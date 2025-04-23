@@ -188,7 +188,7 @@
                         <li><b>环路滤镜</b>：
                             <ol class="text-smaller">
                                 <li>去块滤镜</li>
-                                <li>定向边缘强化滤镜 CDEF</li>
+                                <li>CDEF</li>
                                 <li>参考缩放环路</li>
                                 <li>超分辨率环路</li>
                                 <li>环路还原滤镜：
@@ -226,8 +226,6 @@
                 <img src="files/av1-decoder-block-diagram.svg" alt="imageR" class="img-medium">
                 <p class="text-gray-side mt-0">图：AV1 的简化流程步骤，见 <a href="https://en.wikipedia.org/wiki/AV1">维基百科 - AV1</a></p>
             </div>
-
-            <!-- 版块分界线 -->
 
             <h2 id="h2-2">流结构</h2>
 
@@ -1077,8 +1075,6 @@
                 <p>拆分的步骤会重复进行到设定最低的分层预测结构，或判断为“不拆分”为止。</p>
             </div>
 
-            <!-- 版块分界线 -->
-
             <h2 id="h2-3">图片结构</h2>
 
             <h3>图片结构——帧 Frame</h3>
@@ -1192,8 +1188,6 @@
 
             <h3>图片结构——环路还原滤镜单元</h3>
             <p>还原单元 Restortion unit 用于定义环路还原滤镜 LRU 的作用范围（滤镜强度分区调节），从而使还原滤镜实现强度自适应。对 RU 的说明见环路滤镜版块，详见下方的环路滤镜版块。</p>
-
-            <!-- 版块分界线 -->
 
             <h2 id="h2-4">变换</h2>
 
@@ -1384,8 +1378,6 @@ typedef enum { // 一般变换模式
                 </code></pre>
             </div>
 
-            <!-- 版块分界线 -->
-
             <h2 id="h2-5">前瞻进程</h2>
 
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：前瞻——时域依赖性建模 TPL</button>
@@ -1502,8 +1494,6 @@ typedef enum { // 一般变换模式
                     <li><span class="text-blue-math">\( s_{\text{Decay}} \)</span>：滤镜强度衰减，由用户设置决定，用于改变编码策略</li>
                 </ul>
             </div>
-
-            <!-- 版块分界线 -->
 
             <h2 id="h2-6">帧间预测</h2>
             
@@ -2072,8 +2062,6 @@ WEDGE_OBLIQUE117, 6, 4
                 <li>使用平移运动补偿的块需要判断是否使用时域插值滤镜（不是空域的 8-tap FIR 滤镜）</li>
             </ul>
 
-            <!-- 版块分界线 -->
-
             <h2 id="h2-7">帧内预测</h2>
 
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：帧内预测——临近参考源序列 Neighbour arrays</button>
@@ -2544,8 +2532,6 @@ scaledLuma = Round2Signed( alpha * ( L[i][j] - lumaAvg ), 6 )
                     <li>调色板模式需要判断调色板大小，以及是否使用缓存的调色板</li>
                 </ul>
             </div>
-
-            <!-- 版块分界线 -->
 
             <h2 id="h2-8">量化</h2>
 
@@ -3185,8 +3171,6 @@ static const int qp_to_qindex[] = { // 索引号
                 </div>
             </div>
 
-            <!-- 版块分界线 -->
-
             <h2 id="h2-9">熵编码</h2>
             <p>基本原理已在 x265 教程中说明，此处不再赘述。AV1 的熵编码使用了两种算法：CABAC 用于量化后的数据，另一种客制化的整数算数编码用于语法元素。</p>
             <ul>
@@ -3659,8 +3643,6 @@ Default_Tx_64x64_Cdf[ TX_SIZE_CONTEXTS ][ MAX_TX_DEPTH + 2 ] = {
                 <p>上述的最后一个下限为 25600，大于 16384。因此需要加 1，得到 <code class="text-blue-emph">10b1000110100</code>；最后补零对齐到 16bit，为 <code class="text-blue-emph">16b1000_1101_0000_0000</code>，在 16 进制上为 <code class="text-blue-emph">2x8D00</code> 或 <code class="text-blue-emph">8D 00</code>。</p>
             </div>
 
-            <!-- 版块分界线 -->
-
             <h2 id="h2-10">模式决策</h2>
 
             <h3>模式决策——率失真优化</h3>
@@ -3725,8 +3707,6 @@ int av1_compute_rd_mult_based_on_qindex(const AV1_COMP *cpi, int qindex) {
                     \text{Lambda}_{\text{CurrentFrame}} \times \text{Geometric_Mean}_\text{scaled} + 0.5
                 \]</span>
             </div>
-
-            <!-- 版块分界线 -->
 
             <h2 id="h2-11">环路滤镜</h2>
             <p>相比于 x264/5 的实现，AV1 中的环路滤镜实现了在编码步骤（分块、变换、量化）之前的滤镜应用、继承 VP9 参与压缩的滤镜、以及根据内容自动调节强度的滤镜。</p>
