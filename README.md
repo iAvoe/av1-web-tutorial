@@ -46,7 +46,7 @@ There are cases with the main clause in a sentence being enclosed in HTML code t
 - Incorrect: ... Use with TM_PREDSimilar principles are used ...
 - Correct: ... Uses similar principles as TM_PRED ...
 
-There are verb-noun confustions in short words:
+There are verb-noun confusions in short words:
 - Source: 应用预测
 - Incorrect: Application Prediction
 - Correct: Apply prediction
@@ -80,5 +80,5 @@ There are verb-noun confustions in short words:
 -----
 
 当前版本（年，版，改）：2025.1.0<br>
-联系方式：[Github：iAvoe]("https://github.com/iAvoe/iAvoe)，[QQ 群]("https://jq.qq.com/?_wv=1027&k=5YJFXyf")  
+联系方式：Github Issues，[QQ 群](https://jq.qq.com/?_wv=1027&k=5YJFXyf)  
 欢迎提交 pull-request 和 issues 指正
