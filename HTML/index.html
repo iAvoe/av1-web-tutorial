@@ -6407,7 +6407,7 @@ typedef enum SvtAv1PredStructure {
 
             <h3>画质指标——块大小感知加权峰值信噪比 WPSNR、XPSNR</h3>
             <p>通过使用分块加权改变 MSE 的统计结果而改良的 PSNR 指标，见 <a href="http://www.ecodis.de/qpa/erfurt_icip_wpsnr.pdf">WPSNR 论文</a>，<a href="http://www.ecodis.de/video/helmrich_xpsnr_rev3.pdf">XPSNR 论文</a></p>
-            <span class="text-blue-math">\[
+            <div class="overflow-auto mt-3"><span class="text-blue-math">\[
                 \text{WPSNR}_{\text{c,s}} =
                 10 \log_{10} \left( \frac{\left( 2^{N_{\text{bit}}}-1 \right)^2}{\text{WMSE}} \right)
             \]\[
@@ -6426,7 +6426,7 @@ typedef enum SvtAv1PredStructure {
                         \left| \text{HighFrequency}_{\text{Spatial}_i} \left[ x,y \right] \right|
                     }{4N^2} \right)^2
                 \right)
-            \]</span>
+            \]</span></div>
             <ul>
                 <li>WMSE 衡量两张图像中，同位粗分块的差距平均平方</li>
                 <li><span class="text-blue-math">\(\sum_{k}\)</span>：遍历 k 项 NxN 粗分块</li>
@@ -6442,7 +6442,7 @@ typedef enum SvtAv1PredStructure {
             </ul>
 
             <p>XPSNR 将帧率算作感知活动范围的参数之一，并使用帧间 FIR 滤镜帧间高频信息（<span class="text-blue-math">\(\text{HighFrequency}_{\text{Temporal}_i}\)</span>），从而能比 WPSNR 更能准确反应视频画质。根据源论文，这种方案虽然不精确，但优点在于简单易算。</p>
-            <span class="text-blue-math">\[
+            <div class="overflow-auto mt-3"><span class="text-blue-math">\[
                 \text{VideoVisualActivity} = \max \left( 
                     a_{\text{min}}^2 \text{,} \hspace{2mm}
                     \left( \frac{
@@ -6451,7 +6451,7 @@ typedef enum SvtAv1PredStructure {
                         \gamma \left| h_{\text{Temporal}_i} \left[ x,y \right] \right|
                     }{4N^2} \right)^2
                 \right)
-            \]</span>
+            \]</span></div>
             <h4>（1/2）ffmpeg XPSNR 的用法</h4>
             <p>由于涉及视频帧时间基对齐问题，所以例子见下方版块。由于 ffmpeg XPSNR 运行时会持续打印信息，所以在区分并行的 CMD 窗口上可以使用 title 命令做标记。</p>
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（2/2）将 XPSNR 分数转换回线性 1~100</button>
