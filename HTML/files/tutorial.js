@@ -72,8 +72,7 @@ function switchPlatform(widthOffset) {
     }
 }
 window.addEventListener('resize', ()=>{switchPlatform(widthOffset)}, false);
-window.
-switchPlatform(widthOffset); // Call this function during load as well
+window.switchPlatform(widthOffset); // Call this function during load as well
 
 /**
  * Click image to enlarge && copy 'alt' attribute to 'title' so I don't have to manual write everything painstakingly

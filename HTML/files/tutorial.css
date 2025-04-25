@@ -212,6 +212,7 @@ pre { overflow: auto; margin: 0; }
 .pl-3 { padding-left: 1rem !important; }
 .pl-5 { padding-left: 3rem !important; }
 
+
 /* Container and cols-rows system from bootstrap */
 .container-mobile {
     background-color: white;
@@ -228,13 +229,21 @@ pre { overflow: auto; margin: 0; }
     margin-left: auto;
 }
 /* Mathml/LaTex text size increment under desktop container */
-.container-desktop .text-blue-math{ font-size: larger; }
+.container-desktop .text-blue-math {
+    font-size: larger;
+}
 .container-title {
     padding-right: var(--bs-gutter-x, 0.75rem);
     padding-left: var(--bs-gutter-x, 0.75rem);
     margin-right: auto;
     margin-left: auto;
 }
+/* h2 extra height under desktop container */
+.container-desktop h2 {
+    margin-top: 3rem !important;
+    margin-bottom: 3rem !important;
+}
+
 /* Desktop Only Resizing */
 @media (min-width: 850px) { .container-desktop, .container-title { max-width: 93vw; }}
 @media (min-width: 921px) { .container-desktop, .container-title { max-width: 92vw; }}
@@ -297,12 +306,6 @@ pre { overflow: auto; margin: 0; }
     .row-cols-sm-5 > * { flex: 0 0 auto; width: 20%; }
     .row-cols-sm-6 > * { flex: 0 0 auto; width: 16.6666666667%; }
     .col-sm-auto { flex: 0 0 auto; width: auto; }
-}
-
-/* h2 extra height */
-h2 {
-    margin-top: 3rem !important;
-    margin-bottom: 3rem !important;
 }
 
 /* Anchor hover effect, text color */
