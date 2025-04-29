@@ -11421,7 +11421,7 @@ SSIMULACRA2_rs: Mean: 43.37989094 Median: 42.86187330 Std Dev: 10.52248577 5th P
                     </tr>
                 </tbody>
             </table></div>
-            <p class="text-gray-side">注：由于此处的画质与噪点一致性强相关，因此画质信息越差，则实际画质反而越好</p>
+            <p class="text-gray-side">注：由于此处的画质与噪点一致性强相关，因此出现了部分画质越差、肉眼观察反而画质反而越好的情况（所有画质指标失效）</p>
             <p class="text-gray-side">注：悬浮光标到单元格上方以查看完整小数</p>
 
             <h4>（5/5）SVT-AV1 胶片颗粒合成分析</h4>
@@ -11537,7 +11537,7 @@ CMD ["cmd"]
             </table>
 
             <h3>下载——编译 SSIMULACRA 官方版</h3>
-            <p>SSIMULACRA 的官方项目中只有在 Debian 的编译示例，Windows 系统下虽然可以调用 Windows Subsystem for Linux（WSL），但编译后仍然是 Linux 应用。因此这里分为两种编译方法，以便今后参考。另外，尽管 <a href="https://github.com/rust-av/ssimulacra2">SSIMULACRA-Rust</a> 的项目存在（且支持直接输入视频），但该实现为季军方，且未说明对应了官方的 2.0 还是 2.1 版本，同时在 Issues 中有视频和图片得分不同的情况出现（SSIMULACRA 是图片检测算法），因此不用。</p>
+            <p>SSIMULACRA 的官方项目中只有在 Debian 的编译示例，Windows 系统下虽然可以调用 Windows Subsystem for Linux（WSL），但编译后仍然是 Linux 应用。因此这里分为两种编译方法，以便今后参考。</p>
             <button type="button" class="collapsible border-main rounded-3 mt-3">（1/2）使用 WSL 编译 Linux 可执行文件</button>
             <div class="coll-content">
                 <h4>（1/2）使用 WSL 编译 Linux 可执行文件</h4>

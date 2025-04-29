@@ -330,6 +330,5 @@ function getDecimalPlaces(float) {
  * @returns {boolean}
  */
 function isDecimalOverTwo(float) {
-    // Number beyond 2 decimal places will be rounded off, which causes inequality
     return Math.round(float * 100) / 100 !== float;
 }
