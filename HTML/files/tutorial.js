@@ -279,3 +279,57 @@ function printModeOff(title, content, widthOffset) {
  *     }
  * }
  */
+
+/**
+ * Rounding data table to n decimals
+ * @param {*} className Locate tables with a certain class name
+ * @param {number} [decimalPlaces=2] Change decimal places
+ */
+function roundDecimals(className, decimalPlaces=2) {
+    const tables = document.querySelectorAll(`table.${className}`);
+
+    tables.forEach(table => {
+        const cells = table.getElementsByTagName("td");
+
+        for (let cell of cells) {
+            const text = cell.textContent.trim();
+            const num = parseFloat(text);
+            if (!isNaN(num)) {
+                cell.title = text;
+
+                if (isDecimalOverTwo(num)) {
+                    cell.textContent = num.toFixed(decimalPlaces);
+                }
+            }
+        }
+    });
+}
+roundDecimals("two-decimals");
+
+/*
+ * Low precision fast decimal precision getter
+ * @credit https://stackoverflow.com/questions/9553354
+ * @param {float} float
+ * @warning Over 20 decimal places returns -1
+function getDecimalPlaces(float) {
+    const MAX_ITERATIONS = 20;
+    let inflation = 1, places = 0;
+    // Only completly inflated number doesn't get rounded off
+    while (Math.round(float * inflation) / inflation !== float) {
+        if (places === MAX_ITERATIONS) { return -1; }
+        inflation *= 10;
+        places++;
+    }
+    return places;
+}
+*/
+
+/**
+ * Check if decimal places is over 2
+ * @param {float} float Number to check
+ * @returns {boolean}
+ */
+function isDecimalOverTwo(float) {
+    // Number beyond 2 decimal places will be rounded off, which causes inequality
+    return Math.round(float * 100) / 100 !== float;
+}

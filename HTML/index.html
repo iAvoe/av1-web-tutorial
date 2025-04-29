@@ -1262,7 +1262,7 @@
                 <p>缩放值 <span class="text-blue-math">\(F\left(k\right)\)</span>，就是“8x8 DCT 图表”中的某一部分。它也使用了遍历变量 <span class="text-blue-math">\(k\)</span>，从而拆分出 <span class="text-blue-math">\(Y_{k}, X_{k}\)</span> 两个序列中每个位置的强度并加在一起。</p>
                 <ul class="text-smaller">
                     <li>由于 <span class="text-blue-math">\(Y_0, Y_2, Y_3\)</span> 的强度为 0，所以只有 <span class="text-blue-math">\(Y_1\)</span> 的部分会缩放 <span class="text-blue-math">\(p(x)\)</span> 的波形频率</li>
-                    <li>强度 <span class="text-blue-math">\(F\left(1\right)\)</span> 也是余弦函数，为 <span class="text-blue-math">\(F_{actual}\left(x\right)=1\cos\left(\frac{3\pi x}{8}\right)\)</span>（<span class="text-blue-math">\(\frac{3\pi x}{8}\)</span> 为第一个点的 X 轴坐标）</li>
+                    <li>强度 <span class="text-blue-math">\(F\left(1\right)\)</span> 也是余弦函数，为 <span class="text-blue-math">\(F_{actual}\left(x\right)=1\cos\left(\frac{3\pi x}{8}\right)\)</span>（<span class="text-blue-math">\(\frac{3\pi x}{8}\)</span> 为冠军个点的 X 轴坐标）</li>
                 </ul>
 
                 <p>在这个例子中，初始值即 Y，X 两个序列，结果值是函数 p(x)，缩放值由多个部分组成，但可拆分为：</p>
@@ -1326,40 +1326,32 @@
                 </p>
             </div>
 
-            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：变换——部分模式决策</button>
-            <div class="coll-content">
-                <h3>变换——部分模式决策</h3>
-                <p>色度帧内块的变换取决于同位亮度帧内块的模式：</p>
-                <pre><code class="text-smaller">
+            <h3>变换——部分模式决策与先后选择顺序</h3>
+            <p>根据帧内预测选用的模式决定。色度帧内块的变换取决于同位亮度帧内块的模式。</p>
+            <pre><code class="text-smaller">
 Mode_To_Txfm[ UV_INTRA_MODES_CFL_ALLOWED ] = {
-DCT_DCT,   // DC_PRED
-ADST_DCT,  // V_PRED
+DCT_DCT,   // DC_PRED 水平直流模式
+ADST_DCT,  // V_PRED 大概率夹角模式
 DCT_ADST,  // H_PRED
 DCT_DCT,   // D45_PRED
 ADST_ADST, // D135_PRED
 ADST_DCT,  // D113_PRED
 DCT_ADST,  // D157_PRED
 DCT_ADST,  // D203_PRED
-ADST_DCT,  // D67_PRED
-ADST_ADST, // SMOOTH_PRED
+ADST_DCT,  // D67_PRED 小概率夹角模式
+ADST_ADST, // SMOOTH_PRED 大概率平滑模式
 ADST_DCT,  // SMOOTH_V_PRED
-DCT_ADST,  // SMOOTH_H_PRED
-ADST_ADST, // PAETH_PRED
-DCT_DCT,   // UV_CFL_PRED
+DCT_ADST,  // SMOOTH_H_PRED 小概率平滑模式
+ADST_ADST, // PAETH_PRED 非线性模式
+DCT_DCT,   // UV_CFL_PRED 色度填亮度模式
 }
-                </code></pre>
-            </div>
 
-            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：变换——枚举变量顺序</button>
-            <div class="coll-content">
-                <h3>变换——枚举变量顺序</h3>
-                <pre><code>
-typedef enum { // 一般变换模式
+typedef enum { // 一般模式
     DCT_DCT = 0, // 纵向 DCT 加横向 DCT
     ADST_DCT = 1, // 纵向 ADST 加横向 DCT
     DCT_ADST = 2, // 纵向 DCT 加横向 ADST
     ADST_ADST = 3, // 纵向 ADST 加横向 ADST
-#if CONFIG_EXT_TX // 扩展变换模式
+#if CONFIG_EXT_TX // 扩展模式
     FLIPADST_DCT = 4,
     DCT_FLIPADST = 5,
     FLIPADST_FLIPADST = 6,
@@ -1375,8 +1367,7 @@ typedef enum { // 一般变换模式
 #endif
     TX_TYPES,
 } TX_TYPE;
-                </code></pre>
-            </div>
+            </code></pre>
 
             <h2 id="h2-5">前瞻进程</h2>
 
@@ -2387,7 +2378,7 @@ else
             <div class="coll-content">
                 <h4>（2/2）预测过程</h4>
                 <ol>
-                    <li>设第一个 4x2 分块序列的坐标：<code>i1; j1</code></li>
+                    <li>设冠军个 4x2 分块序列的坐标：<code>i1; j1</code></li>
                     <li>沿用参考源序列的索引号：<code>i = 0..6</code></li>
                     <li>沿用上一步配置好的参考源：<code>p</code></li>
                     <li>设预测像素：<code>pr</code></li>
@@ -2501,7 +2492,7 @@ scaledLuma = Round2Signed( alpha * ( L[i][j] - lumaAvg ), 6 )
 
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：调色板模式的映射</button>
             <div class="coll-content">
-                <p>调色板的映射包括从左，上和左上参考源中筛选出惯用值，再对上下文排序，最后以对角线扫描的顺序映射出预测块。预测每个块都需要更新一遍调色板（上下文）。编码时，编码块的第一个预测像素会独立选择调色板中的颜色，其余的预测像素使用其顶部、左侧和左上角的参考源作为熵编码的上下文进行编码。见：<a href="https://aomediacodec.github.io/av1-spec/#palette-prediction-process">AV1 Spec - Palette Prediction</a>，<a href="https://aomediacodec.github.io/av1-spec/#palette-color-context-function">AV1 Spec - Palette Color Context</a></p>
+                <p>调色板的映射包括从左，上和左上参考源中筛选出惯用值，再对上下文排序，最后以对角线扫描的顺序映射出预测块。预测每个块都需要更新一遍调色板（上下文）。编码时，编码块的冠军个预测像素会独立选择调色板中的颜色，其余的预测像素使用其顶部、左侧和左上角的参考源作为熵编码的上下文进行编码。见：<a href="https://aomediacodec.github.io/av1-spec/#palette-prediction-process">AV1 Spec - Palette Prediction</a>，<a href="https://aomediacodec.github.io/av1-spec/#palette-color-context-function">AV1 Spec - Palette Color Context</a></p>
                 <div class="align-items-center">
                     <img src="files/intra-prediction/palette-mode.png" alt="imageR" class="img-small">
                     <img src="files/intra-prediction/palette-context.png" alt="imageR" class="img-small">
@@ -3382,9 +3373,9 @@ Default_Partition_W64_Cdf[ PARTITION_CONTEXTS ][ 11 ] = {
     { 870, 1212, 1487, 31198, 31394, 31574, 31743, 31881, 32332, 32768, 0 }
 }
                 </code></pre>
-                <!--第一行的“起跳高度”分别为 +0.043，+0.047，+0.198，+0.008，+0.013，+0.008，+0.011，+0.026，+0.032，-1-->
+                <!--冠军行的“起跳高度”分别为 +0.043，+0.047，+0.198，+0.008，+0.013，+0.008，+0.011，+0.026，+0.032，-1-->
                 <p>可以看到上下文长 3 时，<b><code>PARTITION_NONE</code></b>、<b><code>PARTITION_HORZ</code></b>、<b><code>PARTITION_VERT</code></b> 的出字概率变得很小，也就是说在编码了 3 个 64x64 块后，接下来的块有了足够多的信息，所以选择这些模式的概率也会变小。熵编码出字概率 0~1 区间的范围越小，用于表示这段区间的小数数位越长，因此降低不常用模式的出字概率（占据位宽），就可以提高其他模式可用的宽度，以减少小数数位，而提高压缩率。</p>
-                <p>假设编码某帧中的第一个 64x64 SB。其左侧和顶部区域不存在（ctx 为 0，对应上述第一行）。假设其分块模式决定使用 <b><code>PARTITION_NONE</code></b>，则选择第一行，第一列的 20137（0.615）区间，并更新一遍 CTX。下一个分块会使用第二行的出字概率</p>
+                <p>假设编码某帧中的冠军个 64x64 SB。其左侧和顶部区域不存在（ctx 为 0，对应上述冠军行）。假设其分块模式决定使用 <b><code>PARTITION_NONE</code></b>，则选择冠军行，冠军列的 20137（0.615）区间，并更新一遍 CTX。下一个分块会使用亚军行的出字概率</p>
                 <p>预设 0~1 区间（0~32768）的 0.615 倍为，20137，这个数小于 32768，因此需要循环归一化/基本单位化（乘以 2），放大到 40274。</p>
                 <div class="align-items-center">
                     <img src="files/entropy-coding/arithmetic-coding-1.png" alt="imageR" class="img-medium">
@@ -3397,7 +3388,7 @@ Default_Partition_W64_Cdf[ PARTITION_CONTEXTS ][ 11 ] = {
                 </ul>
 
                 <h4>（2/6）残差编码开关元素</h4>
-                <p>判断该分块是否需要执行残差编码，早在变换块中判断，并发送 <code>all_zero</code> 旗标到此处。由于第一个分块并没有预测模式可用，所以残差计算不会进行，得到“跳过 Skip 模式”；因此，选择下表中第 2 列的 32768，也就是 PDF 的 1097（0.031）。</p>
+                <p>判断该分块是否需要执行残差编码，早在变换块中判断，并发送 <code>all_zero</code> 旗标到此处。由于冠军个分块并没有预测模式可用，所以残差计算不会进行，得到“跳过 Skip 模式”；因此，选择下表中第 2 列的 32768，也就是 PDF 的 1097（0.031）。</p>
                 <pre><code class="text-smaller">
 /**
  * 换算为 0~1 范围
@@ -3430,7 +3421,7 @@ Default_Skip_Cdf[ SKIP_CONTEXTS ][ 3 ] = {
                 </ul>
 
                 <h4>（3/6）亮度预测模式元素 YMode</h4>
-                <p>此处假设选择帧内编码，不使用帧内块复制 IBC 模式。第一个分块并没有左上或顶部参考块可用（有的话优先选用左上、右上，其次左下、右下块的模式，见 <a href="https://github.com/mozilla/aom/blob/46b7bb243b39929c02d6decc1bdb2e39e11540d6/av1/common/blockd.c#L19"><b><code>av1_left_block_mode</code></b></a>）。帧间模式按照 AV1 标准排序 <b><code>Intra_Frame_Y_Mode</code></b>（见：<a href="https://aomediacodec.github.io/av1-spec/#intra-frame-mode-info-semantics">AV1 Spec</a>），<b><code>Intra_Mode_Context</code></b>（见 <a href="https://aomediacodec.github.io/av1-spec/#cdf-selection-process">AV1 Spec</a>）得到：</p>
+                <p>此处假设选择帧内编码，不使用帧内块复制 IBC 模式。冠军个分块并没有左上或顶部参考块可用（有的话优先选用左上、右上，其次左下、右下块的模式，见 <a href="https://github.com/mozilla/aom/blob/46b7bb243b39929c02d6decc1bdb2e39e11540d6/av1/common/blockd.c#L19"><b><code>av1_left_block_mode</code></b></a>）。帧间模式按照 AV1 标准排序 <b><code>Intra_Frame_Y_Mode</code></b>（见：<a href="https://aomediacodec.github.io/av1-spec/#intra-frame-mode-info-semantics">AV1 Spec</a>），<b><code>Intra_Mode_Context</code></b>（见 <a href="https://aomediacodec.github.io/av1-spec/#cdf-selection-process">AV1 Spec</a>）得到：</p>
                 <table class="table-center align-items-center">
                     <thead>
                         <tr>
@@ -3598,7 +3589,7 @@ Default_Uv_Mode_Cfl_Not_Allowed_Cdf[ INTRA_MODES ][  UV_INTRA_MODES_CFL_NOT_ALLO
     { 12124, 13759, 14959, 14992, 15007, 15051, 15078, 15166, 15255, 15753, 16039, 16606, 32768, 0 } 
 }
                 </code></pre>
-                <p>同为帧内编码的第一个分块，因此这里编码的色度块仍然使用 [0][0] 处的出字概率 0.691。</p>
+                <p>同为帧内编码的冠军个分块，因此这里编码的色度块仍然使用 [0][0] 处的出字概率 0.691。</p>
                 <div class="align-items-center">
                     <img src="files/entropy-coding/arithmetic-coding-4.png" alt="imageR" class="img-medium">
                 </div>
@@ -6507,7 +6498,7 @@ InputValue    Score
             <h3>画质指标——多失真识别多分辨率结构相似性 SSIMULACRA</h3>
 
             <p>一种对 MS-SSIM、<a href="https://github.com/pornel/dssim">DSSIM</a> 的改进，被用于 JPEG-XL。全拼为 Structural similarity unveiling local & compression related artifacts。其特点在于对失真的统计方法上除了沿用 MS-SSIM 的多分辨率迭代，还通过生成亮度、色度失真热度图以避免直接将失真计做一项平均值，并且结合了块失真、边缘失真（蚊噪、振铃）识别以更准确的反应画质分数。见 <a href="https://cloudinary.com/blog/detecting_the_psychovisual_impact_of_compression_related_artifacts_using_ssimulacra">Cloudinary</a>。</p>
-            <p>失真热度图分为 SSIM 图、块失真振铃图、平滑模糊图 3 种。这些图分别以 6 种分辨率比例（1:1~1:32）对 X、Y、B 平面识别和累积得到共 3×6×3=54 张热度图。从中统计出 1-norm 和 4-norm 两值，共 108 个范数，通过加权求和得到最终的评分。权重由多种主观指标（CID22、TID2013、Kadid10k、KonFiG-IQA）对多种图像编码结果（JPEG、JPEG 2000、JPEG XL、WebP、AVIF、HEIC），以及人工添加失真的结果对比得到，见 <a href="https://github.com/cloudinary/ssimulacra2#how-it-works">GitHub/cloudinary</a>；第三方对比结果见 <a href="https://jon-cld.s3.amazonaws.com/test/ahall_of_fshame_SSIMULACRA_2_modelD.html">jon-cld</a>。</p>
+            <p>失真热度图分为 SSIM 图、块失真振铃图、平滑模糊图 3 种。这些图分别以 6 种分辨率比例（1:1~1:32）对 X、Y、B 平面识别和累积得到共 3×6×3=54 张热度图。从中统计出 1-norm 和 4-norm 两值，共 108 个范数，通过加权求和得到最终的评分。权重由多种主观指标（CID22、TID2013、Kadid10k、KonFiG-IQA）对多种图像编码结果（JPEG、JPEG 2000、JPEG XL、WebP、AVIF、HEIC），以及人工添加失真的结果对比得到，见 <a href="https://github.com/cloudinary/ssimulacra2#how-it-works">GitHub/cloudinary</a>；季军方对比结果见 <a href="https://jon-cld.s3.amazonaws.com/test/ahall_of_fshame_SSIMULACRA_2_modelD.html">jon-cld</a>。</p>
 
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（1/5）范数与失真的关系</button>
             <div class="coll-content">
@@ -6595,7 +6586,7 @@ for ($i=1; $i -le $frames; $i++) {
                         <li>JXL 支持的无损图片类型中都不支持 10bit 位深，所以不能使用</li>
                     </ul>
                 </li>
-                <li><del><b>第三方版特别慢</b> - SSIMULACRA-Rust 的统计速度为 5 spf，即 5 秒每帧</del> 可以指定 frame-thread 线程数，只要内存没吃满就可以加</li>
+                <li><del><b>季军方版特别慢</b> - SSIMULACRA-Rust 的统计速度为 5 spf，即 5 秒每帧</del> 可以指定 frame-thread 线程数，只要内存没吃满就可以加</li>
             </ul>
             <p>由于行不通，所以本教程的原测试结果全部更换为 <a href="https://github.com/rust-av/ssimulacra2.git">ssimulacra_rs</a>（内置 VapourSynth LSMASH 视频解码器）跑分。</p>
 
@@ -6613,31 +6604,26 @@ for ($i=1; $i -le $frames; $i++) {
 
             <h3>测试——SVT-AV1 编码器基准</h3>
             <p>编码器通过在 SVT-AV1 官方 GitLab 仓库下载（2025 年 3 月），据 <a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/master/Docs/Build-Guide.md">官方说明</a>（Visual Studio 2022、CMake、NASM）编译得到。视频源选择方面，应该查找编码难度偏高（高时域、空域复杂度），而不是任何编码器都擅长的视频源。</p>
-            <p>编译优化方面，更好的编译方案可以提高程序的运行性能，但这相当于一个一般用户不易获得的待测试变量，因此在测试上，本教程必须使用最短方法编译 SVT-AV1。</p>
+            <p>编译优化方面，更好的编译方案可以提高程序的运行性能，但这相当于一项额外的测试变量，且一般用户难以实现，因此本教程只使用最官方的编译结果测试 SVT-AV1。</p>
             
-            <h4>（1/9）基准测试目标</h4>
-            <p>在尽可能贴近官方推荐用法上尝试微调，以及开启一些默认关闭的功能。所有项目必须一直使用 CRF 30（中）、35（中高）两个强度、较长的 12 秒关键帧间隔、以及对应 x265 slow/veryslow 预设的 Preset 3，从而使得各种待测试的功能有一定的发力空间，并对应 x265 的 CRF 18、22。在实际使用中，这些值可以根据视频内容的复杂度略微或大幅降低，以满足更苛刻的画质、解码性能等需求。</p>
-            <ol>
-                <li>CRF 强度 30 与 35 的影响（画质略好于默认、默认）</li>
-                <li>什么时候适合启用量化矩阵、以及启用全部矩阵还是默认的部分矩阵（默认不启用以节约解码端算力）</li>
-                <li>什么时候适合使用非默认 <code>--tune</code> 参数值（默认为 PSNR）</li>
-                <li>开启或关闭胶片颗粒合成对编码的影响</li>
-            </ol>
-            <h4>（2/9）对照组</h4>
-            <p>使用 x264、x265 的编码结果作为对照组，对照组使用 CRF 18、20（画质好于默认、略好于默认）。对动画片源使用 x265 教程急用版的动画预设、对录像片源使用 x254 教程急用版的电影预设。</p>
-            <h4>（3/9）测试源条件与中间格式</h4>
-            <p>避免使用不满足条件的源、并将所有源的格式统一，以达到可靠的测试条件。</p>
+            <h4>（1/7）测试源条件与中间格式</h4>
+            <p>只使用合理的视频源、并将所有源的格式统一，以达到可靠的测试条件。</p>
             <ul>
                 <li><b>分辨率：</b>原生逐行扫描、视频高不超过 2160 像素</li>
-                <li><b>帧率：</b>整数帧率、未插帧</li>
+                <li><b>帧率：</b>原生恒定帧率、未插帧的视频源</li>
                 <li><b>色彩空间：</b>源与压缩结果均为 YUV 4:2:0；矩阵格式/系数指标、传输特质、三原色及白点、master-display 皆为 Bt.709 SDR
-                    <ul><li>正常测试流程中，必须将不符合条件的源转换到符合条件为止，但这样做工作量非常大，并且因为大量测试数据作废，导致本教程已经严重偏移原定发布计划，所以也不得不放弃进一步转换相关的研讨和流程制定，而是只留下符合条件的源</li></ul>
+                    <ul>
+                        <li>如果源的原生色域高于 Bt.709，则转换到 Bt.709 并编码为中间格式</li>
+                        <li>源的原生色域不可低于 Bt.709</li>
+                    </ul>
                 </li>
-                <li><b>位深：</b>8bit 或 10bit，只有在源的位深更高时才将其降低到 10bit</li>
-                <li><b>关键帧间隔：</b>动画片源为 12 秒、录像片源为 9 秒。该距离虽然略长于串流用途（提高解码难度和延迟），但作为测试，这有助于编码器时域冗余能力的充分发挥</li>
+                <li><b>位深：</b>8 或 10bit，不可低于 8bit，位深超过 10bit 时则转换并编码为中间格式</li>
+                <li><b>关键帧间隔：</b>由于测试项目较多，所以只使用 12 秒间隔，理想时间条件下应当额外测试 5 秒关键帧间隔
+                    <ul><li>该距离虽略长于串流用途（提高解码难度和延迟），但作为测试，这有助于编码器时域冗余能力得到充分发挥</li></ul>
+                </li>
             </ul>
-            <h4>（4/9）测试内容画面</h4>
-            <h5>（4/9——1/3）电影、录像</h5>
+            <h4>（2/7）测试内容画面</h4>
+            <h5>（2/7——1/3）电影、录像</h5>
             <ul>
                 <li>困难：<a href="https://archive.org/details/AV-LOSSLESS-TEST-MATERIAL">Boat 4096x2160 60fps 10bit 420</a>
                     <ul>
@@ -6652,7 +6638,7 @@ for ($i=1; $i -le $frames; $i++) {
                     </ul>
                 </li>
             </ul>
-            <h5>（4/9——3/3）仿真材质动画、AAA 游戏</h5>
+            <h5>（2/7——2/3）仿真材质动画、AAA 游戏</h5>
             <ul>
                 <li>普通：<a href="https://archive.org/details/AV-LOSSLESS-TEST-MATERIAL">BigBuckBunny 1920x1080 24fps 8bit rgb</a>
                     <ul><li>©Blender Foundation</li></ul>
@@ -6661,7 +6647,7 @@ for ($i=1; $i -le $frames; $i++) {
                     <ul><li>©Blender Foundation</li></ul>
                 </li>
             </ul>
-            <h5>（4/9——3/3）漫画材质动画：</h5>
+            <h5>（2/7——3/3）漫画材质动画：</h5>
             <ul>
                 <li>简单：氷菓 限定版 Volume 1\STREAM\00002.m2ts 1920x1080 23.976fps 8bit 420（AVC 37.4 Mbps）
                     <ul>
@@ -6684,9 +6670,9 @@ for ($i=1; $i -le $frames; $i++) {
                     </ul>
                 </li>
             </ul>
-            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（5/8）测试电脑平台</button>
+            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（3/7）测试电脑平台</button>
             <div class="coll-content">
-                <h4>（5/9）测试电脑平台</h4>
+                <h4>（3/7）测试电脑平台</h4>
                 <ul class="text-smaller">
                     <li>OS：Windows 10 22H2 19045.5371，高性能电源计划</li>
                     <li>CPU：R9 9900X 5.4 Ghz 风冷、PBO -8 曲线、限制 220W，满载 89°C、FCLK 2200</li>
@@ -6698,9 +6684,9 @@ for ($i=1; $i -le $frames; $i++) {
                 </ul>
                 <p>测试条件虽较为简陋，但编码时未遇到内存和硬盘 IO 瓶颈，因此尽管同 CPU 电脑的编码速度可能无法达到精准，但不同编码测试之间的速度差异不受影响。</p>
             </div>
-            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（6/8）转换 ST.2084 PQ 到 Bt.709</button>
+            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（4/7）转换 ST.2084 PQ 到 Bt.709</button>
             <div class="coll-content">
-                <h4>（6/8）转换 ST.2084 PQ 到 Bt.709</h4>
+                <h4>（4/7）转换 ST.2084 PQ 到 Bt.709</h4>
                 <pre><code class="text-smaller">
 ffmpeg -i .\SolLevante_HDR10_r2020_ST2084_UHD_24fps_1000nit.mov
 -vf "format=yuv444p12le,
@@ -6712,9 +6698,9 @@ format=yuv420p10le"
 .\SolLevante_yuv444p10le_bt709.yuv
                 </code></pre>
             </div>
-            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（7/8）FFV1 编码中间源</button>
+            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（5/7）FFV1 编码中间源</button>
             <div class="coll-content">
-                <h4>（7/9）FFV1 编码中间源</h4>
+                <h4>（5/7）FFV1 编码中间源</h4>
                 <p>由于 SSIMULACRA2_rs 只能使用 LSMAS 解码，而 LSMAS 解码不支持 <code>.yuv</code> 文件，因此这些源需要经过加工才能使用（当然为了数据可靠，曾经完成的测试也一并要重做），如：</p>
                 <pre><code class="text-smaller">
 ffmpeg -i .\SolLevante_HDR10_r2020_ST2084_UHD_24fps_1000nit.mov ^
@@ -6747,7 +6733,7 @@ ffmpeg -i .\Elephants-Dream_1920x1080_24fps_8bit_rgb.video+audio.mkv ^
 .\Elephants-Dream_1920x1080_24fps_8bit_yuv420.mkv
                 </code></pre>
             </div>
-            <h4>（8/9）画质指标得分好坏定义</h4>
+            <h4>（6/7）画质指标得分好坏定义</h4>
             <p>测试栏目中，数据会以编码参数 + 部分编码信息 + 画质指标信息的方式呈现。部分编码信息记录速度和码率，画质指标信息记录各种画质指标检测的结果，分别为：</p>
             <ul>
                 <li><b>XPSNR：</b>播放画质，仔细观看
@@ -6777,7 +6763,7 @@ ffmpeg -i .\Elephants-Dream_1920x1080_24fps_8bit_rgb.video+audio.mkv ^
                 </li>
             </ul>
             <p>注：如果衡量标准是以手机观看，则应将以上要求降低至少一个等级，如达标→良好。</p>
-            <h4>（9/9）XPSNR、VMAF 对齐时间基的使用方法</h4>
+            <h4>（7/7）XPSNR、VMAF 对齐时间基的使用方法</h4>
             <p>使用 ffmpeg 测试 XPSNR、VMAF 时，源和编码结果的帧率虽然一样，但时间基 Time Base 可能完全不同，导致一些匪夷所思的跑分，以及“三帧烂一帧”的规律。使用 <code>ffprobe -v debug -show_streams .\视频.mkv</code> 命令可以看出，FFV1 time_base = 1/1000; SVT-AV1 time_base = 1/24，因此在测试的命令中添加手动对齐命令是有必要的。</p>
             <p>XPSNR + VF-FPS + VF-SetPTS：手动提供视频帧率到 24fps，手动指定 setpts 到两个 time_base 的积（1/1000 * 1/24 = 1/24000）：</p>
             <pre><code>
@@ -7178,6 +7164,12 @@ SSIMULACRA2_rs: Mean: 79.68937613 Median: 80.29604784 Std Dev: 5.62411048 5th Pe
             </div>
 
             <h3>测试——SVT-AV1 基准测试</h3>
+            <p>在尽可能贴近全部默认的用法上尝试基本功能。所有项目必须一直使用 CRF 30（中）、35（中高）两个强度、较长的 12 秒关键帧间隔、以及对应 x265 slow/veryslow 预设的 Preset 3，从而使得各种待测试的功能有一定的发力空间，并对应 x265 的 CRF 18、22。在实际使用中，这些值可以根据视频内容的复杂度略微或大幅降低，以满足更苛刻的画质、解码性能等需求。</p>
+            <ol>
+                <li>CRF 强度 30 与 35 的影响（画质略好于默认、默认）</li>
+                <li>启用量化矩阵、以及启用全部矩阵还是默认的部分矩阵（默认关）的适用性</li>
+                <li>非默认 <code>--tune</code> 参数值（默认为 PSNR）的适用性</li>
+            </ol>
 
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（1/22）SVT-AV1 v3.0——SolLevante</button>
             <div class="coll-content">
@@ -7360,8 +7352,6 @@ SSIMULACRA2_rs: Mean: 71.49626144 Median: 66.18785330 Std Dev: 18.79315072 5th P
                 </code></pre>
                 <p>VQ：<code>--preset 3 --crf 30 --tune 0</code>：</p>
                 <pre><code class="text-smaller">
-
-
 SUMMARY --------------------------------- Channel 1  --------------------------------
 Total Frames            Frame Rate              Byte Count              Bitrate
         6314            24.00 fps                712471110              21665.26 kbps
@@ -8587,35 +8577,34 @@ VMAF 4K: 88.632980, VMAF 1080p: 82.651362
 SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Percentile: 72.57400971 95th Percentile: 87.35136827
                 </code></pre>
             </div>
-            <p>注：由于数据量非常庞大，所以难以避免抄写或打字错误，但整体上能够保证准确。</p>
-            <div class="overflow-auto mt-3"><table class="table-center text-smaller">
+            <div class="overflow-auto mt-3"><table class="table-center text-xs two-decimals">
                 <thead>
                     <tr>
-                        <th>编码器</th>
-                        <th>编码选项</th>
-                        <th>速度 fps</th>
-                        <th>码率 kbps</th>
-                        <th>XPSNR-Y dB</th>
-                        <th>XPSNR-U dB</th>
-                        <th>XPSNR-V dB</th>
-                        <th>VMAF 4k</th>
-                        <th>VMAF 1080p</th>
-                        <th>S2.1：均值</th>
-                        <th>S2.1：中位</th>
-                        <th>S2.1：第 5%</th>
-                        <th>S2.1：第 95%</th>
+                        <th class="px-1">编码器</th>
+                        <th class="px-1">编码选项</th>
+                        <th class="px-1">速度 fps</th>
+                        <th class="px-1">码率 kbps</th>
+                        <th class="px-1">XPSNR-Y dB</th>
+                        <th class="px-1">XPSNR-U dB</th>
+                        <th class="px-1">XPSNR-V dB</th>
+                        <th class="px-1">VMAF 4k</th>
+                        <th class="px-1">VMAF 1080p</th>
+                        <th class="px-1">S2.1：均值</th>
+                        <th class="px-1">S2.1：中位</th>
+                        <th class="px-1">S2.1：第 5%</th>
+                        <th class="px-1">S2.1：第 95%</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr class="border-bottom">
                         <td class="px-1">x265</td>
-                        <td class="px-1">Netflix_Boat CRF22</td>
+                        <td class="px-1">Netflix-Boat CRF22</td>
                         <td class="px-1">2.06</td>
                         <td class="px-1">31171.09</td>
-                        <td class="px-1" style="color:#FFC000;background-color:#F6FBBB">40.5607</td>
-                        <td class="px-1" style="color:#92D050;background-color:#F6FBBB">42.9254</td>
-                        <td class="px-1" style="color:#00B050;background-color:#F6FBBB">45.6857</td>
-                        <td class="px-1" style="color:#C65911">77.612357</td>
+                        <td class="px-1 sec" style="color:#FFC000">40.5607</td>
+                        <td class="px-1 sec" style="color:#92D050">42.9254</td>
+                        <td class="px-1 sec" style="color:#00B050">45.6857</td>
+                        <td class="px-1 trd" style="color:#C65911">77.612357</td>
                         <td class="px-1" style="color:#F00">68.300762</td>
                         <td class="px-1" style="color:#C65911">64.77780339</td>
                         <td class="px-1" style="color:#C65911">63.9109824</td>
@@ -8624,9 +8613,9 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">SVT-AV1</td>
-                        <td class="px-1">Netflix_Boat CRF35 P3</td>
-                        <td class="px-1">3.515</td>
-                        <td class="px-1">21798.79</td>
+                        <td class="px-1">Netflix-Boat CRF35 PSNR P3</td>
+                        <td class="px-1 trd">3.515</td>
+                        <td class="px-1 trd">21798.79</td>
                         <td class="px-1" style="color:#C65911">32.1465</td>
                         <td class="px-1" style="color:#FFC000">40.6428</td>
                         <td class="px-1" style="color:#92D050">42.6896</td>
@@ -8639,7 +8628,7 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">SVT-AV1</td>
-                        <td class="px-1">Netflix_Boat CRF35 QM</td>
+                        <td class="px-1">Netflix-Boat CRF35 PSNR QM P3</td>
                         <td class="px-1">3.512</td>
                         <td class="px-1">21871.53</td>
                         <td class="px-1" style="color:#C65911">32.1469</td>
@@ -8654,9 +8643,9 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">SVT-AV1</td>
-                        <td class="px-1">Netflix_Boat CRF35 QM0</td>
+                        <td class="px-1">Netflix-Boat CRF35 PSNR QM0 P3</td>
                         <td class="px-1">3.473</td>
-                        <td class="px-1" style="background-color:#F6FBBB">21475.98</td>
+                        <td class="px-1 sec">21475.98</td>
                         <td class="px-1" style="color:#C65911">32.1264</td>
                         <td class="px-1" style="color:#FFC000">40.5581</td>
                         <td class="px-1" style="color:#92D050">42.5867</td>
@@ -8669,14 +8658,14 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">SVT-AV1</td>
-                        <td class="px-1">Netflix_Boat CRF35 VQ</td>
-                        <td class="px-1" style="background-color:#C9FFE1">3.537</td>
+                        <td class="px-1">Netflix-Boat CRF35 VQ P3</td>
+                        <td class="px-1 ace">3.537</td>
                         <td class="px-1">22308.7</td>
                         <td class="px-1" style="color:#C65911">32.1609</td>
                         <td class="px-1" style="color:#FFC000">40.6217</td>
                         <td class="px-1" style="color:#92D050">42.6716</td>
                         <td class="px-1" style="color:#C65911">77.176024</td>
-                        <td class="px-1" style="color:#F00;background-color:#F6FBBB">67.782053</td>
+                        <td class="px-1 sec" style="color:#F00">67.782053</td>
                         <td class="px-1" style="color:#C65911">65.62472343</td>
                         <td class="px-1" style="color:#C65911">65.33376302</td>
                         <td class="px-1" style="color:#C65911">62.92247971</td>
@@ -8684,9 +8673,9 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">SVT-AV1</td>
-                        <td class="px-1">Netflix_Boat CRF35 SSIM</td>
+                        <td class="px-1">Netflix-Boat CRF35 SSIM P3</td>
                         <td class="px-1">3.449</td>
-                        <td class="px-1" style="background-color:#C9FFE1">21179.37</td>
+                        <td class="px-1 ace">21179.37</td>
                         <td class="px-1" style="color:#C65911">32.1297</td>
                         <td class="px-1" style="color:#FFC000">40.5922</td>
                         <td class="px-1" style="color:#92D050">42.599</td>
@@ -8699,37 +8688,37 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">x265</td>
-                        <td class="px-1">Netflix_Boat CRF18</td>
+                        <td class="px-1">Netflix-Boat CRF18</td>
                         <td class="px-1">1.54</td>
                         <td class="px-1" style="color:#FFF;background-color:#FF7C80">60831.26</td>
-                        <td class="px-1" style="color:#92D050;background-color:#C9FFE1">42.0499</td>
-                        <td class="px-1" style="color:#92D050;background-color:#C9FFE1">44.8382</td>
-                        <td class="px-1" style="color:#00B050;background-color:#C9FFE1">47.8922</td>
-                        <td class="px-1" style="color:#C65911;background-color:#C9FFE1">78.668415</td>
-                        <td class="px-1" style="color:#F00;background-color:#C9FFE1">69.732866</td>
-                        <td class="px-1" style="color:#FFC000;background-color:#C9FFE1">73.25259644</td>
-                        <td class="px-1" style="color:#FFC000;background-color:#C9FFE1">71.55939769</td>
-                        <td class="px-1" style="color:#C65911;background-color:#C9FFE1">69.44349186</td>
-                        <td class="px-1" style="color:#C90;background-color:#C9FFE1">79.86377007</td>
+                        <td class="px-1 ace" style="color:#92D050">42.0499</td>
+                        <td class="px-1 ace" style="color:#92D050">44.8382</td>
+                        <td class="px-1 ace" style="color:#00B050">47.8922</td>
+                        <td class="px-1 ace" style="color:#C65911">78.668415</td>
+                        <td class="px-1 ace" style="color:#F00">69.732866</td>
+                        <td class="px-1 ace" style="color:#FFC000">73.25259644</td>
+                        <td class="px-1 ace" style="color:#FFC000">71.55939769</td>
+                        <td class="px-1 ace" style="color:#C65911">69.44349186</td>
+                        <td class="px-1 ace" style="color:#FFCC00">79.86377007</td>
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">SVT-AV1</td>
-                        <td class="px-1">Netflix_Boat CRF30 P3</td>
+                        <td class="px-1">Netflix-Boat CRF30 PSNR P3</td>
                         <td class="px-1">3.35</td>
                         <td class="px-1">31292.89</td>
-                        <td class="px-1" style="color:#C65911">32.2467</td>
+                        <td class="px-1 trd" style="color:#C65911">32.2467</td>
                         <td class="px-1" style="color:#FFC000">40.8241</td>
                         <td class="px-1" style="color:#92D050">42.8826</td>
-                        <td class="px-1" style="color:#C65911;background-color:#F6FBBB">77.863401</td>
-                        <td class="px-1" style="color:#F00">68.746449</td>
-                        <td class="px-1" style="color:#FFC000;background-color:#F6FBBB">70.60364934</td>
-                        <td class="px-1" style="color:#FFC000;background-color:#F6FBBB">70.44573796</td>
+                        <td class="px-1 sec" style="color:#C65911">77.863401</td>
+                        <td class="px-1 trd" style="color:#F00">68.746449</td>
+                        <td class="px-1 sec" style="color:#FFC000">70.60364934</td>
+                        <td class="px-1 sec" style="color:#FFC000">70.44573796</td>
                         <td class="px-1" style="color:#C65911">68.31306315</td>
-                        <td class="px-1" style="color:#FFC000;background-color:#F6FBBB">73.43305347</td>
+                        <td class="px-1 sec" style="color:#FFC000">73.43305347</td>
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">SVT-AV1</td>
-                        <td class="px-1">Netflix_Boat CRF30 QM</td>
+                        <td class="px-1">Netflix-Boat CRF30 PSNR QM P3</td>
                         <td class="px-1">3.368</td>
                         <td class="px-1">30147.1</td>
                         <td class="px-1" style="color:#C65911">32.2376</td>
@@ -8737,14 +8726,14 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#92D050">42.8621</td>
                         <td class="px-1" style="color:#C65911">77.534536</td>
                         <td class="px-1" style="color:#F00">68.353681</td>
-                        <td class="px-1" style="color:#FFC000">70.48941736</td>
-                        <td class="px-1" style="color:#FFC000">70.34330051</td>
-                        <td class="px-1" style="color:#C65911">68.32600577</td>
-                        <td class="px-1" style="color:#FFC000">73.00726519</td>
+                        <td class="px-1 trd" style="color:#FFC000">70.48941736</td>
+                        <td class="px-1 trd" style="color:#FFC000">70.34330051</td>
+                        <td class="px-1 trd" style="color:#C65911">68.32600577</td>
+                        <td class="px-1 trd" style="color:#FFC000">73.00726519</td>
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">SVT-AV1</td>
-                        <td class="px-1">Netflix_Boat CRF30 QM0</td>
+                        <td class="px-1">Netflix-Boat CRF30 PSNR QM0 P3</td>
                         <td class="px-1">3.293</td>
                         <td class="px-1">29498.61</td>
                         <td class="px-1" style="color:#C65911">32.2176</td>
@@ -8759,22 +8748,22 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">SVT-AV1</td>
-                        <td class="px-1">Netflix_Boat CRF30 VQ</td>
-                        <td class="px-1" style="background-color:#F6FBBB">3.53</td>
+                        <td class="px-1">Netflix-Boat CRF30 VQ P3</td>
+                        <td class="px-1 sec">3.53</td>
                         <td class="px-1">22308.7</td>
                         <td class="px-1" style="color:#C65911">32.2371</td>
-                        <td class="px-1" style="color:#FFC000">40.8458</td>
-                        <td class="px-1" style="color:#92D050">42.8932</td>
+                        <td class="px-1 trd" style="color:#FFC000">40.8458</td>
+                        <td class="px-1 trd" style="color:#92D050">42.8932</td>
                         <td class="px-1" style="color:#C65911">77.517816</td>
                         <td class="px-1" style="color:#F00">68.330515</td>
                         <td class="px-1" style="color:#FFC000">70.46943646</td>
                         <td class="px-1" style="color:#FFC000">70.32725873</td>
-                        <td class="px-1" style="color:#C65911;background-color:#F6FBBB">68.33790856</td>
+                        <td class="px-1 sec" style="color:#C65911">68.33790856</td>
                         <td class="px-1" style="color:#FFC000">73.00295684</td>
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">SVT-AV1</td>
-                        <td class="px-1">Netflix_Boat CRF30 SSIM</td>
+                        <td class="px-1">Netflix-Boat CRF30 SSIM P3</td>
                         <td class="px-1">3.36</td>
                         <td class="px-1">29453.41</td>
                         <td class="px-1" style="color:#C65911">32.2267</td>
@@ -8788,24 +8777,25 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#FFC000">72.35572415</td>
                     </tr>
                     <tr class="text-smaller">
-                        <td class="px-1 t-light-gray"><b>字体颜色：</b></td>
-                        <td class="px-1 t-light-gray" style="color:#00B050">视觉无损</td>
+                        <td class="px-1 t-light-gray"><b>基准：</b></td>
+                        <td class="px-1 t-light-gray" style="color:#00B050">视无损</td>
                         <td class="px-1 t-light-gray" style="color:#92D050">优秀</td>
                         <td class="px-1 t-light-gray" style="color:#FFC000">良好</td>
                         <td class="px-1 t-light-gray" style="color:#C65911">达标</td>
                         <td class="px-1 t-light-gray" style="color:#F00">待达标</td>
-                        <td colspan="3" class="t-light-gray">
-                        <td class="px-1 t-light-gray"><b>背景颜色：</b></td>
-                        <td class="px-1 t-light-gray" style="background-color:#C9FFE1">第一</td>
-                        <td class="px-1 t-light-gray" style="background-color:#F6FBBB">第二</td>
-                        <td class="px-1 t-light-gray" style="background-color:#FF7C80">特殊</td>
+                        <td colspan="2" class="t-light-gray">
+                        <td class="px-1 t-light-gray"><b>排名：</b></td>
+                        <td class="px-1 ace t-light-gray">冠军</td>
+                        <td class="px-1 sec t-light-gray">亚军</td>
+                        <td class="px-1 trd t-light-gray">季军</td>
+                        <td class="px-1 t-light-gray" style="color:white;background-color:#FF7C80">败/犯规</td>
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">x265</td>
                         <td class="px-1">WindAndNature CRF22</td>
                         <td class="px-1">2.54</td>
                         <td class="px-1">10472.07</td>
-                        <td class="px-1" style="color:#FFC000;background-color:#F6FBBB">39.8871</td>
+                        <td class="px-1 sec" style="color:#FFC000">39.8871</td>
                         <td class="px-1" style="color:#92D050">42.1991</td>
                         <td class="px-1" style="color:#92D050">42.3623</td>
                         <td class="px-1" style="color:#92D050">91.383935</td>
@@ -8817,12 +8807,12 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">SVT-AV1</td>
-                        <td class="px-1">WindAndNature CRF35 P3</td>
-                        <td class="px-1">6</td>
+                        <td class="px-1">WindAndNature CRF35 PSNR P3</td>
+                        <td class="px-1 ace">6</td>
                         <td class="px-1">6665.2</td>
                         <td class="px-1" style="color:#C65911">37.3362</td>
-                        <td class="px-1" style="color:#92D050">43.4853</td>
-                        <td class="px-1" style="color:#92D050">43.1529</td>
+                        <td class="px-1 trd" style="color:#92D050">43.4853</td>
+                        <td class="px-1 trd" style="color:#92D050">43.1529</td>
                         <td class="px-1" style="color:#92D050">92.806035</td>
                         <td class="px-1" style="color:#FFC000">87.777087</td>
                         <td class="px-1" style="color:#C65911">65.63168941</td>
@@ -8832,9 +8822,9 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">SVT-AV1</td>
-                        <td class="px-1">WindAndNature CRF35 QM</td>
-                        <td class="px-1" style="background-color:#F6FBBB">5.606</td>
-                        <td class="px-1" style="background-color:#F6FBBB">6638.52</td>
+                        <td class="px-1">WindAndNature CRF35 PSNR QM P3</td>
+                        <td class="px-1 trd">5.606</td>
+                        <td class="px-1 trd">6638.52</td>
                         <td class="px-1" style="color:#C65911">34.4809</td>
                         <td class="px-1" style="color:#92D050">42.5478</td>
                         <td class="px-1" style="color:#FFC000">40.5093</td>
@@ -8847,9 +8837,9 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">SVT-AV1</td>
-                        <td class="px-1">WindAndNature CRF35 QM0</td>
+                        <td class="px-1">WindAndNature CRF35 PSNR QM0 P3</td>
                         <td class="px-1">5.555</td>
-                        <td class="px-1">6593.4</td>
+                        <td class="px-1 sec">6593.4</td>
                         <td class="px-1" style="color:#C65911">34.4778</td>
                         <td class="px-1" style="color:#92D050">42.4815</td>
                         <td class="px-1" style="color:#FFC000">40.4485</td>
@@ -8862,14 +8852,14 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">SVT-AV1</td>
-                        <td class="px-1">WindAndNature CRF35 VQ</td>
-                        <td class="px-1" style="background-color:#C9FFE1">5.623</td>
+                        <td class="px-1">WindAndNature CRF35 VQ P3</td>
+                        <td class="px-1 sec">5.623</td>
                         <td class="px-1">7124.16</td>
                         <td class="px-1" style="color:#C65911">34.4899</td>
                         <td class="px-1" style="color:#92D050">42.5401</td>
                         <td class="px-1" style="color:#FFC000">40.5767</td>
-                        <td class="px-1" style="color:#92D050;background-color:#C9FFE1">94.823117</td>
-                        <td class="px-1" style="color:#92D050;background-color:#C9FFE1">90.429029</td>
+                        <td class="px-1 ace" style="color:#92D050">94.823117</td>
+                        <td class="px-1 ace" style="color:#92D050">90.429029</td>
                         <td class="px-1" style="color:#C65911">66.04194395</td>
                         <td class="px-1" style="color:#C65911">67.69334252</td>
                         <td class="px-1" style="color:#F00">58.6735277</td>
@@ -8877,9 +8867,9 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">SVT-AV1</td>
-                        <td class="px-1">WindAndNature CRF35 SSIM</td>
+                        <td class="px-1">WindAndNature CRF35 SSIM P3</td>
                         <td class="px-1">5.573</td>
-                        <td class="px-1" style="background-color:#C9FFE1">6578.42</td>
+                        <td class="px-1 ace">6578.42</td>
                         <td class="px-1" style="color:#C65911">34.474</td>
                         <td class="px-1" style="color:#92D050">42.5145</td>
                         <td class="px-1" style="color:#FFC000">40.4584</td>
@@ -8895,56 +8885,56 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1">WindAndNature CRF18</td>
                         <td class="px-1">2.07</td>
                         <td class="px-1">21360.67</td>
-                        <td class="px-1" style="color:#FFC000;background-color:#C9FFE1">40.9048</td>
-                        <td class="px-1" style="color:#92D050;background-color:#F6FBBB">43.5395</td>
-                        <td class="px-1" style="color:#92D050;background-color:#F6FBBB">43.4034</td>
+                        <td class="px-1 ace" style="color:#FFC000">40.9048</td>
+                        <td class="px-1 sec" style="color:#92D050">43.5395</td>
+                        <td class="px-1 sec" style="color:#92D050">43.4034</td>
                         <td class="px-1" style="color:#92D050">92.753515</td>
                         <td class="px-1" style="color:#FFC000">87.722631</td>
                         <td class="px-1" style="color:#C65911">68.23241143</td>
                         <td class="px-1" style="color:#C65911">68.96018756</td>
                         <td class="px-1" style="color:#C65911">61.08936644</td>
-                        <td class="px-1" style="color:#C90;background-color:#C9FFE1">76.03682341</td>
+                        <td class="px-1 ace" style="color:#FFCC00">76.03682341</td>
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">SVT-AV1</td>
-                        <td class="px-1">WindAndNature CRF30 P3</td>
+                        <td class="px-1">WindAndNature CRF30 PSNR P3</td>
                         <td class="px-1">5.3</td>
                         <td class="px-1">9261.1</td>
-                        <td class="px-1" style="color:#C65911">37.5399</td>
-                        <td class="px-1" style="color:#92D050;background-color:#C9FFE1">43.7761</td>
-                        <td class="px-1" style="color:#92D050;background-color:#C9FFE1">43.4111</td>
+                        <td class="px-1 trd" style="color:#C65911">37.5399</td>
+                        <td class="px-1 ace" style="color:#92D050">43.7761</td>
+                        <td class="px-1 ace" style="color:#92D050">43.4111</td>
                         <td class="px-1" style="color:#92D050">93.308794</td>
                         <td class="px-1" style="color:#FFC000">88.447753</td>
-                        <td class="px-1" style="color:#C65911;background-color:#F6FBBB">68.92250911</td>
-                        <td class="px-1" style="color:#FFC000;background-color:#F6FBBB">70.75917283</td>
-                        <td class="px-1" style="color:#C65911">62.09646559</td>
+                        <td class="px-1 trd" style="color:#C65911">68.92250911</td>
+                        <td class="px-1 sec" style="color:#FFC000">70.75917283</td>
+                        <td class="px-1 trd" style="color:#C65911">62.09646559</td>
                         <td class="px-1" style="color:#FFC000">73.04270951</td>
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">SVT-AV1</td>
-                        <td class="px-1">WindAndNature CRF30 QM</td>
+                        <td class="px-1">WindAndNature CRF30 PSNR QM P3</td>
                         <td class="px-1">5.076</td>
                         <td class="px-1">9171.44</td>
                         <td class="px-1" style="color:#C65911">34.6036</td>
                         <td class="px-1" style="color:#92D050">42.7509</td>
                         <td class="px-1" style="color:#FFC000">40.6414</td>
-                        <td class="px-1" style="color:#92D050;background-color:#F6FBBB">94.75702</td>
-                        <td class="px-1" style="color:#92D050;background-color:#F6FBBB">90.344565</td>
+                        <td class="px-1 sec" style="color:#92D050">94.75702</td>
+                        <td class="px-1 sec" style="color:#92D050">90.344565</td>
                         <td class="px-1" style="color:#C65911">68.91905952</td>
-                        <td class="px-1" style="color:#FFC000">70.73052286</td>
-                        <td class="px-1" style="color:#C65911;background-color:#F6FBBB">62.1007959</td>
-                        <td class="px-1" style="color:#FFC000">73.08080131</td>
+                        <td class="px-1 trd" style="color:#FFC000">70.73052286</td>
+                        <td class="px-1 sec" style="color:#C65911">62.1007959</td>
+                        <td class="px-1 trd" style="color:#FFC000">73.08080131</td>
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">SVT-AV1</td>
-                        <td class="px-1">WindAndNature CRF30 QM0</td>
+                        <td class="px-1">WindAndNature CRF30 PSNR QM0 P3</td>
                         <td class="px-1">5.046</td>
                         <td class="px-1">9171.44</td>
                         <td class="px-1" style="color:#C65911">34.5935</td>
                         <td class="px-1" style="color:#92D050">42.6956</td>
                         <td class="px-1" style="color:#FFC000">40.593</td>
                         <td class="px-1" style="color:#92D050">94.697077</td>
-                        <td class="px-1" style="color:#92D050">90.274703</td>
+                        <td class="px-1 trd" style="color:#92D050">90.274703</td>
                         <td class="px-1" style="color:#C65911">68.80260246</td>
                         <td class="px-1" style="color:#FFC000">70.67784608</td>
                         <td class="px-1" style="color:#C65911">61.91905432</td>
@@ -8952,7 +8942,7 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">SVT-AV1</td>
-                        <td class="px-1">WindAndNature CRF30 VQ</td>
+                        <td class="px-1">WindAndNature CRF30 VQ P3</td>
                         <td class="px-1">5.125</td>
                         <td class="px-1">10062.18</td>
                         <td class="px-1" style="color:#C65911">34.5941</td>
@@ -8960,38 +8950,39 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#FFC000">40.7056</td>
                         <td class="px-1" style="color:#92D050">93.875844</td>
                         <td class="px-1" style="color:#FFC000">89.245974</td>
-                        <td class="px-1" style="color:#C65911;background-color:#C9FFE1">69.04057766</td>
-                        <td class="px-1" style="color:#FFC000;background-color:#C9FFE1">70.76173066</td>
+                        <td class="px-1 ace" style="color:#C65911">69.04057766</td>
+                        <td class="px-1 ace" style="color:#FFC000">70.76173066</td>
                         <td class="px-1" style="color:#C65911">61.63058503</td>
-                        <td class="px-1" style="color:#FFC000;background-color:#F6FBBB">73.41046502</td>
+                        <td class="px-1 sec" style="color:#FFC000">73.41046502</td>
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">SVT-AV1</td>
-                        <td class="px-1">WindAndNature CRF30 SSIM</td>
+                        <td class="px-1">WindAndNature CRF30 SSIM P3</td>
                         <td class="px-1">5.174</td>
                         <td class="px-1">9141.92</td>
                         <td class="px-1" style="color:#C65911">34.5897</td>
                         <td class="px-1" style="color:#92D050">42.7322</td>
                         <td class="px-1" style="color:#FFC000">40.6001</td>
-                        <td class="px-1" style="color:#92D050">94.750709</td>
+                        <td class="px-1 trd" style="color:#92D050">94.750709</td>
                         <td class="px-1" style="color:#FFC000">90.340893</td>
-                        <td class="px-1" style="color:#C65911">68.93928567</td>
+                        <td class="px-1 sec" style="color:#C65911">68.93928567</td>
                         <td class="px-1" style="color:#FFC000">70.61041299</td>
-                        <td class="px-1" style="color:#C65911;background-color:#C9FFE1">62.56205008</td>
+                        <td class="px-1 ace" style="color:#C65911">62.56205008</td>
                         <td class="px-1" style="color:#FFC000">72.72085333</td>
                     </tr>
                     <tr class="text-smaller">
-                        <td class="px-1 t-light-gray"><b>字体颜色：</b></td>
-                        <td class="px-1 t-light-gray" style="color:#00B050">视觉无损</td>
+                        <td class="px-1 t-light-gray"><b>基准：</b></td>
+                        <td class="px-1 t-light-gray" style="color:#00B050">视无损</td>
                         <td class="px-1 t-light-gray" style="color:#92D050">优秀</td>
                         <td class="px-1 t-light-gray" style="color:#FFC000">良好</td>
                         <td class="px-1 t-light-gray" style="color:#C65911">达标</td>
                         <td class="px-1 t-light-gray" style="color:#F00">待达标</td>
-                        <td colspan="3" class="t-light-gray">
-                        <td class="px-1 t-light-gray"><b>背景颜色：</b></td>
-                        <td class="px-1 t-light-gray" style="background-color:#C9FFE1">第一</td>
-                        <td class="px-1 t-light-gray" style="background-color:#F6FBBB">第二</td>
-                        <td class="px-1 t-light-gray" style="background-color:#FF7C80">特殊</td>
+                        <td colspan="2" class="t-light-gray">
+                        <td class="px-1 t-light-gray"><b>排名：</b></td>
+                        <td class="px-1 ace t-light-gray">冠军</td>
+                        <td class="px-1 sec t-light-gray">亚军</td>
+                        <td class="px-1 trd t-light-gray">季军</td>
+                        <td class="px-1 t-light-gray" style="color:white;background-color:#FF7C80">败/犯规</td>
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">x265</td>
@@ -9005,13 +8996,13 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#FFC000">82.474976</td>
                         <td class="px-1" style="color:#FFC000">77.79793375</td>
                         <td class="px-1" style="color:#FFC000">78.10156956</td>
-                        <td class="px-1" style="color:#C65911;background-color:#F6FBBB">69.98188935</td>
+                        <td class="px-1 trd" style="color:#C65911">69.98188935</td>
                         <td class="px-1" style="color:#92D050">83.80652456</td>
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">SVT-AV1</td>
-                        <td class="px-1">BigBuckBunny CRF35</td>
-                        <td class="px-1">32.473</td>
+                        <td class="px-1">BigBuckBunny CRF35 PSNR P3</td>
+                        <td class="px-1 trd">32.473</td>
                         <td class="px-1">1346.27</td>
                         <td class="px-1" style="color:#C65911">33.5011</td>
                         <td class="px-1" style="color:#FFC000">40.8278</td>
@@ -9025,9 +9016,9 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">SVT-AV1</td>
-                        <td class="px-1">BigBuckBunny CRF35 QM</td>
+                        <td class="px-1">BigBuckBunny CRF35 PSNR QM P3</td>
                         <td class="px-1">32.462</td>
-                        <td class="px-1">1327.51</td>
+                        <td class="px-1 trd">1327.51</td>
                         <td class="px-1" style="color:#C65911">33.4773</td>
                         <td class="px-1" style="color:#FFC000">40.7428</td>
                         <td class="px-1" style="color:#FFC000">41.531</td>
@@ -9040,9 +9031,9 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">SVT-AV1</td>
-                        <td class="px-1">BigBuckBunny CRF35 QM Min0</td>
+                        <td class="px-1">BigBuckBunny CRF35 PSNR QM0 P3</td>
                         <td class="px-1">32.369</td>
-                        <td class="px-1" style="background-color:#F6FBBB">1305.69</td>
+                        <td class="px-1 sec">1305.69</td>
                         <td class="px-1" style="color:#C65911">33.3821</td>
                         <td class="px-1" style="color:#FFC000">40.5867</td>
                         <td class="px-1" style="color:#FFC000">41.4067</td>
@@ -9055,8 +9046,8 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">SVT-AV1</td>
-                        <td class="px-1">BigBuckBunny CRF35 VQ</td>
-                        <td class="px-1" style="background-color:#C9FFE1">34.039</td>
+                        <td class="px-1">BigBuckBunny CRF35 VQ P3</td>
+                        <td class="px-1 ace">34.039</td>
                         <td class="px-1">1432.71</td>
                         <td class="px-1" style="color:#C65911">33.4972</td>
                         <td class="px-1" style="color:#FFC000">40.8966</td>
@@ -9070,9 +9061,9 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">SVT-AV1</td>
-                        <td class="px-1">BigBuckBunny CRF35 SSIM</td>
+                        <td class="px-1">BigBuckBunny CRF35 SSIM P3</td>
                         <td class="px-1">31.926</td>
-                        <td class="px-1" style="background-color:#C9FFE1">1301.26</td>
+                        <td class="px-1 ace">1301.26</td>
                         <td class="px-1" style="color:#C65911">33.4781</td>
                         <td class="px-1" style="color:#FFC000">40.7613</td>
                         <td class="px-1" style="color:#FFC000">41.5222</td>
@@ -9088,41 +9079,41 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1">BigBuckBunny CRF18</td>
                         <td class="px-1">6.68</td>
                         <td class="px-1">4334.79</td>
-                        <td class="px-1" style="color:#C65911;background-color:#C9FFE1">33.8165</td>
-                        <td class="px-1" style="color:#FFC000;background-color:#F6FBBB">41.352</td>
-                        <td class="px-1" style="color:#92D050;background-color:#C9FFE1">42.3812</td>
-                        <td class="px-1" style="color:#FFC000;background-color:#C9FFE1">88.496245</td>
-                        <td class="px-1" style="color:#FFC000;background-color:#C9FFE1">83.188079</td>
-                        <td class="px-1" style="color:#92D050;background-color:#C9FFE1">83.24602058</td>
-                        <td class="px-1" style="color:#92D050;background-color:#C9FFE1">83.40918464</td>
-                        <td class="px-1" style="color:#FFC000;background-color:#C9FFE1">78.01967156</td>
-                        <td class="px-1" style="color:#92D050;background-color:#F6FBBB">87.57657407</td>
+                        <td class="px-1 ace" style="color:#C65911">33.8165</td>
+                        <td class="px-1 sec" style="color:#FFC000">41.352</td>
+                        <td class="px-1 ace" style="color:#92D050">42.3812</td>
+                        <td class="px-1 ace" style="color:#FFC000">88.496245</td>
+                        <td class="px-1 ace" style="color:#FFC000">83.188079</td>
+                        <td class="px-1 ace" style="color:#92D050">83.24602058</td>
+                        <td class="px-1 ace" style="color:#92D050">83.40918464</td>
+                        <td class="px-1 ace" style="color:#FFC000">78.01967156</td>
+                        <td class="px-1 sec" style="color:#92D050">87.57657407</td>
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">SVT-AV1</td>
-                        <td class="px-1">BigBuckBunny CRF30</td>
+                        <td class="px-1">BigBuckBunny CRF30 PSNR P3</td>
                         <td class="px-1">31.806</td>
                         <td class="px-1">1843.32</td>
-                        <td class="px-1" style="color:#C65911;background-color:#F6FBBB">33.7512</td>
-                        <td class="px-1" style="color:#FFC000">41.3003</td>
-                        <td class="px-1" style="color:#92D050;background-color:#F6FBBB">42.043</td>
+                        <td class="px-1 sec" style="color:#C65911">33.7512</td>
+                        <td class="px-1 trd" style="color:#FFC000">41.3003</td>
+                        <td class="px-1 sec" style="color:#92D050">42.043</td>
                         <td class="px-1" style="color:#FFC000">88.153931</td>
                         <td class="px-1" style="color:#FFC000">82.723244</td>
-                        <td class="px-1" style="color:#FFC000">78.85317925</td>
-                        <td class="px-1" style="color:#FFC000">78.87951009</td>
+                        <td class="px-1 trd" style="color:#FFC000">78.85317925</td>
+                        <td class="px-1 trd" style="color:#FFC000">78.87951009</td>
                         <td class="px-1" style="color:#C65911">69.75914376</td>
-                        <td class="px-1" style="color:#92D050">87.17429615</td>
+                        <td class="px-1 trd" style="color:#92D050">87.17429615</td>
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">SVT-AV1</td>
-                        <td class="px-1">BigBuckBunny CRF30 QM</td>
+                        <td class="px-1">BigBuckBunny CRF30 PSNR QM P3</td>
                         <td class="px-1">31.701</td>
                         <td class="px-1">1810.23</td>
                         <td class="px-1" style="color:#C65911">33.7239</td>
                         <td class="px-1" style="color:#FFC000">41.1964</td>
                         <td class="px-1" style="color:#FFC000">41.9703</td>
-                        <td class="px-1" style="color:#FFC000">88.161816</td>
-                        <td class="px-1" style="color:#FFC000;background-color:#F6FBBB">82.745566</td>
+                        <td class="px-1 trd" style="color:#FFC000">88.161816</td>
+                        <td class="px-1 sec" style="color:#FFC000">82.745566</td>
                         <td class="px-1" style="color:#FFC000">78.79998864</td>
                         <td class="px-1" style="color:#FFC000">78.83792127</td>
                         <td class="px-1" style="color:#C65911">69.77388681</td>
@@ -9130,7 +9121,7 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">SVT-AV1</td>
-                        <td class="px-1">BigBuckBunny CRF30 QM Min0</td>
+                        <td class="px-1">BigBuckBunny CRF30 PSNR QM0 P3</td>
                         <td class="px-1">31.602</td>
                         <td class="px-1">1766.73</td>
                         <td class="px-1" style="color:#C65911">33.6135</td>
@@ -9145,22 +9136,22 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">SVT-AV1</td>
-                        <td class="px-1">BigBuckBunny CRF30 VQ</td>
-                        <td class="px-1" style="background-color:#F6FBBB">33.204</td>
+                        <td class="px-1">BigBuckBunny CRF30 VQ P3</td>
+                        <td class="px-1 sec">33.204</td>
                         <td class="px-1">1947.9</td>
-                        <td class="px-1" style="color:#C65911">33.7393</td>
-                        <td class="px-1" style="color:#FFC000;background-color:#C9FFE1">41.3689</td>
-                        <td class="px-1" style="color:#92D050">42.0001</td>
-                        <td class="px-1" style="color:#FFC000;background-color:#F6FBBB">88.171916</td>
-                        <td class="px-1" style="color:#FFC000">82.733681</td>
-                        <td class="px-1" style="color:#FFC000;background-color:#F6FBBB">79.2659128</td>
-                        <td class="px-1" style="color:#FFC000;background-color:#F6FBBB">79.29272234</td>
-                        <td class="px-1" style="color:#FFC000">70.15623321</td>
-                        <td class="px-1" style="color:#92D050;background-color:#C9FFE1">87.64869908</td>
+                        <td class="px-1 trd" style="color:#C65911">33.7393</td>
+                        <td class="px-1 ace" style="color:#FFC000">41.3689</td>
+                        <td class="px-1 trd" style="color:#92D050">42.0001</td>
+                        <td class="px-1 sec" style="color:#FFC000">88.171916</td>
+                        <td class="px-1 trd" style="color:#FFC000">82.733681</td>
+                        <td class="px-1 sec" style="color:#FFC000">79.2659128</td>
+                        <td class="px-1 sec" style="color:#FFC000">79.29272234</td>
+                        <td class="px-1 sec" style="color:#FFC000">70.15623321</td>
+                        <td class="px-1 ace" style="color:#92D050">87.64869908</td>
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">SVT-AV1</td>
-                        <td class="px-1">BigBuckBunny CRF30 SSIM</td>
+                        <td class="px-1">BigBuckBunny CRF30 SSIM P3</td>
                         <td class="px-1">31.3</td>
                         <td class="px-1">1773.06</td>
                         <td class="px-1" style="color:#C65911">33.7302</td>
@@ -9174,17 +9165,18 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#92D050">86.97921263</td>
                     </tr>
                     <tr class="text-smaller">
-                        <td class="px-1 t-light-gray"><b>字体颜色：</b></td>
-                        <td class="px-1 t-light-gray" style="color:#00B050">视觉无损</td>
+                        <td class="px-1 t-light-gray"><b>基准：</b></td>
+                        <td class="px-1 t-light-gray" style="color:#00B050">视无损</td>
                         <td class="px-1 t-light-gray" style="color:#92D050">优秀</td>
                         <td class="px-1 t-light-gray" style="color:#FFC000">良好</td>
                         <td class="px-1 t-light-gray" style="color:#C65911">达标</td>
                         <td class="px-1 t-light-gray" style="color:#F00">待达标</td>
-                        <td colspan="3" class="t-light-gray">
-                        <td class="px-1 t-light-gray"><b>背景颜色：</b></td>
-                        <td class="px-1 t-light-gray" style="background-color:#C9FFE1">第一</td>
-                        <td class="px-1 t-light-gray" style="background-color:#F6FBBB">第二</td>
-                        <td class="px-1 t-light-gray" style="background-color:#FF7C80">特殊</td>
+                        <td colspan="2" class="t-light-gray">
+                        <td class="px-1 t-light-gray"><b>排名：</b></td>
+                        <td class="px-1 ace t-light-gray">冠军</td>
+                        <td class="px-1 sec t-light-gray">亚军</td>
+                        <td class="px-1 trd t-light-gray">季军</td>
+                        <td class="px-1 t-light-gray" style="color:white;background-color:#FF7C80">败/犯规</td>
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">x265</td>
@@ -9197,13 +9189,13 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#FFC000">83.679159</td>
                         <td class="px-1" style="color:#C65911">77.135198</td>
                         <td class="px-1" style="color:#FFC000">77.79793375</td>
-                        <td class="px-1" style="color:#FFC000">78.10156956</td>
-                        <td class="px-1" style="color:#C65911">69.98188935</td>
+                        <td class="px-1 sec" style="color:#FFC000">78.10156956</td>
+                        <td class="px-1 sec" style="color:#C65911">69.98188935</td>
                         <td class="px-1" style="color:#92D050">83.80652456</td>
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">SVT-AV1</td>
-                        <td class="px-1">ElephantsDream CRF35 P3</td>
+                        <td class="px-1">ElephantsDream CRF35 PSNR P3</td>
                         <td class="px-1">28.329</td>
                         <td class="px-1">1580.03</td>
                         <td class="px-1" style="color:#C65911">32.732</td>
@@ -9218,7 +9210,7 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">SVT-AV1</td>
-                        <td class="px-1">ElephantsDream CRF35 QM</td>
+                        <td class="px-1">ElephantsDream CRF35 PSNR QM P3</td>
                         <td class="px-1">28.297</td>
                         <td class="px-1">1577.01</td>
                         <td class="px-1" style="color:#C65911">32.7234</td>
@@ -9233,9 +9225,9 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">SVT-AV1</td>
-                        <td class="px-1">ElephantsDream CRF35 QM Min0</td>
-                        <td class="px-1" style="background-color:#F6FBBB">28.546</td>
-                        <td class="px-1" style="background-color:#F6FBBB">1554.96</td>
+                        <td class="px-1">ElephantsDream CRF35 PSNR QM0 P3</td>
+                        <td class="px-1 sec">28.546</td>
+                        <td class="px-1 sec">1554.96</td>
                         <td class="px-1" style="color:#C65911">32.6843</td>
                         <td class="px-1" style="color:#92D050">44.8147</td>
                         <td class="px-1" style="color:#92D050">44.0403</td>
@@ -9248,9 +9240,9 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">SVT-AV1</td>
-                        <td class="px-1">ElephantsDream CRF35 VQ</td>
-                        <td class="px-1" style="background-color:#C9FFE1">28.784</td>
-                        <td class="px-1">1658.06</td>
+                        <td class="px-1">ElephantsDream CRF35 VQ P3</td>
+                        <td class="px-1 ace">28.784</td>
+                        <td class="px-1 trd">1658.06</td>
                         <td class="px-1" style="color:#C65911">32.7453</td>
                         <td class="px-1" style="color:#92D050">44.7811</td>
                         <td class="px-1" style="color:#92D050">44.0312</td>
@@ -9263,9 +9255,9 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">SVT-AV1</td>
-                        <td class="px-1">ElephantsDream CRF35 SSIM</td>
+                        <td class="px-1">ElephantsDream CRF35 SSIM P3</td>
                         <td class="px-1">28.038</td>
-                        <td class="px-1" style="background-color:#C9FFE1">1538.13</td>
+                        <td class="px-1 ace">1538.13</td>
                         <td class="px-1" style="color:#C65911">32.705</td>
                         <td class="px-1" style="color:#92D050">44.8079</td>
                         <td class="px-1" style="color:#92D050">44.0565</td>
@@ -9281,49 +9273,49 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1">ElephantsDream CRF18</td>
                         <td class="px-1">6.11</td>
                         <td class="px-1">5120.43</td>
-                        <td class="px-1" style="color:#C65911;background-color:#C9FFE1">33.23</td>
-                        <td class="px-1" style="color:#00B050;background-color:#C9FFE1">45.4838</td>
-                        <td class="px-1" style="color:#00B050;background-color:#C9FFE1">45.1058</td>
-                        <td class="px-1" style="color:#FFC000;background-color:#C9FFE1">84.281309</td>
-                        <td class="px-1" style="color:#C65911;background-color:#C9FFE1">77.912665</td>
-                        <td class="px-1" style="color:#92D050;background-color:#C9FFE1">83.24602058</td>
-                        <td class="px-1" style="color:#92D050;background-color:#C9FFE1">83.40918464</td>
-                        <td class="px-1" style="color:#FFC000;background-color:#C9FFE1">78.01967156</td>
+                        <td class="px-1 ace" style="color:#C65911">33.23</td>
+                        <td class="px-1 ace" style="color:#00B050">45.4838</td>
+                        <td class="px-1 ace" style="color:#00B050">45.1058</td>
+                        <td class="px-1 ace" style="color:#FFC000">84.281309</td>
+                        <td class="px-1 ace" style="color:#C65911">77.912665</td>
+                        <td class="px-1 ace" style="color:#92D050">83.24602058</td>
+                        <td class="px-1 ace" style="color:#92D050">83.40918464</td>
+                        <td class="px-1 ace" style="color:#FFC000">78.01967156</td>
                         <td class="px-1" style="color:#FFC000">87.57657407</td>
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">SVT-AV1</td>
-                        <td class="px-1">ElephantsDream CRF30 P3</td>
+                        <td class="px-1">ElephantsDream CRF30 PSNR P3</td>
                         <td class="px-1">27.78</td>
                         <td class="px-1">2253.69</td>
-                        <td class="px-1" style="color:#C65911">32.9889</td>
-                        <td class="px-1" style="color:#00B050;background-color:#F6FBBB">45.2554</td>
-                        <td class="px-1" style="color:#92D050;background-color:#F6FBBB">44.5165</td>
+                        <td class="px-1 trd" style="color:#C65911">32.9889</td>
+                        <td class="px-1 sec" style="color:#00B050">45.2554</td>
+                        <td class="px-1 sec" style="color:#92D050">44.5165</td>
                         <td class="px-1" style="color:#FFC000">83.837285</td>
                         <td class="px-1" style="color:#C65911">77.317822</td>
-                        <td class="px-1" style="color:#FFC000;background-color:#F6FBBB">77.95534397</td>
-                        <td class="px-1" style="color:#FFC000;background-color:#F6FBBB">77.6063332</td>
+                        <td class="px-1 trd" style="color:#FFC000">77.95534397</td>
+                        <td class="px-1" style="color:#FFC000">77.6063332</td>
                         <td class="px-1" style="color:#C65911">63.26160259</td>
-                        <td class="px-1" style="color:#00B050;background-color:#F6FBBB">94.46343097</td>
+                        <td class="px-1 sec" style="color:#00B050">94.46343097</td>
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">SVT-AV1</td>
-                        <td class="px-1">ElephantsDream CRF30 QM</td>
+                        <td class="px-1">ElephantsDream CRF30 PSNR QM P3</td>
                         <td class="px-1">27.516</td>
                         <td class="px-1">2241.62</td>
                         <td class="px-1" style="color:#C65911">32.9777</td>
-                        <td class="px-1" style="color:#00B050">45.2444</td>
-                        <td class="px-1" style="color:#92D050">44.4971</td>
-                        <td class="px-1" style="color:#FFC000">83.838933</td>
-                        <td class="px-1" style="color:#C65911">77.320776</td>
+                        <td class="px-1 trd" style="color:#00B050">45.2444</td>
+                        <td class="px-1 trd" style="color:#92D050">44.4971</td>
+                        <td class="px-1 trd" style="color:#FFC000">83.838933</td>
+                        <td class="px-1 trd" style="color:#C65911">77.320776</td>
                         <td class="px-1" style="color:#FFC000">77.92935682</td>
                         <td class="px-1" style="color:#FFC000">77.58905525</td>
-                        <td class="px-1" style="color:#C65911;background-color:#F6FBBB">63.31099239</td>
-                        <td class="px-1" style="color:#00B050;background-color:#C9FFE1">94.5150659</td>
+                        <td class="px-1" style="color:#C65911">63.31099239</td>
+                        <td class="px-1 ace" style="color:#00B050">94.5150659</td>
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">SVT-AV1</td>
-                        <td class="px-1">ElephantsDream CRF30 QM Min0</td>
+                        <td class="px-1">ElephantsDream CRF30 PSNR QM0 P3</td>
                         <td class="px-1">27.992</td>
                         <td class="px-1">2202.75</td>
                         <td class="px-1" style="color:#C65911">32.9266</td>
@@ -9337,22 +9329,23 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#00B050">94.43395281</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">ElephantsDream CRF30 VQ</td>
-                        <td class="px-1" style="background-color:#C9FFE1">28.319</td>
+                        <td class="px-1">SVT-AV1</td>
+                        <td class="px-1">ElephantsDream CRF30 VQ P3</td>
+                        <td class="px-1 trd">28.319</td>
                         <td class="px-1">2350.97</td>
-                        <td class="px-1" style="color:#C65911;background-color:#F6FBBB">32.9975</td>
+                        <td class="px-1 sec" style="color:#C65911">32.9975</td>
                         <td class="px-1" style="color:#00B050">45.1853</td>
                         <td class="px-1" style="color:#92D050">44.452</td>
-                        <td class="px-1" style="color:#FFC000;background-color:#F6FBBB">83.893225</td>
-                        <td class="px-1" style="color:#C65911;background-color:#F6FBBB">77.376995</td>
-                        <td class="px-1" style="color:#FFC000">78.28962734</td>
-                        <td class="px-1" style="color:#FFC000">77.96771217</td>
-                        <td class="px-1" style="color:#C65911">63.73580664</td>
-                        <td class="px-1" style="color:#00B050">94.47657123</td>
+                        <td class="px-1 sec" style="color:#FFC000">83.893225</td>
+                        <td class="px-1 sec" style="color:#C65911">77.376995</td>
+                        <td class="px-1 sec" style="color:#FFC000">78.28962734</td>
+                        <td class="px-1 trd" style="color:#FFC000">77.96771217</td>
+                        <td class="px-1 trd" style="color:#C65911">63.73580664</td>
+                        <td class="px-1 trd" style="color:#00B050">94.47657123</td>
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">SVT-AV1</td>
-                        <td class="px-1">ElephantsDream CRF30 SSIM</td>
+                        <td class="px-1">ElephantsDream CRF30 SSIM P3</td>
                         <td class="px-1">27.445</td>
                         <td class="px-1">2194.22</td>
                         <td class="px-1" style="color:#C65911">32.9654</td>
@@ -9366,17 +9359,18 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#00B050">93.97271621</td>
                     </tr>
                     <tr class="text-smaller">
-                        <td class="px-1 t-light-gray"><b>字体颜色：</b></td>
-                        <td class="px-1 t-light-gray" style="color:#00B050">视觉无损</td>
+                        <td class="px-1 t-light-gray"><b>基准：</b></td>
+                        <td class="px-1 t-light-gray" style="color:#00B050">视无损</td>
                         <td class="px-1 t-light-gray" style="color:#92D050">优秀</td>
                         <td class="px-1 t-light-gray" style="color:#FFC000">良好</td>
                         <td class="px-1 t-light-gray" style="color:#C65911">达标</td>
                         <td class="px-1 t-light-gray" style="color:#F00">待达标</td>
-                        <td colspan="3" class="t-light-gray">
-                        <td class="px-1 t-light-gray"><b>背景颜色：</b></td>
-                        <td class="px-1 t-light-gray" style="background-color:#C9FFE1">第一</td>
-                        <td class="px-1 t-light-gray" style="background-color:#F6FBBB">第二</td>
-                        <td class="px-1 t-light-gray" style="background-color:#FF7C80">特殊</td>
+                        <td colspan="2" class="t-light-gray">
+                        <td class="px-1 t-light-gray"><b>排名：</b></td>
+                        <td class="px-1 ace t-light-gray">冠军</td>
+                        <td class="px-1 sec t-light-gray">亚军</td>
+                        <td class="px-1 trd t-light-gray">季军</td>
+                        <td class="px-1 t-light-gray" style="color:white;background-color:#FF7C80">落败犯规</td>
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">x265</td>
@@ -9391,13 +9385,13 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#C65911">55.88148851</td>
                         <td class="px-1" style="color:#F00">52.56807147</td>
                         <td class="px-1" style="color:#FFF;background-color:#FF7C80">-2.62235865</td>
-                        <td class="px-1" style="color:#00B050;background-color:#C9FFE1">100</td>
+                        <td class="px-1 ace" style="color:#00B050">100</td>
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">SVT-AV1</td>
-                        <td class="px-1">SolLevante CRF35 P3</td>
+                        <td class="px-1">SolLevante CRF35 PSNR P3</td>
                         <td class="px-1">4.334</td>
-                        <td class="px-1" style="background-color:#F6FBBB">15048.56</td>
+                        <td class="px-1 sec">15048.56</td>
                         <td class="px-1" style="color:#C65911">37.4796</td>
                         <td class="px-1" style="color:#FFC000">41.301</td>
                         <td class="px-1" style="color:#92D050">42.1299</td>
@@ -9406,13 +9400,13 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#C65911">65.97162016</td>
                         <td class="px-1" style="color:#F00">59.94357483</td>
                         <td class="px-1" style="color:#F00">32.53194259</td>
-                        <td class="px-1" style="color:#00B050;background-color:#C9FFE1">100</td>
+                        <td class="px-1 ace" style="color:#00B050">100</td>
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">SVT-AV1</td>
-                        <td class="px-1">SolLevante CRF35 P3 QM</td>
+                        <td class="px-1">SolLevante CRF35 PSNR QM P3</td>
                         <td class="px-1">4.379</td>
-                        <td class="px-1">15081.03</td>
+                        <td class="px-1 trd">15081.03</td>
                         <td class="px-1" style="color:#C65911">37.4796</td>
                         <td class="px-1" style="color:#FFC000">41.301</td>
                         <td class="px-1" style="color:#92D050">42.1299</td>
@@ -9425,9 +9419,9 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">SVT-AV1</td>
-                        <td class="px-1">SolLevante CRF35 P3 QM Min0</td>
+                        <td class="px-1">SolLevante CRF35 PSNR QM0 P3</td>
                         <td class="px-1">4.377</td>
-                        <td class="px-1" style="background-color:#C9FFE1">14778.57</td>
+                        <td class="px-1 ace">14778.57</td>
                         <td class="px-1" style="color:#C65911">37.4555</td>
                         <td class="px-1" style="color:#FFC000">41.2608</td>
                         <td class="px-1" style="color:#92D050">42.0718</td>
@@ -9440,8 +9434,8 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">SVT-AV1</td>
-                        <td class="px-1">SolLevante CRF35 P3 VQ</td>
-                        <td class="px-1">4.399</td>
+                        <td class="px-1">SolLevante CRF35 VQ P3</td>
+                        <td class="px-1 trd">4.399</td>
                         <td class="px-1">15332.42</td>
                         <td class="px-1" style="color:#C65911">37.4686</td>
                         <td class="px-1" style="color:#FFC000">41.3226</td>
@@ -9455,18 +9449,18 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">SVT-AV1</td>
-                        <td class="px-1">SolLevante CRF35 P3 SSIM</td>
+                        <td class="px-1">SolLevante CRF35 SSIM P3</td>
                         <td class="px-1">4.111</td>
                         <td class="px-1">16413.47</td>
                         <td class="px-1" style="color:#C65911">31.4607</td>
-                        <td class="px-1" style="color:#FFC000;background-color:#C9FFE1">41.8239</td>
+                        <td class="px-1 ace" style="color:#FFC000">41.8239</td>
                         <td class="px-1" style="color:#FFC000">39.4703</td>
                         <td class="px-1" style="color:#00B050">98.078654</td>
                         <td class="px-1" style="color:#00B050">96.63514</td>
                         <td class="px-1" style="color:#C65911">65.28679182</td>
                         <td class="px-1" style="color:#F00">59.20220066</td>
                         <td class="px-1" style="color:#F00">31.85868858</td>
-                        <td class="px-1" style="color:#00B050;background-color:#C9FFE1">100</td>
+                        <td class="px-1 ace" style="color:#00B050">100</td>
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">x265</td>
@@ -9476,76 +9470,76 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#F00">21.0524</td>
                         <td class="px-1" style="color:#FFC000">38.4039</td>
                         <td class="px-1" style="color:#C65911">35.275</td>
-                        <td class="px-1" style="color:#00B050;background-color:#C9FFE1">98.951545</td>
-                        <td class="px-1" style="color:#00B050;background-color:#C9FFE1">98.200316</td>
+                        <td class="px-1 ace" style="color:#00B050">98.951545</td>
+                        <td class="px-1 ace" style="color:#00B050">98.200316</td>
                         <td class="px-1" style="color:#C65911">68.8732738</td>
-                        <td class="px-1" style="color:#C65911;background-color:#C9FFE1">67.24602694</td>
+                        <td class="px-1 ace" style="color:#C65911">67.24602694</td>
                         <td class="px-1" style="color:#F00">28.23977369</td>
-                        <td class="px-1" style="color:#00B050;background-color:#F6FBBB">99.82971151</td>
+                        <td class="px-1 sec" style="color:#00B050">99.82971151</td>
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">SVT-AV1</td>
-                        <td class="px-1">SolLevante CRF30 P3</td>
+                        <td class="px-1">SolLevante CRF30 PSNR P3</td>
                         <td class="px-1">4.336</td>
                         <td class="px-1">21280.89</td>
-                        <td class="px-1" style="color:#C65911;background-color:#F6FBBB">37.8511</td>
-                        <td class="px-1" style="color:#FFC000;background-color:#F6FBBB">41.6377</td>
-                        <td class="px-1" style="color:#92D050;background-color:#C9FFE1">42.6135</td>
+                        <td class="px-1 sec" style="color:#C65911">37.8511</td>
+                        <td class="px-1 sec" style="color:#FFC000">41.6377</td>
+                        <td class="px-1 ace" style="color:#92D050">42.6135</td>
                         <td class="px-1" style="color:#00B050">98.615379</td>
-                        <td class="px-1" style="color:#00B050">97.452872</td>
-                        <td class="px-1" style="color:#FFC000">72.01245585</td>
+                        <td class="px-1 trd" style="color:#00B050">97.452872</td>
+                        <td class="px-1 trd" style="color:#FFC000">72.01245585</td>
                         <td class="px-1" style="color:#C65911">66.82872302</td>
-                        <td class="px-1" style="color:#F00;background-color:#F6FBBB">45.26125476</td>
-                        <td class="px-1" style="color:#00B050">99.29705787</td>
+                        <td class="px-1 sec" style="color:#F00">45.26125476</td>
+                        <td class="px-1 trd" style="color:#00B050">99.29705787</td>
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">SVT-AV1</td>
-                        <td class="px-1">SolLevante CRF30 P3 QM</td>
+                        <td class="px-1">SolLevante CRF30 PSNR QM P3</td>
                         <td class="px-1">4.333</td>
                         <td class="px-1">21167.47</td>
-                        <td class="px-1" style="color:#C65911;background-color:#C9FFE1">37.8514</td>
-                        <td class="px-1" style="color:#FFC000">41.6337</td>
-                        <td class="px-1" style="color:#92D050;background-color:#F6FBBB">42.6076</td>
-                        <td class="px-1" style="color:#00B050">98.622843</td>
-                        <td class="px-1" style="color:#00B050;background-color:#F6FBBB">97.462467</td>
-                        <td class="px-1" style="color:#FFC000">72.03421424</td>
-                        <td class="px-1" style="color:#C65911">66.91038305</td>
-                        <td class="px-1" style="color:#F00">45.2452499</td>
-                        <td class="px-1" style="color:#00B050;background-color:#C9FFE1">100</td>
+                        <td class="px-1 ace" style="color:#C65911">37.8514</td>
+                        <td class="px-1 trd" style="color:#FFC000">41.6337</td>
+                        <td class="px-1 sec" style="color:#92D050">42.6076</td>
+                        <td class="px-1 trd" style="color:#00B050">98.622843</td>
+                        <td class="px-1 sec" style="color:#00B050">97.462467</td>
+                        <td class="px-1 sec" style="color:#FFC000">72.03421424</td>
+                        <td class="px-1 trd" style="color:#C65911">66.91038305</td>
+                        <td class="px-1 trd" style="color:#F00">45.2452499</td>
+                        <td class="px-1 ace" style="color:#00B050">100</td>
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">SVT-AV1</td>
-                        <td class="px-1">SolLevante CRF30 P3 QM Min0</td>
-                        <td class="px-1">4.409</td>
+                        <td class="px-1">SolLevante CRF30 PSNR QM0 P3</td>
+                        <td class="px-1 sec">4.409</td>
                         <td class="px-1">20672.63</td>
-                        <td class="px-1" style="color:#C65911">37.8158</td>
+                        <td class="px-1 trd" style="color:#C65911">37.8158</td>
                         <td class="px-1" style="color:#FFC000">41.5928</td>
-                        <td class="px-1" style="color:#92D050">42.5431</td>
+                        <td class="px-1 trd" style="color:#92D050">42.5431</td>
                         <td class="px-1" style="color:#00B050">98.601947</td>
                         <td class="px-1" style="color:#00B050">97.42399</td>
                         <td class="px-1" style="color:#FFC000">71.617254</td>
                         <td class="px-1" style="color:#C65911">66.48754073</td>
                         <td class="px-1" style="color:#F00">44.37356138</td>
-                        <td class="px-1" style="color:#00B050;background-color:#C9FFE1">100</td>
+                        <td class="px-1 ace" style="color:#00B050">100</td>
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">SVT-AV1</td>
-                        <td class="px-1">SolLevante CRF30 P3 VQ</td>
-                        <td class="px-1" style="background-color:#C9FFE1;">4.432</td>
+                        <td class="px-1">SolLevante CRF30 VQ P3</td>
+                        <td class="px-1 ace">4.432</td>
                         <td class="px-1">21665.26</td>
                         <td class="px-1" style="color:#C65911">37.4686</td>
                         <td class="px-1" style="color:#FFC000">41.3226</td>
                         <td class="px-1" style="color:#92D050">42.1316</td>
-                        <td class="px-1" style="color:#00B050;background-color:#F6FBBB">98.63212</td>
+                        <td class="px-1 sec" style="color:#00B050">98.63212</td>
                         <td class="px-1" style="color:#00B050">97.439903</td>
-                        <td class="px-1" style="color:#FFC000">72.33149666</td>
-                        <td class="px-1" style="color:#C65911">67.03434155</td>
-                        <td class="px-1" style="color:#F00;background-color:#C9FFE1">45.6597599</td>
-                        <td class="px-1" style="color:#00B050;background-color:#C9FFE1">100</td>
+                        <td class="px-1 ace" style="color:#FFC000">72.33149666</td>
+                        <td class="px-1 src" style="color:#C65911">67.03434155</td>
+                        <td class="px-1 ace" style="color:#F00">45.6597599</td>
+                        <td class="px-1 ace" style="color:#00B050">100</td>
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">SVT-AV1</td>
-                        <td class="px-1">SolLevante CRF30 P3 SSIM</td>
+                        <td class="px-1">SolLevante CRF30 SSIM P3</td>
                         <td class="px-1">4.383</td>
                         <td class="px-1">20008.12</td>
                         <td class="px-1" style="color:#C65911">37.3834</td>
@@ -9556,29 +9550,30 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#FFC000">71.49626144</td>
                         <td class="px-1" style="color:#C65911">66.1878533</td>
                         <td class="px-1" style="color:#F00">44.68539708</td>
-                        <td class="px-1" style="color:#00B050;background-color:#C9FFE1">100</td>
+                        <td class="px-1 ace" style="color:#00B050">100</td>
                     </tr>
                     <tr class="text-smaller">
-                        <td class="px-1 t-light-gray"><b>字体颜色：</b></td>
-                        <td class="px-1 t-light-gray" style="color:#00B050">视觉无损</td>
+                        <td class="px-1 t-light-gray"><b>基准：</b></td>
+                        <td class="px-1 t-light-gray" style="color:#00B050">视无损</td>
                         <td class="px-1 t-light-gray" style="color:#92D050">优秀</td>
                         <td class="px-1 t-light-gray" style="color:#FFC000">良好</td>
                         <td class="px-1 t-light-gray" style="color:#C65911">达标</td>
                         <td class="px-1 t-light-gray" style="color:#F00">待达标</td>
-                        <td colspan="3" class="t-light-gray">
-                        <td class="px-1 t-light-gray"><b>背景颜色：</b></td>
-                        <td class="px-1 t-light-gray" style="background-color:#C9FFE1">第一</td>
-                        <td class="px-1 t-light-gray" style="background-color:#F6FBBB">第二</td>
-                        <td class="px-1 t-light-gray" style="background-color:#FF7C80">特殊</td>
+                        <td colspan="2" class="t-light-gray">
+                        <td class="px-1 t-light-gray"><b>排名：</b></td>
+                        <td class="px-1 ace t-light-gray">冠军</td>
+                        <td class="px-1 sec t-light-gray">亚军</td>
+                        <td class="px-1 trd t-light-gray">季军</td>
+                        <td class="px-1 t-light-gray" style="color:white;background-color:#FF7C80">落败犯规</td>
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">x265</td>
                         <td class="px-1">MAIDRAGON CRF22</td>
                         <td class="px-1">23.73</td>
                         <td class="px-1">1945.67</td>
-                        <td class="px-1" style="color:#FFC000;background-color:#F6FBBB">40.8455</td>
-                        <td class="px-1" style="color:#92D050;background-color:#F6FBBB">42.8648</td>
-                        <td class="px-1" style="color:#92D050;background-color:#F6FBBB">43.3141</td>
+                        <td class="px-1 sec" style="color:#FFC000">40.8455</td>
+                        <td class="px-1 sec" style="color:#92D050">42.8648</td>
+                        <td class="px-1 sec" style="color:#92D050">43.3141</td>
                         <td class="px-1" style="color:#FFC000">85.672864</td>
                         <td class="px-1" style="color:#C65911">78.839019</td>
                         <td class="px-1" style="color:#FFC000">73.91282871</td>
@@ -9588,13 +9583,13 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">SVT-AV1</td>
-                        <td class="px-1">MAIDRAGON CRF35 P3</td>
-                        <td class="px-1">35.645</td>
+                        <td class="px-1">MAIDRAGON CRF35 PSNR P3</td>
+                        <td class="px-1 trd">35.645</td>
                         <td class="px-1">1289.57</td>
                         <td class="px-1" style="color:#F00">31.5394</td>
                         <td class="px-1" style="color:#FFC000">38.5571</td>
                         <td class="px-1" style="color:#FFC000">38.5871</td>
-                        <td class="px-1" style="color:#FFC000;background-color:#F6FBBB">85.898294</td>
+                        <td class="px-1" style="color:#FFC000">85.898294</td>
                         <td class="px-1" style="color:#C65911">79.145894</td>
                         <td class="px-1" style="color:#FFC000">77.79595955</td>
                         <td class="px-1" style="color:#92D050">80.76951847</td>
@@ -9603,9 +9598,9 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">SVT-AV1</td>
-                        <td class="px-1">MAIDRAGON CRF35 QM</td>
+                        <td class="px-1">MAIDRAGON CRF35 PSNR QM P3</td>
                         <td class="px-1">35.269</td>
-                        <td class="px-1">1264.48</td>
+                        <td class="px-1 trd">1264.48</td>
                         <td class="px-1" style="color:#F00">31.5227</td>
                         <td class="px-1" style="color:#FFC000">38.4858</td>
                         <td class="px-1" style="color:#FFC000">38.5249</td>
@@ -9618,9 +9613,9 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">SVT-AV1</td>
-                        <td class="px-1">MAIDRAGON CRF35 QM Min0</td>
+                        <td class="px-1">MAIDRAGON CRF35 PSNR QM0 P3</td>
                         <td class="px-1">35.512</td>
-                        <td class="px-1" style="background-color:#F6FBBB">1258.04</td>
+                        <td class="px-1 sec">1258.04</td>
                         <td class="px-1" style="color:#F00">31.4662</td>
                         <td class="px-1" style="color:#FFC000">38.3831</td>
                         <td class="px-1" style="color:#FFC000">38.4344</td>
@@ -9633,8 +9628,8 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">SVT-AV1</td>
-                        <td class="px-1">MAIDRAGON CRF35 VQ</td>
-                        <td class="px-1" style="background-color:#C9FFE1">37.573</td>
+                        <td class="px-1">MAIDRAGON CRF35 VQ P3</td>
+                        <td class="px-1 ace">37.573</td>
                         <td class="px-1">1358.55</td>
                         <td class="px-1" style="color:#F00">31.5195</td>
                         <td class="px-1" style="color:#FFC000">38.5399</td>
@@ -9648,9 +9643,9 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">SVT-AV1</td>
-                        <td class="px-1">MAIDRAGON CRF35 SSIM</td>
+                        <td class="px-1">MAIDRAGON CRF35 SSIM P3</td>
                         <td class="px-1">34.559</td>
-                        <td class="px-1" style="background-color:#C9FFE1">1220.44</td>
+                        <td class="px-1 ace">1220.44</td>
                         <td class="px-1" style="color:#F00">31.5036</td>
                         <td class="px-1" style="color:#FFC000">38.4679</td>
                         <td class="px-1" style="color:#FFC000">38.5017</td>
@@ -9666,11 +9661,11 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1">MAIDRAGON CRF18</td>
                         <td class="px-1">21.06</td>
                         <td class="px-1">3162.45</td>
-                        <td class="px-1" style="color:#92D050;background-color:#C9FFE1">42.5171</td>
-                        <td class="px-1" style="color:#92D050;background-color:#C9FFE1">44.2124</td>
-                        <td class="px-1" style="color:#92D050;background-color:#C9FFE1">44.547</td>
-                        <td class="px-1" style="color:#FFC000;background-color:#C9FFE1">86.089327</td>
-                        <td class="px-1" style="color:#C65911;background-color:#C9FFE1">79.410981</td>
+                        <td class="px-1 ace" style="color:#92D050">42.5171</td>
+                        <td class="px-1 ace" style="color:#92D050">44.2124</td>
+                        <td class="px-1 ace" style="color:#92D050">44.547</td>
+                        <td class="px-1 ace" style="color:#FFC000">86.089327</td>
+                        <td class="px-1 ace" style="color:#C65911">79.410981</td>
                         <td class="px-1" style="color:#92D050">80.15751958</td>
                         <td class="px-1" style="color:#92D050">82.75859474</td>
                         <td class="px-1" style="color:#C65911">62.41689237</td>
@@ -9678,37 +9673,37 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">SVT-AV1</td>
-                        <td class="px-1">MAIDRAGON CRF30 P3</td>
+                        <td class="px-1">MAIDRAGON CRF30 PSNR P3</td>
                         <td class="px-1">34.714</td>
                         <td class="px-1">1746.96</td>
-                        <td class="px-1" style="color:#F00">31.6802</td>
-                        <td class="px-1" style="color:#FFC000">38.7924</td>
-                        <td class="px-1" style="color:#FFC000">38.8041</td>
-                        <td class="px-1" style="color:#FFC000">86.088653</td>
-                        <td class="px-1" style="color:#C65911;background-color:#F6FBBB">79.403111</td>
-                        <td class="px-1" style="color:#92D050;background-color:#F6FBBB">80.7293233</td>
-                        <td class="px-1" style="color:#92D050;background-color:#F6FBBB">83.2105695</td>
+                        <td class="px-1 trd" style="color:#F00">31.6802</td>
+                        <td class="px-1 trd" style="color:#FFC000">38.7924</td>
+                        <td class="px-1 trd" style="color:#FFC000">38.8041</td>
+                        <td class="px-1 sec" style="color:#FFC000">86.088653</td>
+                        <td class="px-1 sec" style="color:#C65911">79.403111</td>
+                        <td class="px-1 sec" style="color:#92D050">80.7293233</td>
+                        <td class="px-1 sec" style="color:#92D050">83.2105695</td>
                         <td class="px-1" style="color:#C65911">62.57713789</td>
-                        <td class="px-1" style="color:#92D050">88.27199543</td>
+                        <td class="px-1 sec" style="color:#92D050">88.27199543</td>
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">SVT-AV1</td>
-                        <td class="px-1">MAIDRAGON CRF30 QM</td>
+                        <td class="px-1">MAIDRAGON CRF30 PSNR QM P3</td>
                         <td class="px-1">34.394</td>
                         <td class="px-1">1701.28</td>
                         <td class="px-1" style="color:#F00">31.6603</td>
                         <td class="px-1" style="color:#FFC000">38.7179</td>
                         <td class="px-1" style="color:#FFC000">38.7374</td>
-                        <td class="px-1" style="color:#FFC000">86.085526</td>
-                        <td class="px-1" style="color:#C65911">79.402306</td>
-                        <td class="px-1" style="color:#92D050">80.59807135</td>
-                        <td class="px-1" style="color:#92D050">83.09262696</td>
-                        <td class="px-1" style="color:#C65911">62.58511914</td>
+                        <td class="px-1 trd" style="color:#FFC000">86.085526</td>
+                        <td class="px-1 trd" style="color:#C65911">79.402306</td>
+                        <td class="px-1 trd" style="color:#92D050">80.59807135</td>
+                        <td class="px-1 trd" style="color:#92D050">83.09262696</td>
+                        <td class="px-1 trd" style="color:#C65911">62.58511914</td>
                         <td class="px-1" style="color:#92D050">88.03572868</td>
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">SVT-AV1</td>
-                        <td class="px-1">MAIDRAGON CRF30 QM Min0</td>
+                        <td class="px-1">MAIDRAGON CRF30 PSNR QM0 P3</td>
                         <td class="px-1">34.683</td>
                         <td class="px-1">1678.91</td>
                         <td class="px-1" style="color:#F00">31.5949</td>
@@ -9723,22 +9718,22 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">SVT-AV1</td>
-                        <td class="px-1">MAIDRAGON CRF30 VQ</td>
-                        <td class="px-1" style="background-color:#F6FBBB">36.461</td>
+                        <td class="px-1">MAIDRAGON CRF30 VQ P3</td>
+                        <td class="px-1 sec">36.461</td>
                         <td class="px-1">1841.98</td>
                         <td class="px-1" style="color:#F00">31.6595</td>
                         <td class="px-1" style="color:#FFC000">38.7775</td>
                         <td class="px-1" style="color:#FFC000">38.7775</td>
                         <td class="px-1" style="color:#FFC000">86.030722</td>
                         <td class="px-1" style="color:#C65911">79.317153</td>
-                        <td class="px-1" style="color:#92D050;background-color:#C9FFE1">81.0576056</td>
-                        <td class="px-1" style="color:#92D050;background-color:#C9FFE1">83.45341781</td>
-                        <td class="px-1" style="color:#C65911;background-color:#C9FFE1">63.52342983</td>
-                        <td class="px-1" style="color:#92D050;background-color:#C9FFE1">88.37986377</td>
+                        <td class="px-1 ace" style="color:#92D050">81.0576056</td>
+                        <td class="px-1 ace" style="color:#92D050">83.45341781</td>
+                        <td class="px-1 ace" style="color:#C65911">63.52342983</td>
+                        <td class="px-1 ace" style="color:#92D050">88.37986377</td>
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">SVT-AV1</td>
-                        <td class="px-1">MAIDRAGON CRF30 SSIM</td>
+                        <td class="px-1">MAIDRAGON CRF30 SSIM P3</td>
                         <td class="px-1">33.994</td>
                         <td class="px-1">1665.26</td>
                         <td class="px-1" style="color:#F00">31.6558</td>
@@ -9748,30 +9743,31 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#C65911">79.289779</td>
                         <td class="px-1" style="color:#92D050">80.37004198</td>
                         <td class="px-1" style="color:#92D050">82.49914773</td>
-                        <td class="px-1" style="color:#C65911;background-color:#F6FBBB">62.83002581</td>
-                        <td class="px-1" style="color:#92D050;background-color:#F6FBBB">88.19626015</td>
+                        <td class="px-1 sec" style="color:#C65911">62.83002581</td>
+                        <td class="px-1 trd" style="color:#92D050">88.19626015</td>
                     </tr>
                     <tr class="text-smaller">
-                        <td class="px-1 t-light-gray"><b>字体颜色：</b></td>
-                        <td class="px-1 t-light-gray" style="color:#00B050">视觉无损</td>
+                        <td class="px-1 t-light-gray"><b>基准：</b></td>
+                        <td class="px-1 t-light-gray" style="color:#00B050">视无损</td>
                         <td class="px-1 t-light-gray" style="color:#92D050">优秀</td>
                         <td class="px-1 t-light-gray" style="color:#FFC000">良好</td>
                         <td class="px-1 t-light-gray" style="color:#C65911">达标</td>
                         <td class="px-1 t-light-gray" style="color:#F00">待达标</td>
-                        <td colspan="3" class="t-light-gray">
-                        <td class="px-1 t-light-gray"><b>背景颜色：</b></td>
-                        <td class="px-1 t-light-gray" style="background-color:#C9FFE1">第一</td>
-                        <td class="px-1 t-light-gray" style="background-color:#F6FBBB">第二</td>
-                        <td class="px-1 t-light-gray" style="background-color:#FF7C80">特殊</td>
+                        <td colspan="2" class="t-light-gray">
+                        <td class="px-1 t-light-gray"><b>排名：</b></td>
+                        <td class="px-1 ace t-light-gray">冠军</td>
+                        <td class="px-1 sec t-light-gray">亚军</td>
+                        <td class="px-1 trd t-light-gray">季军</td>
+                        <td class="px-1 t-light-gray" style="color:white;background-color:#FF7C80">落败犯规</td>
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">x265</td>
                         <td class="px-1">HYOUKA CRF22</td>
                         <td class="px-1">26.26</td>
                         <td class="px-1">827.47</td>
-                        <td class="px-1" style="color:#FFC000;background-color:#F6FBBB">39.3288</td>
-                        <td class="px-1" style="color:#92D050;background-color:#F6FBBB">42.407</td>
-                        <td class="px-1" style="color:#92D050;background-color:#F6FBBB">42.984</td>
+                        <td class="px-1 sec" style="color:#FFC000">39.3288</td>
+                        <td class="px-1 sec" style="color:#92D050">42.407</td>
+                        <td class="px-1 sec" style="color:#92D050">42.984</td>
                         <td class="px-1" style="color:#FFC000">88.251216</td>
                         <td class="px-1" style="color:#FFC000">82.140527</td>
                         <td class="px-1" style="color:#FFC000">74.36000528</td>
@@ -9781,7 +9777,7 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">SVT-AV1</td>
-                        <td class="px-1">HYOUKA CRF35 P3</td>
+                        <td class="px-1">HYOUKA CRF35 PSNR P3</td>
                         <td class="px-1">44.83</td>
                         <td class="px-1">626</td>
                         <td class="px-1" style="color:#C65911">33.0814</td>
@@ -9796,9 +9792,9 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">SVT-AV1</td>
-                        <td class="px-1">HYOUKA CRF35 QM</td>
-                        <td class="px-1" style="background-color:#F6FBBB">45.157</td>
-                        <td class="px-1">616</td>
+                        <td class="px-1">HYOUKA CRF35 QM P3</td>
+                        <td class="px-1 sec">45.157</td>
+                        <td class="px-1 trd">616</td>
                         <td class="px-1" style="color:#C65911">33.073</td>
                         <td class="px-1" style="color:#FFC000">41.1885</td>
                         <td class="px-1" style="color:#FFC000">41.7834</td>
@@ -9811,9 +9807,9 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">SVT-AV1</td>
-                        <td class="px-1">HYOUKA CRF35 QM Min0</td>
-                        <td class="px-1">45.103</td>
-                        <td class="px-1" style="background-color:#F6FBBB">605.16</td>
+                        <td class="px-1">HYOUKA CRF35 QM0 P3</td>
+                        <td class="px-1 trd">45.103</td>
+                        <td class="px-1 sec">605.16</td>
                         <td class="px-1" style="color:#C65911">33.0321</td>
                         <td class="px-1" style="color:#FFC000">41.1181</td>
                         <td class="px-1" style="color:#FFC000">41.7172</td>
@@ -9826,8 +9822,8 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">SVT-AV1</td>
-                        <td class="px-1">HYOUKA CRF35 VQ</td>
-                        <td class="px-1" style="background-color:#C9FFE1">46.994</td>
+                        <td class="px-1">HYOUKA CRF35 VQ P3</td>
+                        <td class="px-1 ace">46.994</td>
                         <td class="px-1">664.75</td>
                         <td class="px-1" style="color:#C65911">33.0548</td>
                         <td class="px-1" style="color:#FFC000">41.1949</td>
@@ -9841,9 +9837,9 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">SVT-AV1</td>
-                        <td class="px-1">HYOUKA CRF35 SSIM</td>
+                        <td class="px-1">HYOUKA CRF35 SSIM P3</td>
                         <td class="px-1">44.168</td>
-                        <td class="px-1" style="background-color:#C9FFE1">604.44</td>
+                        <td class="px-1 ace">604.44</td>
                         <td class="px-1" style="color:#C65911">33.0569</td>
                         <td class="px-1" style="color:#FFC000">41.1617</td>
                         <td class="px-1" style="color:#FFC000">41.7536</td>
@@ -9859,9 +9855,9 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1">HYOUKA CRF18</td>
                         <td class="px-1">24.57</td>
                         <td class="px-1">1381.65</td>
-                        <td class="px-1" style="color:#FFC000;background-color:#C9FFE1">40.4798</td>
-                        <td class="px-1" style="color:#92D050;background-color:#C9FFE1">43.4753</td>
-                        <td class="px-1" style="color:#92D050;background-color:#C9FFE1">43.8205</td>
+                        <td class="px-1 ace" style="color:#FFC000">40.4798</td>
+                        <td class="px-1 ace" style="color:#92D050">43.4753</td>
+                        <td class="px-1 ace" style="color:#92D050">43.8205</td>
                         <td class="px-1" style="color:#FFC000">88.690842</td>
                         <td class="px-1" style="color:#FFC000">82.720369</td>
                         <td class="px-1" style="color:#FFC000">79.68937613</td>
@@ -9871,37 +9867,37 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">SVT-AV1</td>
-                        <td class="px-1">HYOUKA CRF30 P3</td>
+                        <td class="px-1">HYOUKA CRF30 PSNR P3</td>
                         <td class="px-1">43.113</td>
                         <td class="px-1">849.51</td>
-                        <td class="px-1" style="color:#C65911">33.2199</td>
-                        <td class="px-1" style="color:#FFC000">41.4836</td>
-                        <td class="px-1" style="color:#92D050">42.0629</td>
-                        <td class="px-1" style="color:#FFC000;background-color:#F6FBBB">88.706578</td>
-                        <td class="px-1" style="color:#FFC000;background-color:#F6FBBB">82.750268</td>
-                        <td class="px-1" style="color:#92D050;background-color:#F6FBBB">82.03787385</td>
-                        <td class="px-1" style="color:#92D050;background-color:#F6FBBB">83.02565519</td>
-                        <td class="px-1" style="color:#FFC000;background-color:#F6FBBB">72.68777288</td>
-                        <td class="px-1" style="color:#92D050;background-color:#F6FBBB">87.46544644</td>
+                        <td class="px-1 trd" style="color:#C65911">33.2199</td>
+                        <td class="px-1 trd" style="color:#FFC000">41.4836</td>
+                        <td class="px-1 trd" style="color:#92D050">42.0629</td>
+                        <td class="px-1 sec" style="color:#FFC000">88.706578</td>
+                        <td class="px-1 sec" style="color:#FFC000">82.750268</td>
+                        <td class="px-1 sec" style="color:#92D050">82.03787385</td>
+                        <td class="px-1 sec" style="color:#92D050">83.02565519</td>
+                        <td class="px-1 sec" style="color:#FFC000">72.68777288</td>
+                        <td class="px-1 sec" style="color:#92D050">87.46544644</td>
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">SVT-AV1</td>
-                        <td class="px-1">HYOUKA CRF30 QM</td>
+                        <td class="px-1">HYOUKA CRF30 PSNR QM</td>
                         <td class="px-1">43.246</td>
                         <td class="px-1">830.18</td>
                         <td class="px-1" style="color:#C65911">33.2107</td>
                         <td class="px-1" style="color:#FFC000">41.4386</td>
                         <td class="px-1" style="color:#92D050">42.0205</td>
-                        <td class="px-1" style="color:#FFC000;background-color:#C9FFE1">88.707766</td>
-                        <td class="px-1" style="color:#FFC000;background-color:#C9FFE1">82.756303</td>
-                        <td class="px-1" style="color:#92D050">82.00116606</td>
-                        <td class="px-1" style="color:#92D050">82.99097252</td>
-                        <td class="px-1" style="color:#FFC000">72.65484942</td>
-                        <td class="px-1" style="color:#92D050">87.35281267</td>
+                        <td class="px-1 ace" style="color:#FFC000">88.707766</td>
+                        <td class="px-1 ace" style="color:#FFC000">82.756303</td>
+                        <td class="px-1 trd" style="color:#92D050">82.00116606</td>
+                        <td class="px-1 trd" style="color:#92D050">82.99097252</td>
+                        <td class="px-1 trd" style="color:#FFC000">72.65484942</td>
+                        <td class="px-1 trd" style="color:#92D050">87.35281267</td>
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">SVT-AV1</td>
-                        <td class="px-1">HYOUKA CRF30 QM Min0</td>
+                        <td class="px-1">HYOUKA CRF30 PSNR QM0 P3</td>
                         <td class="px-1">43.43</td>
                         <td class="px-1">807.47</td>
                         <td class="px-1" style="color:#C65911">33.1681</td>
@@ -9916,7 +9912,7 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">SVT-AV1</td>
-                        <td class="px-1">HYOUKA CRF30 VQ</td>
+                        <td class="px-1">HYOUKA CRF30 VQ P3</td>
                         <td class="px-1">44.81</td>
                         <td class="px-1">907.2</td>
                         <td class="px-1" style="color:#C65911">33.1894</td>
@@ -9924,14 +9920,14 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#92D050">42.0314</td>
                         <td class="px-1" style="color:#FFC000">88.664737</td>
                         <td class="px-1" style="color:#FFC000">82.685052</td>
-                        <td class="px-1" style="color:#92D050;background-color:#C9FFE1">82.2466764</td>
-                        <td class="px-1" style="color:#92D050;background-color:#C9FFE1">83.14431623</td>
-                        <td class="px-1" style="color:#FFC000;background-color:#C9FFE1">73.1824835</td>
-                        <td class="px-1" style="color:#92D050;background-color:#C9FFE1">87.50851431</td>
+                        <td class="px-1 ace" style="color:#92D050">82.2466764</td>
+                        <td class="px-1 ace" style="color:#92D050">83.14431623</td>
+                        <td class="px-1 ace" style="color:#FFC000">73.1824835</td>
+                        <td class="px-1 ace" style="color:#92D050">87.50851431</td>
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">SVT-AV1</td>
-                        <td class="px-1">HYOUKA CRF30 SSIM</td>
+                        <td class="px-1">HYOUKA CRF30 SSIM P3</td>
                         <td class="px-1">42.132</td>
                         <td class="px-1">821.58</td>
                         <td class="px-1" style="color:#C65911">33.2012</td>
@@ -9946,30 +9942,33 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                     </tr>
                 </tbody>
             </table></div>
+            <p class="text-gray-side">注：悬浮光标到单元格上方以查看完整小数</p>
 
             <h4>（22/22）SVT-AV1 基准测试分析</h4>
             <ol>
                 <li>Tune VQ 明显提高了漫画材质动画片源的感知质量</li>
                 <li>速度：
                     <ol class="text-smaller">
-                        <li>SVT-AV1 Preset 3 在 x265 Preset Veryslow 时会根据片源分辨率快出 2~5 倍，x265 位于劣势</li>
+                        <li>除非动态信息复杂或分辨率超过 4k，SVT-AV1 Preset 3 在 x265 Preset Veryslow 时会根据片源分辨率快出 2~5 倍，x265 完败</li>
                         <li>SVT-AV1 Tune VQ 速度最快，其次是默认的 Tune PSNR，开启与关闭量化矩阵影响不大</li>
                         <li>上表的 fps 数字为平均值，而在 1920x1080 的漫画材质动画片源中，SVT-AV1 Preset 3 已经达到了 47 fps 的速度，是 x265 的 4~5 倍</li>
                     </ol>
                 </li>
                 <li>画质：
                     <ol class="text-smaller">
-                        <li>x265 的 XPSNR（播放画质、仔细观看）画质最高，但在其它指标下优势消失</li>
+                        <li>x265 的 XPSNR（播放画质、仔细观看）画质最高，但在其它指标下优势较小</li>
+                        <li>x265 编码后的码率几乎始终是两倍于 SVT-AV1，但画质的提升往往小于 1.5 倍，甚至还有负提升</li>
                         <li>x265 CRF 22 出现了一次结构性失真状况（-2.62 相关），但 SVT-AV1 没有出现</li>
-                        <li>x265 的画质优势非常大，主要体现在在拟真材质动画中（虽然码率高，但文件毕竟是视频，所以尚可接受）</li>
+                        <li>x265 的画质优势非常大，主要体现在在拟真材质动画中（虽然码率高，但文件毕竟是视频，所以抛开下载和低端计算机的带宽不谈，整体尚可接受）</li>
                         <li>在画面维持长期渐变/低对比度的情况下，x265 与 SVT-AV1 的画质差不多</li>
                         <li>SVT-AV1 Tune VQ 的综合画质得分最好，但在高动态场景下得分略差于 Tune PSNR</li>
                         <li>SVT-AV1 开启量化矩阵时，在漫画材质动画片源的 VMAF（播放画质、正常观看）、SSIMULACRA2.1（暂停画质、仔细观看）画质会提高</li>
                         <li>SVT-AV1 Tune PSNR（默认）在高动态场景下的画质得分最好，但综合上不高</li>
                         <li>无论画面类型，只要静态画面偏多，Tune VQ 就相比 Tune PSNR 有优势，如 BigBuckBunny、WindAndNature、MAIDRAGON-S、氷菓，否则 Tune PSNR 最好</li>
+                        <li>动态信息越复杂，SVT-AV1 的画质优势越大；否则 x265 的画质优势更大</li>
                     </ol>
                 </li>
-                <li>码率：<span class="text-smaller">SVT-AV1 Preset 3 在 x265 Preset Veryslow 时码率只有后者的一半，x265 位于较大劣势</span></li>
+                <li>码率：<span class="text-smaller">SVT-AV1 Preset 3 在 x265 Preset Veryslow 时码率只有后者的一半，x265 完败</span></li>
                 <li>体验：
                     <ol class="text-smaller">
                         <li>SVT-AV1 实现了直接设定关键帧到秒数的配置，这使得设定参数更方便了</li>
@@ -9979,8 +9978,8 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
             </ol>
             
             <h3>测试——SVT-AV1 高暂停画质测试</h3>
-            <p>注：“高暂停画质”指 Still-image tuning。</p>
-            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（1/2）SVT-AV1 v3.0——SolLevant-高暂停画质选项</button>
+            <p>即 Still-image tuning。</p>
+            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（1/2）SVT-AV1 v3.0——SolLevante-高暂停画质选项</button>
             <div class="coll-content">
                 <p><code>--preset 3 --crf 30 --enable-qm 1 --qm-min 2 --tune 0</code>：</p>
                 <pre><code class="text-smaller">
@@ -10139,26 +10138,26 @@ SSIMULACRA2_rs: Mean: 79.07579506 Median: 75.54317772 Std Dev: 13.21970057 5th P
                 </code></pre>
             </div>
 
-            <div class="overflow-auto mt-3"><table class="table-center text-smaller">
+            <div class="overflow-auto mt-3"><table class="table-center text-xs two-decimals">
                 <thead>
                     <tr>
-                        <th>SVT-AV1 编码选项</th>
-                        <th>速度 fps</th>
-                        <th>码率 kbps</th>
-                        <th>XPSNR-Y dB</th>
-                        <th>XPSNR-U dB</th>
-                        <th>XPSNR-V dB</th>
-                        <th>VMAF 4k</th>
-                        <th>VMAF 1080p</th>
-                        <th>S2.1：均值</th>
-                        <th>S2.1：中位</th>
-                        <th>S2.1：第 5%</th>
-                        <th>S2.1：第 95%</th>
+                        <th class="px-1">SVT-AV1 编码选项</th>
+                        <th class="px-1">速度 fps</th>
+                        <th class="px-1">码率 kbps</th>
+                        <th class="px-1">XPSNR-Y dB</th>
+                        <th class="px-1">XPSNR-U dB</th>
+                        <th class="px-1">XPSNR-V dB</th>
+                        <th class="px-1">VMAF 4k</th>
+                        <th class="px-1">VMAF 1080p</th>
+                        <th class="px-1">S2.1：均值</th>
+                        <th class="px-1">S2.1：中位</th>
+                        <th class="px-1">S2.1：第 5%</th>
+                        <th class="px-1">S2.1：第 95%</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr class="border-bottom">
-                        <td class="px-1">SolLevante CRF30 P3</td>
+                        <td class="px-1">SolLevante CRF30 PSNR P3</td>
                         <td class="px-1">4.336</td>
                         <td class="px-1">21280.89</td>
                         <td class="px-1" style="color:#C65911">37.8511</td>
@@ -10172,7 +10171,7 @@ SSIMULACRA2_rs: Mean: 79.07579506 Median: 75.54317772 Std Dev: 13.21970057 5th P
                         <td class="px-1" style="color:#00B050">99.29705787</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">SolLevante CRF30 P3 QM</td>
+                        <td class="px-1">SolLevante CRF30 PSNR P3 QM</td>
                         <td class="px-1">4.333</td>
                         <td class="px-1">21167.47</td>
                         <td class="px-1" style="color:#C65911">37.8514</td>
@@ -10183,12 +10182,12 @@ SSIMULACRA2_rs: Mean: 79.07579506 Median: 75.54317772 Std Dev: 13.21970057 5th P
                         <td class="px-1" style="color:#FFC000">72.03421424</td>
                         <td class="px-1" style="color:#C65911">66.91038305</td>
                         <td class="px-1" style="color:#F00">45.2452499</td>
-                        <td class="px-1" style="color:#00B050;background-color:#C9FFE1">100</td>
+                        <td class="px-1 ace" style="color:#00B050">100</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">SolLevante CRF30 P3 QM Min0</td>
-                        <td class="px-1" style="background-color:#F6FBBB">4.409</td>
-                        <td class="px-1">20672.63</td>
+                        <td class="px-1">SolLevante CRF30 QM0 P3</td>
+                        <td class="px-1 trd">4.409</td>
+                        <td class="px-1 sec">20672.63</td>
                         <td class="px-1" style="color:#C65911">37.8158</td>
                         <td class="px-1" style="color:#FFC000">41.5928</td>
                         <td class="px-1" style="color:#92D050">42.5431</td>
@@ -10197,11 +10196,11 @@ SSIMULACRA2_rs: Mean: 79.07579506 Median: 75.54317772 Std Dev: 13.21970057 5th P
                         <td class="px-1" style="color:#FFC000">71.617254</td>
                         <td class="px-1" style="color:#C65911">66.48754073</td>
                         <td class="px-1" style="color:#F00">44.37356138</td>
-                        <td class="px-1" style="color:#00B050;background-color:#C9FFE1">100</td>
+                        <td class="px-1 ace" style="color:#00B050">100</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">SolLevante CRF30 P3 VQ</td>
-                        <td class="px-1" style="background-color:#F6FBBB">4.432</td>
+                        <td class="px-1">SolLevante CRF30 VQ P3</td>
+                        <td class="px-1 sec">4.432</td>
                         <td class="px-1">21665.26</td>
                         <td class="px-1" style="color:#C65911">37.4686</td>
                         <td class="px-1" style="color:#FFC000">41.3226</td>
@@ -10211,12 +10210,12 @@ SSIMULACRA2_rs: Mean: 79.07579506 Median: 75.54317772 Std Dev: 13.21970057 5th P
                         <td class="px-1" style="color:#FFC000">72.33149666</td>
                         <td class="px-1" style="color:#C65911">67.03434155</td>
                         <td class="px-1" style="color:#F00">45.6597599</td>
-                        <td class="px-1" style="color:#00B050;background-color:#C9FFE1">100</td>
+                        <td class="px-1 ace" style="color:#00B050">100</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">SolLevante CRF30 P3 SSIM</td>
+                        <td class="px-1">SolLevante CRF30 SSIM P3</td>
                         <td class="px-1">4.383</td>
-                        <td class="px-1">20008.12</td>
+                        <td class="px-1 ace">20008.12</td>
                         <td class="px-1" style="color:#C65911">37.3834</td>
                         <td class="px-1" style="color:#FFC000">41.2295</td>
                         <td class="px-1" style="color:#92D050">42.0278</td>
@@ -10225,24 +10224,25 @@ SSIMULACRA2_rs: Mean: 79.07579506 Median: 75.54317772 Std Dev: 13.21970057 5th P
                         <td class="px-1" style="color:#FFC000">71.49626144</td>
                         <td class="px-1" style="color:#C65911">66.1878533</td>
                         <td class="px-1" style="color:#F00">44.68539708</td>
-                        <td class="px-1" style="color:#00B050;background-color:#C9FFE1">100</td>
+                        <td class="px-1 ace" style="color:#00B050">100</td>
                     </tr>
                     <tr class="text-smaller">
-                        <td class="px-1 t-light-gray"><b>字体颜色：</b></td>
-                        <td class="px-1 t-light-gray" style="color:#00B050">视觉无损</td>
+                        <td class="px-1 t-light-gray"><b>基准：</b></td>
+                        <td class="px-1 t-light-gray" style="color:#00B050">视无损</td>
                         <td class="px-1 t-light-gray" style="color:#92D050">优秀</td>
                         <td class="px-1 t-light-gray" style="color:#FFC000">良好</td>
                         <td class="px-1 t-light-gray" style="color:#C65911">达标</td>
                         <td class="px-1 t-light-gray" style="color:#F00">待达标</td>
-                        <td colspan="3" class="t-light-gray">
-                        <td class="px-1 t-light-gray"><b>背景颜色：</b></td>
-                        <td class="px-1 t-light-gray" style="background-color:#C9FFE1">第一</td>
-                        <td class="px-1 t-light-gray" style="background-color:#F6FBBB">第二</td>
+                        <td colspan="2" class="t-light-gray">
+                        <td class="px-1 t-light-gray"><b>排名：</b></td>
+                        <td class="px-1 ace t-light-gray">冠军</td>
+                        <td class="px-1 sec t-light-gray">亚军</td>
+                        <td class="px-1 trd t-light-gray">季军</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">SolLevante CRF30 P3 QM Min2 VQ</td>
-                        <td class="px-1" style="background-color:#C9FFE1">4.434</td>
-                        <td class="px-1">21029.16</td>
+                        <td class="px-1">SolLevante CRF30 VQ QM2 P3</td>
+                        <td class="px-1 ace">4.434</td>
+                        <td class="px-1 trd">21029.16</td>
                         <td class="px-1" style="color:#C65911">37.8142</td>
                         <td class="px-1" style="color:#FFC000">41.6312</td>
                         <td class="px-1" style="color:#92D050">42.5653</td>
@@ -10251,10 +10251,10 @@ SSIMULACRA2_rs: Mean: 79.07579506 Median: 75.54317772 Std Dev: 13.21970057 5th P
                         <td class="px-1" style="color:#FFC000">71.52760837</td>
                         <td class="px-1" style="color:#FFC000">66.53989790</td>
                         <td class="px-1" style="color:#F00">44.47004001</td>
-                        <td class="px-1" style="color:#00B050">99.71058625</td>
+                        <td class="px-1 trd" style="color:#00B050">99.71058625</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">SolLevante CRF30 P3 QM Min2 VQ VB-Curve2Strength1</td>
+                        <td class="px-1">SolLevante CRF30 VQ QM2 P3 VB-Curve2Strength1</td>
                         <td class="px-1">3.935</td>
                         <td class="px-1">28407.58</td>
                         <td class="px-1" style="color:#FFC000">38.1206</td>
@@ -10268,7 +10268,7 @@ SSIMULACRA2_rs: Mean: 79.07579506 Median: 75.54317772 Std Dev: 13.21970057 5th P
                         <td class="px-1" style="color:#00B050">99.70758759</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">SolLevante CRF30 P3 QM Min2 VQ VB-Curve2Strength2</td>
+                        <td class="px-1">SolLevante CRF30 VQ QM2 P3 VB-Curve2Strength2</td>
                         <td class="px-1">3.783</td>
                         <td class="px-1">32068.69</td>
                         <td class="px-1" style="color:#FFC000">38.2139</td>
@@ -10282,7 +10282,7 @@ SSIMULACRA2_rs: Mean: 79.07579506 Median: 75.54317772 Std Dev: 13.21970057 5th P
                         <td class="px-1" style="color:#00B050">99.70655998</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">SolLevante CRF30 P3 QM Min2 PSNR VB-Strength3</td>
+                        <td class="px-1">SolLevante CRF30 QM2 PSNR P3 VB-Strength3</td>
                         <td class="px-1">3.715</td>
                         <td class="px-1">30503.94</td>
                         <td class="px-1" style="color:#FFCC00">38.1868</td>
@@ -10292,57 +10292,58 @@ SSIMULACRA2_rs: Mean: 79.07579506 Median: 75.54317772 Std Dev: 13.21970057 5th P
                         <td class="px-1" style="color:#00B050">97.692013</td>
                         <td class="px-1" style="color:#FFC000">79.0337577</td>
                         <td class="px-1" style="color:#FFC000">75.19569402</td>
-                        <td class="px-1" style="color:#C65911">60.18905311</td>
-                        <td class="px-1" style="color:#00B050;background-color:#C9FFE1">100</td>
+                        <td class="px-1 trd" style="color:#C65911">60.18905311</td>
+                        <td class="px-1 ace" style="color:#00B050">100</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">SolLevante CRF30 P3 QM Min2 VQ VarOct2 VB-Curve2Strength2</td>
+                        <td class="px-1">SolLevante CRF30 VQ QM2 P3 VarOct2 VB-Curve2Strength2</td>
                         <td class="px-1">3.680</td>
                         <td class="px-1">37849.26</td>
-                        <td class="px-1" style="color:#FFCC00">38.2583</td>
-                        <td class="px-1" style="color:#92D050">42.0998</td>
-                        <td class="px-1" style="color:#92D050">43.2996</td>
-                        <td class="px-1" style="color:#00B050;background-color:#C9FFE1">99.255388</td>
-                        <td class="px-1" style="color:#00B050;background-color:#C9FFE1">98.668085</td>
-                        <td class="px-1" style="color:#92D050;background-color:#C9FFE1">80.73591880</td>
-                        <td class="px-1" style="color:#FFC000;background-color:#C9FFE1">77.06076447</td>
-                        <td class="px-1" style="color:#C65911;background-color:#C9FFE1">62.63733727</td>
-                        <td class="px-1" style="color:#00B050;background-color:#C9FFE1">100</td>
+                        <td class="px-1 trd" style="color:#FFCC00">38.2583</td>
+                        <td class="px-1 trd" style="color:#92D050">42.0998</td>
+                        <td class="px-1 trd" style="color:#92D050">43.2996</td>
+                        <td class="px-1 ace" style="color:#00B050">99.255388</td>
+                        <td class="px-1 ace" style="color:#00B050">98.668085</td>
+                        <td class="px-1 ace" style="color:#92D050">80.73591880</td>
+                        <td class="px-1 ace" style="color:#FFC000">77.06076447</td>
+                        <td class="px-1 ace" style="color:#C65911">62.63733727</td>
+                        <td class="px-1 ace" style="color:#00B050">100</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">SolLevante CRF30 P3 PSNR VarOct2 VB-Curve2Strength3</td>
+                        <td class="px-1">SolLevante CRF30 PSNR P3 VarOct2 VB-Curve2Strength3</td>
                         <td class="px-1">3.597</td>
                         <td class="px-1" style="color:#FFF;background-color:#FF7C80">45149.86</td>
-                        <td class="px-1" style="color:#FFCC00;background-color:#F6FBBB">38.3074</td>
-                        <td class="px-1" style="color:#92D050;background-color:#F6FBBB">42.1168</td>
-                        <td class="px-1" style="color:#92D050;background-color:#F6FBBB">43.3133</td>
-                        <td class="px-1" style="color:#00B050">98.883611</td>
-                        <td class="px-1" style="color:#00B050">97.775126</td>
-                        <td class="px-1" style="color:#FFC000;background-color:#F6FBBB">79.82330296</td>
-                        <td class="px-1" style="color:#FFC000;background-color:#F6FBBB">76.53311341</td>
-                        <td class="px-1" style="color:#C65911;background-color:#F6FBBB">61.14050056</td>
+                        <td class="px-1 sec" style="color:#FFCC00">38.3074</td>
+                        <td class="px-1 sec" style="color:#92D050">42.1168</td>
+                        <td class="px-1 sec" style="color:#92D050">43.3133</td>
+                        <td class="px-1 trd" style="color:#00B050">98.883611</td>
+                        <td class="px-1 trd" style="color:#00B050">97.775126</td>
+                        <td class="px-1 sec" style="color:#FFC000">79.82330296</td>
+                        <td class="px-1 sec" style="color:#FFC000">76.53311341</td>
+                        <td class="px-1 sec" style="color:#C65911">61.14050056</td>
                         <td class="px-1" style="color:#00B050">99.69831884</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">SolLevante CRF30 P3 VQ VB-Curve2Strength3</td>
+                        <td class="px-1">SolLevante CRF30 VQ P3 VB-Curve2Strength3</td>
                         <td class="px-1">3.554</td>
                         <td class="px-1">38662.85</td>
-                        <td class="px-1" style="color:#FFC000;background-color:#C9FFE1">38.4039</td>
-                        <td class="px-1" style="color:#92D050;background-color:#C9FFE1">42.2333</td>
-                        <td class="px-1" style="color:#92D050;background-color:#C9FFE1">43.4886</td>
-                        <td class="px-1" style="color:#00B050;background-color:#F6FBBB">98.993032</td>
-                        <td class="px-1" style="color:#00B050;background-color:#F6FBBB">97.920108</td>
-                        <td class="px-1" style="color:#FFC000">79.07579506</td>
-                        <td class="px-1" style="color:#FFC000">75.54317772</td>
+                        <td class="px-1 ace" style="color:#FFC000">38.4039</td>
+                        <td class="px-1 ace" style="color:#92D050">42.2333</td>
+                        <td class="px-1 ace" style="color:#92D050">43.4886</td>
+                        <td class="px-1 sec" style="color:#00B050">98.993032</td>
+                        <td class="px-1 sec" style="color:#00B050">97.920108</td>
+                        <td class="px-1 trd" style="color:#FFC000">79.07579506</td>
+                        <td class="px-1 trd" style="color:#FFC000">75.54317772</td>
                         <td class="px-1" style="color:#C65911">59.66073892</td>
-                        <td class="px-1" style="color:#00B050;background-color:#F6FBBB">99.71539232</td>
+                        <td class="px-1 sec" style="color:#00B050">99.71539232</td>
                     </tr>
                 </tbody>
             </table></div>
+            <p class="text-gray-side">注：悬浮光标到单元格上方以查看完整小数</p>
             <h4>（2/2）SVT-AV1 高暂停画质测试分析</h4>
             <ol>
                 <li>使用 Varaince Boost 相关参数可以实现带来整体画质提升，但强度太高会导致码率翻倍</li>
-                <li>在复杂且多动的画面中，Tune VQ 对比 Tine PSNR、QM Min2 Tune VQ 对比 QM Min0 Tune PSNR 在码率和画质上同时占据劣势</li>
+                <li>在动态信息复杂的画面中，Tune PSNR 比 Tune VQ 画质更好；QM Min2 Tune PSNR 在码率和画质上同时比 QM Min2 Tune VQ 同时更好</li>
                 <li>随着改用更激进的方差自适应量化增强（Variance Boost）设定，速度会下降，码率显著增加，整体画质上升</li>
                 <li><code>--variance-boost-strength 3</code> 的增益不如 <code>--variance-boost-curve 2</code> 好</li>
             </ol>
@@ -10504,28 +10505,28 @@ VMAF 4k: 83.919000, VMAF 1080p: 77.411903
 SSIMULACRA2_rs: Mean: 78.34317414 Median: 78.04531049 Std Dev: 8.94038278 5th Percentile: 63.70302548 95th Percentile: 94.68040064
                 </code></pre>
             </div>
-            <div class="overflow-auto mt-3"><table class="table-center text-smaller">
+            <div class="overflow-auto mt-3"><table class="table-center text-xs two-decimals">
                 <thead>
                     <tr>
-                        <th>SVT-AV1 编码选项</th>
-                        <th>速度 fps</th>
-                        <th>码率 kbps</th>
-                        <th>XPSNR-Y dB</th>
-                        <th>XPSNR-U dB</th>
-                        <th>XPSNR-V dB</th>
-                        <th>VMAF 4k</th>
-                        <th>VMAF 1080p</th>
-                        <th>S2.1：均值</th>
-                        <th>S2.1：中位</th>
-                        <th>S2.1：第 5%</th>
-                        <th>S2.1：第 95%</th>
+                        <th class="px-1">SVT-AV1 编码选项</th>
+                        <th class="px-1">速度 fps</th>
+                        <th class="px-1">码率 kbps</th>
+                        <th class="px-1">XPSNR-Y dB</th>
+                        <th class="px-1">XPSNR-U dB</th>
+                        <th class="px-1">XPSNR-V dB</th>
+                        <th class="px-1">VMAF 4k</th>
+                        <th class="px-1">VMAF 1080p</th>
+                        <th class="px-1">S2.1：均值</th>
+                        <th class="px-1">S2.1：中位</th>
+                        <th class="px-1">S2.1：第 5%</th>
+                        <th class="px-1">S2.1：第 95%</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr class="border-bottom">
-                        <td class="px-1">ElephantsDream CRF30 P3</td>
-                        <td class="px-1">27.78</td>
-                        <td class="px-1" style="background-color:#C9FFE1">2253.69</td>
+                        <td class="px-1">ElephantsDream CRF30 PSNR P3</td>
+                        <td class="px-1 sec">27.78</td>
+                        <td class="px-1 ace">2253.69</td>
                         <td class="px-1" style="color:#C65911">32.9889</td>
                         <td class="px-1" style="color:#00B050">45.2554</td>
                         <td class="px-1" style="color:#92D050">44.5165</td>
@@ -10537,26 +10538,26 @@ SSIMULACRA2_rs: Mean: 78.34317414 Median: 78.04531049 Std Dev: 8.94038278 5th Pe
                         <td class="px-1" style="color:#00B050">94.46343097</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">Elephants-Dream CRF30 P3 TF2-Strength1</td>
+                        <td class="px-1">ElephantsDream CRF30 PSNR P3 TF2-Strength1</td>
                         <td class="px-1">27.095</td>
-                        <td class="px-1" style="background-color:#F6FBBB">2291.43</td>
-                        <td class="px-1" style="color:#C65911;background-color:#C9FFE1">33.0077</td>
+                        <td class="px-1 sec">2291.43</td>
+                        <td class="px-1 ace" style="color:#C65911">33.0077</td>
                         <td class="px-1" style="color:#00B050">45.2598</td>
-                        <td class="px-1" style="color:#92D050;background-color:#F6FBBB">44.5232</td>
+                        <td class="px-1 sec" style="color:#92D050">44.5232</td>
                         <td class="px-1" style="color:#FFC000">83.883905</td>
                         <td class="px-1" style="color:#C65911">77.371160</td>
                         <td class="px-1" style="color:#FFC000">78.22777773</td>
                         <td class="px-1" style="color:#FFC000">77.90825341</td>
                         <td class="px-1" style="color:#C65911">63.48438667</td>
-                        <td class="px-1" style="color:#00B050;background-color:#C9FFE1">94.69709169</td>
+                        <td class="px-1 ace" style="color:#00B050">94.69709169</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">Elephants-Dream CRF30 P3 TF2-Strength2</td>
+                        <td class="px-1">ElephantsDream CRF30 PSNR P3 TF2-Strength2</td>
                         <td class="px-1">27.074</td>
                         <td class="px-1">2292.45</td>
-                        <td class="px-1" style="color:#C65911;background-color:#F6FBBB">33.0076</td>
-                        <td class="px-1" style="color:#00B050">45.2605</td>
-                        <td class="px-1" style="color:#92D050;background-color:#C9FFE1">44.5243</td>
+                        <td class="px-1 sec" style="color:#C65911">33.0076</td>
+                        <td class="px-1 trd" style="color:#00B050">45.2605</td>
+                        <td class="px-1 ace" style="color:#92D050">44.5243</td>
                         <td class="px-1" style="color:#FFC000">83.883826</td>
                         <td class="px-1" style="color:#C65911">77.371034</td>
                         <td class="px-1" style="color:#FFC000">78.22557615</td>
@@ -10565,11 +10566,11 @@ SSIMULACRA2_rs: Mean: 78.34317414 Median: 78.04531049 Std Dev: 8.94038278 5th Pe
                         <td class="px-1" style="color:#00B050">94.67345211</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">Elephants-Dream CRF30 P3 TF2-Strength3</td>
+                        <td class="px-1">ElephantsDream CRF30 PSNR P3 TF2-Strength3</td>
                         <td class="px-1">27.083</td>
-                        <td class="px-1">2291.70</td>
-                        <td class="px-1" style="color:#C65911">33.0074</td>
-                        <td class="px-1" style="color:#00B050;background-color:#F6FBBB">45.2613</td>
+                        <td class="px-1 trd">2291.70</td>
+                        <td class="px-1 trd" style="color:#C65911">33.0074</td>
+                        <td class="px-1 sec" style="color:#00B050">45.2613</td>
                         <td class="px-1" style="color:#92D050">44.5211</td>
                         <td class="px-1" style="color:#FFC000">83.880991</td>
                         <td class="px-1" style="color:#C65911">77.368641</td>
@@ -10579,34 +10580,35 @@ SSIMULACRA2_rs: Mean: 78.34317414 Median: 78.04531049 Std Dev: 8.94038278 5th Pe
                         <td class="px-1" style="color:#00B050">94.67894894</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">Elephants-Dream CRF30 P3 TF2-Strength4</td>
+                        <td class="px-1">ElephantsDream CRF30 PSNR P3 TF2-Strength4</td>
                         <td class="px-1">27.089</td>
                         <td class="px-1">2292.35</td>
-                        <td class="px-1" style="color:#C65911">33.0074</td>
-                        <td class="px-1" style="color:#00B050;background-color:#C9FFE1">45.2620</td>
-                        <td class="px-1" style="color:#92D050">44.5231</td>
+                        <td class="px-1 trd" style="color:#C65911">33.0074</td>
+                        <td class="px-1 ace" style="color:#00B050">45.2620</td>
+                        <td class="px-1 trd" style="color:#92D050">44.5231</td>
                         <td class="px-1" style="color:#FFC000">83.875521</td>
                         <td class="px-1" style="color:#C65911">77.365725</td>
                         <td class="px-1" style="color:#FFC000">78.22642014</td>
                         <td class="px-1" style="color:#FFC000">77.90742740</td>
                         <td class="px-1" style="color:#C65911">63.54598795</td>
-                        <td class="px-1" style="color:#00B050;background-color:#F6FBBB">94.68495096</td>
+                        <td class="px-1 sec" style="color:#00B050">94.68495096</td>
                     </tr>
                     <tr class="text-smaller">
-                        <td class="px-1 t-light-gray"><b>字体颜色：</b></td>
-                        <td class="px-1 t-light-gray" style="color:#00B050">视觉无损</td>
+                        <td class="px-1 t-light-gray"><b>基准：</b></td>
+                        <td class="px-1 t-light-gray" style="color:#00B050">视无损</td>
                         <td class="px-1 t-light-gray" style="color:#92D050">优秀</td>
                         <td class="px-1 t-light-gray" style="color:#FFC000">良好</td>
                         <td class="px-1 t-light-gray" style="color:#C65911">达标</td>
                         <td class="px-1 t-light-gray" style="color:#F00">待达标</td>
-                        <td colspan="3" class="t-light-gray">
-                        <td class="px-1 t-light-gray"><b>背景颜色：</b></td>
-                        <td class="px-1 t-light-gray" style="background-color:#C9FFE1">第一</td>
-                        <td class="px-1 t-light-gray" style="background-color:#F6FBBB">第二</td>
+                        <td colspan="2" class="t-light-gray">
+                        <td class="px-1 t-light-gray"><b>排名：</b></td>
+                        <td class="px-1 ace t-light-gray">冠军</td>
+                        <td class="px-1 sec t-light-gray">亚军</td>
+                        <td class="px-1 trd t-light-gray">季军</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">ElephantsDream CRF30 VQ</td>
-                        <td class="px-1" style="background-color:#C9FFE1">28.319</td>
+                        <td class="px-1">ElephantsDream CRF30 VQ P3</td>
+                        <td class="px-1 ace">28.319</td>
                         <td class="px-1">2350.97</td>
                         <td class="px-1" style="color:#C65911">32.9975</td>
                         <td class="px-1" style="color:#00B050">45.1853</td>
@@ -10615,70 +10617,70 @@ SSIMULACRA2_rs: Mean: 78.34317414 Median: 78.04531049 Std Dev: 8.94038278 5th Pe
                         <td class="px-1" style="color:#C65911">77.376995</td>
                         <td class="px-1" style="color:#FFC000">78.28962734</td>
                         <td class="px-1" style="color:#FFC000">77.96771217</td>
-                        <td class="px-1" style="color:#C65911;background-color:#C9FFE1">63.73580664</td>
+                        <td class="px-1 ace" style="color:#C65911">63.73580664</td>
                         <td class="px-1" style="color:#00B050">94.47657123</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">Elephants-Dream CRF30 P3 VQ TF2-Strength1</td>
+                        <td class="px-1">ElephantsDream CRF30 VQ P3 TF2-Strength1</td>
                         <td class="px-1">27.559</td>
                         <td class="px-1">2373.84</td>
                         <td class="px-1" style="color:#C65911">33.0033</td>
                         <td class="px-1" style="color:#00B050">45.1779</td>
                         <td class="px-1" style="color:#92D050">44.4447</td>
-                        <td class="px-1" style="color:#FFC000;background-color:#C9FFE1">83.923292</td>
-                        <td class="px-1" style="color:#C65911;background-color:#C9FFE1">77.415802</td>
+                        <td class="px-1 ace" style="color:#FFC000">83.923292</td>
+                        <td class="px-1 ace" style="color:#C65911">77.415802</td>
                         <td class="px-1" style="color:#FFC000">78.34140551</td>
                         <td class="px-1" style="color:#FFC000">78.02652168</td>
                         <td class="px-1" style="color:#C65911">63.69285703</td>
-                        <td class="px-1" style="color:#00B050">94.68040064</td>
+                        <td class="px-1 trd" style="color:#00B050">94.68040064</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">Elephants-Dream CRF30 P3 VQ TF2-Strength2</td>
+                        <td class="px-1">ElephantsDream CRF30 VQ P3 TF2-Strength2</td>
                         <td class="px-1">27.553</td>
                         <td class="px-1">2373.05</td>
                         <td class="px-1" style="color:#C65911">33.0032</td>
                         <td class="px-1" style="color:#00B050">45.1805</td>
                         <td class="px-1" style="color:#92D050">44.4446</td>
                         <td class="px-1" style="color:#FFC000">83.917920</td>
-                        <td class="px-1" style="color:#C65911">77.411099</td>
-                        <td class="px-1" style="color:#FFC000;background-color:#C9FFE1">78.34621137</td>
-                        <td class="px-1" style="color:#FFC000;background-color:#C9FFE1">78.03496570</td>
-                        <td class="px-1" style="color:#C65911;background-color:#F6FBBB">63.70885484</td>
-                        <td class="px-1" style="color:#00B050">94.68040064</td>
+                        <td class="px-1 trd" style="color:#C65911">77.411099</td>
+                        <td class="px-1 ace" style="color:#FFC000">78.34621137</td>
+                        <td class="px-1 trd" style="color:#FFC000">78.03496570</td>
+                        <td class="px-1 sec" style="color:#C65911">63.70885484</td>
+                        <td class="px-1 trd" style="color:#00B050">94.68040064</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">Elephants-Dream CRF30 P3 VQ TF2-Strength3</td>
-                        <td class="px-1" style="background-color:#F6FBBB">27.679</td>
+                        <td class="px-1">ElephantsDream CRF30 VQ P3 TF2-Strength3</td>
+                        <td class="px-1 trd">27.679</td>
                         <td class="px-1">2374.30</td>
                         <td class="px-1" style="color:#C65911">33.0030</td>
                         <td class="px-1" style="color:#00B050">45.1770</td>
                         <td class="px-1" style="color:#92D050">44.4432</td>
-                        <td class="px-1" style="color:#FFC000;background-color:#F6FBBB">83.919227</td>
+                        <td class="px-1 sec" style="color:#FFC000">83.919227</td>
                         <td class="px-1" style="color:#C65911">77.410876</td>
-                        <td class="px-1" style="color:#FFC000">78.34247749</td>
-                        <td class="px-1" style="color:#FFC000;background-color:#F6FBBB">78.03666873</td>
+                        <td class="px-1 trd" style="color:#FFC000">78.34247749</td>
+                        <td class="px-1 sec" style="color:#FFC000">78.03666873</td>
                         <td class="px-1" style="color:#C65911">63.68956267</td>
                         <td class="px-1" style="color:#00B050">94.67801513</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">Elephants-Dream CRF30 P3 VQ TF2-Strength4</td>
+                        <td class="px-1">ElephantsDream CRF30 VQ P3 TF2-Strength4</td>
                         <td class="px-1">27.608</td>
                         <td class="px-1">2373.78</td>
                         <td class="px-1" style="color:#C65911">33.0029</td>
                         <td class="px-1" style="color:#00B050">45.1808</td>
                         <td class="px-1" style="color:#92D050">44.4414</td>
-                        <td class="px-1" style="color:#FFC000">83.919000</td>
-                        <td class="px-1" style="color:#C65911;background-color:#F6FBBB">77.411903</td>
-                        <td class="px-1" style="color:#FFC000;background-color:#F6FBBB">78.34317414</td>
-                        <td class="px-1" style="color:#FFC000;background-color:#C9FFE1">78.04531049</td>
-                        <td class="px-1" style="color:#C65911">63.70302548</td>
-                        <td class="px-1" style="color:#00B050">94.68040064</td>
+                        <td class="px-1 trd" style="color:#FFC000">83.919000</td>
+                        <td class="px-1 sec" style="color:#C65911">77.411903</td>
+                        <td class="px-1 sec" style="color:#FFC000">78.34317414</td>
+                        <td class="px-1 ace" style="color:#FFC000">78.04531049</td>
+                        <td class="px-1 trd" style="color:#C65911">63.70302548</td>
+                        <td class="px-1 trd" style="color:#00B050">94.68040064</td>
                     </tr>
                 </tbody>
             </table></div>
             <h4>（2/2）SVT-AV1 时域降噪过滤分析</h4>
             <ol>
-                <li>即使去掉 CRF30 P3、CRF30 VQ 两个基准结果，编码出的视频仍然是不分高下且差距极小</li>
+                <li>即使去掉 CRF30 PSNR、CRF30 VQ 两个基准结果，编码出的视频仍然是不分高下且差距极小</li>
                 <li>在所有画质指标中，启用 <code>--enable-tf 2</code> 后都隐隐有些画质提升，但这明显是码率增加换来的</li>
                 <li>启用 <code>--enable-tf 2</code> 后，1920x1080 视频编码 fps 却下降了 0.707，而降低 CRF 非但能够达到同样的画质提升，并且不会拖累编码速度</li>
                 <li>Elephants-Dream 片源包含了多种动态变化程度的场景，理论上只要有一个场景明显占优势，则测试的一系列选项就应当出现阶段性的上升/下降趋势，但跑分的变化忽高忽低，没有趋势</li>
@@ -11105,28 +11107,28 @@ VMAF 4k: 96.492425, VMAF 1080p: 93.439512
 SSIMULACRA2_rs: Mean: 43.37989094 Median: 42.86187330 Std Dev: 10.52248577 5th Percentile: 27.33426194 95th Percentile: 62.78089483
                 </code></pre>
             </div>
-            <div class="overflow-auto mt-3"><table class="table-center text-smaller">
+            <div class="overflow-auto mt-3"><table class="table-center text-xs two-decimals">
                 <thead>
                     <tr>
-                        <th>SVT-AV1 编码选项</th>
-                        <th>速度 fps</th>
-                        <th>码率 kbps</th>
-                        <th>XPSNR-Y dB</th>
-                        <th>XPSNR-U dB</th>
-                        <th>XPSNR-V dB</th>
-                        <th>VMAF 4k</th>
-                        <th>VMAF 1080p</th>
-                        <th>S2.1：均值</th>
-                        <th>S2.1：中位</th>
-                        <th>S2.1：第 5%</th>
-                        <th>S2.1：第 95%</th>
+                        <th class="px-1">SVT-AV1 编码选项</th>
+                        <th class="px-1">速度 fps</th>
+                        <th class="px-1">码率 kbps</th>
+                        <th class="px-1">XPSNR-Y dB</th>
+                        <th class="px-1">XPSNR-U dB</th>
+                        <th class="px-1">XPSNR-V dB</th>
+                        <th class="px-1">VMAF 4k</th>
+                        <th class="px-1">VMAF 1080p</th>
+                        <th class="px-1">S2.1：均值</th>
+                        <th class="px-1">S2.1：中位</th>
+                        <th class="px-1">S2.1：第 5%</th>
+                        <th class="px-1">S2.1：第 95%</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr class="border-bottom">
                         <td class="px-1">Ultraman1 CRF30 PSNR P3</td>
-                        <td class="px-1">28.734</td>
-                        <td class="px-1">1669.85</td>
+                        <td class="px-1 ace">28.734</td>
+                        <td class="px-1 ace">1669.85</td>
                         <td class="px-1" style="color:#FFC000">38.1204</td>
                         <td class="px-1" style="color:#C65911">36.5504</td>
                         <td class="px-1" style="color:#FFC000">41.9289</td>
@@ -11138,9 +11140,9 @@ SSIMULACRA2_rs: Mean: 43.37989094 Median: 42.86187330 Std Dev: 10.52248577 5th P
                         <td class="px-1" style="color:#FFC000">70.01810194</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">Ultraman1 CRF30 P3 PSNR FG1</td>
+                        <td class="px-1">Ultraman1 CRF30 PSNR P3 FG1</td>
                         <td class="px-1">21.955</td>
-                        <td class="px-1">1676.41</td>
+                        <td class="px-1 sec">1676.41</td>
                         <td class="px-1" style="color:#FFC000">38.1204</td>
                         <td class="px-1" style="color:#C65911">36.5504</td>
                         <td class="px-1" style="color:#FFC000">41.9289</td>
@@ -11152,9 +11154,9 @@ SSIMULACRA2_rs: Mean: 43.37989094 Median: 42.86187330 Std Dev: 10.52248577 5th P
                         <td class="px-1" style="color:#FFC000">70.01810194</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">Ultraman1 CRF30 P3 PSNR FG11</td>
+                        <td class="px-1">Ultraman1 CRF30 PSNR P3 FG11</td>
                         <td class="px-1">22.027</td>
-                        <td class="px-1">1693.11</td>
+                        <td class="px-1 trd">1693.11</td>
                         <td class="px-1" style="color:#C65911">36.5453</td>
                         <td class="px-1" style="color:#C65911">35.3250</td>
                         <td class="px-1" style="color:#FFC000">39.5036</td>
@@ -11166,7 +11168,7 @@ SSIMULACRA2_rs: Mean: 43.37989094 Median: 42.86187330 Std Dev: 10.52248577 5th P
                         <td class="px-1" style="color:#C65911">68.78530314</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">Ultraman1 CRF30 P3 PSNR FG21</td>
+                        <td class="px-1">Ultraman1 CRF30 PSNR P3 FG21</td>
                         <td class="px-1">22.029</td>
                         <td class="px-1">1695.20</td>
                         <td class="px-1" style="color:#C65911">35.5426</td>
@@ -11180,7 +11182,7 @@ SSIMULACRA2_rs: Mean: 43.37989094 Median: 42.86187330 Std Dev: 10.52248577 5th P
                         <td class="px-1" style="color:#C65911">67.56729955</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">Ultraman1 CRF30 P3 PSNR FG31</td>
+                        <td class="px-1">Ultraman1 CRF30 PSNR P3 FG31</td>
                         <td class="px-1">22.007</td>
                         <td class="px-1">1695.79</td>
                         <td class="px-1" style="color:#C65911">34.7929</td>
@@ -11194,7 +11196,7 @@ SSIMULACRA2_rs: Mean: 43.37989094 Median: 42.86187330 Std Dev: 10.52248577 5th P
                         <td class="px-1" style="color:#C65911">65.91101183</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">Ultraman1 CRF30 P3 PSNR FG41</td>
+                        <td class="px-1">Ultraman1 CRF30 PSNR P3 FG41</td>
                         <td class="px-1">22.052</td>
                         <td class="px-1">1695.91</td>
                         <td class="px-1" style="color:#C65911">34.3394</td>
@@ -11208,7 +11210,7 @@ SSIMULACRA2_rs: Mean: 43.37989094 Median: 42.86187330 Std Dev: 10.52248577 5th P
                         <td class="px-1" style="color:#C65911">64.28934544</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">Ultraman1 CRF30 P3 PSNR FG50</td>
+                        <td class="px-1">Ultraman1 CRF30 PSNR P3 FG50</td>
                         <td class="px-1">22.024</td>
                         <td class="px-1">1695.93</td>
                         <td class="px-1" style="color:#C65911">34.1353</td>
@@ -11222,8 +11224,8 @@ SSIMULACRA2_rs: Mean: 43.37989094 Median: 42.86187330 Std Dev: 10.52248577 5th P
                         <td class="px-1" style="color:#C65911">63.16879872</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">Ultraman1 CRF30 P3 VQ</td>
-                        <td class="px-1">28.810</td>
+                        <td class="px-1">Ultraman1 CRF30 VQ P3</td>
+                        <td class="px-1 sec">28.810</td>
                         <td class="px-1">2056.28</td>
                         <td class="px-1" style="color:#FFC000">38.1717</td>
                         <td class="px-1" style="color:#C65911">36.5926</td>
@@ -11236,7 +11238,7 @@ SSIMULACRA2_rs: Mean: 43.37989094 Median: 42.86187330 Std Dev: 10.52248577 5th P
                         <td class="px-1" style="color:#FFC000">70.84131535</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">Ultraman1 CRF30 P3 VQ FG1</td>
+                        <td class="px-1">Ultraman1 CRF30 VQ P3 FG1</td>
                         <td class="px-1">22.209</td>
                         <td class="px-1">2062.79</td>
                         <td class="px-1" style="color:#FFC000">38.1717</td>
@@ -11250,7 +11252,7 @@ SSIMULACRA2_rs: Mean: 43.37989094 Median: 42.86187330 Std Dev: 10.52248577 5th P
                         <td class="px-1" style="color:#FFC000">70.84131535</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">Ultraman1 CRF30 P3 VQ FG11</td>
+                        <td class="px-1">Ultraman1 CRF30 VQ P3 FG11</td>
                         <td class="px-1">22.115</td>
                         <td class="px-1">2079.51</td>
                         <td class="px-1" style="color:#C65911">36.5799</td>
@@ -11264,7 +11266,7 @@ SSIMULACRA2_rs: Mean: 43.37989094 Median: 42.86187330 Std Dev: 10.52248577 5th P
                         <td class="px-1" style="color:#C65911">69.53730410</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">Ultraman1 CRF30 P3 VQ FG21</td>
+                        <td class="px-1">Ultraman1 CRF30 VQ P3 FG21</td>
                         <td class="px-1">22.149</td>
                         <td class="px-1">2081.60</td>
                         <td class="px-1" style="color:#C65911">35.5684</td>
@@ -11278,7 +11280,7 @@ SSIMULACRA2_rs: Mean: 43.37989094 Median: 42.86187330 Std Dev: 10.52248577 5th P
                         <td class="px-1" style="color:#C65911">67.80717058</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">Ultraman1 CRF30 P3 VQ FG31</td>
+                        <td class="px-1">Ultraman1 CRF30 VQ P3 FG31</td>
                         <td class="px-1">22.157</td>
                         <td class="px-1">2082.20</td>
                         <td class="px-1" style="color:#C65911">34.8137</td>
@@ -11292,7 +11294,7 @@ SSIMULACRA2_rs: Mean: 43.37989094 Median: 42.86187330 Std Dev: 10.52248577 5th P
                         <td class="px-1" style="color:#C65911">66.06963942</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">Ultraman1 CRF30 P3 VQ FG41</td>
+                        <td class="px-1">Ultraman1 CRF30 VQ P3 FG41</td>
                         <td class="px-1">22.178</td>
                         <td class="px-1">2082.32</td>
                         <td class="px-1" style="color:#C65911">34.3581</td>
@@ -11306,7 +11308,7 @@ SSIMULACRA2_rs: Mean: 43.37989094 Median: 42.86187330 Std Dev: 10.52248577 5th P
                         <td class="px-1" style="color:#C65911">64.44994167</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">Ultraman1 CRF30 P3 VQ FG50</td>
+                        <td class="px-1">Ultraman1 CRF30 VQ P3 FG50</td>
                         <td class="px-1">22.195</td>
                         <td class="px-1">2082.34</td>
                         <td class="px-1" style="color:#C65911">34.1539</td>
@@ -11320,8 +11322,8 @@ SSIMULACRA2_rs: Mean: 43.37989094 Median: 42.86187330 Std Dev: 10.52248577 5th P
                         <td class="px-1" style="color:#C65911">63.32191585</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">Ultraman1 CRF30 P3 SSIM</td>
-                        <td class="px-1">28.113</td>
+                        <td class="px-1">Ultraman1 CRF30 SSIM P3</td>
+                        <td class="px-1 trd">28.113</td>
                         <td class="px-1">1737.48</td>
                         <td class="px-1" style="color:#FFC000">38.1953</td>
                         <td class="px-1" style="color:#C65911">36.5190</td>
@@ -11334,7 +11336,7 @@ SSIMULACRA2_rs: Mean: 43.37989094 Median: 42.86187330 Std Dev: 10.52248577 5th P
                         <td class="px-1" style="color:#C65911">69.48821685</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">Ultraman1 CRF30 P3 SSIM FG1</td>
+                        <td class="px-1">Ultraman1 CRF30 SSIM P3 FG1</td>
                         <td class="px-1">21.698</td>
                         <td class="px-1">1744.04</td>
                         <td class="px-1" style="color:#FFC000">38.1953</td>
@@ -11348,7 +11350,7 @@ SSIMULACRA2_rs: Mean: 43.37989094 Median: 42.86187330 Std Dev: 10.52248577 5th P
                         <td class="px-1" style="color:#C65911">69.48821685</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">Ultraman1 CRF30 P3 SSIM FG11</td>
+                        <td class="px-1">Ultraman1 CRF30 SSIM P3 FG11</td>
                         <td class="px-1">21.693</td>
                         <td class="px-1">1760.74</td>
                         <td class="px-1" style="color:#C65911">36.5975</td>
@@ -11362,7 +11364,7 @@ SSIMULACRA2_rs: Mean: 43.37989094 Median: 42.86187330 Std Dev: 10.52248577 5th P
                         <td class="px-1" style="color:#C65911">68.44942008</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">Ultraman1 CRF30 P3 SSIM FG21</td>
+                        <td class="px-1">Ultraman1 CRF30 SSIM P3 FG21</td>
                         <td class="px-1">20.958</td>
                         <td class="px-1">1762.83</td>
                         <td class="px-1" style="color:#C65911">35.5834</td>
@@ -11376,7 +11378,7 @@ SSIMULACRA2_rs: Mean: 43.37989094 Median: 42.86187330 Std Dev: 10.52248577 5th P
                         <td class="px-1" style="color:#C65911">67.04853533</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">Ultraman1 CRF30 P3 SSIM FG31</td>
+                        <td class="px-1">Ultraman1 CRF30 SSIM P3 FG31</td>
                         <td class="px-1">21.731</td>
                         <td class="px-1">1763.42</td>
                         <td class="px-1" style="color:#C65911">34.8267</td>
@@ -11390,7 +11392,7 @@ SSIMULACRA2_rs: Mean: 43.37989094 Median: 42.86187330 Std Dev: 10.52248577 5th P
                         <td class="px-1" style="color:#C65911">65.42500792</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">Ultraman1 CRF30 P3 SSIM FG41</td>
+                        <td class="px-1">Ultraman1 CRF30 SSIM P3 FG41</td>
                         <td class="px-1">21.707</td>
                         <td class="px-1">1763.54</td>
                         <td class="px-1" style="color:#C65911">34.3698</td>
@@ -11404,7 +11406,7 @@ SSIMULACRA2_rs: Mean: 43.37989094 Median: 42.86187330 Std Dev: 10.52248577 5th P
                         <td class="px-1" style="color:#C65911">63.80731931</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">Ultraman1 CRF30 P3 SSIM FG50</td>
+                        <td class="px-1">Ultraman1 CRF30 SSIM P3 FG50</td>
                         <td class="px-1">21.716</td>
                         <td class="px-1">1763.57</td>
                         <td class="px-1" style="color:#C65911">34.1650</td>
@@ -11419,6 +11421,9 @@ SSIMULACRA2_rs: Mean: 43.37989094 Median: 42.86187330 Std Dev: 10.52248577 5th P
                     </tr>
                 </tbody>
             </table></div>
+            <p class="text-gray-side">注：由于此处的画质与噪点一致性强相关，因此画质信息越差，则实际画质反而越好</p>
+            <p class="text-gray-side">注：悬浮光标到单元格上方以查看完整小数</p>
+
             <h4>（5/5）SVT-AV1 胶片颗粒合成分析</h4>
             <ol>
                 <li>FGS 最低强度下无效，还会徒增码率</li>
@@ -11532,7 +11537,7 @@ CMD ["cmd"]
             </table>
 
             <h3>下载——编译 SSIMULACRA 官方版</h3>
-            <p>SSIMULACRA 的官方项目中只有在 Debian 的编译示例，Windows 系统下虽然可以调用 Windows Subsystem for Linux（WSL），但编译后仍然是 Linux 应用。因此这里分为两种编译方法，以便今后参考。另外，尽管 <a href="https://github.com/rust-av/ssimulacra2">SSIMULACRA-Rust</a> 的项目存在（且支持直接输入视频），但该实现为第三方，且未说明对应了官方的 2.0 还是 2.1 版本，同时在 Issues 中有视频和图片得分不同的情况出现（SSIMULACRA 是图片检测算法），因此不用。</p>
+            <p>SSIMULACRA 的官方项目中只有在 Debian 的编译示例，Windows 系统下虽然可以调用 Windows Subsystem for Linux（WSL），但编译后仍然是 Linux 应用。因此这里分为两种编译方法，以便今后参考。另外，尽管 <a href="https://github.com/rust-av/ssimulacra2">SSIMULACRA-Rust</a> 的项目存在（且支持直接输入视频），但该实现为季军方，且未说明对应了官方的 2.0 还是 2.1 版本，同时在 Issues 中有视频和图片得分不同的情况出现（SSIMULACRA 是图片检测算法），因此不用。</p>
             <button type="button" class="collapsible border-main rounded-3 mt-3">（1/2）使用 WSL 编译 Linux 可执行文件</button>
             <div class="coll-content">
                 <h4>（1/2）使用 WSL 编译 Linux 可执行文件</h4>

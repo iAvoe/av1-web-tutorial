@@ -57,41 +57,43 @@
     --hex-light-grayblue: #DEE2E6; /* main body background & table border */
     --hex-dark-gray: #595959; /* main body text */
     --hex-light-gray: #A6A6A6; /* side body text */
-    --hex-lighest-gray: #F2F2F2; /* table cell gray */
+    --hex-lighest-gray: #F2F2F2; /* table cell gray, use css gray for another depth */
     --hex-dark-blue: #365F91; /* emphasize blue */
     --hex-dark-red: #943634; /* emphasize red */
     --hex-dark-waterblue: #607D8B; /* math gray waterblue */
     --hex-light-green: #31BD8E; /* hyperlink green */
     --hex-light-blue: #58AEBC; /* side emphasize blue */
     --hex-light-red: #FF9999; /* side emphasize red */
-    --hex-bright-pink: #FF6CB6; /* step over probobility consequense */
-    --hex-bright-blue: #7979FF; /* step over encoding consequense */
-    --hex-pure-red: #C00000; /* lerp triangulation visual 1 */
-    --hex-pure-blue: #3F3FFF; /* lerp triangulation visual 2 */
-    --hex-pure-green: #008000;  /* lerp triangulation visual 3 */
+    --hex-bright-pink: #FF6CB6;
+    --hex-bright-blue: #7979FF;
+    --hex-pure-red: #C00000;
+    --hex-pure-blue: #3F3FFF;
+    --hex-pure-green: #008000;
     --hex-dark-green: #408080; /* entropy coding dynamic programming */
-    --hex-dark-gold: #948A54; /* reserved */
+    --hex-dark-gold: #948A54; /* select background color */
     --hex-light-yellow: #FDFDCD; /* reserved */
     --hex-dark-purple: #5F497A; /* reserved */
-    --rgb-light-grayblue: 222,226,230; /* main body background & table border */
-    --rgb-dark-gray: 89,89,89; /* main body text */
-    --rgb-light-gray: 166,166,166; /* side body text */
-    --rgb-lighest-gray: 242,242,242; /* table cell gray */
-    --rgb-dark-blue: 54,95,145; /* emphasize blue */
-    --rgb-dark-red: 148,54,52; /* emphasize red */
-    --rgb-dark-waterblue: 96,125,139; /* math gray waterblue */
-    --rgb-light-green: 49,189,142; /* hyperlink green */
-    --rgb-light-blue: 88,174,188; /* side emphasize blue */
-    --rgb-light-red: 255,153,153; /* side emphasize red */
-    --rgb-bright-pink: 255,108,182; /* step over probability consequense */
-    --rgb-bright-blue: 121,121,255; /* step over enbcoding consequense */
-    --rgb-pure-red: 192,0,0; /* lerp triangulation visual 1 */
-    --rgb-pure-blue: 63,63,255; /* lerp triangulation visual 2 */
-    --rgb-pure-green: 0,128,0; /* lerp triangulation visual 3 */
-    --rgb-dark-green: 64,128,128; /* entropy coding dynamic programming */
-    --rgb-dark-gold: 148,138,84; /* reserved */
-    --rgb-light-yellow: 253,253,205; /* reserved */
-    --rgb-dark-purple: 95,73,122; /* reserved */
+    --hex-bronze: #AD8A56;
+    --hex-golden-brown: #8E6015;
+    --rgb-light-grayblue: 222,226,230;
+    --rgb-dark-gray: 89,89,89;
+    --rgb-light-gray: 166,166,166;
+    --rgb-lighest-gray: 242,242,242;
+    --rgb-dark-blue: 54,95,145;
+    --rgb-dark-red: 148,54,52;
+    --rgb-dark-waterblue: 96,125,139;
+    --rgb-light-green: 49,189,142;
+    --rgb-light-blue: 88,174,188;
+    --rgb-light-red: 255,153,153;
+    --rgb-bright-pink: 255,108,182;
+    --rgb-bright-blue: 121,121,255;
+    --rgb-pure-red: 192,0,0;
+    --rgb-pure-blue: 63,63,255;
+    --rgb-pure-green: 0,128,0;
+    --rgb-dark-green: 64,128,128;
+    --rgb-dark-gold: 148,138,84;
+    --rgb-light-yellow: 253,253,205;
+    --rgb-dark-purple: 95,73,122;
     --bs-font-sans-serif: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     --bs-font-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "SweiGothic", "Liberation Mono", "Courier New", monospace, "YouYuan";
     --font-style-main: "Zhudou Sans", sans-serif;
@@ -473,4 +475,38 @@ code { word-break: break-word; }
 ::selection {
     color: white;
     background-color: var(--hex-dark-gold);
+}
+
+/* Table cell badges */
+.ace::before {
+    content: "";
+    display: inline-block;
+    width: 0.44em;
+    height: 0.44em;
+    background-color: gold;
+    border-radius: 50%;
+    margin: auto 0 auto 0.15em;
+    vertical-align: middle;
+}
+
+.sec::before {
+    content: "";
+    display: inline-block;
+    width: 0.44em;
+    height: 0.44em;
+    background-color: silver;
+    border-radius: 50%;
+    margin: auto 0 auto 0.15em;
+    vertical-align: middle;
+}
+
+.trd::before {
+    content: "";
+    display: inline-block;
+    width: 0.44em;
+    height: 0.44em;
+    background-color: var(--hex-golden-brown);
+    border-radius: 50%;
+    margin: auto 0 auto 0.15em;
+    vertical-align: middle;
 }
