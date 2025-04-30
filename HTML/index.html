@@ -76,6 +76,8 @@
             <p>点击图片即可轮询 3 种图片大小。窗口宽度大于窗口高度则切换到宽屏/桌面端/平板电脑排版，否则切换到窄屏/移动端排版。</p>
         </div>
         <div class="container-mobile rounded-9 border-main">
+            <h3>测试结论</h3>
+            <p>SVT-AV1（Preset 3，CRF 30）在压缩率与编码速度上均较 x265 veryslow CRF 18 有约 2 倍提升；同时在一般场景能够接近 x265 的视觉质量，在高复杂度且高分辨率的视频中完胜；缺点是由于 SVT-AV1 默认使用单值量化，观众可能会不适应这种异于矩阵量化的涂抹失真，而这种失真可能还与 TF、去块等“加工痕迹”叠加，导致在低对比度、帧间连贯性差时出现视频播放时可见的画面问题。通过合理调整 CRF、Tune、Variance 曲线、开启量化矩阵和设定足够低的 Preset，以及对有噪声素材启用高强度 FGS 从而优化输出质量。由于 FGS 只能复现同类噪声，因此虽然强度越高则噪声的肉眼观感越好，但任何检测一致性的画质指标也会失效。</p>
             <h2 id="h2-1">视频的压制</h2>
             <ol>
                 <li><b>打开编码器</b>
@@ -11694,6 +11696,7 @@ CMD ["cmd"]
         <footer class="py-3 my-4 align-items-center border-top">
             <p>联系：
                 <a href='https://github.com/iAvoe/'>Github</a>，
+                <a href='https://github.com/iAvoe/av1-web-tutorial/issues'>Github Issues</a>，
                 <a href='https://jq.qq.com/?_wv=1027&k=5YJFXyf'>QQ 群：691892901</a>
             </p>
             &#x24B8; iAvoe，2024
