@@ -76,8 +76,9 @@
             <p>点击图片即可轮询 3 种图片大小。窗口宽度大于窗口高度则切换到宽屏/桌面端/平板电脑排版，否则切换到窄屏/移动端排版。</p>
         </div>
         <div class="container-mobile rounded-9 border-main">
-            <h3>测试结论</h3>
-            <p>SVT-AV1（Preset 3，CRF 30）在压缩率与编码速度上均较 x265 veryslow CRF 18 有约 2 倍提升；同时在一般场景能够接近 x265 的视觉质量，在高复杂度且高分辨率的视频中完胜；缺点是由于 SVT-AV1 默认使用单值量化，观众可能会不适应这种异于矩阵量化的涂抹失真，而这种失真可能还与 TF、去块等“加工痕迹”叠加，导致在低对比度、帧间连贯性差时出现视频播放时可见的画面问题。通过合理调整 CRF、Tune、Variance 曲线、开启量化矩阵和设定足够低的 Preset，以及对有噪声素材启用高强度 FGS 从而优化输出质量。由于 FGS 只能复现同类噪声，因此虽然强度越高则噪声的肉眼观感越好，但任何检测一致性的画质指标也会失效。</p>
+            <h3>SVT-AV1 测试结论</h3>
+            <p>Preset 3，CRF 30 在压缩率与编码速度上均较 x265 veryslow CRF 18 有约 2 倍提升；同时在一般场景能够接近和超越 x265 的视觉质量，且表现出了极强的跨分辨率适应性（High scalability）而完胜 x265（高复杂度加高分辨率的视频中 x265 码率和画质失控）；缺点是由于 SVT-AV1 默认使用单值量化，观众可能会不适应这种异于矩阵量化的涂抹失真，而这种涂抹可能还与 TF、去块等加工痕迹叠加，导致在低对比度、帧间连贯性差的场景出现视频播放时可见的画面问题。至于缓解画面问题，通过给予合理的 CRF、Tune、自适应量化方差、量化矩阵开关与强度、低值预设，以及对有噪声素材启用高强度 FGS 消除即可。需要注意由于 FGS 只能复现同类噪声，所以强度越高观感越像，但对画质指标来说区别越大所致的不可测状态。此外，详细的测试结果以及隐藏规律见测试栏目版块。</p>
+            
             <h2 id="h2-1">视频的压制</h2>
             <ol>
                 <li><b>打开编码器</b>
@@ -88,9 +89,10 @@
                                 <li>编码器通常根据输出文件的后缀名自动封装视频文件。</li>
                             </ul>
                         </li>
-                        <li>如果编码器没有内置解封装解码功能，则通常会使用 ffmpeg 内部的解封装工具和编码器。
+                        <li>如果编码器没有内置解封装解码功能，则：
                             <ul class="text-smaller">
-                                <li>可以使用 pipe 将上游如 ffmpeg、VapourSynth、avs2yuv 连接到下游如 x264/5 的编码器</li>
+                                <li>使用 ffmpeg、VapourSynth、avs2yuv 通过 pipe 传输流到编码器</li>
+                                <li>调用 ffmpeg、Premiere、Final Cut Pro X 等软件内置的编码器动态链接库</li>
                             </ul>
                         </li>
                     </ul>
@@ -4671,7 +4673,11 @@ int av1_compute_rd_mult_based_on_qindex(const AV1_COMP *cpi, int qindex) {
             <code><b>--crf</b></code>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 1~63，默认 35：中高量化&gt;指定质量呼应码率模式的量化强度目标，SVT-AV1 中直接映射为 <code>&#45;&#45;rc 0 --aq-mode 2 --qp [_]</code>。</p>
             <code><b>--sharpness</b></code>
-            <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 -7~7，默认 0：平均&gt;指定码率控制模式分配码率到图片锐度低处到高处的范围。</p>
+            <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 -7~7，默认 0：平均&gt;指定码率控制模式根据图片锐度分配码率的方法。</p>
+            <ul class="font-monospace pl-5 text-smaller list-dotless">
+                <li><b>7: </b>保线条烂平面</li>
+                <li><b>-7: </b>保平面烂线条</li>
+            </ul>
 
             <h5>（8/12——1/7）QIndex 偏移</h5>
             <p>相比于 AVC、HEVC 偏移 QP，QIndex 的精度比 QP 高 4 倍。同时，使用时应该注意 <code>Dc_Qlookup</code> 与 <code>Ac_Qlookup</code> 表格在不同位深下的替换（强度变更），并注意量化步长曲线走向与 AVC、HEVC 量化步长曲线的区别。</p>
