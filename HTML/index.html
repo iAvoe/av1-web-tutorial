@@ -4295,9 +4295,9 @@ int av1_compute_rd_mult_based_on_qindex(const AV1_COMP *cpi, int qindex) {
 
             <h3>SVT-AV1——命令行格式</h3>
             <p>使用 ffmpeg 内置的 libsvtav1 编码视频，拷贝音频，输出 .mp4 封装文件（推荐）：</p>
-            <code>ffmpeg -i .\输入.mkv -c:v libsvtav1 -preset 3 -crf 30 -svtav1-params "keyint=12s:sharpness=-2" -c:a copy .\输出.mp4</code>
+            <code>ffmpeg -i .\输入.mkv -c:v libsvtav1 -preset 3 -crf 30 -svtav1-params "keyint=12s:sharpness=-2:film-grain=20" -c:a copy .\输出.mp4</code>
             <p>ffmpeg 命令行中，如原本 <code><b>--param1 value --param2 value</b></code> 需要以 API 格式书写，为 <code><b>-xxx-params "param1=value:param2=value"</b></code>，而兼容性略好的编码库则会提供一小部分 <code><b>-param1 value</b></code> 的格式于 <code><b>-c:v libxxx</b></code> 与 <code><b>-xxx-params</b></code> 之间，配置起来会容易一点。</p>
-            <code>ffmpeg -i .\输入.mkv -c:v libsvtav1 -preset 4 -crf 35 -svtav1-params "keyint=12s:enable-variance-boost=1:variance-boost-curve=2 :variance-boost-strength=3:film-grain=20:mastering-display=G(0.2649,0.6900)B(0.1500,0.0600)R(0.6800,0.3200)WP(0.3127,0.3290)L(1000.0,1)" -c:a copy .\输出.mp4</code>
+            <code>ffmpeg -i .\输入.mkv -c:v libsvtav1 -preset 4 -crf 35 -svtav1-params "keyint=12s:enable-variance-boost=1:variance-boost-curve=2:variance-boost-strength=3:mastering-display=G(0.2649,0.6900)B(0.1500,0.0600)R(0.6800,0.3200)WP(0.3127,0.3290)L(1000.0,1)" -c:a copy .\输出.mp4</code>
             <p>使用 ffmpeg 管道输出到独立 SVT-AV1 编码器程序，使用 <code>-strict -1</code> 解除 10bit y4m 管道格式限制，SVT-AV1 使用 12 秒关键帧间隔，CRF 35，预设 3，启用量化矩阵量化模式，完整显示进度条；导出未封装视频流：</p>
             <code>ffmpeg -i .\输入.mkv -f yuv4mpegpipe -pix_fmt yuv420p10le -strict -1 - | SvtAv1EncApp -i - --keyint 12s --crf 35 --enable-qm 1 --preset 3 --progress 2 -b .\WindAndNature_yuv420p10le_bt709_crf35_qm_preset3.ivf</code>
             <p>导入有元数据的 yuv for mepg 视频流，指定使用 12 秒关键帧间隔，CRF 30，预设 3，懈怠显示进度条；导出未封装视频流：</p>
