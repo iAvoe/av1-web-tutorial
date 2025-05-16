@@ -2812,7 +2812,7 @@ for(i=0; i &lt; th; i++) { // 遍历分块宽，高
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（1/1）QLookup 表</button>
             <div class="coll-content">
                 <h4>（1/1）QLookup 表</h4>
-                <p>AV1 中的默认量化与逆量化方法的强度。范围为 0~255，由 <b><code>qp_to_qindex</code></b> 映射出 0~63。逆量化结果由块中像素值乘进 QLookup 表中对应的数，再将结果的二进制右移一位实现。这些值会由偏移值进一步调整：</p>
+                <p>AV1 中的默认量化与逆量化方法的强度。范围为 0~255，由 <b><code>qp_to_qindex</code></b> 映射出 0~63。逆量化结果由块中像素值乘进 QLookup 表中对应的数，再将结果的二进制右移一位（÷2）实现。这些值会由偏移值进一步调整：</p>
                 <div class="align-items-center">
                     <img src="files/rate-control/quantization-qp-qindex.png" alt="imageR" class="img-medium">
                     <p class="text-gray-side mt-0">图：QLookup 表对应的 0~63 QP 范围。与 0~255 的 QIndex 范围的曲线变化极小</p>
@@ -3050,7 +3050,7 @@ static const int qp_to_qindex[] = { // 索引号
                 <h3>量化——编码优化</h3>
                 <p>例如，量化一个像素的计算为：
                     <span class="text-blue-math">\[ Q_{\text{Coefficient}} = \frac{T_{\text{Coefficient}}}{Q_{\text{Step}}} \]</span>
-                    硬件编解码器不擅长除法，所以添加一道 16 次幂的乘法，以及二进制下右移 16 位两个步骤：
+                    硬件编解码器不擅长除法，所以添加一道 16 次幂的乘法，以及右移 16 位（÷2^16）两个步骤：
                     <span class="text-blue-math">\[ Q_{\text{Coefficient}} = \left( \frac{T_{\text{Coefficient}}}{ Q_{\text{Step}} } \cdot 2^{16} \right) &gt;&gt; 16 \]</span>
                     然后将除法部分“预渲染”为缩放值：
                     <span class="text-blue-math">\[ A = \frac{2^{16}}{ Q_{\text{Step}} } = Q_{\text{Lookup}\left[m\right]\left[n\right]} \]</span>
@@ -4677,12 +4677,8 @@ int av1_compute_rd_mult_based_on_qindex(const AV1_COMP *cpi, int qindex) {
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 1~63，默认 35：中高量化&gt;指定 CQP 模式下的固定值，CRF 模式下为初始 QP（类似于手动设置 x264/5 的 <code>--cplxblur</code>）。由于 GOP 总以关键帧开始，所以 CRF 模式下推荐较低的值。</p>
             <code><b>--crf</b></code>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 1~63，默认 35：中高量化&gt;指定质量呼应码率模式的量化强度目标，SVT-AV1 中直接映射为 <code>&#45;&#45;rc 0 --aq-mode 2 --qp [_]</code>。</p>
-            <code><b>--sharpness</b></code>
-            <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 -7~7，默认 0：平均&gt;指定码率控制模式根据图片锐度分配码率的方法。</p>
-            <ul class="font-monospace pl-5 text-smaller list-dotless">
-                <li><b>7: </b>保线条烂平面</li>
-                <li><b>-7: </b>保平面烂线条</li>
-            </ul>
+            <code><b>--luminance-qp-bias</b></code>
+            <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~100，默认 0：关闭&gt;将 QP 分配逻辑过渡到“据亮度调整”的百分比程度（使码率分配逻辑变得更像 x264、x265 的表现）。</p>
 
             <h5>（8/12——1/7）QIndex 偏移</h5>
             <p>相比于 AVC、HEVC 偏移 QP，QIndex 的精度比 QP 高 4 倍。同时，使用时应该注意 <code>Dc_Qlookup</code> 与 <code>Ac_Qlookup</code> 表格在不同位深下的替换（强度变更），并注意量化步长曲线走向与 AVC、HEVC 量化步长曲线的区别。</p>
@@ -5089,6 +5085,110 @@ typedef enum SvtAv1PredStructure {
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;0/1，默认 1：开&gt;开启环路定向边缘强化滤镜。</p>
             <code><b>&#45;&#45;enable-restoration</b></code>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;0/1，默认 1：开&gt;开启环路还原滤镜。在快速高画质编码预设下可能会出现 SSW 滤镜因 RU 大小过大的模糊失真。</p>
+            <code><b>--sharpness</b></code>
+            <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 -7~7，默认 0：平均&gt;指定环路滤镜和模式决策中涉及锐度变更的强度。</p>
+            <ul class="font-monospace pl-5 text-smaller list-dotless">
+                <li><b>&lt; 0: </b>增加死区量化器大小，减少量化舍入进位宽限</li>
+                <li><b>&gt; 0: </b>去块强度减半，减少死区量化器大小</li>
+                <li><b>&gt; 4: </b>去块强度减四分之三，减少死区量化器大小，增加量化舍入进位宽限</li>
+            </ul>
+
+            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：sharpness 相关源码分析</button>
+            <div class="coll-content"><code>deblocking_filter.c</code>：设定环路滤镜强度
+                <pre><code class="text-smaller">
+EbErrorType svt_av1_pick_filter_level(EbPictureBufferDesc *srcBuffer, PictureControlSet *pcs, LpfPickMethod method) {
+    // ...省略...
+    SequenceControlSet *scs = pcs->scs;
+    // 导入帧标识头、源缓冲
+    FrameHeader *frm_hdr = &pcs->ppcs->frm_hdr;
+    (void)srcBuffer;
+    struct LoopFilter *const lf = &frm_hdr->loop_filter_params;
+
+    // 将参数 sharpness 缩限到 0~7 范围，赋值到 sharpness_val
+    const int32_t sharpness_val = CLIP3(0, 7, pcs->scs->static_config.sharpness);
+
+    // 将 sharpness_val 赋值到环路滤镜的 sharpness_level 变量
+    lf->sharpness_level = sharpness_val;
+
+    // 当前帧为关键帧，且设定 Tune VQ 时，提高 sharpness_level
+    if (frm_hdr->frame_type == KEY_FRAME && pcs->scs->static_config.tune == 0)
+        lf->sharpness_level = MIN(7, sharpness_val + 2);
+
+    // ...省略...
+}
+                </code></pre>
+                <code>deblocking_common.c</code>：遍历每个可能的强度（lvl）以设定滤镜值
+                <pre><code class="text-smaller">
+void svt_aom_update_sharpness(LoopFilterInfoN *lfi, int32_t sharpness_lvl) {
+    int32_t lvl;
+
+    // MAX_LOOP_FILTER == 63
+    for (lvl=0; lvl&lt;=MAX_LOOP_FILTER; lvl++) {
+
+        // 根据 sharpness 设定 block_inside_limit，具体为 lvl 右移 1 或 2 位（÷2、÷2^2）
+        // 右移 0 位后，最大 block_inside_limit 为 63
+        // 右移 1 位后，最大 block_inside_limit 为 31
+        // 右移 2 位后，最大 block_inside_limit 为 15
+        int32_t block_inside_limit = lvl &gt; ((sharpness_lvl &gt; 0) + (sharpness_lvl &gt; 4));
+
+        // 上限、下限限位
+        if (sharpness_lvl > 0) {
+            if (block_inside_limit > (9 - sharpness_lvl))
+                block_inside_limit = (9 - sharpness_lvl);
+        }
+        if (block_inside_limit &lt; 1) {
+            block_inside_limit = 1;
+        }
+
+        // 根据 block_inside_limit 限制环路滤镜的各个强度阈值（LoopFilterThresh）
+        // lim: 特大块内的去块最大强度
+        memset(lfi->lfthr[lvl].lim, block_inside_limit, SIMD_WIDTH);
+        // mblim: 特大块（Macroblock）间缝隙的去块最大强度
+        memset(lfi->lfthr[lvl].mblim, (2 * (lvl + 2) + block_inside_limit), SIMD_WIDTH);
+    }
+}
+                </code></pre>
+                <code>md_config_process.c</code>：配置量化相关强度
+                <pre><code class="text-smaller">
+void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth, int32_t y_dc_delta_q, int32_t u_dc_delta_q, int32_t u_ac_delta_q, int32_t v_dc_delta_q, int32_t v_ac_delta_q, Quants *const quants, Dequants *const deq) {
+    int32_t i, q, quant_qtx;
+
+    for (q=0; q&lt;QINDEX_RANGE; q++) {
+        int32_t qzbin_factor = svt_aom_get_qzbin_factor(q, bit_depth);
+        // 非零值舍入范围在 lossless 下设为 64（?）
+        int32_t qrounding_factor = q == 0 ? 64 : 48;
+        const int32_t sharpness_val = pcs->scs->static_config.sharpness;
+        // 当前量化值与帧标识头 Q-index 的强度差异大小
+        // q 小得负，q 大得正
+        int diff = q - pcs->frm_hdr.quantization_params.base_q_idx;
+
+        // sharpness 与 diff 正负相反时：
+        if ((sharpness_val &gt; 0 && diff &lt; 0) ||
+            (sharpness_val &lt; 0 && diff &gt; 0)) {
+            
+            // 根据 sharpness 计算偏移值：
+            // sharpness_val 大于 0：左移一位（×2），与 diff 的绝对值中选最大
+            // sharpness_val 小于等于 0：绝对值左移一位（×2），与 diff 值中选最小
+            int32_t offset = sharpness_val &gt; 0 ? MAX(sharpness_val &lt;&lt; 1, abs(diff))
+                                               : MIN(abs(sharpness_val) &lt;&lt; 1, diff);
+            
+            // sharpness 大于 0 时，缩小死区量化（Deadzone / Zero bin factor）1 个偏移值，否则扩大 1 个偏移值
+            qzbin_factor += (sharpness_val &gt; 0) ? -offset : offset;
+
+            // sharpness 大于 0 时，增加非零值舍入因数（与 qzbin_factor 负相关）
+            // qrounding_factor 初始值为 48，而越大则量化结果的进位越容易，对细节有微小提升
+            qrounding_factor += (sharpness_val &gt; 0) ? offset : -offset;
+
+            // 限位
+            qzbin_factor = CLIP3(1, 256, qzbin_factor);
+            qrounding_factor = CLIP3(1, 256, qrounding_factor);
+        }
+        // ... 省略 ...
+    }
+    // ... 省略 ...
+}
+                </code></pre>
+            </div>
 
             <h5>（11/12——1/3）胶片颗粒编码</h5>
             <code><b>&#45;&#45;film-grain</b></code>
