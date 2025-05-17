@@ -5088,10 +5088,11 @@ typedef enum SvtAv1PredStructure {
             <code><b>--sharpness</b></code>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 -7~7，默认 0：平均&gt;指定环路滤镜和模式决策中涉及锐度变更的强度。</p>
             <ul class="font-monospace pl-5 text-smaller list-dotless">
-                <li><b>&lt; 0: </b>增加死区量化器大小，减少量化舍入进位宽限</li>
-                <li><b>&gt; 0: </b>去块强度减半，减少死区量化器大小</li>
-                <li><b>&gt; 4: </b>去块强度减四分之三，减少死区量化器大小，增加量化舍入进位宽限</li>
+                <li><b>小于 0: </b>增加死区量化器大小，减少量化舍入进位宽限</li>
+                <li><b>大于 0: </b>去块强度减半，减少死区量化器大小</li>
+                <li><b>大于 4: </b>去块强度减四分之三，减少死区量化器大小，增加量化舍入进位宽限</li>
             </ul>
+            <p>注：虽然 &gt; 0 也会增加量化舍入进位宽限，但影响太小。</p>
 
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：sharpness 相关源码分析</button>
             <div class="coll-content"><code>deblocking_filter.c</code>：设定环路滤镜强度
@@ -5125,11 +5126,13 @@ void svt_aom_update_sharpness(LoopFilterInfoN *lfi, int32_t sharpness_lvl) {
     // MAX_LOOP_FILTER == 63
     for (lvl=0; lvl&lt;=MAX_LOOP_FILTER; lvl++) {
 
-        // 根据 sharpness 设定 block_inside_limit，具体为 lvl 右移 1 或 2 位（÷2、÷2^2）
+        // 根据 sharpness 设定 block_inside_limit
+        // 具体为 lvl 右移 1 或 2 位（÷2、÷2^2）
         // 右移 0 位后，最大 block_inside_limit 为 63
         // 右移 1 位后，最大 block_inside_limit 为 31
         // 右移 2 位后，最大 block_inside_limit 为 15
-        int32_t block_inside_limit = lvl &gt; ((sharpness_lvl &gt; 0) + (sharpness_lvl &gt; 4));
+        int32_t block_inside_limit =
+            lvl &gt;&gt; ((sharpness_lvl &gt; 0) + (sharpness_lvl &gt; 4));
 
         // 上限、下限限位
         if (sharpness_lvl > 0) {
