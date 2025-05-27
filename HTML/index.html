@@ -35,7 +35,6 @@
                             <a class="toSelf" href="#h2-9">熵编码</a>
                             <a class="toSelf" href="#h2-10">模式决策</a>
                             <a class="toSelf" href="#h2-11">环路滤镜</a>
-                            <a class="toSelf" href="#h2-12">规格级别</a>
                         </li>
                         <li>参数：
                             <a class="toSelf" href="#h2-13">SVT-AV1 参数与预设</a>
@@ -3141,9 +3140,9 @@ static const int qp_to_qindex[] = { // 索引号
                 \]</span>
             </div>
 
-            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（3/3）SVT-AV1 方差强化 Variance boost（VB）</button>
+            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（3/3）SVT-AV1 帧内方差自适应量化增强 Variance boost（VB）</button>
             <div class="coll-content">
-                <h4>（3/3）SVT-AV1 方差强化</h4>
+                <h4>（3/3）SVT-AV1 帧内方差自适应量化增强</h4>
                 <p>一种调整方差计算结果强度的方法，称为 Variance boost（VB）。下例为 2 个大小相似的岩石纹理图。纹理逐渐淡化为纯白色、米色和黑色。从中出现了模糊、高频细节丢失、以及显露的变换块基础图案。算法部分详见：<a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/tree/master/Docs/Appendix-Variance-Boost.md">SVT-AV1 Docs</a>：</p>
                 <div class="align-items-center">
                     <img src="files/rate-control/svt-av1/vb_rock_novb_qp50_22848.webp" alt="imageR" class="img-medium">
@@ -4699,11 +4698,11 @@ int av1_compute_rd_mult_based_on_qindex(const AV1_COMP *cpi, int qindex) {
 
             <h5>（8/12——2/7）方差自适应量化</h5>
             <code><b>&#45;&#45;enable-variance-boost</b></code>
-            <p class="font-monospace pl-5 m-0 overflow-auto">&lt;0/1，默认 0：关&gt;开启方差自适应量化的增强强度微调。</p>
+            <p class="font-monospace pl-5 m-0 overflow-auto">&lt;0/1，默认 0：关，<span class="text-red-emph">Superblock 大小改为 64x64</span>&gt;指定帧内方差自适应量化的增强强度微调。Superblock 改动逻辑见 <a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/master/Source/Lib/Globals/enc_handle.c#L3922">enc_handle.c</a>。</p>
             <code><b>--variance-boost-curve</b></code>
-            <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~2，默认 0：默认曲线&gt;指定方差自适应量化的增强曲线，作用类似于 x264/5 的 <code>--qcomp</code>，但应用在了 VAQ 上</p>
+            <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~2，默认 0：默认曲线&gt;指定方差自适应量化的增强映射曲线，类似于 x264/5 的 <code>--qcomp</code></p>
             <ul class="list-dotless text-smaller">
-                <li><b>0：</b>通过低底数指数递减曲线映射方差变化，快速收敛/收紧方差自适应量化的优化范围</li>
+                <li><b>0：</b>通过低底数的指数递减曲线映射方差变化，快速收敛/收紧方差自适应量化的优化范围</li>
                 <li><b>1：</b>通过线性递减线映射方差变化到量化值，中速收敛/收紧方差自适应量化的优化范围，在适度增加码率的情况下增强低~中对比度区域的画质</li>
                 <li><b>2：</b>通过线性递减线映射方差变化到量化值，慢速收敛/收紧方差自适应量化的优化范围，由 SVT-AV1-PSY 开发组基于 Cloudinary CID22 测试集中 SSIMULACRA2 跑分得出
                     <ul><li>SVT-AV1-PSY Tune 4（静态图像微调）会调用该曲线</li></ul>
@@ -4717,14 +4716,14 @@ switch (curve) {
 }
             </code></pre>
             <code><b>--variance-boost-strength</b></code>
-            <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 1~4，默认 2：弱&gt;指定方差自适应量化的增强强度——1：微，2：弱，3：中：4：强</p>
+            <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 1~4，默认 2：弱&gt;指定帧内方差自适应量化的增强强度——1：微，2：弱，3：中：4：强</p>
             <code><b>--variance-octile</b></code>
-            <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 1~8，默认 6：偏高&gt;指定开启方差自适应量化增强条件“特大块中低对比度面积占比阈值”。但凡特大块中，低对比度面积达到 N/8，则对该特大块启用方差自适应量化增强（Octile 代表分母）。分子值越低，则触发的特大块越多，码率越高；而分子偏高则可能会导致特大块之间的画面失真不一致，导致一圈特大块中显现出 64x64、64x128、128x128，或/和 256x128 的块失真。</p>
+            <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 1~8，默认 6：偏高&gt;指定帧内开启方差自适应量化增强条件“特大块中低对比度面积占比阈值”。但凡特大块中，低对比度面积达到 N/8，则对该特大块启用方差自适应量化增强（Octile 代表分母）。分子值越低，则触发的特大块越多，码率越高；而分子偏高则可能会导致特大块之间的画面失真不一致，导致一圈特大块中显现出 64x64、64x128、128x128，或/和 256x128 的块失真。</p>
             <ul class="list-dotless text-smaller">
                 <li>注：如果源的画面本就是中~高对比度，则 4~8 的范围会编码出相同结果</li>
             </ul>
             <code><b>--aq-mode</b></code>
-            <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~2，默认 2：分瓣 VAQ + QP 偏移预测&gt;指定自适应量化模式——0：关，1：分瓣 VAQ 调整；2：并且使用 QP 偏移预测</p>
+            <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~2，默认 2：分瓣 VAQ + QP 偏移预测&gt;指定帧间方差自适应量化模式——0：关，1：分瓣 VAQ 调整；2：并且使用 QP 偏移预测</p>
 
             <h5>（8/12——3/7）VBR、CBR 模式细节</h5>
             <code><b>--tbr</b></code>
@@ -5202,7 +5201,6 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
             <code><b>&#45;&#45;film-grain-denoise</b></code>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;0/1，默认 0：关，<span class="text-red-emph">覆盖<code>&#45;&#45;film-grain</code></span>&gt;丢弃 FGS 分离的噪点，<code>&#45;&#45;film-grain</code> 的分离强度间接转化为降噪强度。</p>
 
-
             <h4>（11/12——2/3）参考缩放环路</h4>
             <code><b>&#45;&#45;resize-mode</b></code>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~4，默认 0：关，<span class="text-red-emph">需关闭超采样滤镜环路</span>&gt;启用参考缩放环路，并制定缩放模式。</p>
@@ -5242,7 +5240,7 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
             <h4>（12/12）编码预设</h4>
             <p>注：SVT-AV1 的预设参数下牵扯着若干项强度的设定，且官方文档中仅实现了部分标注。以下内容主要来自于源代码分析，因此可能会有看错看晕或理解错误，但对于帮助设定该参数有着良性作用。</p>
             <code><b>&#45;&#45;preset</b></code>
-            <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 13~-1，默认 10：快速&gt;SVT-AV1 中高度涉及编码功能强度设定的参数。大致上 13~7 用于实时和快速编码用途，6~4 为常规用途，3~1 为高压缩用途，-1 为替代 0 的自动（<code>ENC_MR</code>，Research mode）模式。10~0 的<i>部分</i>预设范围见下，或 <a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/master/Docs/CommonQuestions.md">SVT-AV1 Common questions</a>：</p>
+            <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 13~-1，默认 10（可能最新版本为 8）：快速&gt;SVT-AV1 中高度涉及编码功能强度设定的参数。大致上 13~7 用于实时和快速编码用途，6~4 为常规用途，3~1 为高压缩用途，-1 为（<code>ENC_MR</code>，Research mode）模式，是在算力足以支撑 preset 0 时的上位替代选项。10~0 的<i>部分</i>预设范围见下，或 <a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/master/Docs/CommonQuestions.md">SVT-AV1 Common questions</a>：</p>
             <ul class="text-smaller">
                 <li><b>TF level</b>：时域降噪过滤搜索级别</li>
                 <li><b>NSQ level</b>：非正方形细分块搜索级别</li>
@@ -5253,10 +5251,10 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                 <li><b>Filter Intra level</b>：递归插值模式搜索级别</li>
                 <li><b>InterIntra level</b>：混合参考帧的帧内帧间模式搜索级别</li>
                 <li><b>COMP level</b>：混合参考帧的帧间模式搜索级别（InterInter）</li>
-                <li><b>TPL level</b>：前瞻时域依赖性建模级别</li>
+                <li><b>TPL level</b>：前瞻时域依赖性建模级别（Lookahead）</li>
                 <li><b>GM level</b>：全局仿射变换动态补偿</li>
                 <li><b>MRP level</b>：多参考帧搜索范围 Multi reference picture</li>
-                <li><b>Max CAN</b>：模式决策候选量 Maximum candidates</li>
+                <li><b>Max CAN</b>：模式决策最大候选量 Maximum candidates</li>
                 <li><b>Chroma level</b>：色度平面编码级别（模式决策搜索级别与候选数量）</li>
                 <li><b>Update CDF level</b>：累积分布函数更新搜索级别</li>
                 <li><code>is_ref</code>：当前帧的类型为被参考帧</li>
@@ -5629,17 +5627,17 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                             <!--<td class="px-1">11</td>-->
                         </tr>
                         <tr class="border-lr border-bottom">
-                            <td class="px-1">Superblock 大小</td>
+                            <td class="px-1"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/master/Source/Lib/Globals/enc_handle.c">Superblock 大小</a></td>
                             <td class="px-1 t-light-gray" colspan="4">64</td>
                             <!--<td class="px-1">2</td>-->
                             <!--<td class="px-1">3</td>-->
                             <!--<td class="px-1">4</td>-->
-                            <td class="px-1 t-invert-light" colspan="7">128</td>
+                            <td class="px-1 t-invert-light text-smaller" colspan="3">（由率控制模式指定的）GOP QP 小于等于 57：64，否则 128</td>
                             <!--<td class="px-1">6</td>-->
                             <!--<td class="px-1">7</td>-->
-                            <!--<td class="px-1">8</td>-->
-                            <!--<td class="px-1">9</td>-->
-                            <!--<td class="px-1">10</td>-->
+                            <td class="px-1 t-invert-dark text-smaller">GOP QP 小于等于 56：64，否则 128</td>
+                            <td class="px-1 t-invert-dark text-smaller">源分辨率小于等于 480p：GOP QP 小于等于 56：64，否则 128；源分辨率大于 480p：GOP QP 小于等于 50：64，否则 128</td>
+                            <td class="px-1 t-invert-dark" colspan="2">128</td>
                             <!--<td class="px-1">11</td>-->
                         </tr>
                         <tr class="border-lr border-bottom">
@@ -5822,7 +5820,7 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                             <!--<td class="px-1">11</td>-->
                         </tr>
                         <tr class="border-lr border-bottom">
-                            <td class="px-1">方差自适应量化</td>
+                            <td class="px-1">帧间与帧内方差自适应量化</td>
                             <td class="px-1 text-smaller" colspan="4"><code>--aq-mode &gt; 0, --scd 1, --enable-variance-boost</code> 时开，否则关</td>
                             <!--<td class="px-1">3</td>-->
                             <!--<td class="px-1">4</td>-->
