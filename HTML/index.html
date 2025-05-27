@@ -4643,7 +4643,7 @@ int av1_compute_rd_mult_based_on_qindex(const AV1_COMP *cpi, int qindex) {
             <!--<code><b>&#45;&#45;16bit-pipeline</b></code>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;0/1，默认 0：关&gt;指定编码器内部使用 16bit 位深精度计算。</p>-->
             <code><b>&#45;&#45;fast-decode</b></code>
-            <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~2，默认 0：关，<span class="text-red-emph">被<code>--hierarchical-levels</code>覆盖</span>&gt;指定低延迟模式（减少解码复杂度），适合直播的转码分发机制，以及算力不足的平台——1：普通限制，2：强限制。</p>
+            <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~2，默认 0：关，<span class="text-red-emph">被<code>--hierarchical-levels</code>覆盖</span>&gt;指定低延迟模式（减少解码复杂度），适合直播的转码分发机制，以及算力不足的平台——1：普通限制，2：强限制。影响 SuperBlock 大小等多个机制。</p>
             <code><b>--asm</b></code>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~11/字符串 c~max，默认 max：全部&gt;指定弃用较新的 CPU 指令集以兼容旧式计算机平台。按照从旧到新排序为——c, mmx, sse, sse2, sse3, ssse3, sse4_1, sse4_2, avx, avx2, avx512, avx512icl, max。</p>
             <code><b>&#45;&#45;forced-maximum-frame-width</b></code>
@@ -5046,7 +5046,7 @@ typedef enum SvtAv1FrameUpdateType {
             <code><b>--hierarchical-levels</b></code>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 2~5，默认 4，<span class="text-blue-emph"><code>&#45;&#45;preset 12~13</code> 下默认 5</span>，<span class="text-red-emph">覆盖<code>&#45;&#45;fast-decode</code>，被<code>&#45;&#45;pred-struct</code>覆盖</span>&gt;指定每个 GOP 于底层之上的分层预测结构层数。越高则帧间冗余功能越强、尖塔混合参考帧越多、负责解码每个 GOP 的 OBU 越多、编码速度越慢、解码压力越大（带宽压力越小）、串流时的网络信号质量要求越高。类似于设定连续 B 帧长度——2: 共 3 层，3: 共 4 层，5: 共 6 层。</p>
             <code><b>&#45;&#45;pred-struct</b></code>
-            <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 1~2，默认 2，<span class="text-red-emph">覆盖 <code>--hierarchical-levels</code></span>&gt;指定帧间预测模式——1: 低延迟编解码（限为单层，关闭混合参考模式，并影响一些编码模式的强度，映射到 <code>rtc_tune = true</code>），2: 支持随机访问（不限制，开启混合参考模式）。</p>
+            <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 1~2，默认 2，<span class="text-red-emph">覆盖 <code>--hierarchical-levels</code></span>&gt;指定帧间预测模式——1: 低延迟编解码（限为单层，关闭混合参考模式，并影响一些编码模式的强度，映射到 <code>rtc_tune = true</code>、<code>LOW_DELAY_B</code>），2: 支持随机访问（不限制，开启混合参考模式）。</p>
             <pre><code class="text-smaller">
 /* 
  * 指定帧间预测模式，definitions.h 中为 PredStructure
@@ -5064,6 +5064,17 @@ typedef enum SvtAv1PredStructure {
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;0/1，默认 1：开，<span class="text-red-emph">需 <code>--rc 0</code>，分辨率小于 4k，<code>&#45;&#45;fast-decode 0</code>，<code>&#45;&#45;pred-struct 2</code>，<code>&#45;&#45;preset &lt;=7</code></span>&gt;开启 GOP 层数的前期动态分析，拆分出 mini-GOP 以在 GOP 结构上提高对高时域复杂度场景的适应性，mini-GOP 默认长度为 16 帧。</p>
             <code><b>--startup-mg-size</b></code>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 2~4 或 0，默认 0：关，<span class="text-red-emph">需小于 <code>--hierarchical-levels</code></span>&gt;指定每个关键帧之后首个 mini-GOP 专用的分层预测结构层数。类似于设定连续 B 帧长度——2: 共 3 层，3: 共 4 层，4: 共 5 层。<span class="text-red-emph">猜测：</span>该功能可以在 GOP 本身较长的情况下，缓解 CBR 解码延迟的增长速率，从而使码率分配更合理。</p>
+
+            <h5>设定 Superblock 大小到 64x64 的条件</h5>
+            <ul>
+                <li><code>--enable-variance-boost 1</code></li>
+                <li><code>&#45;&#45;preset</code> 大于等于 7，更慢的预设需要高 GOP QP 设置为 64x64</li>
+                <li><code>&#45;&#45;fast-decode</code> 大于等于 1</li>
+                <li><code>&#45;&#45;resize-mode</code> 大于等于 1</li>
+                <li><code>--pred-struct 1</code></li>
+                <li>输入视频分辨率大于 360p、GOP QP 小于等于 56、</li>
+                <li>输入视频分辨率小于等于 240p</li>
+            </ul>
 
             <h4>（10/12）前瞻进程、帧间预测</h4>
             <code><b>&#45;&#45;enable-tpl-la</b></code>
@@ -5238,9 +5249,9 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~64，默认 43：中高&gt;指定动态分母模式下非关键帧、关键帧的 QP 阈值，只要率控制模式指定了更高的 QP 值，就开始增加缩小分母大小。</p>
 
             <h4>（12/12）编码预设</h4>
-            <p>注：SVT-AV1 的预设参数下牵扯着若干项强度的设定，且官方文档中仅实现了部分标注。以下内容主要来自于源代码分析，因此可能会有看错看晕或理解错误，但对于帮助设定该参数有着良性作用。</p>
+            <p>注：SVT-AV1 的预设参数下牵扯着若干项强度的设定，且官方文档中仅实现了部分标注。以下内容主要来自于源代码分析，因此可能会看错看晕的情况，但对于帮助设定该参数有着良性作用。</p>
             <code><b>&#45;&#45;preset</b></code>
-            <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 13~-1，默认 10（可能最新版本为 8）：快速&gt;SVT-AV1 中高度涉及编码功能强度设定的参数。大致上 13~7 用于实时和快速编码用途，6~4 为常规用途，3~1 为高压缩用途，-1 为（<code>ENC_MR</code>，Research mode）模式，是在算力足以支撑 preset 0 时的上位替代选项。10~0 的<i>部分</i>预设范围见下，或 <a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/master/Docs/CommonQuestions.md">SVT-AV1 Common questions</a>：</p>
+            <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 13~-1，默认 10（可能最新版本为 8）：快速&gt;SVT-AV1 中高度涉及编码功能强度设定的参数。大致上 13~7 用于实时和快速编码用途，6~4 为常规用途，3~1 为高压缩用途，-1 为（<code>ENC_MR</code>，Research mode）模式，是在算力足以支撑 preset 0 时可以考虑的更优选项（不一定是上位替代）。10~0 的<i>部分</i>预设范围见下，或 <a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/master/Docs/CommonQuestions.md">SVT-AV1 Common questions</a>：</p>
             <ul class="text-smaller">
                 <li><b>TF level</b>：时域降噪过滤搜索级别</li>
                 <li><b>NSQ level</b>：非正方形细分块搜索级别</li>
