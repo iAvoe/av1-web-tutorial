@@ -928,7 +928,7 @@
             </div>
 
             <h3>流结构/帧间预测——被参考帧列表 Dynamic Reference List（DRL）</h3>
-            <p>VP9 与 AV1 中的帧间参考源缓存，长 8 帧，同时作用于编码和解码两端。编码时，编码器中的解码功能将帧内/帧间预测的结果帧更新到该列表中，以供当前正在进行帧间预测编码的帧参考。Open GOP 中的 DRL 更新顺序与视频帧显示顺序高度一致，Closed GOP 下则不会。VP9 中，当前编码帧可以选择其中的 3 帧作为其帧间参考源。这三帧因相对于当前编码帧的位置，而被冠名：<b><code>LAST_FRAME</b></code>、<b><code>GOLDEN_FRAME</b></code>、<b><code>ALTREF_FRAME</b></code>。</p>
+            <p>VP9 与 AV1 中的帧间参考源缓存，长 8 帧，同时作用于编码和解码两端。编码时，编码器中的解码功能将帧内/帧间预测的结果帧更新到该列表中，以供当前正在进行帧间预测编码的帧参考。Open GOP 中的 DRL 更新顺序与视频帧显示顺序高度一致，Closed GOP 下则不会。VP9 中，当前编码帧可以选择其中的 3 帧作为其帧间参考源。这三帧因相对于当前编码帧的位置，而被冠名：<b><code>LAST_FRAME</code></b>、<b><code>GOLDEN_FRAME</code></b>、<b><code>ALTREF_FRAME</code></b>。</p>
             <p class="text-gray-side">注：SVT-AV1 中称为 Decoded picture buffer（DPB）</p>
 
             <h4>（1/3）支线被参考帧 Alternate Reference Frame（ALTREF）</h4>
@@ -936,7 +936,7 @@
             <p>时域降噪过滤处理的说明见下方的前瞻进程——时域降噪过滤。</p>
 
             <h4>（2/3）金帧/远距离过去帧 Golden Frame</h4>
-            <p>VP3 中的“Last intra frame”，于当前帧间编码帧之前。在 VP6 中改为允许任意帧间参考帧，并重定义为“远距离过去帧 Distant past”，相对于 <b><code>LAST_FRAME</b></code> 的“Near past”。会被关键帧刷新掉，功能上非常类似于 I 帧，之后被 VP7，8，9 和 AV1 沿用。</p>
+            <p>VP3 中的“Last intra frame”，于当前帧间编码帧之前。在 VP6 中改为允许任意帧间参考帧，并重定义为“远距离过去帧 Distant past”，相对于 <b><code>LAST_FRAME</code></b> 的“Near past”。会被关键帧刷新掉，功能上非常类似于 I 帧，之后被 VP7，8，9 和 AV1 沿用。</p>
             <p class="text-gray-side">注：称呼为“Golden”的原因不明。</p>
 
             <h4>（3/3）上帧 Last Frame</h4>
@@ -944,22 +944,22 @@
 
             <p>AV1 在此之上扩充了：</p>
             <ul>
-                <li><b><code>LAST2_FRAME</b></code>：位于当前帧间编码帧之前</li>
-                <li><b><code>LAST3_FRAME</b></code>：位于当前帧间编码帧之前，距离当前帧间编码帧最远</li>
-                <li><b><code>ALTREF2_FRAME</b></code>：位于当前帧间编码帧之前或之后</li>
-                <li><b><code>BWDREF_FRAME</b></code>：类似于支线被参考帧，但未经过 TF 处理（噪声与微小细节被保留），所以比 ALTREF 更适合向其之前的帧提供参考</li>
-                <li><b><code>OVERLAY_FRAME</b></code>：时域降噪过滤处理任意位于分层预测结构底部的帧（SVT-AV1 中仅代表支线被参考帧）时可能会生成的叠加帧。此叠加图片对应于相同的原始源图片，但仅使用源图片的时间滤波版本作为参考来重建原始图片。，以及重建环路的参考</li>
+                <li><b><code>LAST2_FRAME</code></b>：位于当前帧间编码帧之前</li>
+                <li><b><code>LAST3_FRAME</code></b>：位于当前帧间编码帧之前，距离当前帧间编码帧最远</li>
+                <li><b><code>ALTREF2_FRAME</code></b>：位于当前帧间编码帧之前或之后</li>
+                <li><b><code>BWDREF_FRAME</code></b>：类似于支线被参考帧，但未经过 TF 处理（噪声与微小细节被保留），所以比 ALTREF 更适合向其之前的帧提供参考</li>
+                <li><b><code>OVERLAY_FRAME</code></b>：时域降噪过滤处理任意位于分层预测结构底部的帧（SVT-AV1 中仅代表支线被参考帧）时可能会生成的叠加帧。此叠加图片对应于相同的原始源图片，但仅使用源图片的时间滤波版本作为参考来重建原始图片。，以及重建环路的参考</li>
             </ul>
 
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：DRL 内帧的更迭，解码的顺序</button>
             <div class="coll-content">
-                <p>此外，被参考帧列表中还为帧内编码帧 <b><code>INTRA_FRAME</b></code> 留了一个位子，所以共长 8 帧。编码时，VP9 与 AV1 会选择这 8 帧中的任意帧。如 AV1 的帧内帧间混合模式（Interintra）中，这个分块的参考帧列表可能会是 <b><code>RefFrame[0] = LAST_FRAME; RefFrame[1] = INTRA_FRAME;</b></code>。</p>
+                <p>此外，被参考帧列表中还为帧内编码帧 <b><code>INTRA_FRAME</code></b> 留了一个位子，所以共长 8 帧。编码时，VP9 与 AV1 会选择这 8 帧中的任意帧。如 AV1 的帧内帧间混合模式（Interintra）中，这个分块的参考帧列表可能会是 <b><code>RefFrame[0] = LAST_FRAME; RefFrame[1] = INTRA_FRAME;</code></b>。</p>
                 <p>在当前编码帧选择并完成了帧间预测后，其帧间预测的结果可以选择替换掉被参考帧列表中的任意帧，包括刷新清空该列表；跳过、替换、刷新操作与播放视频的过程一致。解码顺序<i>大致为</i>：</p>
                 <ol>
-                    <li><b><code>GOLDEN</b></code></li>
-                    <li><b><code>ALTREF，ALTREF2</b></code></li>
-                    <li><b><code>BWDREF</b></code></li>
-                    <li><b><code>LAST / LAST2 / LAST3</b></code></li>
+                    <li><b><code>GOLDEN</code></b></li>
+                    <li><b><code>ALTREF，ALTREF2</code></b></li>
+                    <li><b><code>BWDREF</code></b></li>
+                    <li><b><code>LAST / LAST2 / LAST3</code></b></li>
                     <li>其它</li>
                 </ol>
                 <div class="align-items-center">
@@ -969,45 +969,45 @@
             </div>
 
             <h3>流结构/帧间预测——参考帧 Reference Frame</h3>
-            <p>相对于被参考帧，有类似 P 帧的单帧参考帧 <b><code>SINGLE_REFERENCE</b></code>，支持被参考帧列表中的 7 帧：</p>
+            <p>相对于被参考帧，有类似 P 帧的单帧参考帧 <b><code>SINGLE_REFERENCE</code></b>，支持被参考帧列表中的 7 帧：</p>
             <ul>
-                <li><b><code>ALTREF2_FRAME</b></code></li>
-                <li><b><code>BWDREF_FRAME</b></code></li>
-                <li><b><code>ALTREF_FRAME</b></code></li>
-                <li><b><code>GOLDEN_FRAME</b></code></li>
-                <li><b><code>LAST3_FRAME</b></code></li>
-                <li><b><code>LAST2_FRAME</b></code></li>
-                <li><b><code>LAST_FRAME</b></code></li>
+                <li><b><code>ALTREF2_FRAME</code></b></li>
+                <li><b><code>BWDREF_FRAME</code></b></li>
+                <li><b><code>ALTREF_FRAME</code></b></li>
+                <li><b><code>GOLDEN_FRAME</code></b></li>
+                <li><b><code>LAST3_FRAME</code></b></li>
+                <li><b><code>LAST2_FRAME</code></b></li>
+                <li><b><code>LAST_FRAME</code></b></li>
             </ul>
 
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（1/2）单向混合参考帧 UNIDIR</button>
             <div class="coll-content">
-                <p>与类似 B 帧，但仍然属于单向参考的混合参考帧 <b><code>COMPOUND_REFERENCE</b></code>。混合参考帧下分为单向混合溯帧 <code>UNIDIR_COMP_REFERENCE</code>（前—前—，—后—后）：</p>
+                <p>与类似 B 帧，但仍然属于单向参考的混合参考帧 <b><code>COMPOUND_REFERENCE</code></b>。混合参考帧下分为单向混合溯帧 <code>UNIDIR_COMP_REFERENCE</code>（前—前—，—后—后）：</p>
                 <ul>
-                    <li><b><code>BWDREF_FRAME</b></code>，<b><code>ALTREF_FRAME</b></code></li>
-                    <li><b><code>LAST_FRAME</b></code>，<b><code>GOLDEN_FRAME</b></code></li>
-                    <li><b><code>LAST_FRAME</b></code>，<b><code>LAST3_FRAME</b></code></li>
-                    <li><b><code>LAST_FRAME</b></code>，<b><code>LAST2_FRAME</b></code></li>
+                    <li><b><code>BWDREF_FRAME</code></b>，<b><code>ALTREF_FRAME</code></b></li>
+                    <li><b><code>LAST_FRAME</code></b>，<b><code>GOLDEN_FRAME</code></b></li>
+                    <li><b><code>LAST_FRAME</code></b>，<b><code>LAST3_FRAME</code></b></li>
+                    <li><b><code>LAST_FRAME</code></b>，<b><code>LAST2_FRAME</code></b></li>
                 </ul>
             </div>
 
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（2/2）双向混合参考帧 BIDIR</button>
             <div class="coll-content">
                 <h4>（2/2）双向混合参考帧</h4>
-                <p>以及更类似 B 帧的双向混合参考帧 <b><code>BIDIR_COMP_REFERENCE</b></code>（前— —后）。</p>
+                <p>以及更类似 B 帧的双向混合参考帧 <b><code>BIDIR_COMP_REFERENCE</code></b>（前— —后）。</p>
                 <ul class="text-smaller">
-                    <li><b><code>LAST2_FRAME</b></code>，<b><code>ALTREF2_FRAME</b></code></li>
-                    <li><b><code>LAST2_FRAME</b></code>，<b><code>BWDREF_FRAME</b></code></li>
-                    <li><b><code>LAST2_FRAME</b></code>，<b><code>ALTREF_FRAME</b></code></li>
-                    <li><b><code>LAST_FRAME</b></code>，<b><code>ALTREF2_FRAME</b></code></li>
-                    <li><b><code>LAST_FRAME</b></code>，<b><code>BWDREF_FRAME</b></code></li>
-                    <li><b><code>LAST_FRAME</b></code>，<b><code>ALTREF_FRAME</b></code></li>
-                    <li><b><code>GOLDEN_FRAME</b></code>，<b><code>ALTREF2_FRAME</b></code></li>
-                    <li><b><code>GOLDEN_FRAME</b></code>，<b><code>BWDREF_FRAME</b></code></li>
-                    <li><b><code>GOLDEN_FRAME</b></code>，<b><code>ALTREF_FRAME</b></code></li>
-                    <li><b><code>LAST3_FRAME</b></code>，<b><code>ALTREF2_FRAME</b></code></li>
-                    <li><b><code>LAST3_FRAME</b></code>，<b><code>BWDREF_FRAME</b></code></li>
-                    <li><b><code>LAST3_FRAME</b></code>，<b><code>ALTREF_FRAME</b></code></li>
+                    <li><b><code>LAST2_FRAME</code></b>，<b><code>ALTREF2_FRAME</code></b></li>
+                    <li><b><code>LAST2_FRAME</code></b>，<b><code>BWDREF_FRAME</code></b></li>
+                    <li><b><code>LAST2_FRAME</code></b>，<b><code>ALTREF_FRAME</code></b></li>
+                    <li><b><code>LAST_FRAME</code></b>，<b><code>ALTREF2_FRAME</code></b></li>
+                    <li><b><code>LAST_FRAME</code></b>，<b><code>BWDREF_FRAME</code></b></li>
+                    <li><b><code>LAST_FRAME</code></b>，<b><code>ALTREF_FRAME</code></b></li>
+                    <li><b><code>GOLDEN_FRAME</code></b>，<b><code>ALTREF2_FRAME</code></b></li>
+                    <li><b><code>GOLDEN_FRAME</code></b>，<b><code>BWDREF_FRAME</code></b></li>
+                    <li><b><code>GOLDEN_FRAME</code></b>，<b><code>ALTREF_FRAME</code></b></li>
+                    <li><b><code>LAST3_FRAME</code></b>，<b><code>ALTREF2_FRAME</code></b></li>
+                    <li><b><code>LAST3_FRAME</code></b>，<b><code>BWDREF_FRAME</code></b></li>
+                    <li><b><code>LAST3_FRAME</code></b>，<b><code>ALTREF_FRAME</code></b></li>
                 </ul>
                 <p>以帧分瓣格式（Frame segment）编码时，位于分瓣边界的混合参考块需要重设为单帧参考块。</p>
             </div>
@@ -1104,7 +1104,7 @@
                 <h4>（1/1）基于瓦片的多线程优化</h4>
                 <p>作为一种分区方法，瓦片自然也可以用于拆分压制任务。这种方法的缺点是会干扰到视频编码依赖于帧间 + 帧内的二维冗余，导致编码效率或画质降低，类似于 x264 编码器曾尝试并弃用的“基于分片的多线程优化”。SVT-AV1 支持基于瓦片的多线程优化，但默认关闭。</p>
                 <p class="text-gray-side">注：AV1 中已经使用了分瓣（Tile Segment）来根据画面内容而划区分配码率</p>
-                <p class="text-gray-side">注：虽然 x264 证明了通过将帧分为条带来提升多线程优化的编码上下文损失极高，但随着 GPU 和手机 SoC 硬件编码的实现，以及视频分辨率的增加，瓦片的大小可能会变得形同 x264 最初设计应对的分辨率，如 768x512 的微视频，因此这种调度如果被优化到位，则说不定会变得可行</p>
+                <p class="text-gray-side">注：虽然 x264 证明了“将帧分为条带来提升多线程优化”的上下文损失极高，但随着硬件编码技术的改进，以及视频分辨率的增加，瓦片的大小可能会变得形同 x264 最初设计应对的分辨率，如 768x512 的一组视频，因此如果被优化到位，则这种调度说不定会变得可行</p>
             </div>
 
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：图片结构——分瓣 Frame segment</button>
@@ -1121,7 +1121,7 @@
             </div>
 
             <h3>图片结构——粗分块/特大块 Superblock</h3>
-            <p>AV1 支持最大 128x128 与兼容 VP9 的 64x64 亮度 SB。为适配当前市面上的硬件编解码器，128x128 的块会以逻辑上的 64x64 块编解码。相当于将一纸数字横竖各切一刀，再一片片读写。</p>
+            <p>AV1 支持最大 128x128 与兼容 VP9 的 64x64 亮度 SB。为适配当前市面上的硬件编解码器，128x128 的块会以逻辑上的 64x64 块编解码（类似于将一纸数字横竖各切一刀，再重排顺序）</p>
             <div class="align-items-center">
                 <img src="files/block-splitting/micol-mirow-order.png" alt="imageR" class="img-medium">
                 <p class="text-gray-side mt-0">图：按 MiRow、MiCol（Marcoblock Index）行、列顺序解码的 SB，见 <a href="https://wikidocs.net/70813">Wikidocs - Superblock and block</a> </p>
@@ -1135,16 +1135,16 @@
                 <h4>（1/3）细分块大小</h4>
                 <p>虽然这里也有 128x128 的块大小，但这是经过检查，判断为“不分块”的结果，所以也算作细分块。</p>
                 <ul>
-                    <li><b><code>BLOCK_4X4</b></code>，<b><code>BLOCK_4X8</b></code>，<b><code>BLOCK_8X4</b></code></li>
-                    <li><b><code>BLOCK_8X8</b></code>，<b><code>BLOCK_8X16</b></code>，<b><code>BLOCK_16X8</b></code></li>
-                    <li><b><code>BLOCK_16X16</b></code>，<b><code>BLOCK_16X32</b></code>，<b><code>BLOCK_32X16</b></code></li>
-                    <li><b><code>BLOCK_32X32</b></code>，<b><code>BLOCK_32X64</b></code>，<b><code>BLOCK_64X32</b></code></li>
-                    <li><b><code>BLOCK_64X64</b></code>，<b><code>BLOCK_64X128</b></code>，<b><code>BLOCK_128X64</b></code></li>
-                    <li><b><code>BLOCK_128X128</b></code></li>
-                    <li><b><code>BLOCK_4X16</b></code>，<b><code>BLOCK_16X4</b></code></li>
-                    <li><b><code>BLOCK_8X32</b></code>，<b><code>BLOCK_32X8</b></code></li>
-                    <li><b><code>BLOCK_16X64</b></code>，<b><code>BLOCK_64X16</b></code></li>
-                    <li><b><code>BLOCK_32X128</b></code>，<b><code>BLOCK_128X32</b></code></li>
+                    <li><b><code>BLOCK_4X4</code></b>，<b><code>BLOCK_4X8</code></b>，<b><code>BLOCK_8X4</code></b></li>
+                    <li><b><code>BLOCK_8X8</code></b>，<b><code>BLOCK_8X16</code></b>，<b><code>BLOCK_16X8</code></b></li>
+                    <li><b><code>BLOCK_16X16</code></b>，<b><code>BLOCK_16X32</code></b>，<b><code>BLOCK_32X16</code></b></li>
+                    <li><b><code>BLOCK_32X32</code></b>，<b><code>BLOCK_32X64</code></b>，<b><code>BLOCK_64X32</code></b></li>
+                    <li><b><code>BLOCK_64X64</code></b>，<b><code>BLOCK_64X128</code></b>，<b><code>BLOCK_128X64</code></b></li>
+                    <li><b><code>BLOCK_128X128</code></b></li>
+                    <li><b><code>BLOCK_4X16</code></b>，<b><code>BLOCK_16X4</code></b></li>
+                    <li><b><code>BLOCK_8X32</code></b>，<b><code>BLOCK_32X8</code></b></li>
+                    <li><b><code>BLOCK_16X64</code></b>，<b><code>BLOCK_64X16</code></b></li>
+                    <li><b><code>BLOCK_32X128</code></b>，<b><code>BLOCK_128X32</code></b></li>
                 </ul>
             </div>
 
@@ -1153,10 +1153,10 @@
                 <h4>（2/3）细分块方案</h4>
                 <p>从 SB 开始，运行一遍变换和简化的<i>率失真检查</i>。失真较大则四分，然后在每个分区上重复划分正方形分块；然后在每个细分块上遍历 9 种异形分块和 1 种不分块方案，并使用完整的率失真检查，然后选出失真最小的方案。9+1 种的方案为：</p>
                 <ul>
-                    <li><b><code>PARTITION_NONE</b></code></li>
-                    <li><b><code>PARTITION_SPLIT</b></code></li>
-                    <li><b><code>PARTITION_VERT</b></code>，<b><code>PARTITION_VERT_A</b></code>，<b><code>PARTITION_VERT_B</b></code>，<b><code>PARTITION_VERT_4</b></code></li>
-                    <li><b><code>PARTITION_HORZ</b></code>，<b><code>PARTITION_HORZ_A</b></code>，<b><code>PARTITION_HORZ_B</b></code>，<b><code>PARTITION_HORZ_4</b></code></li>
+                    <li><b><code>PARTITION_NONE</code></b></li>
+                    <li><b><code>PARTITION_SPLIT</code></b></li>
+                    <li><b><code>PARTITION_VERT</code></b>，<b><code>PARTITION_VERT_A</code></b>，<b><code>PARTITION_VERT_B</code></b>，<b><code>PARTITION_VERT_4</code></b></li>
+                    <li><b><code>PARTITION_HORZ</code></b>，<b><code>PARTITION_HORZ_A</code></b>，<b><code>PARTITION_HORZ_B</code></b>，<b><code>PARTITION_HORZ_4</code></b></li>
                 </ul>
                 <div class="align-items-center">
                     <img src="files/block-splitting/partitions.png" alt="imageR" class="img-medium">
@@ -1175,14 +1175,14 @@
             <h3>图片结构——变换块</h3>
             <p>AV1 支持的变换块大小如下，用于帧内预测以及变换编码：</p>
             <ul>
-                <li><b><code>TX_4X4</b></code>，<b><code>TX_4X8</b></code>，<b><code>TX_8X4</b></code></li>
-                <li><b><code>TX_8X8</b></code>，<b><code>TX_8X16</b></code>，<b><code>TX_16X8</b></code></li>
-                <li><b><code>TX_16X16</b></code>，<b><code>TX_16X32</b></code>，<b><code>TX_32X16</b></code></li>
-                <li><b><code>TX_32X32</b></code>，<b><code>TX_32X64</b></code>，<b><code>TX_64X32</b></code></li>
-                <li><b><code>TX_64X64</b></code></li>
-                <li><b><code>TX_4X16</b></code>，<b><code>TX_16X4</b></code></li>
-                <li><b><code>TX_8X32</b></code>，<b><code>TX_32X8</b></code></li>
-                <li><b><code>TX_16X64</b></code>，<b><code>TX_64X16</b></code></li>
+                <li><b><code>TX_4X4</code></b>，<b><code>TX_4X8</code></b>，<b><code>TX_8X4</code></b></li>
+                <li><b><code>TX_8X8</code></b>，<b><code>TX_8X16</code></b>，<b><code>TX_16X8</code></b></li>
+                <li><b><code>TX_16X16</code></b>，<b><code>TX_16X32</code></b>，<b><code>TX_32X16</code></b></li>
+                <li><b><code>TX_32X32</code></b>，<b><code>TX_32X64</code></b>，<b><code>TX_64X32</code></b></li>
+                <li><b><code>TX_64X64</code></b></li>
+                <li><b><code>TX_4X16</code></b>，<b><code>TX_16X4</code></b></li>
+                <li><b><code>TX_8X32</code></b>，<b><code>TX_32X8</code></b></li>
+                <li><b><code>TX_16X64</code></b>，<b><code>TX_64X16</code></b></li>
             </ul>
             <ul>
                 <li>128x128 的块会以逻辑上最大 64x64，或宽/高更小的块（min(W, 64) x min(H, 64)）分别变换</li>
@@ -1206,7 +1206,7 @@
                     <span class="text-blue-math">\[X^\prime = \sum_{n=0}^{N-1} \frac{1}{2} \cdot x(n)\]</span>
                     如果将缩放值改回未知数（函数），且输出的音频作为新波形 <span class="text-blue-math">\(y(m)\)</span>，则：
                     <span class="text-blue-math">\[y(m) = \sum_{n=0}^{N-1} A(n, m) \cdot x(n)\]</span>
-                    音频虽是一维信号，但每个采样点除了坐标信息外还会记录一项信号值，这个值可以代表波形高度，或者像素的像素值（注意二维下的高度是坐标的一部分），这个值才是利用坐标系中记录和处理信号的关键。
+                    音频虽是一维信号，但每个采样点除了坐标信息外，还会记录一项可以代表波形高度的信号值，这个信号可以是像素值（注意二维下的高度是坐标的一部分），有了它，人们就可以利用坐标系来记录和处理信号了。
                 </p>
             </div>
 
@@ -1221,11 +1221,11 @@
                     \]</span>
                 </p>
                 <p>不考虑像素值、只考虑坐标变化时，点坐标的 x 分量分别乘进 <span class="text-blue-math">\(m_{x}, m_{Y}\)</span>；y 分量分别乘进 <span class="text-blue-math">\(m_{X}, m_{y}\)</span>，就得到了变换后的坐标。</p>
-                <p>缩放值 <span class="text-blue-math">\(A\)</span> 作为矩阵，除了 <span class="text-blue-math">\(m_{x}\)</span>，<span class="text-blue-math">\(m_{y}\)</span> 两个相对于 <span class="text-blue-math">\((0,0)\)</span> 的缩放分量外，斜对角上还多了 <span class="text-blue-math">\(m_{X}\)</span>，<span class="text-blue-math">\(m_{Y}\)</span> 两个相对于对方的缩放分量。这是因为二维坐标系中出现了旋转的新性质，而<i>旋转的分量</i>即“x 相对于 y 的倍数”横向倾斜，以及“y 相对于 x 的倍数”或纵向倾斜。</p>
+                <p>缩放值 <span class="text-blue-math">\(A\)</span> 作为矩阵，除了 <span class="text-blue-math">\(m_{x}\)</span>，<span class="text-blue-math">\(m_{y}\)</span> 两个相对于 <span class="text-blue-math">\((0,0)\)</span> 的缩放分量外，斜对角上还多了 <span class="text-blue-math">\(m_{X}\)</span>，<span class="text-blue-math">\(m_{Y}\)</span> 两个相对于对方的缩放分量。这是因为二维坐标系出现了旋转的新性质，而“旋转”本质上同样是有两个分量构成的，即“x 相对于 y 的倍数”横向倾斜扭曲，以及“y 相对于 x 的倍数”或纵向倾斜扭曲（这个认知并非常识，建议搜索相关的视频演示）。</p>
                 <ul>
                     <li><span class="text-blue-math">\(m_{Y}\)</span> 会造成 <span class="text-blue-math">\(y \lt 0\)</span> 处的 x 分量与 <span class="text-blue-math">\(y \gt 0\)</span> 处的分量反向缩放，矩阵乘法中表现为图形于 x 轴的缩放被乘进了 <span class="text-blue-math">\(-y\)</span></li>
                     <li><span class="text-blue-math">\(m_{X}\)</span> 会造成 <span class="text-blue-math">\(x \lt 0\)</span> 处的 y 分量与 <span class="text-blue-math">\(x \gt 0\)</span> 处的分量反向缩放，矩阵乘法中表现为图形于 y 轴的缩放被乘进了 <span class="text-blue-math">\(-x\)</span></li>
-                    <li>若 <span class="text-blue-math">\(m_{Y}\)</span> 与 <span class="text-blue-math">\(m_{X}\)</span> 一正一负，就会得到顺时针或逆时针的旋转效果</li>
+                    <li>若 <span class="text-blue-math">\(m_{Y}\)</span> 与 <span class="text-blue-math">\(m_{X}\)</span> 一正一负，就会得到顺/逆时针的旋转效果</li>
                 </ul>
             </div>
             
@@ -1383,11 +1383,11 @@ typedef enum { // 一般模式
                 <h3>前瞻——时域依赖性建模 Temporal dependency modeling（TPL）</h3>
                 <p>在编码每个 GOP 的开端以逆向顺序推演，以 16x16 分区建立运动轨迹，反应了分块对于整个 GOP 压缩率的贡献，类似于 MB/CUTree，对细分块级别的量化强度设定，率失真优化设定起到关键作用。见：<a href="https://martchus.dyn.f3l.de/doc/aom/encoder_guide.html">AOM Guide</a></p>
                 <ul>
-                    <li><b><code>intra_cost</b></code>：根据 SATD 估算帧内预测成本</li>
-                    <li><b><code>inter_cost</b></code>：有 pass1 中可用的运动信息时估算帧间预测成本
+                    <li><b><code>intra_cost</code></b>：根据 SATD 估算帧内预测成本</li>
+                    <li><b><code>inter_cost</code></b>：有 pass1 中可用的运动信息时估算帧间预测成本
                         <ul><li>AV1 支持帧内帧间混合预测模式，因此 <code>inter_cost</code> 的上限由 <code>intra_cost</code> 决定</li></ul>
                     </li>
-                    <li><b><code>propagation_amount</b></code>，<b><code>propagation_cost</b></code>：从未来处理帧流回的累计传播量，以及计算出的传播代价</li>
+                    <li><b><code>propagation_amount</code></b>，<b><code>propagation_cost</code></b>：从未来处理帧流回的累计传播量，以及计算出的传播代价</li>
                     <li>GOP 中最后一个处理帧中的所有块，它被初始化为 0</li>
                 </ul>
             </div>
@@ -1579,10 +1579,10 @@ typedef enum { // 一般模式
                 <h4>（1/2）单帧参考帧筛选</h4>
                 <p>动态搜索以及 MVRS 得到的预测量中，按照动态向量的长度，由（帧间距离）进到远排序（?）：</p>
                 <ul>
-                    <li><b><code>NEARESTMV</b></code>：第 1 种动态向量</li>
-                    <li><b><code>NEWMV</b></code>：第 1~3 种动态向量中筛选，附有预测向量与实际向量的差距（MV difference，MVD）</li>
-                    <li><b><code>NEARMV</b></code>：第 2~4 种动态向量中筛选</li>
-                    <li><b><code>GLOBALMV</b></code>：使用全局动态向量</li>
+                    <li><b><code>NEARESTMV</code></b>：第 1 种动态向量</li>
+                    <li><b><code>NEWMV</code></b>：第 1~3 种动态向量中筛选，附有预测向量与实际向量的差距（MV difference，MVD）</li>
+                    <li><b><code>NEARMV</code></b>：第 2~4 种动态向量中筛选</li>
+                    <li><b><code>GLOBALMV</code></b>：使用全局动态向量</li>
                 </ul>
                 <div class="align-items-center">
                     <img src="files/inter-prediction/reference-mv-single.png" alt="imageR" class="img-medium">
@@ -1593,19 +1593,19 @@ typedef enum { // 一般模式
             <div class="coll-content">
                 <h4>（2/2）混合参考帧预测量筛选</h4>
                 <ul>
-                    <li><b><code>NEAREST_NEARESTMV</b></code>：同 <b><code>NEARESTMV</b></code></li>
-                    <li><b><code>NEAREST_NEWMV</b></code>：同 <b><code>NEARESTMV</b></code>，远被参考帧（<b><code>RefFrame[1]</b></code>）附有预测向量与实际向量的差距（MV difference，MVD）</li>
-                    <li><b><code>NEW_NEARESTMV</b></code>：同 <b><code>NEARESTMV</b></code>，近被参考帧（<b><code>RefFrame[0]</b></code>）附有预测向量与实际向量的差距（MV difference，MVD）</li>
-                    <li><b><code>NEW_NEWMV</b></code>：同 <b><code>NEWMV</b></code>，附有近、远两被参考帧的 MVD</li>
-                    <li><b><code>NEAR_NEARMV</b></code>：同 <b><code>NEARMV</b></code>，附有远被参考帧的 MVD</li>
-                    <li><b><code>NEAR_NEWMV</b></code>：同 <b><code>NEARMV</b></code>，附有近被参考帧的 MVD</li>
-                    <li><b><code>NEAR_NEARMV</b></code>：同 <b><code>NEARMV</b></code>，附有远，仅两被参考帧的 MVD</li>
-                    <li><b><code>GLOBALMV</b></code>：同上</li>
+                    <li><b><code>NEAREST_NEARESTMV</code></b>：同 <b><code>NEARESTMV</code></b></li>
+                    <li><b><code>NEAREST_NEWMV</code></b>：同 <b><code>NEARESTMV</code></b>，远被参考帧（<b><code>RefFrame[1]</code></b>）附有预测向量与实际向量的差距（MV difference，MVD）</li>
+                    <li><b><code>NEW_NEARESTMV</code></b>：同 <b><code>NEARESTMV</code></b>，近被参考帧（<b><code>RefFrame[0]</code></b>）附有预测向量与实际向量的差距（MV difference，MVD）</li>
+                    <li><b><code>NEW_NEWMV</code></b>：同 <b><code>NEWMV</code></b>，附有近、远两被参考帧的 MVD</li>
+                    <li><b><code>NEAR_NEARMV</code></b>：同 <b><code>NEARMV</code></b>，附有远被参考帧的 MVD</li>
+                    <li><b><code>NEAR_NEWMV</code></b>：同 <b><code>NEARMV</code></b>，附有近被参考帧的 MVD</li>
+                    <li><b><code>NEAR_NEARMV</code></b>：同 <b><code>NEARMV</code></b>，附有远，仅两被参考帧的 MVD</li>
+                    <li><b><code>GLOBALMV</code></b>：同上</li>
                 </ul>
                 <div class="align-items-center">
                     <img src="files/inter-prediction/reference-mv-compound.png" alt="imageR" class="img-medium">
                 </div>
-                <p>除 <b><code>NEARESTMV</b></code>，<b><code>NEAREST_NEARESTMV</b></code> 之外，被参考帧的预测差距 MVD 都会被纳入考量。而剩余的模式区别就是采用哪一种预测量的区别。</p>
+                <p>除 <b><code>NEARESTMV</code></b>，<b><code>NEAREST_NEARESTMV</code></b> 之外，被参考帧的预测差距 MVD 都会被纳入考量。而剩余的模式区别就是采用哪一种预测量的区别。</p>
             </div>
 
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：帧内与帧间预测模式表 Ymode</button>
@@ -1920,10 +1920,10 @@ static const int mode_2_counter[] = { // 帧内 + 帧间预测模式表
                 <h4>（4/4）全局动态向量 Global MV</h4>
                 <p>即模型识别的结果，分为 4 类：</p>
                 <ul>
-                    <li><b><code>IDENTITY</b></code>：IDTX 变换</li>
-                    <li><b><code>TRANSLATION</b></code>：平移变换</li>
-                    <li><b><code>ROTZOOM</b></code>：平移，旋转和对称放大变换</li>
-                    <li><b><code>AFFINE</b></code>：本格仿射变换</li>
+                    <li><b><code>IDENTITY</code></b>：IDTX 变换</li>
+                    <li><b><code>TRANSLATION</code></b>：平移变换</li>
+                    <li><b><code>ROTZOOM</code></b>：平移，旋转和对称放大变换</li>
+                    <li><b><code>AFFINE</code></b>：本格仿射变换</li>
                 </ul>
             </div>
 
@@ -2079,17 +2079,17 @@ WEDGE_OBLIQUE117, 6, 4
                 <p>仅左侧或上侧参考源可用——以左上角参考源的像素值填补</p>
                 <div class="align-items-center">
                     <img src="files/intra-prediction/intra-neighbour-replenishment.png" alt="imageR" class="img-small">
-                    <p class="text-gray-side mt-0">图：<b><code>haveAbove == 0; haveLeft == 1</b></code> 时的填补</p>
+                    <p class="text-gray-side mt-0">图：<b><code>haveAbove == 0; haveLeft == 1</code></b> 时的填补</p>
                 </div>
                 <p>两侧参考源皆不可用——设为最大像素值的 <span class="text-blue-math">\(\frac{1}{4}\)</span>。</p>
                 <div class="align-items-center">
                     <img src="files/intra-prediction/intra-neighbour-replenishment-2.png" alt="imageR" class="img-small">
-                    <p class="text-gray-side mt-0">图：<b><code>haveAbove == 0; haveLeft == 0</b></code> 时的填补</p>
+                    <p class="text-gray-side mt-0">图：<b><code>haveAbove == 0; haveLeft == 0</code></b> 时的填补</p>
                 </div>
                 <p>左侧和上侧参考源可用，但右上行参考源缺失——用顶部的最右侧参考源填补。</p>
                 <div class="align-items-center">
                     <img src="files/intra-prediction/intra-neighbour-replenishment-3.png" alt="imageR" class="img-small">
-                    <p class="text-gray-side mt-0">图：<b><code>haveAbove == 1; haveAboveRight == 0</b></code> 时的填补</p>
+                    <p class="text-gray-side mt-0">图：<b><code>haveAbove == 1; haveAboveRight == 0</code></b> 时的填补</p>
                 </div>
                 <p>左上角的参考源遵循相同的填补逻辑。见：<a href="https://wikidocs.net/71814">Wikidocs</a></p>
                 <div class="align-items-center">
@@ -2131,14 +2131,14 @@ WEDGE_OBLIQUE117, 6, 4
             <div class="coll-content">
                 <h4>（1/2）VP9——基本角 162°，无偏移角，共 8 种</h4>
                 <ul class="text-smaller">
-                    <li><b><code>D45_PRED</b></code>：+0°</li>
-                    <li><b><code>D63_PRED</b></code>：+18°</li>
-                    <li><b><code>H_PRED</b></code>：+27°</li>
-                    <li><b><code>D117_PRED</b></code>：+27°</li>
-                    <li><b><code>D135_PRED</b></code>：+18°</li>
-                    <li><b><code>D153_PRED</b></code>：+18°</li>
-                    <li><b><code>V_PRED</b></code>：+27°</li>
-                    <li><b><code>D207_PRED</b></code>：+27°</li>
+                    <li><b><code>D45_PRED</code></b>：+0°</li>
+                    <li><b><code>D63_PRED</code></b>：+18°</li>
+                    <li><b><code>H_PRED</code></b>：+27°</li>
+                    <li><b><code>D117_PRED</code></b>：+27°</li>
+                    <li><b><code>D135_PRED</code></b>：+18°</li>
+                    <li><b><code>D153_PRED</code></b>：+18°</li>
+                    <li><b><code>V_PRED</code></b>：+27°</li>
+                    <li><b><code>D207_PRED</code></b>：+27°</li>
                 </ul>
             </div>
 
@@ -2147,14 +2147,14 @@ WEDGE_OBLIQUE117, 6, 4
                 <h4>（2/2）AV1——基本角 158°，偏移最大 176°，共 56 种</h4>
                 <p>AV1 沿用了<i>一小部分</i> VP9 的基本夹角。</p>
                 <ul class="text-smaller">
-                    <li><b><code>D45_PRED</b></code>：+0°</li>
-                    <li><b><code>D67_PRED</b></code>：+22°</li>
-                    <li><b><code>H_PRED</b></code>：+23°</li>
-                    <li><b><code>D113_PRED</b></code>：+23°</li>
-                    <li><b><code>D135_PRED</b></code>：+22°</li>
-                    <li><b><code>D157_PRED</b></code>：+22°</li>
-                    <li><b><code>V_PRED</b></code>：+23°</li>
-                    <li><b><code>D203_PRED</b></code>：+23°</li>
+                    <li><b><code>D45_PRED</code></b>：+0°</li>
+                    <li><b><code>D67_PRED</code></b>：+22°</li>
+                    <li><b><code>H_PRED</code></b>：+23°</li>
+                    <li><b><code>D113_PRED</code></b>：+23°</li>
+                    <li><b><code>D135_PRED</code></b>：+22°</li>
+                    <li><b><code>D157_PRED</code></b>：+22°</li>
+                    <li><b><code>V_PRED</code></b>：+23°</li>
+                    <li><b><code>D203_PRED</code></b>：+23°</li>
                 </ul>
                 <p>偏移角最大和最小的夹角分别为 207+9°和 45-9°，最终相差 180°（Type II 最终相差 176°）。8x8 的小预测块仍然沿用 8 个夹角以节省算力。这种先基本后细化夹角的查找方法类似于 x265 中的 fast-intra 查找。</p>
                 <div class="align-items-center">
@@ -2164,11 +2164,11 @@ WEDGE_OBLIQUE117, 6, 4
             </div>
 
             <h3>帧内预测——平滑模式 Smooth</h3>
-            <p>分为以二次多项式插值（一种样条 Spline 插值）的 <b><code>SMOOTH_V_PRED</b></code> 与 <b><code>SMOOTH_H_PRED</b></code>，以及合并前两者，构成类似 HEVC 趋平预测模式（Planar）的 <b><code>SMOOTH_PRED</b></code>。权重根据预测像素坐标变化而变化：</p>
+            <p>分为以二次多项式插值（一种样条 Spline 插值）的 <b><code>SMOOTH_V_PRED</code></b> 与 <b><code>SMOOTH_H_PRED</code></b>，以及合并前两者，构成类似 HEVC 趋平预测模式（Planar）的 <b><code>SMOOTH_PRED</code></b>。权重根据预测像素坐标变化而变化：</p>
             <ul class="text-smaller">
-                <li><b><code>SMOOTH_V_PRED</b></code> 使用二次多项式插值计算左下角参考点到左上角参考点的过渡，然后纵向填满该编码块</li>
-                <li><b><code>SMOOTH_H_PRED</b></code> 使用二次多项式插值计算右上角参考点到左上角参考点的过渡，然后横向填满该编码块</li>
-                <li><b><code>SMOOTH_PRED</b></code> 使用二次多项式插值出两种过渡，然后通过 Round2 函数取平均</li>
+                <li><b><code>SMOOTH_V_PRED</code></b> 使用二次多项式插值计算左下角参考点到左上角参考点的过渡，然后纵向填满该编码块</li>
+                <li><b><code>SMOOTH_H_PRED</code></b> 使用二次多项式插值计算右上角参考点到左上角参考点的过渡，然后横向填满该编码块</li>
+                <li><b><code>SMOOTH_PRED</code></b> 使用二次多项式插值出两种过渡，然后通过 Round2 函数取平均</li>
                 <li>二次多项式插值代表“权重 1 × 点 1 + 权重 2 × 点 2 + ... + 权重 N × 点 N”，权重由距离过渡得到</li>
             </ul>
             <div class="align-items-center">
@@ -2205,21 +2205,21 @@ Round2(x,n) = floor((x+2^(n-1)) / 2^n)
             </div>
             
             <h3>帧内预测——DC 模式</h3>
-            <p>沿用了 VP9 中的 <b><code>DC_PRED</b></code>。</p>
+            <p>沿用了 VP9 中的 <b><code>DC_PRED</code></b>。</p>
 
             <h3>帧内预测——非线性模式 Paeth</h3>
-            <p>来自 PNG 图像格式，适合在夹角未知的情况下模仿参考源，在常规的预测方法无效时提高了预测的准确度。VP9 中为 <b><code>TM_PRED</b></code>，代表预测像素值由“所对应顶部与左侧参考源之和，减左上参考源的差”得到。AV1 升级为 <b><code>PAETH_PRED</b></code>，见：<a href="https://aomediacodec.github.io/av1-spec/#basic-intra-prediction-process">AV1 Spec</a>。</p>
+            <p>来自 PNG 图像格式，适合在夹角未知的情况下模仿参考源，在常规的预测方法无效时提高了预测的准确度。VP9 中为 <b><code>TM_PRED</code></b>，代表预测像素值由“所对应顶部与左侧参考源之和，减左上参考源的差”得到。AV1 升级为 <b><code>PAETH_PRED</code></b>，见：<a href="https://aomediacodec.github.io/av1-spec/#basic-intra-prediction-process">AV1 Spec</a>。</p>
 
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（1/1）Paeth 插值步骤</button>
             <div class="coll-content">
                 <ol>
-                    <li>算出 <b><code>TM_PRED</b></code> 插值，赋值到变量 <b><code>base</b></code> </li>
-                    <li>分别算出 <b><code>base</b></code> 与其对应的顶部、左侧、左上参考源的差，再取三者中最小</li>
-                    <li>这种算法相比单纯执行 <b><code>TM_PRED</b></code> 能更好地隔离边缘纹理</li>
+                    <li>算出 <b><code>TM_PRED</code></b> 插值，赋值到变量 <b><code>base</code></b> </li>
+                    <li>分别算出 <b><code>base</code></b> 与其对应的顶部、左侧、左上参考源的差，再取三者中最小</li>
+                    <li>这种算法相比单纯执行 <b><code>TM_PRED</code></b> 能更好地隔离边缘纹理</li>
                 </ol>
                 <div class="align-items-center">
                     <img src="files/intra-prediction/tm-prediction.png" alt="imageR" class="img-small">
-                    <p class="text-gray-side mt-0">图：<b><code>TM_PRED</b></code> 所对应的顶部，左侧和左上角参考源</p>
+                    <p class="text-gray-side mt-0">图：<b><code>TM_PRED</code></b> 所对应的顶部，左侧和左上角参考源</p>
                 </div>
             </div>
 
@@ -2241,7 +2241,7 @@ else
             </div>
 
             <h3>帧内预测——递归插值模式 Recursive filter intra</h3>
-            <p>使用与 <b><code>TM_PRED</b></code> 类似的原理，结合递归逻辑预测一处 8x8 范围。AV1 中定义了 5 种递归模式，每种附带一组 7-tap 滤镜，将当前块划分为 4x2 的细分块，这些细分块由来自顶部和左侧块的 7 个参考源，由滤镜插值得到。每个 4x2 细分块内使用不同的 7-tap 滤镜，且每个完成预测的细分块都被用于下一个 4x2 细分块的预测，构成递归计算的参考结构。</p><!--该预测模式并没有“<b><code>_PRED</b></code>”的变量名。-->
+            <p>使用与 <b><code>TM_PRED</code></b> 类似的原理，结合递归逻辑预测一处 8x8 范围。AV1 中定义了 5 种递归模式，每种附带一组 7-tap 滤镜，将当前块划分为 4x2 的细分块，这些细分块由来自顶部和左侧块的 7 个参考源，由滤镜插值得到。每个 4x2 细分块内使用不同的 7-tap 滤镜，且每个完成预测的细分块都被用于下一个 4x2 细分块的预测，构成递归计算的参考结构。</p><!--该预测模式并没有“<b><code>_PRED</code></b>”的变量名。-->
             <div class="align-items-center">
                 <img src="files/intra-prediction/recursive-prediction.png" alt="imageR" class="img-small">
                 <img src="files/intra-prediction/recursive-prediction-variables.png" alt="imageR" class="img-small">
@@ -2255,11 +2255,11 @@ else
                     <thead>
                         <tr>
                             <th class="px-1">像素</th>
-                            <th class="px-1"><b><code>FILTER_DC_PRED</b></code></th>
-                            <th class="px-1"><b><code>FILTER_V_PRED</b></code></th>
-                            <th class="px-1"><b><code>FILTER_H_PRED</b></code></th>
-                            <th class="px-1"><b><code>FILTER_D157_PRED</b></code></th>
-                            <th class="px-1"><b><code>FILTER_PAETH_PRED</b></code></th>
+                            <th class="px-1"><b><code>FILTER_DC_PRED</code></b></th>
+                            <th class="px-1"><b><code>FILTER_V_PRED</code></b></th>
+                            <th class="px-1"><b><code>FILTER_H_PRED</code></b></th>
+                            <th class="px-1"><b><code>FILTER_D157_PRED</code></b></th>
+                            <th class="px-1"><b><code>FILTER_PAETH_PRED</code></b></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -2340,21 +2340,21 @@ else
                     <li>设 4x2 分块序列的坐标：<code>i2; j4</code></li>
                     <li>设参考源序列 <code>p[7]</code></li>
                     <li>设参考源序列的索引号 <code>i = 0..6</code></li>
-                    <li>顶部参考源 1~5 <b><code>i == 0..4</b></code>：
+                    <li>顶部参考源 1~5 <b><code>i == 0..4</code></b>：
                         <ul>
-                            <li><b><code>i2 == 0</b></code>
+                            <li><b><code>i2 == 0</code></b>
                                 <ul>
                                     <li>4x2 块位于顶部，从顶部参考源序列（AboveRow）取值</li>
                                     <li><code>p[i] = AboveRow[ (j4 &lt;&lt; 2) + i - 1 ]</code></li>
                                 </ul>
                             </li>
-                            <li><b><code>i == 0; j4 == 0</b></code>
+                            <li><b><code>i == 0; j4 == 0</code></b>
                                 <ul>
                                     <li>4x2 块位于左上，从左侧参考源序列（LeftCol）取值</li>
                                     <li><code>p[i] = LeftCol[ (j4 &lt;&lt; 1) - 1 ]</code></li>
                                 </ul>
                             </li>
-                            <li><b><code>i &gt; 0; i2 &gt; 0; j4 &gt; 0</b></code>：
+                            <li><b><code>i &gt; 0; i2 &gt; 0; j4 &gt; 0</code></b>：
                                 <ul>
                                     <li>其它 4x2 块，从早期帧内预测结果 2D 序列（pred）取值</li>
                                     <li><code>p[i] = pred[ ( i2 &lt;&lt; 1 ) - 1 ][ ( j4 &lt;&lt; 2 ) + i - 1 ]</code></li>
@@ -2362,15 +2362,15 @@ else
                             </li>
                         </ul>
                     </li>
-                    <li>左侧参考源 6~7 <b><code>i == 5..6</b></code>：
+                    <li>左侧参考源 6~7 <b><code>i == 5..6</code></b>：
                         <ul>
-                            <li><b><code>j4 == 0</b></code>
+                            <li><b><code>j4 == 0</code></b>
                                 <ul>
                                     <li>4x2 块位于左侧，从左侧参考源序列（LeftCol）取值</li>
                                     <li><code>[i] = LeftCol[ (i2 &lt;&lt; 1) + i - 5 ]</code></li>
                                 </ul>
                             </li>
-                            <li><b><code>j4 &gt; 0</b></code>
+                            <li><b><code>j4 &gt; 0</code></b>
                                 <ul>
                                     <li>其它 4x2 块，从早期帧内预测结果 2D 序列（pred）取值</li>
                                     <li><code>p[i] = pred[ ( i2 &lt;&lt; 1 ) + i - 5 ][ ( j4 &lt;&lt; 2 ) - 1 ]</code></li>
@@ -2389,7 +2389,7 @@ else
                     <li>沿用参考源序列的索引号：<code>i = 0..6</code></li>
                     <li>沿用上一步配置好的参考源：<code>p</code></li>
                     <li>设预测像素：<code>pr</code></li>
-                    <li><b><code>i == 0..6</b></code>：
+                    <li><b><code>i == 0..6</code></b>：
                         <ul>
                             <li><code>pr[i] = Intra_Filter_Taps[ INTRA_FILTER_MODES ][ ( i1 &lt;&lt; 2 ) + j1 ][i] * p[i] </code></li>
                             <li><span class="text-blue-math">\(pr(i) =
@@ -2456,10 +2456,10 @@ else
             </code></pre></div>
 
             <h3>帧内预测——色度填亮度模式 Chroma from luma（CFL，特殊）</h3>
-            <p>色度平面的预测像素通过亮度平面的同位像素值生成。高频部分通过重建块减去亮度块平均值预测得到，低频部分取自亮度块 <b><code>DC_PRED</b></code> 预测模式的像素值。高低频相加则得到一个色度预测像素，见：<a href="https://aomediacodec.github.io/av1-spec/#predict-chroma-from-luma-process">AV1 Spec - CfL</a></p>
+            <p>色度平面的预测像素通过亮度平面的同位像素值生成。高频部分通过重建块减去亮度块平均值预测得到，低频部分取自亮度块 <b><code>DC_PRED</code></b> 预测模式的像素值。高低频相加则得到一个色度预测像素，见：<a href="https://aomediacodec.github.io/av1-spec/#predict-chroma-from-luma-process">AV1 Spec - CfL</a></p>
             <div class="align-items-center">
                 <img src="files/intra-prediction/chroma-from-luma-prediction.png" alt="imageR" class="img-medium">
-                <p class="text-gray-side mt-0">图：色度填亮度预测模式的计算。包括了提取亮度平面残差，乘进缩放值，以及叠加色度平面 <b><code>DC_PRED</b></code> 结果</p>
+                <p class="text-gray-side mt-0">图：色度填亮度预测模式的计算。包括了提取亮度平面残差，乘进缩放值，以及叠加色度平面 <b><code>DC_PRED</code></b> 结果</p>
                 <img src="files/intra-prediction/chroma-from-luma-prediction-1.svg" alt="imageR" class="img-medium">
                 <p class="text-gray-side mt-0">图：<a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/master/Docs/Appendix-CfL.md?ref_type=heads">SVT-AV1 Docs</a> 中的色度填亮度预测模式的计算图例</p>
             </div>
@@ -2495,7 +2495,7 @@ scaledLuma = Round2Signed( alpha * ( L[i][j] - lumaAvg ), 6 )
             </div>
             
             <h3>帧内预测——调色板模式 Palette mode（特殊）</h3>
-            <p>在当前 8x8~64x64 帧内编码亮度或色度块判断为 <b><code>DC_PRED</b></code> 时的可选预测模式。“调色板”代表一套类似于熵编码/文本编码的上下文序列。</p>
+            <p>在当前 8x8~64x64 帧内编码亮度或色度块判断为 <b><code>DC_PRED</code></b> 时的可选预测模式。“调色板”代表一套类似于熵编码/文本编码的上下文序列。</p>
 
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：调色板模式的映射</button>
             <div class="coll-content">
@@ -2515,16 +2515,16 @@ scaledLuma = Round2Signed( alpha * ( L[i][j] - lumaAvg ), 6 )
                     <li>4x4 亮度预测分块沿用 SB 的帧内预测模式</li>
                     <li>8x4，4x8 亮度预测沿用其上级细分块的帧内预测模式</li>
                     <li>更大的块同样沿用 SB 的预测模式</li>
-                    <li>使用 filter_intra（<b><code>INTRA_FILTER_MODES</b></code>）：递归帧内预测模式</li>
+                    <li>使用 filter_intra（<b><code>INTRA_FILTER_MODES</code></b>）：递归帧内预测模式</li>
                     <li>夹角模式的偏移角主要用于提高较大细分块的压缩率，4x4、4x8、8x4 块只使用基本夹角模式</li>
-                    <li>如果亮度细分块可以使用 <b><code>DC_PRED</b></code> 模式，则根据判断是否应该换成递归模式</li>
+                    <li>如果亮度细分块可以使用 <b><code>DC_PRED</code></b> 模式，则根据判断是否应该换成递归模式</li>
                     <li>使用了帧内滤镜的亮度分块选用递归预测模式，见 <a href="https://aomediacodec.github.io/av1-spec/#filter-intra-mode-info-semantics">AV1 Spec - intra_filter_mode</a>，<a href="https://aomediacodec.github.io/av1-spec/#recursive-intra-prediction-process">AV1 Spec - Recursive intra prediction</a>：
                         <ul>
-                            <li><b><code>FILTER_DC_PRED</b></code></li>
-                            <li><b><code>FILTER_V_PRED</b></code></li>
-                            <li><b><code>FILTER_H_PRED</b></code></li>
-                            <li><b><code>FILTER_DC_PRED</b></code></li>
-                            <li><b><code>FILTER_D157_PRED</b></code></li>
+                            <li><b><code>FILTER_DC_PRED</code></b></li>
+                            <li><b><code>FILTER_V_PRED</code></b></li>
+                            <li><b><code>FILTER_H_PRED</code></b></li>
+                            <li><b><code>FILTER_DC_PRED</code></b></li>
+                            <li><b><code>FILTER_D157_PRED</code></b></li>
                         </ul>
                     </li>
                     <li>调色板模式需要判断调色板大小，以及是否使用缓存的调色板</li>
@@ -2811,7 +2811,7 @@ for(i=0; i &lt; th; i++) { // 遍历分块宽，高
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（1/1）QLookup 表</button>
             <div class="coll-content">
                 <h4>（1/1）QLookup 表</h4>
-                <p>AV1 中的默认量化与逆量化方法的强度。范围为 0~255，由 <b><code>qp_to_qindex</b></code> 映射出 0~63。逆量化结果由块中像素值乘进 QLookup 表中对应的数，再将结果的二进制右移一位（÷2）实现。这些值会由偏移值进一步调整：</p>
+                <p>AV1 中的默认量化与逆量化方法的强度。范围为 0~255，由 <b><code>qp_to_qindex</code></b> 映射出 0~63。逆量化结果由块中像素值乘进 QLookup 表中对应的数，再将结果的二进制右移一位（÷2）实现。这些值会由偏移值进一步调整：</p>
                 <div class="align-items-center">
                     <img src="files/rate-control/quantization-qp-qindex.png" alt="imageR" class="img-medium">
                     <p class="text-gray-side mt-0">图：QLookup 表对应的 0~63 QP 范围。与 0~255 的 QIndex 范围的曲线变化极小</p>
@@ -3352,16 +3352,16 @@ static const int qp_to_qindex[] = { // 索引号
                 <h4>（1/6）细分块语法元素</h4>
                 <p>10 种模式，将这些模式按照 AV1 的编码概率排序（见：<a href="https://aomediacodec.github.io/av1-spec/#decode-partition-semantics">AV1 Spec</a>）为：</p>
                 <ol class="text-smaller" start="0">
-                    <li><b><code>PARTITION_NONE</b></code></li>
-                    <li><b><code>PARTITION_HORZ</b></code></li>
-                    <li><b><code>PARTITION_VERT</b></code></li>
-                    <li><b><code>PARTITION_SPLIT</b></code></li>
-                    <li><b><code>PARTITION_HORZ_A</b></code></li>
-                    <li><b><code>PARTITION_HORZ_B</b></code></li>
-                    <li><b><code>PARTITION_VERT_A</b></code></li>
-                    <li><b><code>PARTITION_VERT_B</b></code></li>
-                    <li><b><code>PARTITION_HORZ_4</b></code></li>
-                    <li><b><code>PARTITION_VERT_4</b></code></li>
+                    <li><b><code>PARTITION_NONE</code></b></li>
+                    <li><b><code>PARTITION_HORZ</code></b></li>
+                    <li><b><code>PARTITION_VERT</code></b></li>
+                    <li><b><code>PARTITION_SPLIT</code></b></li>
+                    <li><b><code>PARTITION_HORZ_A</code></b></li>
+                    <li><b><code>PARTITION_HORZ_B</code></b></li>
+                    <li><b><code>PARTITION_VERT_A</code></b></li>
+                    <li><b><code>PARTITION_VERT_B</code></b></li>
+                    <li><b><code>PARTITION_HORZ_4</code></b></li>
+                    <li><b><code>PARTITION_VERT_4</code></b></li>
                 </ol>
                 <p>对比 64x64 块的上下文出字概率结果，以及实际用于计算的整数表：</p>
                 <pre><code class="text-smaller">
@@ -3381,8 +3381,8 @@ Default_Partition_W64_Cdf[ PARTITION_CONTEXTS ][ 11 ] = {
 }
                 </code></pre>
                 <!--冠军行的“起跳高度”分别为 +0.043，+0.047，+0.198，+0.008，+0.013，+0.008，+0.011，+0.026，+0.032，-1-->
-                <p>可以看到上下文长 3 时，<b><code>PARTITION_NONE</b></code>、<b><code>PARTITION_HORZ</b></code>、<b><code>PARTITION_VERT</b></code> 的出字概率变得很小，也就是说在编码了 3 个 64x64 块后，接下来的块有了足够多的信息，所以选择这些模式的概率也会变小。熵编码出字概率 0~1 区间的范围越小，用于表示这段区间的小数数位越长，因此降低不常用模式的出字概率（占据位宽），就可以提高其他模式可用的宽度，以减少小数数位，而提高压缩率。</p>
-                <p>假设编码某帧中的冠军个 64x64 SB。其左侧和顶部区域不存在（ctx 为 0，对应上述冠军行）。假设其分块模式决定使用 <b><code>PARTITION_NONE</b></code>，则选择冠军行，冠军列的 20137（0.615）区间，并更新一遍 CTX。下一个分块会使用亚军行的出字概率</p>
+                <p>可以看到上下文长 3 时，<b><code>PARTITION_NONE</code></b>、<b><code>PARTITION_HORZ</code></b>、<b><code>PARTITION_VERT</code></b> 的出字概率变得很小，也就是说在编码了 3 个 64x64 块后，接下来的块有了足够多的信息，所以选择这些模式的概率也会变小。熵编码出字概率 0~1 区间的范围越小，用于表示这段区间的小数数位越长，因此降低不常用模式的出字概率（占据位宽），就可以提高其他模式可用的宽度，以减少小数数位，而提高压缩率。</p>
+                <p>假设编码某帧中的冠军个 64x64 SB。其左侧和顶部区域不存在（ctx 为 0，对应上述冠军行）。假设其分块模式决定使用 <b><code>PARTITION_NONE</code></b>，则选择冠军行，冠军列的 20137（0.615）区间，并更新一遍 CTX。下一个分块会使用亚军行的出字概率</p>
                 <p>预设 0~1 区间（0~32768）的 0.615 倍为，20137，这个数小于 32768，因此需要循环归一化/基本单位化（乘以 2），放大到 40274。</p>
                 <div class="align-items-center">
                     <img src="files/entropy-coding/arithmetic-coding-1.png" alt="imageR" class="img-medium">
@@ -3428,7 +3428,7 @@ Default_Skip_Cdf[ SKIP_CONTEXTS ][ 3 ] = {
                 </ul>
 
                 <h4>（3/6）亮度预测模式元素 YMode</h4>
-                <p>此处假设选择帧内编码，不使用帧内块复制 IBC 模式。冠军个分块并没有左上或顶部参考块可用（有的话优先选用左上、右上，其次左下、右下块的模式，见 <a href="https://github.com/mozilla/aom/blob/46b7bb243b39929c02d6decc1bdb2e39e11540d6/av1/common/blockd.c#L19"><b><code>av1_left_block_mode</b></code></a>）。帧间模式按照 AV1 标准排序 <b><code>Intra_Frame_Y_Mode</b></code>（见：<a href="https://aomediacodec.github.io/av1-spec/#intra-frame-mode-info-semantics">AV1 Spec</a>），<b><code>Intra_Mode_Context</b></code>（见 <a href="https://aomediacodec.github.io/av1-spec/#cdf-selection-process">AV1 Spec</a>）得到：</p>
+                <p>此处假设选择帧内编码，不使用帧内块复制 IBC 模式。冠军个分块并没有左上或顶部参考块可用（有的话优先选用左上、右上，其次左下、右下块的模式，见 <a href="https://github.com/mozilla/aom/blob/46b7bb243b39929c02d6decc1bdb2e39e11540d6/av1/common/blockd.c#L19"><b><code>av1_left_block_mode</code></b></a>）。帧间模式按照 AV1 标准排序 <b><code>Intra_Frame_Y_Mode</code></b>（见：<a href="https://aomediacodec.github.io/av1-spec/#intra-frame-mode-info-semantics">AV1 Spec</a>），<b><code>Intra_Mode_Context</code></b>（见 <a href="https://aomediacodec.github.io/av1-spec/#cdf-selection-process">AV1 Spec</a>）得到：</p>
                 <table class="table-center align-items-center">
                     <thead>
                         <tr>
@@ -3440,67 +3440,67 @@ Default_Skip_Cdf[ SKIP_CONTEXTS ][ 3 ] = {
                     <tbody>
                         <tr class="t-light-gray">
                             <td class="px-3">0</td>
-                            <td class="px-3"><b><code>DC_PRED</b></code></td>
+                            <td class="px-3"><b><code>DC_PRED</code></b></td>
                             <td class="px-3 text-purple-resv">0</td>
                         </tr>
                         <tr>
                             <td class="px-3">1</td>
-                            <td class="px-3"><b><code>V_PRED</b></code></td>
+                            <td class="px-3"><b><code>V_PRED</code></b></td>
                             <td class="px-3">1</td>
                         </tr>
                         <tr class="t-light-gray">
                             <td class="px-3">2</td>
-                            <td class="px-3"><b><code>H_PRED</b></code></td>
+                            <td class="px-3"><b><code>H_PRED</code></b></td>
                             <td class="px-3">2</td>
                         </tr>
                         <tr>
                             <td class="px-3">3</td>
-                            <td class="px-3"><b><code>D45_PRED</b></code></td>
+                            <td class="px-3"><b><code>D45_PRED</code></b></td>
                             <td class="px-3 text-red-emph">3</td>
                         </tr>
                         <tr class="t-light-gray">
                             <td class="px-3">4</td>
-                            <td class="px-3"><b><code>D135_PRED</b></code></td>
+                            <td class="px-3"><b><code>D135_PRED</code></b></td>
                             <td class="px-3 text-blue-emph">4</td>
                         </tr>
                         <tr>
                             <td class="px-3">5</td>
-                            <td class="px-3"><b><code>D113_PRED</b></code></td>
+                            <td class="px-3"><b><code>D113_PRED</code></b></td>
                             <td class="px-3 text-blue-emph">4</td>
                         </tr>
                         <tr class="t-light-gray">
                             <td class="px-3">6</td>
-                            <td class="px-3"><b><code>D157_PRED</b></code></td>
+                            <td class="px-3"><b><code>D157_PRED</code></b></td>
                             <td class="px-3 text-blue-emph">4</td>
                         </tr>
                         <tr>
                             <td class="px-3">7</td>
-                            <td class="px-3"><b><code>D203_PRED</b></code></td>
+                            <td class="px-3"><b><code>D203_PRED</code></b></td>
                             <td class="px-3 text-blue-emph">4</td>
                         </tr>
                         <tr class="t-light-gray">
                             <td class="px-3">8</td>
-                            <td class="px-3"><b><code>D67_PRED</b></code></td>
+                            <td class="px-3"><b><code>D67_PRED</code></b></td>
                             <td class="px-3 text-red-emph">3</td>
                         </tr>
                         <tr>
                             <td class="px-3">9</td>
-                            <td class="px-3"><b><code>SMOOTH_PRED</b></code></td>
+                            <td class="px-3"><b><code>SMOOTH_PRED</code></b></td>
                             <td class="px-3 text-purple-resv">0</td>
                         </tr>
                         <tr class="t-light-gray">
                             <td class="px-3">10</td>
-                            <td class="px-3"><b><code>SMOOTH_V_PRED</b></code></td>
+                            <td class="px-3"><b><code>SMOOTH_V_PRED</code></b></td>
                             <td class="px-3">1</td>
                         </tr>
                         <tr>
                             <td class="px-3">11</td>
-                            <td class="px-3"><b><code>SMOOTH_H_PRED</b></code></td>
+                            <td class="px-3"><b><code>SMOOTH_H_PRED</code></b></td>
                             <td class="px-3">2</td>
                         </tr>
                         <tr class="t-light-gray">
                             <td class="px-3">12</td>
-                            <td class="px-3"><b><code>PAETH_PRED</b></code></td>
+                            <td class="px-3"><b><code>PAETH_PRED</code></b></td>
                             <td class="px-3 text-purple-resv">0</td>
                         </tr>
                     </tbody>
@@ -3544,7 +3544,7 @@ Default_Intra_Frame_Y_Mode_Cdf[ INTRA_MODE_CONTEXTS ][ INTRA_MODE_CONTEXTS ][ IN
 }
                 </code></pre>
                 
-                <p>在没有可用块时，<b><code>av1_left_block_mode</b></code>，<b><code>av1_top_block_mode</b></code> 会返回 <b><code>DC_MODE</b></code>，映射到上述上下文表中排 aisle、行 row、列 column 的 [0][0][0]，即 0.476。</p>
+                <p>在没有可用块时，<b><code>av1_left_block_mode</code></b>，<b><code>av1_top_block_mode</code></b> 会返回 <b><code>DC_MODE</code></b>，映射到上述上下文表中排 aisle、行 row、列 column 的 [0][0][0]，即 0.476。</p>
                 <div class="align-items-center">
                     <img src="files/entropy-coding/arithmetic-coding-3.png" alt="imageR" class="img-medium">
                 </div>
@@ -3561,7 +3561,7 @@ Default_Intra_Frame_Y_Mode_Cdf[ INTRA_MODE_CONTEXTS ][ INTRA_MODE_CONTEXTS ][ IN
                     <li>色度块决定使用的预测模式</li>
                     <li>是否使用了特殊预测模式（如色度填亮度模式）</li>
                 </ul>  
-                <!--UVMode 与 YMode 同为 <b><code>PREDICTION_MODE</b></code> 类的枚举器-->
+                <!--UVMode 与 YMode 同为 <b><code>PREDICTION_MODE</code></b> 类的枚举器-->
                 <pre><code class="text-smaller">
 /**
  * 非色度填亮度模式（Non-CFL）所用的表格，使用 CFL 则更换为 Default_Uv_Mode_Cfl_Allowed_Cdf
@@ -3646,7 +3646,7 @@ Default_Tx_64x64_Cdf[ TX_SIZE_CONTEXTS ][ MAX_TX_DEPTH + 2 ] = {
             <h3>模式决策——率失真优化</h3>
             <p>基本原理已在 x265 教程中说明，此处不再赘述。AV1 中使用了缩放到整数的值完成计算，但率失真曲线并无变化。率失真代价函数为：</p>
             <span class="text-blue-math">\[J = D + \lambda \cdot R\]</span>
-            <p>由于 AV1 的量化与反量化主要是通过“查表”得到计算参数，所以并不像 AVC、HEVC 一样有 <span class="text-blue-math">\(Q_{\text{scale}}\)</span> 缩放值，而是完全取代为 <span class="text-blue-math">\(Q_{\text{index}}\)</span> 的 <b><code>Dc_Qlookup</b></code>、<b><code>Ac_Qlookup</b></code> 表格索引号（即 x264、x265 的 <span class="text-blue-math">\(Q_{\text{step}}\)</span>），但幸好原理还是一样的。</p>
+            <p>由于 AV1 的量化与反量化主要是通过“查表”得到计算参数，所以并不像 AVC、HEVC 一样有 <span class="text-blue-math">\(Q_{\text{scale}}\)</span> 缩放值，而是完全取代为 <span class="text-blue-math">\(Q_{\text{index}}\)</span> 的 <b><code>Dc_Qlookup</code></b>、<b><code>Ac_Qlookup</code></b> 表格索引号（即 x264、x265 的 <span class="text-blue-math">\(Q_{\text{step}}\)</span>），但幸好原理还是一样的。</p>
             
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：模式决策——斜度 Lambda</button>
             <div class="coll-content">
@@ -4295,7 +4295,7 @@ int av1_compute_rd_mult_based_on_qindex(const AV1_COMP *cpi, int qindex) {
             <h3>SVT-AV1——命令行格式</h3>
             <p>使用 ffmpeg 内置的 libsvtav1 编码视频，拷贝音频，输出 .mp4 封装文件（推荐）：</p>
             <code>ffmpeg -i .\输入.mkv -c:v libsvtav1 -preset 3 -crf 30 -svtav1-params "keyint=12s:sharpness=-2:film-grain=20" -c:a copy .\输出.mp4</code>
-            <p>ffmpeg 命令行中，如原本 <b><code>--param1 value --param2 value</b></code> 需要以 API 格式书写，为 <b><code>-xxx-params "param1=value:param2=value"</b></code>，而兼容性略好的编码库则会提供一小部分 <b><code>-param1 value</b></code> 的格式于 <b><code>-c:v libxxx</b></code> 与 <b><code>-xxx-params</b></code> 之间，配置起来会容易一点。</p>
+            <p>ffmpeg 命令行中，如原本 <b><code>--param1 value --param2 value</code></b> 需要以 API 格式书写，为 <b><code>-xxx-params "param1=value:param2=value"</code></b>，而兼容性略好的编码库则会提供一小部分 <b><code>-param1 value</code></b> 的格式于 <b><code>-c:v libxxx</code></b> 与 <b><code>-xxx-params</code></b> 之间，配置起来会容易一点。</p>
             <code>ffmpeg -i .\输入.mkv -c:v libsvtav1 -preset 4 -crf 35 -svtav1-params "keyint=12s:enable-variance-boost=1:variance-boost-curve=2:variance-boost-strength=3:mastering-display=G(0.2649,0.6900)B(0.1500,0.0600)R(0.6800,0.3200)WP(0.3127,0.3290)L(1000.0,1)" -c:a copy .\输出.mp4</code>
             <p>使用 ffmpeg 管道输出到独立 SVT-AV1 编码器程序，使用 <code>-strict -1</code> 解除 10bit y4m 管道格式限制，SVT-AV1 使用 12 秒关键帧间隔，CRF 35，预设 3，启用量化矩阵量化模式，完整显示进度条；导出未封装视频流：</p>
             <code>ffmpeg -i .\输入.mkv -f yuv4mpegpipe -pix_fmt yuv420p10le -strict -1 - | SvtAv1EncApp -i - --keyint 12s --crf 35 --enable-qm 1 --preset 3 --progress 2 -b .\WindAndNature_yuv420p10le_bt709_crf35_qm_preset3.ivf</code>
@@ -4306,36 +4306,36 @@ int av1_compute_rd_mult_based_on_qindex(const AV1_COMP *cpi, int qindex) {
 
             <h3>SVT-AV1——参数与预设</h3>
             <p>来源于 <a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/master/Docs/Parameters.md">SVT-AV1 官方文档</a>。注意随着编码器的版本更迭，参数的写法已经相较于较早版本有了变化。</p>
-            <b><code>&#45;&#45;version</b></code>
+            <b><code>&#45;&#45;version</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;开关&gt;显示当前编译版本。</p>
 
             <h4>（1/12）IO</h4>
-            <b><code>-i</b></code>
+            <b><code>-i</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;字符串路径&gt;<u>输入</u>待压制的 .y4m，.yuv 流文件；或者选用 <code>-</code> 从管道输入。</p>
-            <b><code>-b</b></code>
+            <b><code>-b</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;字符串路径&gt;<u>输出</u>未封装视频流文件 .ivf 的路径。</p>
-            <!--<b><code>-c</b></code>
+            <!--<b><code>-c</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;字符串路径&gt;<u>输入</u>配置文件（?）。</p>-->
-            <b><code>-n</b></code>
+            <b><code>-n</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数帧数&gt;指定压制帧的数量。</p>
-            <b><code>--skip</b></code>
+            <b><code>--skip</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数帧数&gt;指定跳过前 n 帧后开始压制。</p>
 
             <!--<h4>（2/?）输入图片序列</h4>
             <p>注：可能仅支持管道输入</p>
-            <b><code>&#45;&#45;inj</b></code>
+            <b><code>&#45;&#45;inj</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;0/1，默认 0：关&gt;启用图片序列输入模式。</p>
-            <b><code>&#45;&#45;inj-frm-rt</b></code>
+            <b><code>&#45;&#45;inj-frm-rt</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~240，默认 60&gt;指定图片序列帧率。</p>-->
 
             <h4>（1/12——1/1）日志 IO</h4>
-            <b><code>&#45;&#45;errlog</b></code>
+            <b><code>&#45;&#45;errlog</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;字符串路径&gt;<u>输出</u>报错信息到文件（txt）的路径。</p>
-            <b><code>&#45;&#45;enable-stat-report</b></code>
+            <b><code>&#45;&#45;enable-stat-report</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;0/1，默认 0：关&gt;启用逐帧 PSNR / SSIM 统计功能。</p>
-            <b><code>--stat-file</b></code>
+            <b><code>--stat-file</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;字符串路径&gt;<u>输出</u>逐帧 PSNR / SSIM 结果到文件。</p>
-            <b><code>&#45;&#45;progress</b></code>
+            <b><code>&#45;&#45;progress</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~2，默认 1（懈怠）&gt;启用并指定进度条展示，1 与 2 为进度条样式。</p>
             <ul class="list-dotless text-smaller font-monospace">
                 <li><b>1</b>：<code>Encoding         29</code></li>
@@ -4343,25 +4343,25 @@ int av1_compute_rd_mult_based_on_qindex(const AV1_COMP *cpi, int qindex) {
             </ul>
 
             <h4>（2/12）格式设定</h4>
-            <b><code>&#45;&#45;input-depth</b></code>
+            <b><code>&#45;&#45;input-depth</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;8/10，默认 8，直接导入 .yuv 或从 rawvideo pipe 中导入时必须指定&gt;指定输入视频的位深精度。与视频不符会导致主要为绿屏的严重画面错误。</p>
-            <b><code>-w</b></code>；<b><code>-h</b></code>
+            <b><code>-w</code></b>；<b><code>-h</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 4~16384；整数 4~8704&gt;指定输入视频的宽、高。</p>
-            <b><code>&#45;&#45;fps</b></code>
+            <b><code>&#45;&#45;fps</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 1~240，默认 25&gt;指定视频帧率，可选用后者以精确表示小数帧率。</p>
-            <b><code>&#45;&#45;fps-num</b></code>
+            <b><code>&#45;&#45;fps-num</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~4294967295，默认 60000&gt;指定视频帧率分子，便于表示小数帧率。</p>
-            <b><code>&#45;&#45;fps-denom</b></code>
+            <b><code>&#45;&#45;fps-denom</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~4294967295，默认 1000；整数分子；整数分母&gt;指定视频帧率分母，便于表示小数帧率。</p>
-            <b><code>--color-range</b></code>
+            <b><code>--color-range</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;0/1，默认 0：studio&gt;指定使用有限或完整位深格式——0：studio，1：full</p>
-            <b><code>--tile-rows</b></code>
+            <b><code>--tile-rows</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~6，默认 0：<code>log2(x)</code>&gt;指定横向瓦片数量，默认根据分辨率自适应。</p>
-            <b><code>--tile-columns</b></code>
+            <b><code>--tile-columns</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~4，默认 0：<code>log2(x)</code> 429&gt;指定纵向瓦片数量，默认根据分辨率自适应。</p>
 
             <h4>（3/12）规格与级别</h4>
-            <b><code>&#45;&#45;profile</b></code>
+            <b><code>&#45;&#45;profile</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~2，默认 0（main）&gt;指定输出视频规格——0：main，1：high，2：professional。</p>
             <table class="table-center mt-3">
                 <thead>
@@ -4407,7 +4407,7 @@ int av1_compute_rd_mult_based_on_qindex(const AV1_COMP *cpi, int qindex) {
             </table>
             <p class="text-gray-side pl-5 m-0 align-items-center">表：见 <a href="https://en.wikipedia.org/wiki/AV1#Profiles_and_levels">维基百科 - AV1</a></p>
 
-            <b><code>--level</b></code>
+            <b><code>--level</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;0 / 浮点 2.0~7.3：输出，默认 0（自动）&gt;指定输出视频级别。</p>
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：级别表格</button>
             <div class="coll-content overflow-auto mt-3">
@@ -4526,11 +4526,11 @@ int av1_compute_rd_mult_based_on_qindex(const AV1_COMP *cpi, int qindex) {
             </div>
 
             <h4>（4/12）格式与 VUI/SEI 标注</h4>
-            <b><code>--chroma-sample-position</b></code>
+            <b><code>--chroma-sample-position</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~2，默认 0（留空）&gt;指定色度采样缩减分辨率时所用的像素相对于缩小前像素的位置，涉及到解码端的色度像素对齐。如果源视频标注，则建议标注——1：左，2：左上。</p>
-            <b><code>--color-format</b></code>
+            <b><code>--color-format</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~3，默认 1&gt;指定输入视频的 YUV 色彩空间格式——0: 400，1: 420，2: 422，3: 444</p>
-            <b><code>--matrix-coefficients</b></code>
+            <b><code>--matrix-coefficients</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;部分整数 0~14，默认 2（留空）&gt;播放用矩阵格式/系数指标：</p>
             <ul class="list-dotless text-smaller">
                 <li><b>0：</b>identity</li>
@@ -4549,7 +4549,7 @@ int av1_compute_rd_mult_based_on_qindex(const AV1_COMP *cpi, int qindex) {
                 <li><b>14：</b>ictcp (BT.2100 ICtCp)</li>
                 <li><b>3：</b>保留值，不可用</li>
             </ul>
-            <b><code>--transfer-characteristics</b></code>
+            <b><code>--transfer-characteristics</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;部分整数 1~18，默认 2（留空）&gt;传输特质：</p>
             <ul class="list-dotless text-smaller">
                 <li><b>1：</b>bt709</li>
@@ -4571,7 +4571,7 @@ int av1_compute_rd_mult_based_on_qindex(const AV1_COMP *cpi, int qindex) {
                 <li><b>18：</b>hlg</li>
                 <li><b>3：</b>保留值，不可用</li>
             </ul>
-            <b><code>--color-primaries</b></code>
+            <b><code>--color-primaries</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;部分整数 1~22，默认 2（留空）&gt;三原色及白点指标，详见上述的国际电信联盟（ITU-T）<a href="https://www.itu.int/rec/T-REC-H.273-202407-I">H.273——Table 2</a>：</p>
             <ul class="list-dotless text-smaller">
                 <li><b>1：</b>bt709</li>
@@ -4591,7 +4591,7 @@ int av1_compute_rd_mult_based_on_qindex(const AV1_COMP *cpi, int qindex) {
 
             <h4>（5/12）HDR VUI/SEI 标注</h4>
             <p>HDR 信息分为硬件、软件、以及数据，共 3 类不统一的标准。为保证色彩正确，必须与源视频的元数据一致才能正确解码。</p>
-            <b><code>--master-display</b></code>
+            <b><code>--master-display</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;字符串 G(x,y)B(x,y)R(x,y)WP(x,y)L(max,min)&gt;用于高动态范围内容的绿、蓝、红、白点、光强信息</p>
             <ul class="font-monospace pl-5 text-smaller list-dotless">
                 <li>RGB-WP 原信息见上述的 ITU-T H.273 表格，以下为转换出的结果：</li>
@@ -4631,75 +4631,75 @@ int av1_compute_rd_mult_based_on_qindex(const AV1_COMP *cpi, int qindex) {
                 </li>
                 <li><b>L(max,min): </b> 见源视频的元数据。SDR 视频的光强是 (1000,1)，单位 <span class="text-blue-math">\(\text{candela}\times 10000\)</span></li>
             </ul>
-            <b><code>--content-light</b></code>
+            <b><code>--content-light</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;逗号分隔整数 MaxCLL,MaxFall&gt;根据源视频的元数据设置最大内容光强与最大平均光强。</p>
 
             <h4>（6/12）编解码场景、<span class="text-blue-emph">兼容性</span></h4>
-            <b><code>--nb</b></code>
+            <b><code>--nb</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 -1~<span class="text-blue-math text-smaller">\(1-2^{31}-1\)</span>，默认 -1：关&gt;指定运行逻辑变更：先缓存（原视频解码后的）视频帧，再开始压制。适合内存空间大但内存延迟高（导致 CPU 占用不足的程度）的计算机。解码后每秒的内存占用可以粗略地算作：</p>
             <span class="text-blue-math">\[ \frac{3_{\text{RGB 通道}} \times d_{\text{位深}} \times r_{\text{帧率}} \times w_{\text{宽}} \times h_{\text{高}}}{8_{\text{转字节}} \times 1048576_{\text{二进制 1 MB}}} \]</span>
             <span class="text-blue-math text-smaller">\[ \frac{3 \times 60 \times 8 \times 1920 \times 1080}{8 \times 1048576} = 355.96 \hspace{2mm} \text{MBps (FHD60 8bit)} \]</span>
             <span class="text-blue-math text-smaller">\[ \frac{3 \times 60 \times 10 \times 3840 \times 2160}{8 \times 1048576} = 1779.79 \hspace{2mm} \text{MBps (4K60 10bit)} \]</span>
-            <!--<b><code>&#45;&#45;16bit-pipeline</b></code>
+            <!--<b><code>&#45;&#45;16bit-pipeline</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;0/1，默认 0：关&gt;指定编码器内部使用 16bit 位深精度计算。</p>-->
-            <b><code>&#45;&#45;fast-decode</b></code>
+            <b><code>&#45;&#45;fast-decode</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~2，默认 0：关，<span class="text-red-emph">被<code>--hierarchical-levels</code>覆盖</span>&gt;指定低延迟模式（减少解码复杂度），适合直播的转码分发机制，以及算力不足的平台——1：普通限制，2：强限制。影响 SuperBlock 大小等多个机制。</p>
-            <b><code>--asm</b></code>
+            <b><code>--asm</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~11/字符串 c~max，默认 max：全部&gt;指定弃用较新的 CPU 指令集以兼容旧式计算机平台。按照从旧到新排序为——c, mmx, sse, sse2, sse3, ssse3, sse4_1, sse4_2, avx, avx2, avx512, avx512icl, max。</p>
-            <b><code>&#45;&#45;forced-maximum-frame-width</b></code>
+            <b><code>&#45;&#45;forced-maximum-frame-width</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 4~16384，&gt;将输入帧宽度值设为强制。<span class="text-red-emph">猜测：</span>限制参考缩放环路与超分辨率环路。</p>
-            <b><code>&#45;&#45;forced-maximum-frame-height</b></code>
+            <b><code>&#45;&#45;forced-maximum-frame-height</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 4~8704，用途未知&gt;将输入帧高度值设为强制。<span class="text-red-emph">猜测：</span>限制参考缩放环路与超分辨率环路。</p>
-            <b><code>--avif</b></code>
+            <b><code>--avif</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;0/1，默认 0：关&gt;启用静态图像编码优化，在视频流仅为静态图像时提高编码速度、降低内存占用。</p>
-            <b><code>--lossless</b></code>
+            <b><code>--lossless</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;0/1，默认 0：关&gt;启用无损压缩模式。</p>
 
             <h4>（7/12）线程与节点占用</h4>
-            <b><code>--lp</b></code>
+            <b><code>--lp</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~6，默认 0：全部&gt;指定当前压制任务的线程数量。</p>
-            <b><code>&#45;&#45;pin</b></code>
+            <b><code>&#45;&#45;pin</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~n，默认 0：关&gt;指定仅占用前 n 个 CPU 核心</p>
-            <b><code>--ss</b></code>
+            <b><code>--ss</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 -1~n&gt;指定使用多节点系统中的特定节点编码。-1 表示自动选择。</p>
 
             <h4>（8/12）率控制模式</h4>
-            <b><code>&#45;&#45;enable-qm</b></code>
+            <b><code>&#45;&#45;enable-qm</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;0/1，默认 0：关&gt;启用量化矩阵</p>
-            <b><code>--qm-min</b></code>
+            <b><code>--qm-min</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~15，默认 8：中低&gt;指定量化矩阵的最小序号，序号值越小则允许使用越发陡峭、压缩越强的矩阵。</p>
-            <b><code>--qm-max</b></code>
+            <b><code>--qm-max</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~15，默认 15：最大&gt;指定量化矩阵的最大序号，序号值越大则允许使用越发平坦、压缩越弱的矩阵。</p>
-            <b><code>&#45;&#45;rc</b></code>
+            <b><code>&#45;&#45;rc</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~2，默认 0：CRF 或 CQP&gt;指定率控制模式——（<code>--aq-mode 0</code> 则为 CQP），1：VBR 模式，2：CBR 模式。</p>
-            <b><code>--qp</b></code>
+            <b><code>--qp</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 1~63，默认 35：中高量化&gt;指定 CQP 模式下的固定值，CRF 模式下为初始 QP（类似于手动设置 x264/5 的 <code>--cplxblur</code>）。由于 GOP 总以关键帧开始，所以 CRF 模式下推荐较低的值。</p>
-            <b><code>--crf</b></code>
+            <b><code>--crf</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 1~63，默认 35：中高量化&gt;指定质量呼应码率模式的量化强度目标，SVT-AV1 中直接映射为 <code>&#45;&#45;rc 0 --aq-mode 2 --qp [_]</code>。</p>
-            <b><code>--luminance-qp-bias</b></code>
+            <b><code>--luminance-qp-bias</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~100，默认 0：关闭&gt;将 QP 分配逻辑过渡到“据亮度调整”的百分比程度（使码率分配逻辑变得更像 x264、x265 的表现）。</p>
 
             <h5>（8/12——1/7）QIndex 偏移</h5>
             <p>相比于 AVC、HEVC 偏移 QP，QIndex 的精度比 QP 高 4 倍。同时，使用时应该注意 <code>Dc_Qlookup</code> 与 <code>Ac_Qlookup</code> 表格在不同位深下的替换（强度变更），并注意量化步长曲线走向与 AVC、HEVC 量化步长曲线的区别。</p>
-            <b><code>--use-fixed-qindex-offsets</b></code>
+            <b><code>--use-fixed-qindex-offsets</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~2，默认 0：关&gt;启用量化步长索引 QIndex 偏移。</p>
-            <b><code>--key-frame-qindex-offset</b></code>；<b><code>--key-frame-chroma-qindex-offset</b></code>
+            <b><code>--key-frame-qindex-offset</code></b>；<b><code>--key-frame-chroma-qindex-offset</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 -64~63，默认 0&gt;亮度与色度平面关键帧 QIndex 偏移，决定量化步长大小。</p>
-            <b><code>--luma-y-dc-qindex-offset</b></code>；<b><code>--luma-y-ac-qindex-offset</b></code>；<br>
-            <b><code>--chroma-u-dc-qindex-offset</b></code>；<b><code>--chroma-u-ac-qindex-offset</b></code>；<br>
-            <b><code>--chroma-v-dc-qindex-offset</b></code>；<b><code>--chroma-v-ac-qindex-offset</b></code>
+            <b><code>--luma-y-dc-qindex-offset</code></b>；<b><code>--luma-y-ac-qindex-offset</code></b>；<br>
+            <b><code>--chroma-u-dc-qindex-offset</code></b>；<b><code>--chroma-u-ac-qindex-offset</code></b>；<br>
+            <b><code>--chroma-v-dc-qindex-offset</code></b>；<b><code>--chroma-v-ac-qindex-offset</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 -64~63，默认 0&gt;指定 DC、AC 画面中，Y、Cb、Cr 平面的 QIndex 偏移。</p>
-            <b><code>--startup-qp-offset</b></code>
+            <b><code>--startup-qp-offset</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 -63~63，默认 0&gt;指定 GOP 初始 QP 值偏移。</p>
-            <b><code>--qindex-offsets</b></code>
+            <b><code>--qindex-offsets</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;逗号分隔整数，默认 0,0,...,0&gt;指定每层尖塔混合参考帧（<code>--hierarchical-levels</code>）下级的量化步长索引偏移，决定量化步长大小。</p>
-            <b><code>--chroma-qindex-offsets</b></code>
+            <b><code>--chroma-qindex-offsets</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;逗号分隔整数，默认 0,0,...,0&gt;指定每层色度尖塔混合参考帧（<code>--hierarchical-levels</code>）下级的量化步长索引偏移，决定色度平面量化步长大小。</p>
 
             <h5>（8/12——2/7）方差自适应量化</h5>
-            <b><code>&#45;&#45;enable-variance-boost</b></code>
+            <b><code>&#45;&#45;enable-variance-boost</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;0/1，默认 0：关，<span class="text-red-emph">Superblock 大小改为 64x64</span>&gt;指定帧内方差自适应量化的增强强度微调。Superblock 改动逻辑见 <a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/master/Source/Lib/Globals/enc_handle.c#L3922">enc_handle.c</a>。</p>
-            <b><code>--variance-boost-curve</b></code>
+            <b><code>--variance-boost-curve</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~2，默认 0：默认曲线&gt;指定方差自适应量化的增强映射曲线，类似于 x264/5 的 <code>--qcomp</code></p>
             <ul class="list-dotless text-smaller">
                 <li><b>0：</b>通过低底数的指数递减曲线映射方差变化，快速收敛/收紧方差自适应量化的优化范围</li>
@@ -4715,46 +4715,46 @@ switch (curve) {
     default: qstep_ratio = pow(1.018, strengths[strength] * (-10 * log2((double)variance) + 80)); break;
 }
             </code></pre>
-            <b><code>--variance-boost-strength</b></code>
+            <b><code>--variance-boost-strength</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 1~4，默认 2：弱&gt;指定帧内方差自适应量化的增强强度——1：微，2：弱，3：中：4：强</p>
-            <b><code>--variance-octile</b></code>
+            <b><code>--variance-octile</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 1~8，默认 6：偏高&gt;指定帧内开启方差自适应量化增强条件“特大块中低对比度面积占比阈值”。但凡特大块中，低对比度面积达到 N/8，则对该特大块启用方差自适应量化增强（Octile 代表分母）。分子值越低，则触发的特大块越多，码率越高；而分子偏高则可能会导致特大块之间的画面失真不一致，导致一圈特大块中显现出 64x64、64x128、128x128，或/和 256x128 的块失真。</p>
             <ul class="list-dotless text-smaller">
                 <li>注：如果源的画面本就是中~高对比度，则 4~8 的范围会编码出相同结果</li>
             </ul>
-            <b><code>--aq-mode</b></code>
+            <b><code>--aq-mode</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~2，默认 2：分瓣 VAQ + QP 偏移预测&gt;指定帧间方差自适应量化模式——0：关，1：分瓣 VAQ 调整；2：并且使用 QP 偏移预测</p>
 
             <h5>（8/12——3/7）VBR、CBR 模式细节</h5>
-            <b><code>--tbr</b></code>
+            <b><code>--tbr</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 1~100000，默认 2000：Kbps&gt;指定 VBR 模式的目标码率，相当于 AVC、HEVC 的 <code>--bitrate</code>。</p>
-            <b><code>--min-qp</b></code>；<b><code>--max-qp</b></code>
+            <b><code>--min-qp</code></b>；<b><code>--max-qp</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 1~62，默认 1&gt;&lt;整数 1~63，默认 63&gt;指定限制 VBR、CBR 模式下的 QP 值赋值范围。</p>
-            <b><code>--overshoot-pct</b></code>
+            <b><code>--overshoot-pct</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~100，默认 CBR：25，VBR：50&gt;指定判定 VBR，CBR 模式下码率大小为超标的百分比。</p>
-            <b><code>--undershoot-pct</b></code>
+            <b><code>--undershoot-pct</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~100，默认取决于率控制模式&gt;指定判定 VBR，CBR 模式下码率大小为落标的百分比。</p>
-            <b><code>--gop-constraint-rc</b></code>
+            <b><code>--gop-constraint-rc</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;0/1，默认 0：关，<span class="text-red-emph">需 VBR</span>&gt;将 VBR 模式的码率限制改为逐 GOP 应用，<span class="text-red-emph">猜测：</span>能够使每个 GOP 开始时有更充足的码率，但可能会消耗额外带宽。</p>
 
             <h5>（8/12——4/7）CBR 模式</h5>
             <p>SVT-AV1 中，CBR 模式代表以毫秒为单位的“时间缓冲区”定义缓冲区大小。如果解码用时高于或低于预期，则相应的调整压缩强度。控制参考缩放环路的动态模式。</p>
-            <b><code>--buf-sz</b></code>
+            <b><code>--buf-sz</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 20-10000，默认 1000：毫秒&gt;CBR 缓冲区极限大小，与 AVC、HEVC 的 <code>--vbv-bufsize</code> 有几分相似。</p>
-            <b><code>--buf-initial-sz</b></code>
+            <b><code>--buf-initial-sz</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 20-10000，默认 600：毫秒&gt;CBR 缓冲区初始大小。</p>
-            <b><code>--buf-optimal-sz</b></code>
+            <b><code>--buf-optimal-sz</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 20-10000，默认 600：毫秒&gt;CBR 缓冲区中、后期大小。</p>
 
             <h5>（8/12——5/7）Capped CRF 模式</h5>
-            <b><code>--mbr</b></code>
+            <b><code>--mbr</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~100000，默认 0：关&gt;指定 CRF 模式的峰值码率，相当于 vbv-maxrate。</p>
-            <b><code>--mbr-overshoot-pct</b></code>
+            <b><code>--mbr-overshoot-pct</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~100，默认 50&gt;指定 Capped CRF 模式下，判定码率大小为超标的百分比。</p>
 
             <h5>（8/12——6/7）重编码环路级别</h5>
             <p>TODO：分析源码查证参数说明，可能与编码 TU 有关。</p>
-            <b><code>&#45;&#45;recode-loop</b></code>
+            <b><code>&#45;&#45;recode-loop</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~100，默认 0：关&gt;<span class="text-red-emph">猜测：</span>当编码结果与率控制目标差异过大（码率过低、过高、解码用时低于或高于预期）。</p>
             <ul class="list-dotless text-smaller">
                 <li><b>1</b>：仅允许对关键帧重编码，无视码率限制</li>
@@ -4764,7 +4764,7 @@ switch (curve) {
             </ul>
 
             <h5>（8/12——7/8）率失真优化</h5>
-            <b><code>--tune</b></code>
+            <b><code>--tune</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~2，默认 1：PSNR（客观）&gt;调整率失真优化对失真（rdmult）的定义方法，以及更改一些内部参数（VQ 涉及更改去块滤镜判断锐度级别、SSIM 涉及到更改 MiRow、MiCol（Marcoblock Index）大小）——0：心理视觉优化 Visual quality（主观），2：SSIM。</p>
             <code>coding_loop.c</code>
             <pre><code class="text-smaller">
@@ -4997,7 +4997,7 @@ static void perform_pred_depth_refinement(SequenceControlSet *scs, PictureContro
 }
                 </code></pre></div>
 
-            <b><code>--lambda-scale-factors</b></code>
+            <b><code>--lambda-scale-factors</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;逗号分隔整数×128，默认 128,...,128：关&gt;指定各种帧类型下，精确到帧的的率失真斜度缩放值。“各种帧类型”代表 <code>SvtAv1FrameUpdateType</code> 下的类型。每个值会被编码器除以 128，所以默认值实际上是 1。</p>
             <pre><code class="text-smaller">
 typedef enum SvtAv1FrameUpdateType {
@@ -5013,15 +5013,15 @@ typedef enum SvtAv1FrameUpdateType {
             </code></pre>
 
             <h5>（8/12——8/8）2pass 模式</h5>
-            <b><code>&#45;&#45;passes</b></code>
+            <b><code>&#45;&#45;passes</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;1/2，默认 1：关&gt;启用 2pass 模式。</p>
-            <b><code>&#45;&#45;pass</b></code>
+            <b><code>&#45;&#45;pass</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~2，默认 0：关，<span class="text-red-emph">被 <code>&#45;&#45;preset</code> 覆盖</span>&gt;指定多遍编码模式，1：pass 1，2：pass 2。Pass 1 仅支持 CRF 率控制模式，Pass 2: 仅支持 VBR，同时要求 <code>&#45;&#45;preset &lt; 10</code>（见 <a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/App/EncApp/EbAppConfig.c">SVT-AV1 app_config.c</a>）。</p>
-            <b><code>--stats</b></code>
+            <b><code>--stats</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;字符串路径，默认 "svtav1_2pass.log"&gt;<u>输入输出</u>多遍编码分析日志。</p>
 
             <h4>（9/12）GOP、mini-GOP 设定</h4>
-            <b><code>--keyint</b></code>
+            <b><code>--keyint</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数/整数带后缀 -2~2147483647 帧，支持后缀 s（秒）&gt;设定 GOP 长度，替代旧版的 <code>&#45;&#45;intra-period</code>，映射到 <code>intra_period_length</code>。<a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/master/Docs/svt-av1_encoder_user_guide.md">SVT-AV1 官方推荐</a>设置为 mini-GOP 长度（<span class="text-blue-math">\( 2^{\text{hierarchical-levels}} \)</span>）的倍数之上再加 1，以避免将关键帧插入在 mini-GOP 之内，导致压缩率的降低。</p>
             <ul class="list-dotless text-smaller">
                 <li><b>-2</b>：每 5 秒设立一个关键帧</li>
@@ -5030,22 +5030,22 @@ typedef enum SvtAv1FrameUpdateType {
                 <li><b>1s</b>~<b>2147483647s</b>：每 n 秒设立一个关键帧（推荐）</li>
             </ul>
             <ul class="list-dotless text-smaller">
-                <li><b><code>--hierarchical-levels 3</b></code>：<span class="text-blue-math">\(2^3 = 8\)</span>，即推荐值为 8 的倍数之上加 1</li>
-                <li><b><code>--hierarchical-levels 4</b></code>：<span class="text-blue-math">\(2^4 = 16\)</span>，即推荐值为 16 的倍数之上加 1</li>
-                <li><b><code>--hierarchical-levels 5</b></code>：<span class="text-blue-math">\(2^5 = 32\)</span>，即推荐值为 32 的倍数之上加 1</li>
-                <li><b><code>--hierarchical-levels 6</b></code>（<b><code>&#45;&#45;preset &lt;= 8</b></code>）：<span class="text-blue-math">\(2^6 = 64\)</span>，即推荐值为 64 的倍数之上加 1</li>
+                <li><b><code>--hierarchical-levels 3</code></b>：<span class="text-blue-math">\(2^3 = 8\)</span>，即推荐值为 8 的倍数之上加 1</li>
+                <li><b><code>--hierarchical-levels 4</code></b>：<span class="text-blue-math">\(2^4 = 16\)</span>，即推荐值为 16 的倍数之上加 1</li>
+                <li><b><code>--hierarchical-levels 5</code></b>：<span class="text-blue-math">\(2^5 = 32\)</span>，即推荐值为 32 的倍数之上加 1</li>
+                <li><b><code>--hierarchical-levels 6</code></b>（<b><code>&#45;&#45;preset &lt;= 8</code></b>）：<span class="text-blue-math">\(2^6 = 64\)</span>，即推荐值为 64 的倍数之上加 1</li>
             </ul>
-            <b><code>&#45;&#45;irefresh-type</b></code>
+            <b><code>&#45;&#45;irefresh-type</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;1/2，默认 2：Closed GOP&gt;指定关键帧类型，1：允许前向参考型（Open GOP），2：普通关键帧</p>
-            <b><code>--scd</b></code><!--调用 perform_sc_detection() 函数？-->
+            <b><code>--scd</code></b><!--调用 perform_sc_detection() 函数？-->
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;0/1，默认 0：关&gt;开启转场检测。SVT-AV1 检测到转场后只会减少帧间参考，而不会插入关键帧，因此开启后仅会略微提高码率分配精度（见 <a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/master/Docs/CommonQuestions.md#scene-change-detection">SVT-AV1 common questions</a>）映射到 <code>transition_present</code>。另外，如果需要这种提高画质的 keyint GOP 拆分机制，SVT-AV1 还有前瞻进程中 mini-GOP 的实现可用。</p>
-            <b><code>--scm</b></code>
+            <b><code>--scm</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~2，默认 2：自适应&gt;开启录屏特化功能模式（匹配使用 IBC、调色板帧内编码）开关控制所需的内容类型检测。</p>
-            <b><code>--lookahead</b></code>
+            <b><code>--lookahead</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 -1~120，默认 -1：自动&gt;指定前瞻进程搜索距离</p>
-            <b><code>--hierarchical-levels</b></code>
+            <b><code>--hierarchical-levels</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 2~5，默认 4，<span class="text-blue-emph"><code>&#45;&#45;preset 12~13</code> 下默认 5</span>，<span class="text-red-emph">覆盖<code>&#45;&#45;fast-decode</code>，被<code>&#45;&#45;pred-struct</code>覆盖</span>&gt;指定每个 GOP 于底层之上的分层预测结构层数。越高则帧间冗余功能越强、尖塔混合参考帧越多、负责解码每个 GOP 的 OBU 越多、编码速度越慢、解码压力越大（带宽压力越小）、串流时的网络信号质量要求越高。类似于设定连续 B 帧长度——2: 共 3 层，3: 共 4 层，5: 共 6 层。</p>
-            <b><code>&#45;&#45;pred-struct</b></code>
+            <b><code>&#45;&#45;pred-struct</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 1~2，默认 2，<span class="text-red-emph">覆盖 <code>--hierarchical-levels</code></span>&gt;指定帧间预测模式——1: 低延迟编解码（限为单层，关闭混合参考模式，并影响一些编码模式的强度，映射到 <code>rtc_tune = true</code>、<code>LOW_DELAY_B</code>），2: 支持随机访问（不限制，开启混合参考模式）。</p>
             <pre><code class="text-smaller">
 /* 
@@ -5060,9 +5060,9 @@ typedef enum SvtAv1PredStructure {
 } SvtAv1PredStructure;
             </code></pre>
 
-            <b><code>&#45;&#45;enable-dg</b></code>
+            <b><code>&#45;&#45;enable-dg</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;0/1，默认 1：开，<span class="text-red-emph">需 <code>--rc 0</code>，分辨率小于 4k，<code>&#45;&#45;fast-decode 0</code>，<code>&#45;&#45;pred-struct 2</code>，<code>&#45;&#45;preset &lt;=7</code></span>&gt;开启 GOP 层数的前期动态分析，拆分出 mini-GOP 以在 GOP 结构上提高对高时域复杂度场景的适应性，mini-GOP 默认长度为 16 帧。</p>
-            <b><code>--startup-mg-size</b></code>
+            <b><code>--startup-mg-size</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 2~4 或 0，默认 0：关，<span class="text-red-emph">需小于 <code>--hierarchical-levels</code></span>&gt;指定每个关键帧之后首个 mini-GOP 专用的分层预测结构层数。类似于设定连续 B 帧长度——2: 共 3 层，3: 共 4 层，4: 共 5 层。<span class="text-red-emph">猜测：</span>该功能可以在 GOP 本身较长的情况下，缓解 CBR 解码延迟的增长速率，从而使码率分配更合理。</p>
 
             <h5>设定 Superblock 大小到 64x64 的条件</h5>
@@ -5077,25 +5077,25 @@ typedef enum SvtAv1PredStructure {
             </ul>
 
             <h4>（10/12）前瞻进程、帧间预测</h4>
-            <b><code>&#45;&#45;enable-tpl-la</b></code>
+            <b><code>&#45;&#45;enable-tpl-la</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;0/1，默认 1：开，需 CRF/CQP 率控制模式&gt;开启前瞻时域依赖性建模，决定率控制的自动化。</p>
-            <b><code>&#45;&#45;enable-tf</b></code>
+            <b><code>&#45;&#45;enable-tf</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~2，默认 1：开&gt;时域降噪过滤，也代表启用 <code>ALTREF</code> 帧类型，同时涉及 <code>OVERLAY</code> 帧类型的建立——0：关、1：开、2：根据帧类型（关键帧、参考帧、亮度、色度）、以及偏移值 <code>--tf-strength</code> 决定强度衰减系数、最后由强度在视频中的变化决定。</p>
-            <b><code>--tf-strength</b></code>
+            <b><code>--tf-strength</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~4，默认 3：较强&gt;指定时域降噪过滤中，滤镜强度衰减的偏移值。</p>
-            <b><code>&#45;&#45;enable-overlays</b></code>
+            <b><code>&#45;&#45;enable-overlays</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;0/1，默认 1：开&gt;启用 <code>OVERLAY</code> 帧类型。</p>
-            <b><code>&#45;&#45;enable-mfmv</b></code>
+            <b><code>&#45;&#45;enable-mfmv</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 -1~1，默认 -1：自动&gt;开启向量场规划（MVRS）。</p>
 
             <h4>（11/12）环路滤镜</h4>
-            <b><code>&#45;&#45;enable-dlf</b></code>
+            <b><code>&#45;&#45;enable-dlf</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;0/1，默认 1：开&gt;开启环路去块滤镜。</p>
-            <b><code>&#45;&#45;enable-cdef</b></code>
+            <b><code>&#45;&#45;enable-cdef</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;0/1，默认 1：开&gt;开启环路定向边缘强化滤镜。</p>
-            <b><code>&#45;&#45;enable-restoration</b></code>
+            <b><code>&#45;&#45;enable-restoration</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;0/1，默认 1：开&gt;开启环路还原滤镜。在快速高画质编码预设下可能会出现 SSW 滤镜因 RU 大小过大的模糊失真。</p>
-            <b><code>--sharpness</b></code>
+            <b><code>--sharpness</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 -7~7，默认 0：平均&gt;指定环路滤镜和模式决策中涉及锐度变更的强度。</p>
             <ul class="font-monospace pl-5 text-smaller list-dotless">
                 <li><b>小于 0: </b>增加死区量化器大小，减少量化舍入进位宽限</li>
@@ -5204,16 +5204,16 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
             </div>
 
             <h5>（11/12——1/3）胶片颗粒编码</h5>
-            <b><code>&#45;&#45;film-grain</b></code>
+            <b><code>&#45;&#45;film-grain</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~50，默认 0：关，<span class="text-red-emph">被<code>&#45;&#45;film-grain-denoise</code>覆盖</span>&gt;开启 FGS 并指定噪点分离强度，涉及编码前的噪声的分离与建模、解码端的再合成。强度取决于画面类型，例如录像片源适合中~高强度、动画与录屏片源适合低强度（见 <a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/master/Docs/CommonQuestions.md#tuning-for-animation">SVT-AV1 Common question</a>）——1：最弱分离、50：最强分离。</p>
             <ul class="list-dotless text-smaller font-monospace">
                 <li><b>0</b>（关闭）：跳过 FGS，完全使用时域降噪过滤（TF）分离，编码和降噪噪声画面</li>
             </ul>
-            <b><code>&#45;&#45;film-grain-denoise</b></code>
+            <b><code>&#45;&#45;film-grain-denoise</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;0/1，默认 0：关，<span class="text-red-emph">覆盖<code>&#45;&#45;film-grain</code></span>&gt;丢弃 FGS 分离的噪点，<code>&#45;&#45;film-grain</code> 的分离强度间接转化为降噪强度。</p>
 
             <h4>（11/12——2/3）参考缩放环路</h4>
-            <b><code>&#45;&#45;resize-mode</b></code>
+            <b><code>&#45;&#45;resize-mode</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~4，默认 0：关，<span class="text-red-emph">需关闭超分辨率环路</span>&gt;启用参考缩放环路，并制定缩放模式。</p>
             <ul class="list-dotless text-smaller font-monospace">
                 <li><b>1</b>（固定）：设定 1 个关键帧缩放分母、1 个参考帧缩放分母</li>
@@ -5226,16 +5226,16 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                 </li>
                 <li><b>4</b>（随机访问）：根据 <code>&#45;&#45;frame-resz-events</code>、<code>&#45;&#45;frame-resz-kf-denoms</code>、<code>&#45;&#45;frame-resz-denoms</code> 指定视频中的多个分母</li>
             </ul>
-            <b><code>&#45;&#45;resize-denom</b></code>；<b><code>&#45;&#45;resize-kf-denom</b></code>
+            <b><code>&#45;&#45;resize-denom</code></b>；<b><code>&#45;&#45;resize-kf-denom</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 8~16，默认 8：分母&gt;指定参考缩放环路中“8÷缩放分母”的非关键帧、关键帧缩放分母——8：缩放到 8÷8，16：缩放到 1÷2。</p>
 
-            <b><code>&#45;&#45;frame-resz-events</b></code>
+            <b><code>&#45;&#45;frame-resz-events</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;逗号分隔整数帧号，默认空，<span class="text-red-emph">需 <code>&#45;&#45;resize-mode 4</code></span>&gt;启用参考缩放环路，并制定缩放模式。</p>
-            <b><code>&#45;&#45;frame-resz-denom</b></code>；<b><code>&#45;&#45;frame-resz-kf-denom</b></code>
+            <b><code>&#45;&#45;frame-resz-denom</code></b>；<b><code>&#45;&#45;frame-resz-kf-denom</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;逗号分隔整数 8~16，默认 8：分母，<span class="text-red-emph">需 <code>&#45;&#45;resize-mode 4</code></span>&gt;指定参考缩放环路中每个 <code>&#45;&#45;frame-resz-events</code> 的“8÷缩放分母”的非关键帧、关键帧缩放分母——8：缩放到 8÷8，16：缩放到 1÷2。</p>
             
             <h4>（11/12——3/3）超分辨率环路</h4>
-            <b><code>--superres-mode</b></code>
+            <b><code>--superres-mode</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~4，默认 0：关，<span class="text-red-emph">需关闭参考缩放环路</span>&gt;开启超分辨率环路，并指定一种缩小模式：</p>
             <ul class="list-dotless text-smaller font-monospace">
                 <li><b>1</b>（固定）：由 <code>--superres-denom</code> 指定 1 项“8÷缩小分母”中的分母，从而决定编码分辨率</li>
@@ -5243,14 +5243,14 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                 <li><b>3</b>（阈值）：根据率控制模式判断出的 QP 是否达到用户指定的 QP 阈值（QThreshold，<code>--superres-qthres</code>、<code>--superres-kf-qthres</code>）判断增大和缩小分母，仅缩小关键帧与支线被参考帧 <code>ALTREF</code></li>
                 <li><b>4</b>（自动双流~自动齐发）：进行类似 Npass 编码（至少 2 遍）的流程。首遍编码缩小版视频流、最后编码全分辨率，由率失真优化筛选、拼合出码率限制下的最优版本</li>
             </ul>
-            <b><code>--superres-denom</b></code>；<b><code>--superres-kf-denom</b></code>
+            <b><code>--superres-denom</code></b>；<b><code>--superres-kf-denom</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 8~16，默认 8：分母&gt;指定超分辨率环路中“8÷缩放分母”的非关键帧、关键帧缩放分母——8：缩放到 8÷8，16：缩放到 1÷2。</p>
-            <b><code>--superres-qthres</b></code>；<b><code>--superres-kf-qthres</b></code>
+            <b><code>--superres-qthres</code></b>；<b><code>--superres-kf-qthres</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~64，默认 43：中高&gt;指定动态分母模式下非关键帧、关键帧的 QP 阈值，只要率控制模式指定了更高的 QP 值，就开始增加缩小分母大小。</p>
 
             <h4>（12/12）编码预设</h4>
             <p>注：SVT-AV1 的预设参数下牵扯着若干项强度的设定，且官方文档中仅实现了部分标注。以下内容主要来自于源代码分析，因此可能会看错看晕的情况，但对于帮助设定该参数有着良性作用。</p>
-            <b><code>&#45;&#45;preset</b></code>
+            <b><code>&#45;&#45;preset</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 13~-1，默认 10（可能最新版本为 8）：快速&gt;SVT-AV1 中高度涉及编码功能强度设定的参数。大致上 13~7 用于实时和快速编码用途，6~4 为常规用途，3~1 为高压缩用途，-1 为（<code>ENC_MR</code>，Research mode）模式，是在算力足以支撑 preset 0 时可以考虑的更优选项（不一定是上位替代）。10~0 的<i>部分</i>预设范围见下，或 <a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/master/Docs/CommonQuestions.md">SVT-AV1 Common questions</a>：</p>
             <ul class="text-smaller">
                 <li><b>TF level</b>：时域降噪过滤搜索级别</li>
@@ -5876,8 +5876,8 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
             </div>
             <p>使用 R9 9900X（具体测试系统配置见测试版块）编码 3840x2160 帧大小的速度参考如下：</p>
             <ul class="list-dotless text-smaller font-monospace">
-                <li><b><code>&#45;&#45;preset 1</b></code>：0.10 fps</li>
-                <li><b><code>&#45;&#45;preset 3</b></code>：4.11 fps</li>
+                <li><b><code>&#45;&#45;preset 1</code></b>：0.10 fps</li>
+                <li><b><code>&#45;&#45;preset 3</code></b>：4.11 fps</li>
                 <li>TODO</li>
             </ul>
             <!--<h4>（1/2）HBD 模式</h4>
@@ -5943,34 +5943,34 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                 <li><b><code>&#45;&#45;preset &lt;=4</code>，</b>：8K 分辨率视频源（<code>INPUT_SIZE_8K_TH</code>）仅支持 5 及更快的预设</li>
                 <li><b>视频源宽度</b> 必须至少为 4</li>
                 <li><b>视频源高度</b> 必须至少为 4</li>
-                <li><b><code>&#45;&#45;pass</b></code>：不支持 Open GOP 流结构</li>
-                <li><b><code>&#45;&#45;pass 2</b></code>：不支持 CRF、CBR 率控制模式</li>
-                <li><b><code>&#45;&#45;pass 2</b></code>：在 <code>&#45;&#45;preset &lt; 10</code> 下不支持 VBR 率控制模式</li>
-                <li><b><code>--keyint -1</b></code>：不支持 CRF 率控制模式</li>
-                <li><b><code>--aq-mode 0</b></code>：使用率控制模式（VBR/CBR/CRF）时不能关闭</li>
-                <li><b><code>--mbr</b></code>：仅支持 CRF 模式</li>
+                <li><b><code>&#45;&#45;pass</code></b>：不支持 Open GOP 流结构</li>
+                <li><b><code>&#45;&#45;pass 2</code></b>：不支持 CRF、CBR 率控制模式</li>
+                <li><b><code>&#45;&#45;pass 2</code></b>：在 <code>&#45;&#45;preset &lt; 10</code> 下不支持 VBR 率控制模式</li>
+                <li><b><code>--keyint -1</code></b>：不支持 CRF 率控制模式</li>
+                <li><b><code>--aq-mode 0</code></b>：使用率控制模式（VBR/CBR/CRF）时不能关闭</li>
+                <li><b><code>--mbr</code></b>：仅支持 CRF 模式</li>
                 <li><b><code>&#45;&#45;rc 1~2</code>（CBR）</b>：不支持 <code>&#45;&#45;enable-dg 1</code>，请使用 CRF/CQP 模式</li>
                 <li><b><code>&#45;&#45;rc 1</code>（VBR）</b>：不支持 <code>--keyint -1</code>，请使用 CRF 模式</li>
                 <li><b><code>&#45;&#45;rc 1</code>（VBR）</b>：不支持 <code>&#45;&#45;pred-struct 1</code>，请使用其它模式</li>
                 <li><b><code>&#45;&#45;rc 2</code>（CBR）</b>：不支持 <code>&#45;&#45;pred-struct 2</code>，请使用其它模式</li>
-                <li><b><code>--tbr</b></code>：仅支持 <code>&#45;&#45;rc 1</code>，<code>&#45;&#45;rc 2</code>（VBR/CBR）</li>
-                <li><b><code>--startup-qp-offset</b></code>：仅支持 <code>&#45;&#45;rc 0</code>（CRF/CQP）</li>
-                <li><b><code>&#45;&#45;profile 1</b></code>：要求视频源为 4:4:4 格式</li>
-                <li><b><code>&#45;&#45;profile 2</b></code>：位深度小于 10 时要求视频源为 4:2:2 格式</li>
-                <li><b><code>&#45;&#45;fast-decode</b></code>：不支持超分辨率环路</li>
+                <li><b><code>--tbr</code></b>：仅支持 <code>&#45;&#45;rc 1</code>，<code>&#45;&#45;rc 2</code>（VBR/CBR）</li>
+                <li><b><code>--startup-qp-offset</code></b>：仅支持 <code>&#45;&#45;rc 0</code>（CRF/CQP）</li>
+                <li><b><code>&#45;&#45;profile 1</code></b>：要求视频源为 4:4:4 格式</li>
+                <li><b><code>&#45;&#45;profile 2</code></b>：位深度小于 10 时要求视频源为 4:2:2 格式</li>
+                <li><b><code>&#45;&#45;fast-decode</code></b>：不支持超分辨率环路</li>
             </ul>
 
             <h3>SVT-AV1 警告——推荐与不推荐</h3>
             <ul class="text-smaller">
-                <li><b><code>--aq-mode</b></code>：不支持分辨率宽或高小于 64 的源，已设为关闭（0）</li>
-                <li><b><code>--color-primaries</b></code>：某些值保留且不推荐使用</li>
-                <li><b><code>--transfer-characteristics</b></code>：某些值保留且不推荐使用</li>
-                <li><b><code>--matrix-coefficients</b></code>：某些值保留且不推荐使用</li>
-                <li><b><code>--chroma-sample-position</b></code>：某些值保留且不推荐使用</li>
-                <li><b><code>--scd 0</b></code>：SVT-AV1 不以场景检测添加关键帧</li>
-                <li><b><code>--tile-rows &gt;0</b></code>：建议使用 <code>&#45;&#45;fast-decode 1</code>、2，而不是瓦片数量以提高解码速度</li>
-                <li><b><code>--tile-columns &gt;0</b></code>：建议使用 <code>&#45;&#45;fast-decode 1</code>、2，而不是瓦片数量以提高解码速度</li>
-                <li><b><code>&#45;&#45;fast-decode</b></code>：与 <code>--tune 1</code> 一起使用时效果最佳</li>
+                <li><b><code>--aq-mode</code></b>：不支持分辨率宽或高小于 64 的源，已设为关闭（0）</li>
+                <li><b><code>--color-primaries</code></b>：某些值保留且不推荐使用</li>
+                <li><b><code>--transfer-characteristics</code></b>：某些值保留且不推荐使用</li>
+                <li><b><code>--matrix-coefficients</code></b>：某些值保留且不推荐使用</li>
+                <li><b><code>--chroma-sample-position</code></b>：某些值保留且不推荐使用</li>
+                <li><b><code>--scd 0</code></b>：SVT-AV1 不以场景检测添加关键帧</li>
+                <li><b><code>--tile-rows &gt;0</code></b>：建议使用 <code>&#45;&#45;fast-decode 1</code>、2，而不是瓦片数量以提高解码速度</li>
+                <li><b><code>--tile-columns &gt;0</code></b>：建议使用 <code>&#45;&#45;fast-decode 1</code>、2，而不是瓦片数量以提高解码速度</li>
+                <li><b><code>&#45;&#45;fast-decode</code></b>：与 <code>--tune 1</code> 一起使用时效果最佳</li>
                 <li><b><code>&#45;&#45;enable-dg</code>，</b>：不支持 4K 分辨率及以上（<code>INPUT_SIZE_4K_TH</code>）的视频源</li>
             </ul>
 
@@ -5978,89 +5978,89 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
             <div class="coll-content">
                 <h3>SVT-AV1 报错——参数值</h3>
                 <ul class="text-smaller">
-                    <li><b><code>&#45;&#45;preset</b></code> 必须在 -1~MAX_ENC_PRESET（目前最大 13）范围内</li>
-                    <li><b><code>&#45;&#45;profile</b></code>：最大允许 2</li>
-                    <li><b><code>&#45;&#45;pass &gt;0 &#45;&#45;fast-decode 1</b></code>：多遍编码不支持低延迟模式</li>
-                    <li><b><code>--buf-sz</b></code> 必须在 20~10000 范围内</li>
-                    <li><b><code>--buf-initial-sz</b></code> 必须在 20~10000 范围内，且必须小于最大缓冲区大小</li>
-                    <li><b><code>--buf-optimal-sz</b></code> 必须在 20~10000 范围内，且必须小于最大缓冲区大小</li>
-                    <li><b><code>--overshoot-pct</b></code> 必须在 0~100 范围内</li>
-                    <li><b><code>--mbr-overshoot-pct</b></code> 必须在 0~100 范围内</li>
-                    <li><b><code>--undershoot-pct</b></code> 必须在 0~100 范围内</li>
-                    <li><b><code>--tbr</b></code> 必须在 0~100000 Kbps 范围内</li>
-                    <li><b><code>--mbr</b></code> 必须在 0~100000 Kbps 范围内</li>
+                    <li><b><code>&#45;&#45;preset</code></b> 必须在 -1~MAX_ENC_PRESET（目前最大 13）范围内</li>
+                    <li><b><code>&#45;&#45;profile</code></b>：最大允许 2</li>
+                    <li><b><code>&#45;&#45;pass &gt;0 &#45;&#45;fast-decode 1</code></b>：多遍编码不支持低延迟模式</li>
+                    <li><b><code>--buf-sz</code></b> 必须在 20~10000 范围内</li>
+                    <li><b><code>--buf-initial-sz</code></b> 必须在 20~10000 范围内，且必须小于最大缓冲区大小</li>
+                    <li><b><code>--buf-optimal-sz</code></b> 必须在 20~10000 范围内，且必须小于最大缓冲区大小</li>
+                    <li><b><code>--overshoot-pct</code></b> 必须在 0~100 范围内</li>
+                    <li><b><code>--mbr-overshoot-pct</code></b> 必须在 0~100 范围内</li>
+                    <li><b><code>--undershoot-pct</code></b> 必须在 0~100 范围内</li>
+                    <li><b><code>--tbr</code></b> 必须在 0~100000 Kbps 范围内</li>
+                    <li><b><code>--mbr</code></b> 必须在 0~100000 Kbps 范围内</li>
                     <!--<li><b>最大分段百分比 (Max Section Percentage)</b> 必须在 [0, 10000] 范围内</li>
                     <li><b>最小分段百分比 (Min Section Percentage)</b> 必须在 [0, 100] 范围内</li>
                     <li><b>GOP 约束 RC (Gop Constraint RC)</b>：仅支持 VBR 模式且 GOP 大小大于 119</li>
-                    <li><b><code>&#45;&#45;force-key-frames</b></code>：不支持 VBR 模式</li>-->
-                    <li><b><code>-w</b></code> 必须小于或等于 16384</li>
-                    <li><b><code>-h</b></code> 必须小于或等于 8704</li>
-                    <li><b><code>&#45;&#45;forced-maximum-frame-width</b></code> 必须至少为 4，且小于或等于 16384</li>
-                    <li><b><code>&#45;&#45;forced-maximum-frame-height</b></code> 必须至少为 4，且小于或等于 8704</li>
-                    <li><b><code>--level</b></code> 必须在 2.0~7.3 范围内</li>
-                    <li><b><code>--qp</b></code> 必须在 0~MAX_QP_VALUE 范围内</li>
-                    <li><b><code>--hierarchical-levels</b></code>：必须在 0~5 范围内</li>
-                    <li><b><code>--keyint</b></code> 必须在 -2~2^31-2 范围内</li>
-                    <li><b><code>&#45;&#45;irefresh-type</b></code> 必须在 1~2 范围内</li>
-                    <li><b><code>&#45;&#45;fps</b></code>：最大允许 240，且必须大于 0 fps</li>
-                    <li><b><code>&#45;&#45;fps-num</code>，<code>&#45;&#45;fps-denom</b></code> 必须大于 0</li>
-                    <li><b><code>&#45;&#45;recode-loop</b></code> 必须在 0~4 范围内</li>
-                    <li><b><code>&#45;&#45;rc</b></code> 必须在 0~2 范围内</li>
-                    <li><b><code>--lookahead</b></code> 必须在 0~MAX_LAD 范围内</li>
-                    <li><b><code>--tile rows --tile-columns</b></code> 必须在 0~6 范围内</li>
+                    <li><b><code>&#45;&#45;force-key-frames</code></b>：不支持 VBR 模式</li>-->
+                    <li><b><code>-w</code></b> 必须小于或等于 16384</li>
+                    <li><b><code>-h</code></b> 必须小于或等于 8704</li>
+                    <li><b><code>&#45;&#45;forced-maximum-frame-width</code></b> 必须至少为 4，且小于或等于 16384</li>
+                    <li><b><code>&#45;&#45;forced-maximum-frame-height</code></b> 必须至少为 4，且小于或等于 8704</li>
+                    <li><b><code>--level</code></b> 必须在 2.0~7.3 范围内</li>
+                    <li><b><code>--qp</code></b> 必须在 0~MAX_QP_VALUE 范围内</li>
+                    <li><b><code>--hierarchical-levels</code></b>：必须在 0~5 范围内</li>
+                    <li><b><code>--keyint</code></b> 必须在 -2~2^31-2 范围内</li>
+                    <li><b><code>&#45;&#45;irefresh-type</code></b> 必须在 1~2 范围内</li>
+                    <li><b><code>&#45;&#45;fps</code></b>：最大允许 240，且必须大于 0 fps</li>
+                    <li><b><code>&#45;&#45;fps-num</code>，<code>&#45;&#45;fps-denom</code></b> 必须大于 0</li>
+                    <li><b><code>&#45;&#45;recode-loop</code></b> 必须在 0~4 范围内</li>
+                    <li><b><code>&#45;&#45;rc</code></b> 必须在 0~2 范围内</li>
+                    <li><b><code>--lookahead</code></b> 必须在 0~MAX_LAD 范围内</li>
+                    <li><b><code>--tile rows --tile-columns</code></b> 必须在 0~6 范围内</li>
                     <li><b>瓦片数量</b>：最大为 128，<code>--tile-columns</code> 最大为 16</li>
-                    <li><b><code>--max-qp</b></code> 必须在 1, MAX_QP_VALUE 范围内</li>
-                    <li><b><code>--min-qp</b></code> 必须在 1, MAX_QP_VALUE-1 范围内，且必须小于 <code>--max-qp</code></li>
-                    <li><b><code>--use-fixed-qindex-offsets</b></code> 必须在 0~2 范围内</li>
-                    <li><b><code>--key-frame-qindex-offset</b></code> 必须在 -64~63 范围内</li>
-                    <li><b><code>--qindex-offsets</b></code> 必须在 -64~63 范围内</li>
-                    <li><b><code>--luma-y-ac-qindex-offset</b></code> 必须在 -64~63 范围内</li>
-                    <li><b><code>--luma-y-dc-qindex-offset</b></code> 必须在 -64~63 范围内</li>
-                    <li><b><code>--chroma-u-dc-qindex-offset</b></code> 必须在 -64~63 范围内</li>
-                    <li><b><code>--chroma-u-ac-qindex-offset</b></code> 必须在 -64~63 范围内</li>
-                    <li><b><code>--chroma-v-dc-qindex-offset</b></code> 必须在 -64~63 范围内</li>
-                    <li><b><code>--chroma-v-ac-qindex-offset</b></code> 必须在 -64~63 范围内</li>
-                    <li><b><code>--startup-qp-offset</b></code> 必须在 -63~63 范围内</li>
-                    <li><b><code>&#45;&#45;enable-stat-report</b></code> 必须在 0~1 范围内</li>
-                    <li><b><code>&#45;&#45;enable-restoration</b></code> 必须在 0~1 范围内</li>
-                    <li><b><code>--scm</b></code> 必须在 0~2 范围内</li>
-                    <li><b><code>--aq-mode</b></code> 必须在 0~2 范围内</li>
-                    <li><b><code>&#45;&#45;input-depth</b></code> 必须为 8 或 10</li>
-                    <li><b><code>--color-format</b></code>：仅支持 420</li>
-                    <li><b><code>&#45;&#45;profile</b></code>：非 420 颜色格式必须指定使用 1 或 2</li>
-                    <li><b><code>--asm</b></code>：参数值无效</li>
+                    <li><b><code>--max-qp</code></b> 必须在 1, MAX_QP_VALUE 范围内</li>
+                    <li><b><code>--min-qp</code></b> 必须在 1, MAX_QP_VALUE-1 范围内，且必须小于 <code>--max-qp</code></li>
+                    <li><b><code>--use-fixed-qindex-offsets</code></b> 必须在 0~2 范围内</li>
+                    <li><b><code>--key-frame-qindex-offset</code></b> 必须在 -64~63 范围内</li>
+                    <li><b><code>--qindex-offsets</code></b> 必须在 -64~63 范围内</li>
+                    <li><b><code>--luma-y-ac-qindex-offset</code></b> 必须在 -64~63 范围内</li>
+                    <li><b><code>--luma-y-dc-qindex-offset</code></b> 必须在 -64~63 范围内</li>
+                    <li><b><code>--chroma-u-dc-qindex-offset</code></b> 必须在 -64~63 范围内</li>
+                    <li><b><code>--chroma-u-ac-qindex-offset</code></b> 必须在 -64~63 范围内</li>
+                    <li><b><code>--chroma-v-dc-qindex-offset</code></b> 必须在 -64~63 范围内</li>
+                    <li><b><code>--chroma-v-ac-qindex-offset</code></b> 必须在 -64~63 范围内</li>
+                    <li><b><code>--startup-qp-offset</code></b> 必须在 -63~63 范围内</li>
+                    <li><b><code>&#45;&#45;enable-stat-report</code></b> 必须在 0~1 范围内</li>
+                    <li><b><code>&#45;&#45;enable-restoration</code></b> 必须在 0~1 范围内</li>
+                    <li><b><code>--scm</code></b> 必须在 0~2 范围内</li>
+                    <li><b><code>--aq-mode</code></b> 必须在 0~2 范围内</li>
+                    <li><b><code>&#45;&#45;input-depth</code></b> 必须为 8 或 10</li>
+                    <li><b><code>--color-format</code></b>：仅支持 420</li>
+                    <li><b><code>&#45;&#45;profile</code></b>：非 420 颜色格式必须指定使用 1 或 2</li>
+                    <li><b><code>--asm</code></b>：参数值无效</li>
                     <!--<li><b>目标套接字 (Target Socket)</b> 必须在 -1~1 范围内</li>
                     <li><b>高位深模式决策 (HBD Mode Decision)</b> 必须在 -1~2 范围内</li>
                     <li><b>CDEF 级别</b> 必须在 0~4 范围内，-1 表示自动</li>
                     <li><b>环路还原滤镜级别</b> 必须在 0~1 范围内，-1 表示自动</li>-->
-                    <li><b><code>&#45;&#45;enable-mfmv</b></code> 必须在 0~1 范围内，-1 表示自动</li>
-                    <li><b><code>&#45;&#45;fast-decode</b></code> 必须在 0~2 范围内</li>
-                    <li><b><code>--tune</b></code> 必须在 0~2 范围内</li>
-                    <li><b><code>--superres-mode</b></code> 必须在 <code>SUPERRES_NONE</code>~<code>SUPERRES_AUTO</code> 范围内</li>
-                    <li><b><code>--superres-qthres</b></code> 必须在 <code>MIN_QP_VALUE</code>~<code>MAX_QP_VALUE</code> 范围内</li>
-                    <li><b><code>--superres-kf-qthres</b></code> 必须在 <code>MIN_QP_VALUE</code>~<code>MAX_QP_VALUE</code> 范围内</li>
-                    <li><b><code>--superres-kf-denom</b></code> 必须在 <code>MIN_SUPERRES_DENOM</code>~<code>MAX_SUPERRES_DENOM</code> 范围内</li>
-                    <li><b><code>--superres-denom</b></code> 必须在 <code>MIN_SUPERRES_DENOM</code>~<code>MAX_SUPERRES_DENOM</code> 范围内</li>
-                    <li><b><code>&#45;&#45;resize-mode</b></code> 必须在 <code>RESIZE_NONE</code>~<code>RESIZE_RANDOM_ACCESS</code> 范围内</li>
-                    <li><b><code>&#45;&#45;resize-kf-denom</b></code> 必须在 <code>MIN_RESIZE_DENOM</code>~<code>MAX_RESIZE_DENOM</code> 范围内</li>
-                    <li><b><code>&#45;&#45;resize-denom</b></code> 必须在 <code>MIN_RESIZE_DENOM</code>~<code>MAX_RESIZE_DENOM</code> 范围内</li>
-                    <li><b><code>--matrix-coefficients 0</b></code>：identity 矩阵格式仅支持 YUV 4:4:4 格式</li>
-                    <li><b><code>--hierarchical-levels</b></code>：仅支持 2~5</li>
-                    <li><b><code>&#45;&#45;pass</b></code> 必须在 0~2 范围内</li>
-                    <!--<li><b><code>&#45;&#45;pass</b></code>：不支持 S 帧（Switch frame）功能</li>
+                    <li><b><code>&#45;&#45;enable-mfmv</code></b> 必须在 0~1 范围内，-1 表示自动</li>
+                    <li><b><code>&#45;&#45;fast-decode</code></b> 必须在 0~2 范围内</li>
+                    <li><b><code>--tune</code></b> 必须在 0~2 范围内</li>
+                    <li><b><code>--superres-mode</code></b> 必须在 <code>SUPERRES_NONE</code>~<code>SUPERRES_AUTO</code> 范围内</li>
+                    <li><b><code>--superres-qthres</code></b> 必须在 <code>MIN_QP_VALUE</code>~<code>MAX_QP_VALUE</code> 范围内</li>
+                    <li><b><code>--superres-kf-qthres</code></b> 必须在 <code>MIN_QP_VALUE</code>~<code>MAX_QP_VALUE</code> 范围内</li>
+                    <li><b><code>--superres-kf-denom</code></b> 必须在 <code>MIN_SUPERRES_DENOM</code>~<code>MAX_SUPERRES_DENOM</code> 范围内</li>
+                    <li><b><code>--superres-denom</code></b> 必须在 <code>MIN_SUPERRES_DENOM</code>~<code>MAX_SUPERRES_DENOM</code> 范围内</li>
+                    <li><b><code>&#45;&#45;resize-mode</code></b> 必须在 <code>RESIZE_NONE</code>~<code>RESIZE_RANDOM_ACCESS</code> 范围内</li>
+                    <li><b><code>&#45;&#45;resize-kf-denom</code></b> 必须在 <code>MIN_RESIZE_DENOM</code>~<code>MAX_RESIZE_DENOM</code> 范围内</li>
+                    <li><b><code>&#45;&#45;resize-denom</code></b> 必须在 <code>MIN_RESIZE_DENOM</code>~<code>MAX_RESIZE_DENOM</code> 范围内</li>
+                    <li><b><code>--matrix-coefficients 0</code></b>：identity 矩阵格式仅支持 YUV 4:4:4 格式</li>
+                    <li><b><code>--hierarchical-levels</code></b>：仅支持 2~5</li>
+                    <li><b><code>&#45;&#45;pass</code></b> 必须在 0~2 范围内</li>
+                    <!--<li><b><code>&#45;&#45;pass</code></b>：不支持 S 帧（Switch frame）功能</li>
                     <li><b>切换帧间隔 (Switch Frame Interval)</b> 必须大于或等于 0</li>
                     <li><b>切换帧功能 (Switch Frame Feature)</b>：仅支持低延迟预测结构</li>
                     <li><b>切换帧模式 (Switch Frame Mode)</b> 必须在 [SFRAME_STRICT_BASE, SFRAME_NEAREST_BASE] 范围内</li>-->
-                    <li><b><code>&#45;&#45;film-grain</b></code> 必须在 0~50 范围内</li>
-                    <li><b><code>&#45;&#45;film-grain-denoise</b></code>：必须为 0 或 1</li>
-                    <li><b><code>&#45;&#45;enable-qm</b></code>：<code>--qp-max</code> 必须不大于 <code>--qm-max</code></li>
-                    <li><b><code>--startup-mg-size</b></code>：支持 0 及 2~4，且必须小于 <code>--hierarchical-levels</code></li>
-                    <li><b><code>--variance-boost-curve</b></code> 必须在 0 到 2 之间</li>
-                    <li><b><code>--variance-boost-strength</b></code> 必须在 1~4 之间</li>
-                    <li><b><code>--variance-octile</b></code> 必须在 1~8 之间</li>
-                    <li><b><code>--tf-strength</b></code> 必须在 0~4 之间</li>
+                    <li><b><code>&#45;&#45;film-grain</code></b> 必须在 0~50 范围内</li>
+                    <li><b><code>&#45;&#45;film-grain-denoise</code></b>：必须为 0 或 1</li>
+                    <li><b><code>&#45;&#45;enable-qm</code></b>：<code>--qp-max</code> 必须不大于 <code>--qm-max</code></li>
+                    <li><b><code>--startup-mg-size</code></b>：支持 0 及 2~4，且必须小于 <code>--hierarchical-levels</code></li>
+                    <li><b><code>--variance-boost-curve</code></b> 必须在 0 到 2 之间</li>
+                    <li><b><code>--variance-boost-strength</code></b> 必须在 1~4 之间</li>
+                    <li><b><code>--variance-octile</code></b> 必须在 1~8 之间</li>
+                    <li><b><code>--tf-strength</code></b> 必须在 0~4 之间</li>
                     <!--<li><b>亮度 QP 偏移 (Luminance QP Bias)</b> 必须在 0 到 100 之间</li>-->
-                    <li><b><code>--sharpness</b></code> 必须在 -7~7 之间</li>
+                    <li><b><code>--sharpness</code></b> 必须在 -7~7 之间</li>
                 </ul>
             </div>
             <!--<h2 id="h2-15">某编码器 参数与预设</h2>
