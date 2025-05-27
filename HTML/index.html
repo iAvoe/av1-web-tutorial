@@ -5268,7 +5268,7 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                 <li><b>MRP level</b>：多参考帧搜索范围 Multi reference picture</li>
                 <li><b>Max CAN</b>：模式决策最大候选量 Maximum candidates</li>
                 <li><b>Chroma level</b>：色度平面编码级别（模式决策搜索级别与候选数量）</li>
-                <li><b>DLF level</b>：去块滤镜级别（亮度、色度强度判断搜索、是否调用参考帧、上帧强度）</li>
+                <li><b>DLF level</b>：去块滤镜级别（亮度、色度强度判断搜索、是否检查参考帧所用强度等数据）</li>
                 <li><b>SG filter level</b>：子空间投影回归制导滤镜（SGR）级别</li>
                 <li><b>WN filter level</b>：可拆分对称维纳滤镜（SSW）级别</li>
                 <li><code>rtc_tune</code>：实时编解码（Real-time coding）开关，<code>&#45;&#45;pred-struct 1</code> 时启用</li>
@@ -5860,7 +5860,7 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                     </tbody>
                 </table>
 
-                <h5><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/master/Source/Lib/Codec/enc_mode_config.c#L1302">DLF level</a>：</h5>
+                <h5>（12/12——1/2）<a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/master/Source/Lib/Codec/enc_mode_config.c#L1302">DLF level</a>：</h5>
                 <table class="table-center text-smaller">
                     <thead>
                         <tr class="border-lr border-top">
@@ -5935,10 +5935,9 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                 <li><b><code>&#45;&#45;preset 1</code></b>：0.10 fps</li>
                 <li><b><code>&#45;&#45;preset 3</code></b>：4.11 fps</li>
             </ul>
-            <!--<h4>（1/2）HBD 模式</h4>
+            <!--<h5>（12/12——2/3）HBD 模式</h4>
             <p>即高位深模式，当视频源大于 8bit 时自动启用，并更改一些模式决策的逻辑。</p>-->
-
-            <h5>（12/12——1/1）分辨率常量</h5>
+            <h5>（12/12——2/2）分辨率常量</h5>
             <p>SVT-AV1 会根据视频分辨率的积，在 <code>&#45;&#45;preset</code> 参数之上进一步确立参数强度。</p>
             <table class="table-center">
                 <thead>
