@@ -5214,7 +5214,7 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
 
             <h4>（11/12——2/3）参考缩放环路</h4>
             <code><b>&#45;&#45;resize-mode</b></code>
-            <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~4，默认 0：关，<span class="text-red-emph">需关闭超采样滤镜环路</span>&gt;启用参考缩放环路，并制定缩放模式。</p>
+            <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~4，默认 0：关，<span class="text-red-emph">需关闭超分辨率环路</span>&gt;启用参考缩放环路，并制定缩放模式。</p>
             <ul class="list-dotless text-smaller font-monospace">
                 <li><b>1</b>（固定）：设定 1 个关键帧缩放分母、1 个参考帧缩放分母</li>
                 <li><b>2</b>（随机）：用于测试</li>
@@ -6431,7 +6431,7 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
             </div>
 
             <h3>画质指标——多分辨率结构相似性 MS-SSIM</h3>
-            <p>MS-SSIM 是对传统 SSIM 的扩展改进，并与 SSIM 一样是全参考指标。两者具体区别在于 MS-SSIM 会在不同的分辨率（通常为每次缩小 2 倍）迭代计算 SSIM，并确定每个分辨率的权重，最后通过权重将各个分辨率的得分整合，从而更贴近 HVS 的感知。这种“多尺度分析”使得 MS-SSIM 在不同分辨率下的比较更客观，而且额外计算成本较低，实现了比 SSIM 和 PSNR 更准确的感知质量计算。</p>
+            <p>MS-SSIM 是对传统 SSIM 的扩展改进，并与 SSIM 一样是全参考指标。两者具体区别在于 MS-SSIM 会在不同的分辨率（通常为每次缩小 2 倍）迭代计算 SSIM，并逐分辨率衡量出权重，最后通过权重将各个分辨率的得分整合，从而更贴近 HVS 的感知。这种“多尺度分析”使得 MS-SSIM 在不同分辨率下的比较更客观，而且额外计算成本较低，实现了比 SSIM 和 PSNR 更准确的感知质量计算。</p>
             <h4>（1/1）MS-SSIM 的缺点</h4>
             <ul>
                 <li>与传统 SSIM 差不多，MS-SSIM 虽然不再那么好骗，但也只是解决了部分问题</li>
@@ -11559,49 +11559,7 @@ SSIMULACRA2_rs: Mean: 43.37989094 Median: 42.86187330 Std Dev: 10.52248577 5th P
                 </ol>
                 <p>SVT-AV1 编码器的官方推荐下载和编译流程，见 <a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/master/Docs/Build-Guide.md">Build Guide</a>，<a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/master/Docs/ARM-Build-Guide.md?ref_type=heads">ARM（aarch64）Build Guide</a>：</p>
             </div>
-
-            <!--失败：<h4>（2/2）Windows Docker Desktop 编译</h4>
-            <ol>
-                <li>创建 Docker 账户（支持 Github、Google 账户）并下载 Docker Desktop</li>
-                <li>确保在主机的 BIOS 中开启虚拟化（需重启）</li>
-                <li>确保在 Windows 功能中完全启用了微软虚拟化（Hyper-V）功能（需重启）</li>
-                <li>在 PowerShell 管理员运行模式下输入启用 Hyper-V Container 的命令（需重启）</li>
-                <li>打开 Docker Desktop 并登录（需重启）</li>
-                <li>进入主界面后，在 Windows 桌面右下角的图标上单击右键——Switch To Windows Container
-                    <ul><li>若该选项不存在，则需要清理老版本并重新安装</li></ul>
-                </li>
-                <li>创建一个便于访问的文件夹，此处使用 <code>D:\Docker</code></li>
-                <li>在文件夹中创建编译 Windows Server Core 所需的脚本，此处命名为 <code>win-cmake-nasm</code>（无后缀名）：
-                    <pre><code class="text-smaller">
-# 安装 Windows Server Core (compatible with Docker Desktop)
-FROM mcr.microsoft.com/windows/servercore:ltsc2022
-# 注：使用 Windows 10 22H2 时，改用：
-# FROM mcr.microsoft.com/windows/servercore:ltsc2019
-
-SHELL ["cmd", "/S", "/C"]
-
-# 安装 Chocolatey (Windows package manager)
-RUN powershell -Command "Set-ExecutionPolicy Bypass -Scope Process -Force; \
-    [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; \
-    iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))"
-
-# Visual Studio 2019 与编译工具 (minimum C++ dev)
-RUN choco install visualstudio2019buildtools &#45;&#45;version=16.11.2 &#45;&#45;package-parameters "--add Microsoft.VisualStudio.Workload.VCTools" &#45;&#45;yes
-
-# CMake
-RUN choco install cmake &#45;&#45;installargs 'ADD_CMAKE_TO_PATH=System' &#45;&#45;yes
-# NASM
-RUN choco install nasm &#45;&#45;yes
-# 环境变量
-RUN echo call "C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Auxiliary\Build\vcvarsall.bat" x86 > C:\build_env.bat
-# 更改工作路径并打开命令窗口
-WORKDIR C:\build
-CMD ["cmd"]
-                    </code></pre>
-                </li>
-                <li>在 PowerShell 或 CMD 中运行 Docker 编译命令并等待完成：<code>docker build -t win-cmake-nasm-vs -f D:\Docker\win-cmake-nasm-vs D:\Docker\</code></li>
-                <li>在 Docker Desktop 中运行该 Container</li>（无法运行）
-            </ol>-->
+            <!--失败：<h4>（2/2）Windows Docker Desktop 编译</h4>-->
             <h3>下载——基本工具</h3>
             <table class="table-center">
                 <tbody>
@@ -11822,7 +11780,7 @@ CMD ["cmd"]
                 <a href='https://github.com/iAvoe/av1-web-tutorial/issues'>Github Issues</a>，
                 <a href='https://jq.qq.com/?_wv=1027&k=5YJFXyf'>QQ 群：691892901</a>
             </p>
-            &#x24B8; iAvoe，2024
+            &#x24B8; iAvoe，2025
         </footer>
 	</body>
 </html>
