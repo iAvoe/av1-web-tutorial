@@ -4698,9 +4698,9 @@ int av1_compute_rd_mult_based_on_qindex(const AV1_COMP *cpi, int qindex) {
 
             <h5>（8/12——2/7）方差自适应量化</h5>
             <b><code>&#45;&#45;enable-variance-boost</code></b>
-            <p class="font-monospace pl-5 m-0 overflow-auto">&lt;0/1，默认 0：关，<span class="text-red-emph">Superblock 大小改为 64x64</span>&gt;指定帧内方差自适应量化的增强强度微调。Superblock 改动逻辑见 <a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/master/Source/Lib/Globals/enc_handle.c#L3922">enc_handle.c</a>。</p>
+            <p class="font-monospace pl-5 m-0 overflow-auto">&lt;0/1，默认 0：关，<span class="text-red-emph">Superblock 大小改为 64x64</span>&gt;指定<u>帧内</u>方差自适应量化的增强强度微调。Superblock 改动逻辑见 <a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/master/Source/Lib/Globals/enc_handle.c#L3922">enc_handle.c</a>。</p>
             <b><code>--variance-boost-curve</code></b>
-            <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~2，默认 0：默认曲线&gt;指定方差自适应量化的增强映射曲线，类似于 x264/5 的 <code>--qcomp</code></p>
+            <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~2，默认 0：默认曲线&gt;指定<u>帧内</u>方差自适应量化的增强映射曲线，类似于 x264/5 的 <code>--qcomp</code></p>
             <ul class="list-dotless text-smaller">
                 <li><b>0：</b>通过低底数的指数递减曲线映射方差变化，快速收敛/收紧方差自适应量化的优化范围</li>
                 <li><b>1：</b>通过线性递减线映射方差变化到量化值，中速收敛/收紧方差自适应量化的优化范围，在适度增加码率的情况下增强低~中对比度区域的画质</li>
@@ -4710,17 +4710,32 @@ int av1_compute_rd_mult_based_on_qindex(const AV1_COMP *cpi, int qindex) {
             </ul>
             <pre><code class="text-smaller">
 switch (curve) {
-    case 1:  qstep_ratio = 0.25 * strength * (-log2((double)variance) + 8) + 1; break;
-    case 2:  qstep_ratio = 0.15 * strength * (-log2((double)variance) + 10) + 1; break;
-    default: qstep_ratio = pow(1.018, strengths[strength] * (-10 * log2((double)variance) + 80)); break;
+    case 1:
+        qstep_ratio =
+            0.25 * strength * (-log2((double)variance) + 8) + 1;
+        break;
+    case 2:
+        qstep_ratio =
+            0.15 * strength * (-log2((double)variance) + 10) + 1;
+        break;
+    default:
+        qstep_ratio =
+            pow(1.018, strengths[strength] * (-10 * log2((double)variance) + 80));
+        break;
 }
             </code></pre>
             <b><code>--variance-boost-strength</code></b>
-            <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 1~4，默认 2：弱&gt;指定帧内方差自适应量化的增强强度——1：微，2：弱，3：中：4：强</p>
+            <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 1~4，默认 2：弱&gt;指定<u>帧内</u>方差自适应量化的增强强度——1：微，2：弱，3：中：4：强</p>
             <b><code>--variance-octile</code></b>
-            <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 1~8，默认 6：偏高&gt;指定帧内开启方差自适应量化增强条件“特大块中低对比度面积占比阈值”。但凡特大块中，低对比度面积达到 N/8，则对该特大块启用方差自适应量化增强（Octile 代表分母）。分子值越低，则触发的特大块越多，码率越高；而分子偏高则可能会导致特大块之间的画面失真不一致，导致一圈特大块中显现出 64x64、64x128、128x128，或/和 256x128 的块失真。</p>
+            <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 1~8，默认 6：高要求&gt;指定<u>帧内（Superblock）</u>方差自适应量化增强（Variance Boost）的方差自适应量化开启条件——但凡特大块中某个分块的面积达到全块的 variance-octile÷8，并且内容为低对比度，则对该 Superblock 启用方差自适应量化增强。这样可以减少其中紧挨着“复杂块”的“简单块”被连带着分配了过高量化强度所致的模糊块失真。</p>
             <ul class="list-dotless text-smaller">
-                <li>注：如果源的画面本就是中~高对比度，则 4~8 的范围会编码出相同结果</li>
+                <li>分子越小，则越多紧邻纹理线条/烟雾破片的平面/斜面的区域被开启 VAQ、计算量越大、码率越高、块内视觉对比度一致性也越高</li>
+                <li>分子越大，则越少紧邻纹理线条/烟雾破片的平面/斜面的区域被开启 VAQ、计算量越大、码率越低、块内视觉对比度一致性也越低</li>
+                <li>注：较大的分子可能会导致模糊块失真得不到解决</li>
+                <li>注：如果源的画面自始至终都保持一致的复杂或简单，则此参数的影响需要极小值见效，但此时关键帧的体积可能会超出播放设备的带宽/网速上限</li>
+                <li>建议：该参数高度依赖原画清晰度。如果原画已受到模糊、JPEG 蚊噪等失真影响，则建议使用默认或更高的值</li>
+                <li>建议：一开始给予较低 CRF 强度、宽限 VBR 的情况下可以保持默认，否则根据高频细节与平面的紧邻程度和分辨率来调整。</li>
+                <li>建议：官方建议范围 4~7，此外的值会导致码率翻倍或画质自适应不足。详见 <a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/master/Docs/Appendix-Variance-Boost.md?ref_type=heads#--variance-octile-1-8">SVT-AV1 Readme</a></li>
             </ul>
             <b><code>--aq-mode</code></b>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~2，默认 2：分瓣 VAQ + QP 偏移预测&gt;指定帧间方差自适应量化模式——0：关，1：分瓣 VAQ 调整；2：并且使用 QP 偏移预测</p>
