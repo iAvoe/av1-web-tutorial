@@ -13,7 +13,7 @@
 
 ### 字体系统
 
-本文使用了正文黑体，注解圆体和代码段字体共三套字体集。
+本教程使用了正文黑体，注解圆体和代码段字体共三套字体集。
 
 - 正文黑体为首选[煮豆黑体 Zhudou Sans](https://github.com/Buernia/Zhudou-Sans)（中文）附件  
   - 辅以系统 Sans Serif（英文）
@@ -22,6 +22,8 @@
 辅以[狮尾圆体 Light](https://github.com/max32002/swei-gothic/blob/master)（中文）附件
 - 公式段的字体为 [KaTeX Math Regular](https://github.com/KaTeX/katex-fonts/blob/master)（英文）附件（适配安卓）  
   - 辅以 Cochin，Georgia，Times，Times New Roman，serif
+
+本教程的代码块引入了 [higlight.js](https://highlightjs.org/#usage)（仅保留 cpp，PowerShell，Bash）和微调过的 docco.min.js。
 
 ### 繁体中文支持
 
