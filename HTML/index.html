@@ -8,11 +8,15 @@
         <script src="./files/mathJax3-tex-svg.js" defer></script>
         <!-- Custom CSS -->
         <link rel="stylesheet" href="./files/tutorial.css">
+        <!-- highlight JS & CSS (language-cpp, language-bash, language-powershell) -->
+        <link rel="stylesheet" href="./files/docco.min.css">
+        <script src="./files/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script>
         <title>AV1 编码教程 HTML 版</title>
 	</head>
 	<body class="text-gray-main">
         <div class="container-title">
-            <h1>AV1 编码教程<span class="text-blue-emph"> HTML 版</span></h1>
+            <h1>AV1 编码教程 <span class="text-blue-emph">HTML 版</span></h1>
             <p>欢迎阅读！若有任何问题，请加入 QQ 群<a href='https://jq.qq.com/?_wv=1027&k=5YJFXyf'>691892901</a>。本教程虽然相对于 x264、x265 教程严谨，并提供了测试数据提高严谨性，但仍仅具备业余参考价值。本文省略了 x264、x265 教程中出现过的内容，查阅本文要求读者已经明晰视频编码器的基本原理和一定细节。</p>
             <!-- x264 教程副本，更改需手动同步 ! 未同步 ! 未同步 ! 未同步 { -->
             <h2 class="my-3">地图</h2>
@@ -1335,7 +1339,7 @@
 
             <h3>变换——部分模式决策与先后选择顺序</h3>
             <p>根据帧内预测选用的模式决定。色度帧内块的变换取决于同位亮度帧内块的模式。</p>
-            <pre><code class="text-smaller">
+            <pre><code class="text-smaller language-cpp">
 Mode_To_Txfm[ UV_INTRA_MODES_CFL_ALLOWED ] = {
 DCT_DCT,   // DC_PRED 水平直流模式
 ADST_DCT,  // V_PRED 大概率夹角模式
@@ -1609,7 +1613,7 @@ typedef enum { // 一般模式
             </div>
 
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：帧内与帧间预测模式表 Ymode</button>
-            <div class="coll-content"><pre><code>
+            <div class="coll-content"><pre><code class="language-cpp">
 static const int mode_2_counter[] = { // 帧内 + 帧间预测模式表
     // 帧内预测模式
     9, // DC_PRED
@@ -1673,7 +1677,7 @@ static const int mode_2_counter[] = { // 帧内 + 帧间预测模式表
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：3 种平移运动补偿滤镜以及其自适应变体，4x4 变体</button>
             <div class="coll-content"><ul class="list-dotless">
                 <li><code>REGULAR</code></li>
-                <li><pre><code>
+                <li><pre><code class="language-cpp">
 {
     { 0, 0, 0, 128, 0, 0, 0, 0 }, // 边缘
     { 0, 2, -6, 126, 8, -2, 0, 0 }, // 偏左
@@ -1694,7 +1698,7 @@ static const int mode_2_counter[] = { // 帧内 + 帧间预测模式表
 }
                 </code></pre></li>
                 <li><code>SMOOTH</code></li>
-                <li><pre><code>
+                <li><pre><code class="language-cpp">
 {
     { 0, 0, 0, 128, 0, 0, 0, 0 }, // 左边缘
     { 0, 2, 28, 62, 34, 2, 0, 0 }, // 偏左
@@ -1715,7 +1719,7 @@ static const int mode_2_counter[] = { // 帧内 + 帧间预测模式表
 }
                 </code></pre></li>
                 <li><code>SHARP</code></li>
-                <li><pre><code>
+                <li><pre><code class="language-cpp">
 {
     { 0, 0, 0, 128, 0, 0, 0, 0 }, // 左边缘
     { -2, 2, -6, 126, 8, -2, 2, 0 }, // 偏左
@@ -1736,7 +1740,7 @@ static const int mode_2_counter[] = { // 帧内 + 帧间预测模式表
 }
                 </code></pre></li>
                 <li><code>REGULAR 4x4</code></li>
-                <li><pre><code>
+                <li><pre><code class="language-cpp">
 {
     { 0, 0, 0, 128, 0, 0, 0, 0 }, // 边缘
     { 0, 0, -4, 126, 8, -2, 0, 0 }, // 偏左
@@ -1757,7 +1761,7 @@ static const int mode_2_counter[] = { // 帧内 + 帧间预测模式表
 }
                 </code></pre></li>
                 <li><code>SMOOTH 4x4</code></li>
-                <li><pre><code>
+                <li><pre><code class="language-cpp">
 {
     { 0, 0, 0, 128, 0, 0, 0, 0 }, // 左边缘
     { 0, 0, 30, 62, 34, 2, 0, 0 }, // 偏左
@@ -1778,7 +1782,7 @@ static const int mode_2_counter[] = { // 帧内 + 帧间预测模式表
 }
                 </code></pre></li>
                 <li><code>INTRA CHROMA 2x2（?）</code></li>
-                <li><pre><code>
+                <li><pre><code class="language-cpp">
 {
     { 0, 0, 0, 128, 0, 0, 0, 0 }, // 左边缘
     { 0, 0, 0, 120, 8, 0, 0, 0 }, // 偏左
@@ -1974,7 +1978,7 @@ static const int mode_2_counter[] = { // 帧内 + 帧间预测模式表
             </div>
 
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：64x1 楔形蒙版初始值</button>
-            <div class="coll-content"><pre><code>
+            <div class="coll-content"><pre><code class="language-cpp">
 Wedge_Master_Oblique_Odd[MASK_MASTER_SIZE] =
 { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 6, 18, 37, 53, 60, 63, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64 }
 
@@ -1994,7 +1998,7 @@ Wedge_Master_Vertical[MASK_MASTER_SIZE] =
             <button type="button" class="collapsible border-main rounded-3 my-3">点击展开/折叠内容：蒙版角度及偏移对齐量的筛选</button>
             <div class="coll-content"><ul class="list-dotless text-smaller">
                 <li>纵向 4x4 亮度分块更多（4~15）</li>
-                <li><pre><code>
+                <li><pre><code class="language-cpp">
 WEDGE_OBLIQUE27, 4, 4
 WEDGE_OBLIQUE63, 4, 4
 WEDGE_OBLIQUE117, 4, 4
@@ -2013,7 +2017,7 @@ WEDGE_OBLIQUE117, 2, 4
 WEDGE_OBLIQUE117, 6, 4
                 </code></pre></li>
                 <li>横向 4x4 亮度分块更多（4~15）：</li>
-                <li><pre><code>
+                <li><pre><code class="language-cpp">
 WEDGE_OBLIQUE27, 4, 4
 WEDGE_OBLIQUE63, 4, 4
 WEDGE_OBLIQUE117, 4, 4
@@ -2032,7 +2036,7 @@ WEDGE_OBLIQUE117, 2, 4
 WEDGE_OBLIQUE117, 6, 4
                 </code></pre></li>
                 <li>数量相等（4~15）：</li>
-                <li><pre><code>
+                <li><pre><code class="language-cpp">
 WEDGE_OBLIQUE27, 4, 4
 WEDGE_OBLIQUE63, 4, 4
 WEDGE_OBLIQUE117, 4, 4
@@ -2100,7 +2104,7 @@ WEDGE_OBLIQUE117, 6, 4
             <!--<button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：最大像素值的四分之一</button>
             <div class="coll-content">
                 <p>通过该式得到：<span class="text-blue-math">\( 1 &lt;&lt; \left( \text{BitDepth}-1 \right)-1 \)</span></p>
-                <pre><code>
+                <pre><code class="language-powershell">
 // # PowerShell 例子：
 // PS > $D = 10;
 // PS > 1 -shl ($D-1)-1;
@@ -2177,7 +2181,7 @@ WEDGE_OBLIQUE117, 6, 4
 
             <button type="button" class="collapsible border-main rounded-3 mb-3">点击展开/折叠内容：SMOOTH_PRED 插值，Round2 函数伪代码</button>
             <div class="coll-content">
-                <pre><code>
+                <pre><code class="language-cpp">
 // SMOOTH_V_PRED
 smoothPred = smWeights[i] * AboveRow[j] + (256-smWeights[i]) * LeftCol[h-1]
 pred[i][j] = Round2(smoothPred, 8) // 约分
@@ -2190,8 +2194,8 @@ pred[i][j] = Round2(smoothPred, 8) // 约分
 smoothPred = smWeights[i] * AboveRow[j] + (256-smWeights[i]) * LeftCol[h-1] + smWeights[j] * LeftCol[i] + (256-smWeights[j]) * AboveRow[w-1]
 pred[i][j] = Round2(smoothPred, 9) // 约分的同时取平均
                 </code></pre>
-                <p>Round2 类似于取模 modulus，将输入 <span class="text-blue-math">\(x\)</span> <i>约分</i>到最接近的 <span class="text-blue-math">\(2^n\)</span> 倍数（如 <span class="text-blue-math">\(n=3\)</span> 则为逼近 8 倍数的数），然后通过 <span class="text-blue-math">\(+ 2^{n-1}\)</span> 实现对齐偏移。也代表通过二次幂转换十进制到二进制 bits 的大小</p>
-                <pre><code>
+                <!--<p>Round2 类似于取模 modulus，将输入 <span class="text-blue-math">\(x\)</span> <i>约分</i>到最接近的 <span class="text-blue-math">\(2^n\)</span> 倍数（如 <span class="text-blue-math">\(n=3\)</span> 则为逼近 8 倍数的数），然后通过 <span class="text-blue-math">\(+ 2^{n-1}\)</span> 实现对齐偏移。也代表通过二次幂转换十进制到二进制 bits 的大小</p>
+                <pre><code class="language-powershell">
 // 约分并对其到二进制下 n 的倍数
 Round2(x,n) = floor((x+2^(n-1)) / 2^n)
 
@@ -2201,7 +2205,7 @@ Round2(x,n) = floor((x+2^(n-1)) / 2^n)
 // 154
 
 // 注：154*8 = 1232; 155*8 = 1240;
-                </code></pre>
+                </code></pre>-->
             </div>
             
             <h3>帧内预测——DC 模式</h3>
@@ -2224,7 +2228,7 @@ Round2(x,n) = floor((x+2^(n-1)) / 2^n)
             </div>
 
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：Paeth 插值伪代码</button>
-            <div class="coll-content"><pre><code>
+            <div class="coll-content"><pre><code class="language-cpp">
 base = AboveRow[j] + LeftCol[i] – AboveRow[-1]
 pLeft = Abs(base – LeftCol[i]) // abs(A-C)
 pTop = Abs(base – AboveRow[j]) // abs(L-C)
@@ -2400,8 +2404,8 @@ else
                     </li>
                 </ol>
                 <p>滤镜如下表：</p>
-                <pre><code>Intra_Filter_Taps[ INTRA_FILTER_MODES ][ 8 ][ 7 ] =
-{
+                <pre><code class="language-cpp">
+Intra_Filter_Taps[ INTRA_FILTER_MODES ][ 8 ][ 7 ] = {
     {
         { -6, 10, 0, 0, 0, 12, 0 },
         { -5, 2, 10, 0, 0, 9, 0 },
@@ -2466,7 +2470,7 @@ else
 
             <!--<button type="button" class="collapsible border-main rounded-3">点击展开/折叠内容：Round2Signed 函数伪代码</button>
             <div class="coll-content">
-                <p>Round2 函数的文本说明见帧内预测——平滑模式</p><pre><code>
+                <p>Round2 函数的文本说明见帧内预测——平滑模式</p><pre><code class="language-cpp">
 Round2Signed(x,n) = {
     Round2(x,n); x&gt;=0
    -Round2(-x,n); x&lt;0
@@ -2639,7 +2643,7 @@ Quantizer_Matrix[ 15 ][ 2 ][ QM_TOTAL_SIZE ] = {
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：QIndex、量化步长与量化矩阵之间的关系</button>
             <div class="coll-content">
                 <p>以下是得到 QIndex 后的一些相关 AV1 代码，语法元素见 <a href="https://aomediacodec.github.io/av1-spec/#quantization-params-syntax">AV1 Spec</a>。</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-cpp">
 quantization_params( ) {
     base_q_idx // 获取 QIndex
     DeltaQYDc = read_delta_q( ) // 获取 QIndex 偏移
@@ -2686,7 +2690,7 @@ read_delta_q( ) { // 获取 QIndex，未设置则返回 0
 }
                 </code></pre>
                 <p>将量化步长索引 QIndex 转给 <code>aom_qmatrix</code> 函数，以获取量化矩阵。语法元素见 <a href="https://github.com/mozilla/aom/blob/46b7bb243b39929c02d6decc1bdb2e39e11540d6/av1/common/quant_common.h">github.com/mozilla</a>。</p>
-                <pre><code>
+                <pre><code class="language-cpp">
 #if CONFIG_AOM_QM
 // 计算出量化矩阵范围限制（first，last 对应参数 --qm-min，--qm-max）
 static INLINE int aom_get_qmlevel(int qindex, int first, int last) {
@@ -2709,7 +2713,7 @@ qm_val_t *aom_qmatrix(struct AV1Common *cm, int qindex, int comp, TX_SIZE tx_siz
 #endif
                 </code></pre>
                 <p><i>获取量化、逆量化矩阵</i>：将量化步长索引映射到全局量化矩阵——<code>gqmatrix</code> 序列。语法元素见 <a href="https://github.com/mozilla/aom/blob/46b7bb243b39929c02d6decc1bdb2e39e11540d6/av1/common/quant_common.c">github.com/mozilla</a>。</p>
-                <pre><code>
+                <pre><code class="language-cpp">
 #if CONFIG_AOM_QM
 qm_val_t *aom_iqmatrix(AV1_COMMON *cm, int qmlevel, int is_chroma, TX_SIZE tx_size, int is_intra) {
     // 根据量化强度、平面类型区分、帧内帧间区分给出逆量化矩阵
@@ -2725,7 +2729,7 @@ qm_val_t *aom_qmatrix(AV1_COMMON *cm, int qmlevel, int is_chroma, TX_SIZE tx_siz
                 </code></pre>
                 <p>使用 <code>giqmatrix</code>、<code>gqmatrix</code> 的原因不明，推测是为了节约内存。</p>
                 <!--<p>由于完整量化矩阵的序列特别大，所以有对其进行省略的量化矩阵变量，定义如下（没能找到赋值代码）。语法元素见 <a href="https://github.com/mozilla/aom/blob/46b7bb243b39929c02d6decc1bdb2e39e11540d6/av1/common/onyxc_int.h">github.com/mozilla</a>：</p>
-                <pre><code>
+                <pre><code class="language-cpp">
 #if CONFIG_AOM_QM
     // 全局逆量化、量化矩阵，主要由编码器支持的矩阵分级数量，颜色分量数量（亮度、色度），未知值，以及变换块类型总数决定
     qm_val_t *giqmatrix[NUM_QM_LEVELS][2][2][TX_SIZES_ALL];
@@ -2784,7 +2788,7 @@ qm_val_t *aom_qmatrix(AV1_COMMON *cm, int qmlevel, int is_chroma, TX_SIZE tx_siz
                     </tbody>
                 </table>
                 <p class="text-gray-side mt-0 align-items-center">表：deNorm 的值为 1、2 或 4，代表变换块大小不同时的强度变化。见 <a href="https://wikidocs.net/71452">Wikidocs</a></p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-cpp">
 for(i=0; i &lt; th; i++) { // 遍历分块宽，高
     for(j=0; j &lt; tw; j++) {
         // 获取量化值
@@ -2821,7 +2825,7 @@ for(i=0; i &lt; th; i++) { // 遍历分块宽，高
                     <li>由于每种视频编码映射的量化强度不同，所以该图表无法简单地与其它编码比较</li>
                     <li>QP 映射到 QIndex 时有 QP 偏移，以及 QIndex 偏移两类偏移值</li>
                 </ul>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-cpp">
 Dc_Qlookup[ 3 ][ 256 ] = { // 解码，取值位深：8~12 → 0~2，索引号：0~255
     { // 强度 4~1336，最低强度 4 可能通 x264/5 的“--qp 4”（最低有损量化）
         4, 8, 8, 9, 10, 11, 12, 12, 13, 14, 15, 16,
@@ -3062,16 +3066,16 @@ static const int qp_to_qindex[] = { // 索引号
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：分瓣级别与 av1_get_qindex 函数</button>
             <div class="coll-content">
                 <p>0~2 为低级，3~14 为中级，15 及以上为高级。低中级的平面的熵编码按倒序扫描顺序编码，高级平面按顺序扫描顺序编码。熵编码时与 x265 一样使用零阶指数哥伦布编码（见 x265 教程）转换到二进制。</p>
-                <pre><code class="text-smaller">
-    // 参数：分瓣级别（可选），分瓣 ID，基础量化强度索引号（见上表）
-    int av1_get_qindex(const struct segmentation *seg, int segment_id, int base_qindex) {
-        if (segfeature_active(seg, segment_id, SEG_LVL_ALT_Q)) { // 分瓣模式开
-            const int data = get_segdata(seg, segment_id, SEG_LVL_ALT_Q); // 分瓣中的量化值偏移设定
-            const int seg_qindex = seg->abs_delta == SEGMENT_ABSDATA ? data : base_qindex + data; // 直接使用绝对值或计算偏移结果
-            return clamp(seg_qindex, 0, MAXQ); // 限制偏移强度到合理范围并返回
-        }
-        else { return base_qindex; } // 无偏移 
+                <pre><code class="text-smaller language-cpp">
+// 参数：分瓣级别（可选），分瓣 ID，基础量化强度索引号（见上表）
+int av1_get_qindex(const struct segmentation *seg, int segment_id, int base_qindex) {
+    if (segfeature_active(seg, segment_id, SEG_LVL_ALT_Q)) { // 分瓣模式开
+        const int data = get_segdata(seg, segment_id, SEG_LVL_ALT_Q); // 分瓣中的量化值偏移设定
+        const int seg_qindex = seg->abs_delta == SEGMENT_ABSDATA ? data : base_qindex + data; // 直接使用绝对值或计算偏移结果
+        return clamp(seg_qindex, 0, MAXQ); // 限制偏移强度到合理范围并返回
     }
+    else { return base_qindex; } // 无偏移 
+}
                 </code></pre>
             </div>
 
@@ -3364,7 +3368,7 @@ static const int qp_to_qindex[] = { // 索引号
                     <li><code class="code-bold">PARTITION_VERT_4</code></li>
                 </ol>
                 <p>对比 64x64 块的上下文出字概率结果，以及实际用于计算的整数表：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-cpp">
 /**
  * { 换算为 0~1 范围：
  *     { 0.615, 0.657, 0.704, 0.902, 0.910, 0.923, 0.931, 0.942, 0.968, 1, 0 }, Row 0：初始状态，无 ctx
@@ -3396,7 +3400,7 @@ Default_Partition_W64_Cdf[ PARTITION_CONTEXTS ][ 11 ] = {
 
                 <h4>（2/6）残差编码开关元素</h4>
                 <p>判断该分块是否需要执行残差编码，早在变换块中判断，并发送 <code>all_zero</code> 旗标到此处。由于冠军个分块并没有预测模式可用，所以残差计算不会进行，得到“跳过 Skip 模式”；因此，选择下表中第 2 列的 32768，也就是 PDF 的 1097（0.031）。</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller class="language-cpp"">
 /**
  * 换算为 0~1 范围
  *{
@@ -3507,7 +3511,7 @@ Default_Skip_Cdf[ SKIP_CONTEXTS ][ 3 ] = {
                 </table>
                 <ol class="text-smaller" start="13"><li>“Palette mode”：伪帧内编码，不在熵编码列表里</li></ol>
                 <p class="mb-0">以及上下文配置：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-cpp">
 /**
  * 第 1 排换算为 0~1 范围：
  * 0.476, 0.520, 0.590, 0.617, 0.631, 0.644, 0.666, 0.709, 0.738, 0.860, 0.888, 0.930, 1, 0 顶块 DC/SMOOTH/PAETH，左块 DC/SMOOTH/PAETH
@@ -3562,7 +3566,7 @@ Default_Intra_Frame_Y_Mode_Cdf[ INTRA_MODE_CONTEXTS ][ INTRA_MODE_CONTEXTS ][ IN
                     <li>是否使用了特殊预测模式（如色度填亮度模式）</li>
                 </ul>  
                 <!--UVMode 与 YMode 同为 <code class="code-bold">PREDICTION_MODE</code> 类的枚举器-->
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-cpp">
 /**
  * 非色度填亮度模式（Non-CFL）所用的表格，使用 CFL 则更换为 Default_Uv_Mode_Cfl_Allowed_Cdf
  * 0.691, 0.737, 0.774, 0.783, 0.793, 0.809, 0.826, 0.852, 0.862, 0.917, 0.944, 0.975, 1, 0 Y-DC
@@ -3609,7 +3613,7 @@ Default_Uv_Mode_Cfl_Not_Allowed_Cdf[ INTRA_MODES ][  UV_INTRA_MODES_CFL_NOT_ALLO
 
                 <h4>（5/6）变换块深度元素 TX_DEPTH</h4>
                 <p class="mb-0">变换块有 3 种分块深度，对应概率表：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-cpp">
 /**
  * 0.176, 0.350, 1, 0
  * 0.176, 0.350, 1, 0
@@ -4682,7 +4686,7 @@ int av1_compute_rd_mult_based_on_qindex(const AV1_COMP *cpi, int qindex) {
             <h5>（8/12——1/7）QIndex 偏移</h5>
             <p>相比于 AVC、HEVC 偏移 QP，QIndex 的精度比 QP 高 4 倍。同时，使用时应该注意 <code>Dc_Qlookup</code> 与 <code>Ac_Qlookup</code> 表格在不同位深下的替换（强度变更），并注意量化步长曲线走向与 AVC、HEVC 量化步长曲线的区别。</p>
             <code class="code-bold">--use-fixed-qindex-offsets</code>
-            <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~2，默认 0：关&gt;启用量化步长索引 QIndex 偏移。</p>
+            <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~2，默认 0：编码器设定 QIndex&gt;指定量化步长索引 QIndex 的取值方法——1：用户指定 QP 常数值，并使用下列偏移参数调整 QIndex；2：编码器计算 QP，并使用下列偏移参数调整 QIndex</p>
             <code class="code-bold">--key-frame-qindex-offset</code>；<code class="code-bold">--key-frame-chroma-qindex-offset</code>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 -64~63，默认 0&gt;亮度与色度平面关键帧 QIndex 偏移，决定量化步长大小。</p>
             <code class="code-bold">--luma-y-dc-qindex-offset</code>；<code class="code-bold">--luma-y-ac-qindex-offset</code>；<br>
@@ -4708,7 +4712,7 @@ int av1_compute_rd_mult_based_on_qindex(const AV1_COMP *cpi, int qindex) {
                     <ul><li>SVT-AV1-PSY Tune 4（静态图像微调）会调用该曲线</li></ul>
                 </li>
             </ul>
-            <pre><code class="text-smaller">
+            <pre><code class="text-smaller language-cpp">
 switch (curve) {
     case 1:
         qstep_ratio =
@@ -4720,7 +4724,10 @@ switch (curve) {
         break;
     default:
         qstep_ratio =
-            pow(1.018, strengths[strength] * (-10 * log2((double)variance) + 80));
+            pow(
+                1.018,
+                strengths[strength] * (-10 * log2((double)variance) + 80)
+            );
         break;
 }
             </code></pre>
@@ -4768,7 +4775,6 @@ switch (curve) {
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~100，默认 50&gt;指定 Capped CRF 模式下，判定码率大小为超标的百分比。</p>
 
             <h5>（8/12——6/7）重编码环路级别</h5>
-            <p>TODO：分析源码查证参数说明，可能与编码 TU 有关。</p>
             <code class="code-bold">&#45;&#45;recode-loop</code>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~100，默认 0：关&gt;<span class="text-red-emph">猜测：</span>当编码结果与率控制目标差异过大（码率过低、过高、解码用时低于或高于预期）。</p>
             <ul class="list-dotless text-smaller">
@@ -4782,7 +4788,7 @@ switch (curve) {
             <code class="code-bold">--tune</code>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~2，默认 1：PSNR（客观）&gt;调整率失真优化对失真（rdmult）的定义方法，以及更改一些内部参数（VQ 涉及更改去块滤镜判断锐度级别、SSIM 涉及到更改 MiRow、MiCol（Marcoblock Index）大小）——0：心理视觉优化 Visual quality（主观），2：SSIM。</p>
             <code>coding_loop.c</code>
-            <pre><code class="text-smaller">
+            <pre><code class="text-smaller language-cpp">
 if (pcs->ppcs->blk_lambda_tuning) {
     // 复制当前块几何信息与位置到模式决策
     md_ctx->blk_geom  = ed_ctx->blk_geom;
@@ -4803,7 +4809,7 @@ else if (pcs->ppcs->scs->static_config.tune == 2) { // tune 2
 }
             </code></pre>
             <code>enc_handle.c</code>
-            <pre><code class="text-smaller">
+            <pre><code class="text-smaller language-cpp">
 static void derive_vq_params(SequenceControlSet* scs) {
     VqCtrls* vq_ctrl = &scs->vq_ctrls;
 
@@ -4836,7 +4842,7 @@ static void derive_vq_params(SequenceControlSet* scs) {
             </code></pre>
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：模式决策块间差异稳态化控制</button>
             <div class="coll-content"><code>enc_dec_process.c</code>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-cpp">
 static void perform_pred_depth_refinement(SequenceControlSet *scs, PictureControlSet *pcs, ModeDecisionContext *ctx, uint32_t sb_index) {
     MdcSbData *results_ptr = &ctx->mdc_sb_array;
     uint32_t   blk_index   = 0; // 当前块序号
@@ -4848,7 +4854,8 @@ static void perform_pred_depth_refinement(SequenceControlSet *scs, PictureContro
         if (ctx->disallow_4x4) {
             memset(results_ptr->consider_block, 0, sizeof(uint8_t) * scs->max_block_cnt);
             memset(results_ptr->refined_split_flag, 1, sizeof(uint8_t) * scs->max_block_cnt);
-        } else {
+        }
+        else {
             // 遍历分块并标记大于 4x4 的块
             while (blk_index &lt; scs->max_block_cnt) {
                 const BlockGeom *blk_geom = get_blk_geom_mds(blk_index);
@@ -4859,7 +4866,8 @@ static void perform_pred_depth_refinement(SequenceControlSet *scs, PictureContro
                 blk_index += split_flag ? blk_geom->d1_depth_offset : blk_geom->ns_depth_offset;
             }
         }
-    } else {
+    }
+    else {
         // 启用 4x4 细分块——重设所有块的分块标记为默认，后续根据模式决策与预测块序列细分（md_blk_arr_nsq）
         while (blk_index &lt; scs->max_block_cnt) { // 遍历并加载默认值
             const BlockGeom *blk_geom                  = get_blk_geom_mds(blk_index);
@@ -4900,7 +4908,8 @@ static void perform_pred_depth_refinement(SequenceControlSet *scs, PictureContro
                     // 选定的深度应该可用，除非数据无效（如超出序列范围）。因此需要移除父子结构。
                     if (!ctx->cost_avail[blk_geom->sqi_mds]) {
                         s_depth = e_depth = 0;
-                    } else {
+                    }
+                    else {
                         if (ctx->avail_blk_flag[blk_geom->sqi_mds]) {
                             // 当前块可用旗标。依赖已测试区块信息的决策应在此处进行（?）
                             // 非方形分块的分块成本可能来自 H/V，而方形块没有分块成本信息（?）
@@ -4931,12 +4940,14 @@ static void perform_pred_depth_refinement(SequenceControlSet *scs, PictureContro
                                 e_depth = (blk_geom->sq_size &lt;= 64) ? 0
                                     : (blk_geom->sq_size == 128)    ? MIN(1, e_depth)
                                                                     : e_depth;
-                            } else if (ctx->depth_removal_ctrls.disallow_below_32x32) {
+                            }
+                            else if (ctx->depth_removal_ctrls.disallow_below_32x32) {
                                 e_depth = (blk_geom->sq_size &lt;= 32) ? 0
                                     : (blk_geom->sq_size == 64)     ? MIN(1, e_depth)
                                     : (blk_geom->sq_size == 128)    ? MIN(2, e_depth)
                                                                     : e_depth;
-                            } else if (ctx->depth_removal_ctrls.disallow_below_16x16) {
+                            }
+                            else if (ctx->depth_removal_ctrls.disallow_below_16x16) {
                                 e_depth = (blk_geom->sq_size &lt;= 16) ? 0
                                     : (blk_geom->sq_size == 32)     ? MIN(1, e_depth)
                                     : (blk_geom->sq_size == 64)     ? MIN(2, e_depth)
@@ -5014,7 +5025,7 @@ static void perform_pred_depth_refinement(SequenceControlSet *scs, PictureContro
 
             <code class="code-bold">--lambda-scale-factors</code>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;逗号分隔整数×128，默认 128,...,128：关&gt;指定各种帧类型下，精确到帧的的率失真斜度缩放值。“各种帧类型”代表 <code>SvtAv1FrameUpdateType</code> 下的类型。每个值会被编码器除以 128，所以默认值实际上是 1。</p>
-            <pre><code class="text-smaller">
+            <pre><code class="text-smaller language-cpp">
 typedef enum SvtAv1FrameUpdateType {
     SVT_AV1_KF_UPDATE, // 关键帧
     SVT_AV1_LF_UPDATE, // 上帧
@@ -5062,7 +5073,7 @@ typedef enum SvtAv1FrameUpdateType {
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 2~5，默认 4，<span class="text-blue-emph"><code>&#45;&#45;preset 12~13</code> 下默认 5</span>，<span class="text-red-emph">覆盖<code>&#45;&#45;fast-decode</code>，被<code>&#45;&#45;pred-struct</code>覆盖</span>&gt;指定每个 GOP 于底层之上的分层预测结构层数。越高则帧间冗余功能越强、尖塔混合参考帧越多、负责解码每个 GOP 的 OBU 越多、编码速度越慢、解码压力越大（带宽压力越小）、串流时的网络信号质量要求越高。类似于设定连续 B 帧长度——2: 共 3 层，3: 共 4 层，5: 共 6 层。</p>
             <code class="code-bold">&#45;&#45;pred-struct</code>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 1~2，默认 2，<span class="text-red-emph">覆盖 <code>--hierarchical-levels</code></span>&gt;指定帧间预测模式——1: 低延迟编解码（限为单层，关闭混合参考模式，并影响一些编码模式的强度，映射到 <code>rtc_tune = true</code>、<code>LOW_DELAY_B</code>），2: 支持随机访问（不限制，开启混合参考模式）。</p>
-            <pre><code class="text-smaller">
+            <pre><code class="text-smaller language-cpp">
 /* 
  * 指定帧间预测模式，definitions.h 中为 PredStructure
  */
@@ -5121,7 +5132,7 @@ typedef enum SvtAv1PredStructure {
 
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：sharpness 相关源码分析</button>
             <div class="coll-content"><code>deblocking_filter.c</code>：设定环路滤镜强度
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-cpp">
 EbErrorType svt_av1_pick_filter_level(EbPictureBufferDesc *srcBuffer, PictureControlSet *pcs, LpfPickMethod method) {
     // ...省略...
     SequenceControlSet *scs = pcs->scs;
@@ -5144,7 +5155,7 @@ EbErrorType svt_av1_pick_filter_level(EbPictureBufferDesc *srcBuffer, PictureCon
 }
                 </code></pre>
                 <code>deblocking_common.c</code>：遍历每个可能的强度（lvl）以设定滤镜值
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-cpp">
 void svt_aom_update_sharpness(LoopFilterInfoN *lfi, int32_t sharpness_lvl) {
     int32_t lvl;
 
@@ -5177,7 +5188,7 @@ void svt_aom_update_sharpness(LoopFilterInfoN *lfi, int32_t sharpness_lvl) {
 }
                 </code></pre>
                 <code>md_config_process.c</code>：配置量化相关强度
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-cpp">
 void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth, int32_t y_dc_delta_q, int32_t u_dc_delta_q, int32_t u_ac_delta_q, int32_t v_dc_delta_q, int32_t v_ac_delta_q, Quants *const quants, Dequants *const deq) {
     int32_t i, q, quant_qtx;
 
@@ -6614,7 +6625,7 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
             <div class="coll-content">
                 <h4>（2/2）将 XPSNR 分数转换回线性 1~100</h4>
                 <p>将 dB 直接转换为线性会出现分数指数级增减，导致得分还是和 dB 一样不直观的问题，因此这里将 10~50 dB 的范围直接映射到 0~100 分的得分区间实现。这种方式虽然没有考虑 10bit 下的算法区别，但 XPSNR 在计算时已经统计了这一部分，因此这种映射法的失真不会特别离谱，而是类似于观察 dB 值的主观结果。此方法最终没有使用，但此处的优良分级将会被测试环节沿用。</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-cpp">
 param(
     [Parameter(Position=0, Mandatory=$true)][double]$XPSNR_dB
 )
@@ -6706,7 +6717,7 @@ InputValue    Score
                 <li><b>色彩空间转换</b>：YUV 色彩空间的源需要经过 YUV → RGB → Linear RGB → XYB 共 3 道有损转换，耗费了大量算力和内存，并且破坏了可靠性</li>
             </ul>
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：PowerShell 与 Image Magick 批量嵌入 ICC 配置</button>
-            <div class="coll-content"><pre><code class="text-smaller">
+            <div class="coll-content"><pre><code class="text-smaller language-powershell">
 # 将 Image Magick 添加到环境变量，Image Magick 路径添加到环境变量中的 PATH 序列
 # PowerShell 批量将 sRGB 图片嵌入 sRGB ICC 配置，并禁止 Magick 自动将图片转换为灰阶
 # 指定不转换：在导出部分添加前缀，如 PNG24:output.png
@@ -6814,7 +6825,7 @@ for ($i=1; $i -le $frames; $i++) {
             </ul>
             <h5>（2/7——3/3）漫画材质动画：</h5>
             <ul>
-                <li>简单：氷菓 限定版 Volume 1\STREAM\00002.m2ts 1920x1080 23.976fps 8bit 420（AVC 37.4 Mbps）
+                <li>简单：HYOUKA 限定版 Volume 1\STREAM\00002.m2ts 1920x1080 23.976fps 8bit 420（AVC 37.4 Mbps）
                     <ul>
                         <li>几乎所有场景含有明确的前景、静态场景偏多、前景聚焦点含锐利细节</li>
                         <li>©米澤穂信・角川書店／神山高校古典部 OB 会</li>   
@@ -6852,7 +6863,7 @@ for ($i=1; $i -le $frames; $i++) {
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（4/7）转换 ST.2084 PQ 到 Bt.709</button>
             <div class="coll-content">
                 <h4>（4/7）转换 ST.2084 PQ 到 Bt.709</h4>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\SolLevante_HDR10_r2020_ST2084_UHD_24fps_1000nit.mov
 -vf "format=yuv444p12le,
 zscale=rin=tv:r=full:tin=smpte2084:min=bt2020nc:pin=bt2020,
@@ -6867,7 +6878,7 @@ format=yuv420p10le"
             <div class="coll-content">
                 <h4>（5/7）FFV1 编码中间源</h4>
                 <p>由于 SSIMULACRA2_rs 只能使用 LSMAS 解码，而 LSMAS 解码不支持 <code>.yuv</code> 文件，因此这些源需要经过加工才能使用（当然为了数据可靠，曾经完成的测试也一并要重做），如：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\SolLevante_HDR10_r2020_ST2084_UHD_24fps_1000nit.mov ^
 -vf "format=yuv444p12le,
 zscale=rin=tv:r=full:tin=smpte2084:min=bt2020nc:pin=bt2020,
@@ -6890,7 +6901,7 @@ Output #0, matroska, to '.\SolLevante_yuv420p10le_bt709_3840x2160_24fps_yuv420p1
 frame= 6314 fps=6.6 q=-0.0 Lsize=28020319KiB time=00:04:23.08 bitrate=872508.5kbits/s speed=0.274x
                 </code></pre>
                 <p>对于 LSMAS 不认识的 RGB 色彩空间，需要在源上预先转换到 yuv420p：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\Elephants-Dream_1920x1080_24fps_8bit_rgb.video+audio.mkv ^
 -pix_fmt yuv420p ^
 -c:v ffv1 -context 1 -level 3 -g 1 ^
@@ -6931,7 +6942,7 @@ ffmpeg -i .\Elephants-Dream_1920x1080_24fps_8bit_rgb.video+audio.mkv ^
             <h4>（7/7）XPSNR、VMAF 对齐时间基的使用方法</h4>
             <p>使用 ffmpeg 测试 XPSNR、VMAF 时，源和编码结果的帧率虽然一样，但时间基 Time Base 可能完全不同，导致一些匪夷所思的跑分，以及“三帧烂一帧”的规律。使用 <code>ffprobe -v debug -show_streams .\视频.mkv</code> 命令可以看出，FFV1 time_base = 1/1000; SVT-AV1 time_base = 1/24，因此在测试的命令中添加手动对齐命令是有必要的。</p>
             <p>XPSNR + VF-FPS + VF-SetPTS：手动提供视频帧率到 24fps，手动指定 setpts 到两个 time_base 的积（1/1000 * 1/24 = 1/24000）：</p>
-            <pre><code>
+            <pre><code class="language-powershell">
 ffmpeg -i .\源视频.mkv ^
 -i .\压缩后.ivf" ^
 -lavfi "[0:v]setpts=N*(1/24000)[src]; [1:v]setpts=N*(1/24000)[enc]; [src][enc]xpsnr=stats_file=-" ^ 
@@ -6939,7 +6950,7 @@ ffmpeg -i .\源视频.mkv ^
             </code></pre>
             <p>注：不精确指定 setpts 不会导致分数统计错误，但可以避免 ffmpeg 产生大量的“DTS 未单调增加”报错。</p>
             <p>VMAF + VF-FPS + VF-SetPTS：手动提供分辨率以及帧率，手动指定时间基：</p>
-            <pre><code>
+            <pre><code class="language-powershell">
 ffmpeg -i .\源视频.mkv ^
 -i .\压缩后.ivf" ^
 -lavfi "[0:v]setpts=N*(1/24000)[src]; [1:v]setpts=N*(1/24000)[enc]; [src][enc]libvmaf=model=version=vmaf_v0.6.1\\:name=vmaf_1080p|version=vmaf_4k_v0.6.1\\:name=vmaf_4k" ^ 
@@ -6950,7 +6961,7 @@ ffmpeg -i .\源视频.mkv ^
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（1/7）x265 v4.1——SolLevante</button>
             <div class="coll-content">
                 <p><code>--crf 22</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 x265 --profile main10 --high-tier --tu-intra-depth 4 --tu-inter-depth 4 --max-tu-size 16 --tskip --tskip-fast --me umh --subme 3 --merange 56 --weightb --max-merge 5 --early-skip --ref 3 --no-open-gop --min-keyint 5 --keyint 288 --fades --bframes 16 --b-adapt 2 --bframe-bias 20 --constrained-intra --b-intra --crf 22 --crqpoffs -4 --cbqpoffs -2 --ipratio 1.6 --pbratio 1.3 --cu-lossless --psy-rdoq 2.3 --rdoq-level 2 --hevc-aq --aq-strength 0.9 --qg-size 8 --rd 3 --limit-modes --limit-refs 1 --rskip 1 --rc-lookahead 60 --rect --amp --psy-rd 1.5 --splitrd-skip --rdpenalty 2 --deblock -1:0 --limit-sao --sao-non-deblock --input .\SolLevante_yuv420p10le_bt709.yuv --input-depth 10 --input-res 3840x2160 --input-csp i420 --fps 24 --output .\SolLevante_yuv420p10le_bt709_crf22.hevc
 
 x265 [INFO]: frame I:     67, Avg QP:25.05  kb/s: 50564.78                      MB [647.82 MB]
@@ -6966,7 +6977,7 @@ VMAF 4k: 98.125428, VMAF 1080p: 96.795521
 SSIMULACRA2_rs: Mean: 55.88148851 Median: 52.56807147 Std Dev: 34.29008946 5th Percentile: -2.62235865 95th Percentile: 100.00000000
                 </code></pre>
                 <p><code>--crf 18</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 x265 --profile main10 --high-tier --tu-intra-depth 4 --tu-inter-depth 4 --max-tu-size 16 --tskip --tskip-fast --me umh --subme 3 --merange 56 --weightb --max-merge 5 --early-skip --ref 3 --no-open-gop --min-keyint 5 --keyint 288 --fades --bframes 16 --b-adapt 2 --bframe-bias 20 --constrained-intra --b-intra --crf 18 --crqpoffs -4 --cbqpoffs -2 --ipratio 1.6 --pbratio 1.3 --cu-lossless --psy-rdoq 2.3 --rdoq-level 2 --hevc-aq --aq-strength 0.9 --qg-size 8 --rd 3 --limit-modes --limit-refs 1 --rskip 1 --rc-lookahead 60 --rect --amp --psy-rd 1.5 --splitrd-skip --rdpenalty 2 --deblock -1:0 --limit-sao --sao-non-deblock --input .\SolLevante_yuv420p10le_bt709.yuv --input-depth 10 --input-res 3840x2160 --input-csp i420 --fps 24 --output .\SolLevante_yuv420p10le_bt709_crf18.hevc
 
 x265 [INFO]: frame I:     67, Avg QP:21.04  kb/s: 78567.86                      MB [1082.8 MB]
@@ -6986,7 +6997,7 @@ SSIMULACRA2_rs: Mean: 68.87327380 Median: 67.24602694 Std Dev: 23.64012811 5th P
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（2/7）x265 v4.1——Boat</button>
             <div class="coll-content">
                 <p><code>--crf 22</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -y -i .\Netflix_Boat_4096x2160_60fps_10bit_420.video.mkv -c:v libx265 -pix_fmt yuv420p10le -profile:v main10 -x265-params "high-tier=1:ctu=64:tu-intra-depth=4:tu-inter-depth=4:limit-tu=1:rect=1:tskip=1:tskip-fast=1:me=star:subme=5:merange=56:weightb=1:ref=4:max-merge=5:open-gop=0:min-keyint=3:keyint=216:fades=1:bframes=8:b-adapt=2:analyze-src-pics=1:b-intra=1:crf=22:crqpoffs=-3:ipratio=1.2:pbratio=1.5:rdoq-level=2:aq-mode=4:aq-strength=1.1:qg-size=8:rd=5:limit-refs=0:rskip=0:rc-lookahead=43:psy-rd=1.6:deblock=0,-1:limit-sao=1:sao-non-deblock=1:selective-sao=3" -fps_mode passthrough -c:a copy .\Netflix_Boat_10bit_420_crf22.mp4
 
 Metadata:
@@ -7012,7 +7023,7 @@ VMAF 4k: 77.612357, VMAF 1080p: 68.300762
 SSIMULACRA2_rs: Mean: 64.77780339 Median: 63.91098240 Std Dev: 3.68027547 5th Percentile: 60.04055450 95th Percentile: 71.22150529
                 </code></pre>
                 <p><code>--crf 18</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -y -i .\Netflix_Boat_4096x2160_60fps_10bit_420.video.mkv -c:v libx265 -pix_fmt yuv420p10le -profile:v main10 -x265-params "high-tier=1:ctu=64:tu-intra-depth=4:tu-inter-depth=4:limit-tu=1:rect=1:tskip=1:tskip-fast=1:me=star:subme=5:merange=56:weightb=1:ref=4:max-merge=5:open-gop=0:min-keyint=3:keyint=216:fades=1:bframes=8:b-adapt=2:analyze-src-pics=1:b-intra=1:crf=18:crqpoffs=-3:ipratio=1.2:pbratio=1.5:rdoq-level=2:aq-mode=4:aq-strength=1.1:qg-size=8:rd=5:limit-refs=0:rskip=0:rc-lookahead=43:psy-rd=1.6:deblock=0,-1:limit-sao=1:sao-non-deblock=1:selective-sao=3" -fps_mode passthrough -c:a copy .\Netflix_Boat_10bit_420_crf18.mp4
 
 Metadata:
@@ -7042,7 +7053,7 @@ SSIMULACRA2_rs: Mean: 73.25259644 Median: 71.55939769 Std Dev: 3.68909897 5th Pe
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（3/7）x265 v4.1——WindAndNature</button>
             <div class="coll-content">
                 <p><code>--crf 22</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -y -i .\Netflix_WindAndNature_4096x2160_60fps_10bit_420.video.mkv -c:v libx265 -pix_fmt yuv420p10le -profile:v main10 -x265-params "high-tier=1:ctu=64:tu-intra-depth=4:tu-inter-depth=4:limit-tu=1:rect=1:tskip=1:tskip-fast=1:me=star:subme=5:merange=56:weightb=1:ref=4:max-merge=5:open-gop=0:min-keyint=3:keyint=540:fades=1:bframes=8:b-adapt=2:analyze-src-pics=1:b-intra=1:crf=22:crqpoffs=-3:ipratio=1.2:pbratio=1.5:rdoq-level=2:aq-mode=4:aq-strength=1.1:qg-size=8:rd=5:limit-refs=0:rskip=0:rc-lookahead=108:psy-rd=1.6:deblock=0,-1:limit-sao=1:sao-non-deblock=1:selective-sao=3" -fps_mode passthrough -c:a copy .\Netflix_WindAndNature_10bit_420_crf22.mp4
 
 Metadata:
@@ -7068,7 +7079,7 @@ VMAF 4k: 91.383935, VMAF 1080p: 85.874477
 SSIMULACRA2_rs: Mean: 61.03782816 Median: 62.22680342 Std Dev: 4.47912982 5th Percentile: 53.49027011 95th Percentile: 68.77075281
                 </code></pre>
                 <p><code>--crf 18</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -y -i .\Netflix_WindAndNature_4096x2160_60fps_10bit_420.video.mkv -c:v libx265 -pix_fmt yuv420p10le -profile:v main10 -x265-params "high-tier=1:ctu=64:tu-intra-depth=4:tu-inter-depth=4:limit-tu=1:rect=1:tskip=1:tskip-fast=1:me=star:subme=5:merange=56:weightb=1:ref=4:max-merge=5:open-gop=0:min-keyint=3:keyint=540:fades=1:bframes=8:b-adapt=2:analyze-src-pics=1:b-intra=1:crf=18:crqpoffs=-3:ipratio=1.2:pbratio=1.5:rdoq-level=2:aq-mode=4:aq-strength=1.1:qg-size=8:rd=5:limit-refs=0:rskip=0:rc-lookahead=108:psy-rd=1.6:deblock=0,-1:limit-sao=1:sao-non-deblock=1:selective-sao=3" -fps_mode passthrough -c:a copy .\Netflix_WindAndNature_10bit_420_crf18.mp4
 
 Metadata:
@@ -7097,7 +7108,7 @@ SSIMULACRA2_rs: Mean: 68.23241143 Median: 68.96018756 Std Dev: 4.54572816 5th Pe
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（4/7）x265 v4.1——Big-buck-Bunny</button>
             <div class="coll-content">
                 <p><code>--crf 22</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -y -i .\Big-Buck-Bunny_1920x1080_24fps_8bit_yuv420p.mkv -c:v libx265 -profile:v main10 -x265-params "high-tier=1:ctu=64:tu-intra-depth=4:tu-inter-depth=4:limit-tu=1:rect=1:tskip=1:tskip-fast=1:me=star:subme=3:merange=48:weightb=1:ref=4:max-merge=5:open-gop=0:min-keyint=3:keyint=216:fades=1:bframes=8:b-adapt=2:analyze-src-pics=1:b-intra=1:crf=22:crqpoffs=-3:ipratio=1.2:pbratio=1.5:rdoq-level=2:aq-mode=4:aq-strength=1:qg-size=8:rd=5:limit-refs=0:rskip=0:rc-lookahead=44:psy-rd=1.6:deblock=0,-1:limit-sao=1:sao-non-deblock=1:selective-sao=3" -fps_mode passthrough -c:a copy .\Big-Buck-Bunny_1920x1080_24fps_8bit_yuv420_crf22.mp4
 
 Metadata:
@@ -7126,7 +7137,7 @@ VMAF 4k: 87.920378, VMAF 1080p: 82.474976
 SSIMULACRA2_rs: Mean: 77.79793375 Median: 78.10156956 Std Dev: 4.87145655 5th Percentile: 69.98188935 95th Percentile: 83.80652456
                 </code></pre>
                 <p><code>--crf 18</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -y -i .\Big-Buck-Bunny_1920x1080_24fps_8bit_yuv420p.mkv -c:v libx265 -profile:v main10 -x265-params "high-tier=1:ctu=64:tu-intra-depth=4:tu-inter-depth=4:limit-tu=1:rect=1:tskip=1:tskip-fast=1:me=star:subme=3:merange=48:weightb=1:ref=4:max-merge=5:open-gop=0:min-keyint=3:keyint=216:fades=1:bframes=8:b-adapt=2:analyze-src-pics=1:b-intra=1:crf=18:crqpoffs=-3:ipratio=1.2:pbratio=1.5:rdoq-level=2:aq-mode=4:aq-strength=1:qg-size=8:rd=5:limit-refs=0:rskip=0:rc-lookahead=44:psy-rd=1.6:deblock=0,-1:limit-sao=1:sao-non-deblock=1:selective-sao=3" -fps_mode passthrough -c:a copy .\Big-Buck-Bunny_1920x1080_24fps_8bit_yuv420_crf18.mp4
 
 Metadata:
@@ -7159,7 +7170,7 @@ SSIMULACRA2_rs: Mean: 83.24602058 Median: 83.40918464 Std Dev: 3.43829355 5th Pe
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（4/7）x265 v4.1——ElephantsDream</button>
             <div class="coll-content">
                 <p><code>--crf 22</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -y -i .\Elephants-Dream_1920x1080_24fps_8bit_yuv420.mkv -c:v libx265 -profile:v main -x265-params "high-tier=1:ctu=64:tu-intra-depth=4:tu-inter-depth=4:limit-tu=1:rect=1:tskip=1:tskip-fast=1:me=star:subme=3:merange=48:weightb=1:ref=4:max-merge=5:open-gop=0:min-keyint=3:keyint=216:fades=1:bframes=8:b-adapt=2:analyze-src-pics=1:b-intra=1:crf=22:crqpoffs=-3:ipratio=1.2:pbratio=1.5:rdoq-level=2:aq-mode=4:aq-strength=1:qg-size=8:rd=5:limit-refs=0:rskip=0:rc-lookahead=44:psy-rd=1.6:deblock=0,-1:limit-sao=1:sao-non-deblock=1:selective-sao=3" -fps_mode passthrough -c:a copy .\Elephants-Dream_1920x1080_24fps_8bit_yuv420_crf22.mp4
 
 Metadata:
@@ -7189,7 +7200,7 @@ VMAF 4k: 83.679159, 77.135198
 SSIMULACRA2_rs: Mean: 77.79793375 Median: 78.10156956 Std Dev: 4.87145655 5th Percentile: 69.98188935 95th Percentile: 83.80652456
                 </code></pre>
                 <p><code>--crf 18</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -y -i .\Elephants-Dream_1920x1080_24fps_8bit_yuv420.mkv -c:v libx265 -profile:v main -x265-params "high-tier=1:ctu=64:tu-intra-depth=4:tu-inter-depth=4:limit-tu=1:rect=1:tskip=1:tskip-fast=1:me=star:subme=3:merange=48:weightb=1:ref=4:max-merge=5:open-gop=0:min-keyint=3:keyint=216:fades=1:bframes=8:b-adapt=2:analyze-src-pics=1:b-intra=1:crf=18:crqpoffs=-3:ipratio=1.2:pbratio=1.5:rdoq-level=2:aq-mode=4:aq-strength=1:qg-size=8:rd=5:limit-refs=0:rskip=0:rc-lookahead=44:psy-rd=1.6:deblock=0,-1:limit-sao=1:sao-non-deblock=1:selective-sao=3" -fps_mode passthrough -c:a copy .\Elephants-Dream_1920x1080_24fps_8bit_yuv420_crf18.mp4
 
 Metadata:
@@ -7223,7 +7234,7 @@ SSIMULACRA2_rs: Mean: 83.24602058 Median: 83.40918464 Std Dev: 3.43829355 5th Pe
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（6/7）x265 v4.1——MAIDRAGON-S</button>
             <div class="coll-content">
                 <p><code>--crf 22</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -y -i .\TestFootage\MAIDRAGON-S-Vol.3-1920x1080-23.976fps-8bit-420.m2ts -c:v libx265 -pix_fmt yuv420p -profile:v main -x265-params "high-tier=1:tu-intra-depth=4:tu-inter-depth=4:max-tu-size=16:tskip=1:tskip-fast=1:me=umh:subme=3:merange=48:weightb=1:max-merge=5:early-skip=1:ref=3:open-gop=0:min-keyint=5:keyint=288:fades=1:bframes=16:b-adapt=2:bframe-bias=20:b-intra=1:crf=22:crqpoffs=-4:cbqpoffs=-2:ipratio=1.6:pbratio=1.3:cu-lossless=1:psy-rdoq=2.3:rdoq-level=2:hevc-aq=1:aq-strength=0.9:qg-size=8:rd=3:limit-modes=1:limit-refs=1:rskip=1:rc-lookahead=60:rect=1:amp=1:psy-rd=1.5:splitrd-skip=1:rdpenalty=2:deblock=-1,0:limit-sao=1:sao-non-deblock=1" -fps_mode passthrough -an .\MAIDRAGON-S_Vol.3_1920x1080_23.976fps_8bit_420_crf22.mp4
 
 Metadata:
@@ -7248,7 +7259,7 @@ VMAF 4k: 85.672864, VMAF 1080p: 78.839019
 SSIMULACRA2_rs: Mean: 73.91282871 Median: 77.92521321 Std Dev: 12.82405548 5th Percentile: 46.40877591 95th Percentile: 85.66813206
                 </code></pre>
                 <p><code>--crf 18</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -y -i .\TestFootage\MAIDRAGON-S-Vol.3-1920x1080-23.976fps-8bit-420.m2ts -c:v libx265 -pix_fmt yuv420p -profile:v main -x265-params "high-tier=1:tu-intra-depth=4:tu-inter-depth=4:max-tu-size=16:tskip=1:tskip-fast=1:me=umh:subme=3:merange=48:weightb=1:max-merge=5:early-skip=1:ref=3:open-gop=0:min-keyint=5:keyint=288:fades=1:bframes=16:b-adapt=2:bframe-bias=20:b-intra=1:crf=18:crqpoffs=-4:cbqpoffs=-2:ipratio=1.6:pbratio=1.3:cu-lossless=1:psy-rdoq=2.3:rdoq-level=2:hevc-aq=1:aq-strength=0.9:qg-size=8:rd=3:limit-modes=1:limit-refs=1:rskip=1:rc-lookahead=60:rect=1:amp=1:psy-rd=1.5:splitrd-skip=1:rdpenalty=2:deblock=-1,0:limit-sao=1:sao-non-deblock=1" -fps_mode passthrough -an .\MAIDRAGON-S_Vol.3_1920x1080_23.976fps_8bit_420_crf18.mp4
 
 Metadata:
@@ -7274,11 +7285,11 @@ SSIMULACRA2_rs: Mean: 80.15751958 Median: 82.75859474 Std Dev: 8.38815893 5th Pe
                 </code></pre>
             </div>
 
-            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（7/7）x265 v4.1——氷菓</button>
+            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（7/7）x265 v4.1——HYOUKA</button>
             <div class="coll-content">
                 <p><code>--crf 22</code>：</p>
-                <pre><code class="text-smaller">
-ffmpeg -y -i .\氷菓-Vol.4-1920x1080-23.976fps-8bit-420.m2ts -c:v libx265 -pix_fmt yuv420p -profile:v main -x265-params "high-tier=1:tu-intra-depth=4:tu-inter-depth=4:max-tu-size=16:tskip=1:tskip-fast=1:me=umh:subme=3:merange=48:weightb=1:max-merge=5:early-skip=1:ref=3:open-gop=0:min-keyint=5:keyint=288:fades=1:bframes=16:b-adapt=2:bframe-bias=20:b-intra=1:crf=22:crqpoffs=-4:cbqpoffs=-2:ipratio=1.6:pbratio=1.3:cu-lossless=1:psy-rdoq=2.3:rdoq-level=2:hevc-aq=1:aq-strength=0.9:qg-size=8:rd=3:limit-modes=1:limit-refs=1:rskip=1:rc-lookahead=60:rect=1:amp=1:psy-rd=1.5:splitrd-skip=1:rdpenalty=2:deblock=-1,0:limit-sao=1:sao-non-deblock=1" -fps_mode passthrough -an .\氷菓_Vol.4_1920x1080_23.976fps_8bit_420_crf22.mp4
+                <pre><code class="text-smaller language-powershell">
+ffmpeg -y -i .\HYOUKA-Vol.4-1920x1080-23.976fps-8bit-420.m2ts -c:v libx265 -pix_fmt yuv420p -profile:v main -x265-params "high-tier=1:tu-intra-depth=4:tu-inter-depth=4:max-tu-size=16:tskip=1:tskip-fast=1:me=umh:subme=3:merange=48:weightb=1:max-merge=5:early-skip=1:ref=3:open-gop=0:min-keyint=5:keyint=288:fades=1:bframes=16:b-adapt=2:bframe-bias=20:b-intra=1:crf=22:crqpoffs=-4:cbqpoffs=-2:ipratio=1.6:pbratio=1.3:cu-lossless=1:psy-rdoq=2.3:rdoq-level=2:hevc-aq=1:aq-strength=0.9:qg-size=8:rd=3:limit-modes=1:limit-refs=1:rskip=1:rc-lookahead=60:rect=1:amp=1:psy-rd=1.5:splitrd-skip=1:rdpenalty=2:deblock=-1,0:limit-sao=1:sao-non-deblock=1" -fps_mode passthrough -an .\HYOUKA_Vol.4_1920x1080_23.976fps_8bit_420_crf22.mp4
 
 Metadata:
 encoder         : Lavf61.9.104
@@ -7302,8 +7313,8 @@ VMAF 4k: 88.251216, VMAF 1080p: 82.140527
 SSIMULACRA2_rs: Mean: 74.36000528 Median: 75.52608593 Std Dev: 8.47076723 5th Percentile: 60.49981158 95th Percentile: 83.57375015
                 </code></pre>
                 <p><code>--crf 18</code>：</p>
-                <pre><code class="text-smaller">
-ffmpeg -y -i .\氷菓-Vol.4-1920x1080-23.976fps-8bit-420.m2ts -c:v libx265 -pix_fmt yuv420p -profile:v main -x265-params "high-tier=1:tu-intra-depth=4:tu-inter-depth=4:max-tu-size=16:tskip=1:tskip-fast=1:me=umh:subme=3:merange=48:weightb=1:max-merge=5:early-skip=1:ref=3:open-gop=0:min-keyint=5:keyint=288:fades=1:bframes=16:b-adapt=2:bframe-bias=20:b-intra=1:crf=18:crqpoffs=-4:cbqpoffs=-2:ipratio=1.6:pbratio=1.3:cu-lossless=1:psy-rdoq=2.3:rdoq-level=2:hevc-aq=1:aq-strength=0.9:qg-size=8:rd=3:limit-modes=1:limit-refs=1:rskip=1:rc-lookahead=60:rect=1:amp=1:psy-rd=1.5:splitrd-skip=1:rdpenalty=2:deblock=-1,0:limit-sao=1:sao-non-deblock=1" -fps_mode passthrough -an .\氷菓_Vol.4_1920x1080_23.976fps_8bit_420_crf18.mp4
+                <pre><code class="text-smaller language-powershell">
+ffmpeg -y -i .\HYOUKA-Vol.4-1920x1080-23.976fps-8bit-420.m2ts -c:v libx265 -pix_fmt yuv420p -profile:v main -x265-params "high-tier=1:tu-intra-depth=4:tu-inter-depth=4:max-tu-size=16:tskip=1:tskip-fast=1:me=umh:subme=3:merange=48:weightb=1:max-merge=5:early-skip=1:ref=3:open-gop=0:min-keyint=5:keyint=288:fades=1:bframes=16:b-adapt=2:bframe-bias=20:b-intra=1:crf=18:crqpoffs=-4:cbqpoffs=-2:ipratio=1.6:pbratio=1.3:cu-lossless=1:psy-rdoq=2.3:rdoq-level=2:hevc-aq=1:aq-strength=0.9:qg-size=8:rd=3:limit-modes=1:limit-refs=1:rskip=1:rc-lookahead=60:rect=1:amp=1:psy-rd=1.5:splitrd-skip=1:rdpenalty=2:deblock=-1,0:limit-sao=1:sao-non-deblock=1" -fps_mode passthrough -an .\HYOUKA_Vol.4_1920x1080_23.976fps_8bit_420_crf18.mp4
 
 Metadata:
 encoder         : Lavf61.9.104
@@ -7339,7 +7350,7 @@ SSIMULACRA2_rs: Mean: 79.68937613 Median: 80.29604784 Std Dev: 5.62411048 5th Pe
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（1/22）SVT-AV1 v3.0——SolLevante</button>
             <div class="coll-content">
                 <p><code>--preset 3 --crf 35</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\SolLevante_yuv420p10le_bt709_3840x2160_24fps_yuv420p10le.mkv -f yuv4mpegpipe -pix_fmt yuv420p10le -strict unofficial - | SvtAv1EncApp -i - --keyint 12s --crf 35 --preset 3 -b .\SolLevante_yuv420p10le_bt709_CRF35_preset3.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -7358,7 +7369,7 @@ VMAF 4k: 98.234294, VMAF 1080p: 96.876956
 SSIMULACRA2_rs: Mean: 65.97162016 Median: 59.94357483 Std Dev: 23.20466288 5th Percentile: 32.53194259 95th Percentile: 100.00000000
                 </code></pre>
                 <p><code>--preset 3 --crf 30</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\SolLevante_yuv420p10le_bt709_3840x2160_24fps_yuv420p10le.mkv -f yuv4mpegpipe -pix_fmt yuv420p10le -strict unofficial - | SvtAv1EncApp -i - --keyint 12s --crf 30 --preset 3 -b .\SolLevante_yuv420p10le_bt709_CRF30_preset3.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -7380,7 +7391,7 @@ SSIMULACRA2_rs: Mean: 72.01245585 Median: 66.82872302 Std Dev: 18.74429742 5th P
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（2/22）SVT-AV1 v3.0——SolLevante QM</button>
             <div class="coll-content">
                 <p>启用量化矩阵，增加编解码难度：<code>--preset 3 --crf 35 --enable-qm 1</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\SolLevante_yuv420p10le_bt709_3840x2160_24fps_yuv420p10le.mkv -f yuv4mpegpipe -pix_fmt yuv420p10le -strict unofficial - | SvtAv1EncApp -i - --keyint 12s --crf 35 --preset 3 --enable-qm 1 -b .\SolLevante_yuv420p10le_bt709_CRF35_preset3_qm.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -7399,7 +7410,7 @@ VMAF 4k: 98.245816, VMAF 1080p: 96.897842
 SSIMULACRA2_rs: Mean: 66.03889685 Median: 60.02430719 Std Dev: 23.13374066 5th Percentile: 32.57622116 95th Percentile: 98.68322379
                 </code></pre>
                 <p>启用全部量化矩阵，进一步增加编解码难度：<code>--preset 3 --crf 35 --enable-qm 1 --qm-min 0</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\SolLevante_yuv420p10le_bt709_3840x2160_24fps_yuv420p10le.mkv -f yuv4mpegpipe -pix_fmt yuv420p10le -strict unofficial - | SvtAv1EncApp -i - --keyint 12s --crf 35 --preset 3 --enable-qm 1 --qm-min 0 -b .\SolLevante_yuv420p10le_bt709_CRF35_preset3_qmMin0.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -7418,7 +7429,7 @@ VMAF 4k: 98.231956, VMAF 1080p: 96.875528
 SSIMULACRA2_rs: Mean: 65.73858934 Median: 59.78007333 Std Dev: 23.31712901 5th Percentile: 32.03486931 95th Percentile: 98.68322379
                 </code></pre>
                 <p>启用量化矩阵，增加编解码难度：<code>--preset 3 --crf 30 --enable-qm 1</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\SolLevante_yuv420p10le_bt709_3840x2160_24fps_yuv420p10le.mkv -f yuv4mpegpipe -pix_fmt yuv420p10le -strict unofficial - | SvtAv1EncApp -i - --keyint 12s --crf 30 --preset 3 --enable-qm 1 -b .\SolLevante_yuv420p10le_bt709_CRF30_preset3_qm.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -7437,7 +7448,7 @@ VMAF 4k: 98.622843, VMAF 1080p: 97.462467
 SSIMULACRA2_rs: Mean: 72.03421424 Median: 66.91038305 Std Dev: 18.70887673 5th Percentile: 45.24524990 95th Percentile: 100.00000000
                 </code></pre>
                 <p><code>--preset 3 --crf 30 --enable-qm 1 --qm-min 0</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\SolLevante_yuv420p10le_bt709_3840x2160_24fps_yuv420p10le.mkv -f yuv4mpegpipe -pix_fmt yuv420p10le -strict unofficial - | SvtAv1EncApp -i - --keyint 12s --crf 30 --preset 3 --enable-qm 1 -b .\SolLevante_yuv420p10le_bt709_CRF30_preset3_qmMin0.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -7460,7 +7471,7 @@ SSIMULACRA2_rs: Mean: 71.61725400 Median: 66.48754073 Std Dev: 18.99833478 5th P
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（3/22）SVT-AV1 v3.0——SolLevante Tune</button>
             <div class="coll-content">
                 <p><code>--preset 3 --crf 35 --tune 2</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\SolLevante_yuv420p10le_bt709_3840x2160_24fps_yuv420p10le.mkv -f yuv4mpegpipe -strict -1 - | SvtAv1EncApp -i - --keyint 12s --crf 35 --preset 3 --tune 2 -b .\SolLevante_yuv420p10le_bt709_crf35_preset3_tuneSSIM.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -7479,7 +7490,7 @@ VMAF 4k: 98.078654, VMAF 1080p: 96.635140
 SSIMULACRA2_rs: Mean: 65.28679182 Median: 59.20220066 Std Dev: 23.29595566 5th Percentile: 31.85868858 95th Percentile: 100.00000000
                 </code></pre>
                 <p><code>--preset 3 --crf 35 --tune 0</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\SolLevante_yuv420p10le_bt709_3840x2160_24fps_yuv420p10le.mkv -f yuv4mpegpipe -strict -1 - | SvtAv1EncApp -i - --keyint 12s --crf 35 --preset 3 --tune 0 -b .\SolLevante_yuv420p10le_bt709_crf35_preset3_tuneVQ.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -7498,7 +7509,7 @@ VMAF 4k: 98.235196, VMAF 1080p: 96.859568
 SSIMULACRA2_rs: Mean: 66.23793043 Median: 60.04863790 Std Dev: 23.02009876 5th Percentile: 32.76133609 95th Percentile: 98.81171438
                 </code></pre>
                 <p><code>--preset 3 --crf 30 --tune 2</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\SolLevante_yuv420p10le_bt709_3840x2160_24fps_yuv420p10le.mkv -f yuv4mpegpipe -strict -1 - | SvtAv1EncApp -i - --keyint 12s --crf 30 --preset 3 --tune 2 -b .\SolLevante_yuv420p10le_bt709_crf35_preset3_tuneSSIM.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -7516,7 +7527,7 @@ VMAF 4k: 98.078654, VMAF 1080p: 96.635140
 SSIMULACRA2_rs: Mean: 71.49626144 Median: 66.18785330 Std Dev: 18.79315072 5th Percentile: 44.68539708 95th Percentile: 100.00000000
                 </code></pre>
                 <p>VQ：<code>--preset 3 --crf 30 --tune 0</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 SUMMARY --------------------------------- Channel 1  --------------------------------
 Total Frames            Frame Rate              Byte Count              Bitrate
         6314            24.00 fps                712471110              21665.26 kbps
@@ -7537,7 +7548,7 @@ SSIMULACRA2_rs: Mean: 72.33149666 Median: 67.03434155 Std Dev: 18.54564401 5th P
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（4/22）SVT-AV1 v3.0——WindAndNature</button>
             <div class="coll-content">
                 <p><code>--preset 3 --crf 35</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\SolLevante_yuv420p10le_bt709_3840x2160_24fps_yuv420p10le.mkv -f yuv4mpegpipe -strict -1 - | SvtAv1EncApp -i - --keyint 12s --crf 35 --preset 3 -b .\WindAndNature_yuv420p10le_bt709_crf35_preset3.ivf
 
 Metadata:
@@ -7554,7 +7565,7 @@ VMAF 4k: 92.806035, VMAF 1080p: 87.777087
 SSIMULACRA2_rs: Mean: 65.63168941 Median: 67.48283309 Std Dev: 4.11945531 5th Percentile: 58.42780742 95th Percentile: 70.41150630
                 </code></pre>
                 <p><code>--preset 3 --crf 30</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\Netflix_WindAndNature_4096x2160_60fps_10bit_420.video.mkv -c:v libsvtav1 -preset 3 -crf 30 -svtav1-params "keyint=12s" -c:a copy .\WindAndNature_yuv420p10le_bt709_crf30_preset3.mp4
 
 Metadata:
@@ -7575,7 +7586,7 @@ SSIMULACRA2_rs: Mean: 68.92250911Median: 70.75917283 Std Dev: 3.78970924 5th Per
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（5/22）SVT-AV1 v3.0——WindAndNature QM</button>
             <div class="coll-content">
                 <p><code>--preset 3 --crf 35 --enable-qm</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\Netflix_WindAndNature_4096x2160_60fps_10bit_420.video.mkv -f yuv4mpegpipe -pix_fmt yuv420p10le -strict -1 - | SvtAv1EncApp -i - --keyint 12s --crf 35 --enable-qm 1 --preset 3 --progress 2 -b .\WindAndNature_yuv420p10le_bt709_crf35_qm_preset3.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -7594,7 +7605,7 @@ VMAF 4k: 94.393281, VMAF 1080p: 89.852731
 SSIMULACRA2_rs: Mean: 65.62441101 Median: 67.46571858 Std Dev: 4.12340782 5th Percentile: 58.31453649 95th Percentile: 70.38503641
                 </code></pre>
                 <p><code>--preset 3 --crf 35 --enable-qm --qm-min 0</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\Netflix_WindAndNature_4096x2160_60fps_10bit_420.video.mkv -f yuv4mpegpipe -pix_fmt yuv420p10le -strict -1 - | SvtAv1EncApp -i - --keyint 12s --crf 35 --enable-qm 1 --qm-min 0 --preset 3 --progress 2 -b .\WindAndNature_yuv420p10le_bt709_crf35_qm_preset3.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -7613,7 +7624,7 @@ VMAF 4k: 94.281057, VMAF 1080p: 89.713395
 SSIMULACRA2_rs: Mean: 65.50754114 Median: 67.41629557 Std Dev: 4.14355522 5th Percentile: 58.20332960 95th Percentile: 70.29080931
                 </code></pre>
                 <p><code>--preset 3 --crf 30 --enable-qm</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\Netflix_WindAndNature_4096x2160_60fps_10bit_420.video.mkv -f yuv4mpegpipe -pix_fmt yuv420p10le -strict -1 - | SvtAv1EncApp -i - --keyint 12s --crf 30 --enable-qm 1 --preset 3 --progress 2 -b .\WindAndNature_yuv420p10le_bt709_crf35_qm_preset3.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -7632,7 +7643,7 @@ VMAF 4k: 94.757020, VMAF 1080p: 90.344565
 SSIMULACRA2_rs: Mean: 68.91905952 Median: 70.73052286 Std Dev: 3.79137116 5th Percentile: 62.10079590 95th Percentile: 73.08080131
                 </code></pre>
                 <p><code>--preset 3 --crf 30 --enable-qm --qm-min 0</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\Netflix_WindAndNature_4096x2160_60fps_10bit_420.video.mkv -f yuv4mpegpipe -pix_fmt yuv420p10le -strict -1 - | SvtAv1EncApp -i - --keyint 12s --crf 30 --enable-qm 1 --qm-min 0 --preset 3 --progress 2 -b .\WindAndNature_yuv420p10le_bt709_crf35_qm_preset3.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -7655,7 +7666,7 @@ SSIMULACRA2_rs: Mean: 68.80260246 Median: 70.67784608 Std Dev: 3.83469802 5th Pe
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（6/22）SVT-AV1 v3.0——WindAndNature Tune</button>
             <div class="coll-content">
                 <p><code>--preset 3 --crf 35 --tune 0</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\Netflix_WindAndNature_4096x2160_60fps_10bit_420.video.mkv -i .\WindAndNature_yuv420p10le_bt709_crf35_preset3_tuneVQ.ivf -lavfi libvmaf="model=version=vmaf_v0.6.1\\:name=vmaf_1080p|version=vmaf_4k_v0.6.1\\:name=vmaf_4k" -f null -
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -7674,7 +7685,7 @@ VMAF 4k: 94.823117, VMAF 1080p: 90.429029
 SSIMULACRA2_rs: Mean: 66.04194395 Median: 67.69334252 Std Dev: 4.21918608 5th Percentile: 58.67352770 95th Percentile: 70.90097115
                 </code></pre>
                 <p><code>--preset 3 --crf 30 --tune 0</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\Netflix_WindAndNature_4096x2160_60fps_10bit_420.video.mkv -f yuv4mpegpipe -pix_fmt yuv420p - | .\SvtAv1EncApp -i - --keyint 12s --crf 30 --enable-qm 1 --qm-min 0 --preset 3 --progress 2 --tune 0 -b .\WindAndNature_yuv420p10le_bt709_crf30_preset3_tuneVQ.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -7693,7 +7704,7 @@ VMAF 4k: 93.875844, VMAF 1080p: 89.245974
 SSIMULACRA2_rs: Mean: 69.04057766 Median: 70.76173066 Std Dev: 4.03527187 5th Percentile: 61.63058503 95th Percentile: 73.41046502
                 </code></pre>
                 <p><code>--preset 3 --crf 35 --tune 2</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\Netflix_WindAndNature_4096x2160_60fps_10bit_420.video.mkv -f yuv4mpegpipe -pix_fmt yuv420p - | .\SvtAv1EncApp -i - --keyint 12s --crf 30 --enable-qm 1 --qm-min 0 --preset 3 --progress 2 --tune 2 -b .\WindAndNature_yuv420p10le_bt709_crf30_preset3_tuneSSIM.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -7712,7 +7723,7 @@ VMAF 4k: 94.230593, VMAF 1080p: 89.647985
 SSIMULACRA2_rs: Mean: 65.70502123 Median: 67.36990713 Std Dev: 3.81579500 5th Percentile: 58.95460314 95th Percentile: 70.03019595
                 </code></pre>
                 <p><code>--preset 3 --crf 30 --tune 2</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\Netflix_WindAndNature_4096x2160_60fps_10bit_420.video.mkv -f yuv4mpegpipe -pix_fmt yuv420p - | .\SvtAv1EncApp -i - --keyint 12s --crf 30 --enable-qm 1 --qm-min 0 --preset 3 --progress 2 --tune 2 -b .\WindAndNature_yuv420p10le_bt709_crf30_preset3_tuneSSIM.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -7735,7 +7746,7 @@ SSIMULACRA2_rs: Mean: 68.93928567 Median: 70.61041299 Std Dev: 3.54621458 5th Pe
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（7/22）SVT-AV1 v3.0——Boat</button>
             <div class="coll-content">
                 <p><code>--preset 3 --crf 35</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\Netflix_Boat_4096x2160_60fps_10bit_420.video.mkv -f yuv4mpegpipe -pix_fmt yuv420p10le -strict unofficial - | SvtAv1EncApp -i - --keyint 12s --crf 35 --preset 3 --progress 2 -b .\Netflix_Boat_yuv420p10le_bt709_crf35_preset3.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -7754,7 +7765,7 @@ VMAF 4k: 76.746842, VMAF 1080p: 67.250902
 SSIMULACRA2_rs: Mean: 65.44279924 Median: 65.24821957 Std Dev: 1.86269647 5th Percentile: 62.76749146 95th Percentile: 68.60554732
                 </code></pre>
                 <p><code>--preset 3 --crf 30</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\Netflix_Boat_4096x2160_60fps_10bit_420.video.mkv -f yuv4mpegpipe -pix_fmt yuv420p10le -strict unofficial - | SvtAv1EncApp -i - --keyint 12s --crf 30 --preset 3 --progress 2 --tune 0 -b .\Netflix_Boat_yuv420p10le_bt709_crf30_preset3.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -7777,7 +7788,7 @@ SSIMULACRA2_rs: Mean: 70.46943646 Median: 70.32725873 Std Dev: 1.44849029 5th Pe
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（8/22）SVT-AV1 v3.0——Boat QM</button>
             <div class="coll-content">
                 <p><code>--preset 3 --crf 35 --enable-qm 1</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\Netflix_Boat_4096x2160_60fps_10bit_420.video.mkv -f yuv4mpegpipe -pix_fmt yuv420p10le -strict unofficial - | SvtAv1EncApp -i - --keyint 12s --crf 35 --enable-qm 1 --preset 3 --progress 2 -b .\Netflix_Boat_yuv420p10le_bt709_crf35_qm_preset3.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -7796,7 +7807,7 @@ VMAF 4k: 76.766875, VMAF 1080p: 67.279102
 SSIMULACRA2_rs: Mean: 65.51104289 Median: 65.27929578 Std Dev: 1.86209612 5th Percentile: 62.79561741 95th Percentile: 68.67732264
                 </code></pre>
                 <p><code>--preset 3 --crf 30 --enable-qm 1</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\Netflix_Boat_4096x2160_60fps_10bit_420.video.mkv -f yuv4mpegpipe -pix_fmt yuv420p10le -strict unofficial - | SvtAv1EncApp -i - --keyint 12s --crf 30 --enable-qm 1 --preset 3 --progress 2 -b .\Netflix_Boat_yuv420p10le_bt709_crf30_qm_preset3.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -7815,7 +7826,7 @@ VMAF 4k: 77.534536, VMAF 1080p: 68.353681
 SSIMULACRA2_rs: Mean: 70.48941736 Median: 70.34330051 Std Dev: 1.45603910 5th Percentile: 68.32600577 95th Percentile: 73.00726519
                 </code></pre>
                 <p><code>--preset 3 --crf 35 --enable-qm 1 --qm-min 0</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\Netflix_Boat_4096x2160_60fps_10bit_420.video.mkv -f yuv4mpegpipe -pix_fmt yuv420p10le -strict unofficial - | SvtAv1EncApp -i - --keyint 12s --crf 35 --enable-qm 1 --qm-min 0 --preset 3 --progress 2 -b .\Netflix_Boat_yuv420p10le_bt709_crf35_qmMin0_preset3.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -7834,7 +7845,7 @@ VMAF 4k: 76.725852, VMAF 1080p: 67.221263
 SSIMULACRA2_rs: Mean: 65.26716472 Median: 65.11628273 Std Dev: 1.81914745 5th Percentile: 62.62584510 95th Percentile: 68.37429589
                 </code></pre>
                 <p><code>--preset 3 --crf 30 --enable-qm 1 --qm-min 0</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\Netflix_Boat_4096x2160_60fps_10bit_420.video.mkv -f yuv4mpegpipe -pix_fmt yuv420p10le -strict unofficial - | SvtAv1EncApp -i - --keyint 12s --crf 30 --enable-qm 1 --qm-min 0 --preset 3 --progress 2 -b .\Netflix_Boat_yuv420p10le_bt709_crf30_qmMin0_preset3.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -7857,7 +7868,7 @@ SSIMULACRA2_rs: Mean: 70.20741785 Median: 70.07957787 Std Dev: 1.37105614 5th Pe
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（9/22）SVT-AV1 v3.0——Boat Tune</button>
             <div class="coll-content">
                 <p><code>--preset 3 --crf 35 --tune 0</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\Netflix_Boat_4096x2160_60fps_10bit_420.video.mkv -f yuv4mpegpipe -pix_fmt yuv420p10le -strict unofficial - | SvtAv1EncApp -i - --keyint 12s --crf 35 --preset 3 --progress 2 --tune 0 -b .\Netflix_Boat_yuv420p10le_bt709_crf35_tuneVQ_preset3.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -7876,7 +7887,7 @@ VMAF 4k: 77.176024, VMAF 1080p: 67.782053
 SSIMULACRA2_rs: Mean: 65.62472343 Median: 65.33376302 Std Dev: 2.05862478 5th Percentile: 62.92247971 95th Percentile: 68.71991106
                 </code></pre>
                 <p><code>--preset 3 --crf 30 --tune 0</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\Netflix_Boat_4096x2160_60fps_10bit_420.video.mkv -f yuv4mpegpipe -pix_fmt yuv420p10le -strict unofficial - | SvtAv1EncApp -i - --keyint 12s --crf 30 --preset 3 --progress 2 --tune 0 -b .\Netflix_Boat_yuv420p10le_bt709_crf35_tuneVQ_preset3.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -7895,7 +7906,7 @@ VMAF 4k: 77.863401, VMAF 1080p: 68.746449
 SSIMULACRA2_rs: Mean: 70.60364934 Median: 70.44573796 Std Dev: 1.64924424 5th Percentile: 68.31306315 95th Percentile: 73.43305347
                 </code></pre>
                 <p><code>--preset 3 --crf 35 --tune 2</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\Netflix_Boat_4096x2160_60fps_10bit_420.video.mkv -f yuv4mpegpipe -pix_fmt yuv420p10le -strict unofficial - | SvtAv1EncApp -i - --keyint 12s --crf 35 --preset 3 --progress 2 --tune 2 -b .\Netflix_Boat_yuv420p10le_bt709_crf35_tuneSSIM_preset3.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -7914,7 +7925,7 @@ VMAF 4k: 76.574269, VMAF 1080p: 67.017956
 SSIMULACRA2_rs: Mean: 64.66386301 Median: 64.46980413 Std Dev: 1.91379239 5th Percentile: 61.83743679 95th Percentile: 67.85317053
                 </code></pre>
                 <p><code>--preset 3 --crf 30 --tune 2</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\Netflix_Boat_4096x2160_60fps_10bit_420.video.mkv -f yuv4mpegpipe -pix_fmt yuv420p10le -strict unofficial - | SvtAv1EncApp -i - --keyint 12s --crf 30 --preset 3 --progress 2 --tune 2 -b .\Netflix_Boat_yuv420p10le_bt709_crf30_tuneSSIM_preset3.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -7937,7 +7948,7 @@ SSIMULACRA2_rs: Mean: 69.94324986 Median: 69.84754035 Std Dev: 1.42894718 5th Pe
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（10/22）SVT-AV1 v3.0——Big-Buck-Bunny</button>
             <div class="coll-content">
                 <p><code>--preset 3 --crf 35</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\Big-Buck-Bunny_1920x1080_24fps_8bit_yuv420p.mkv -f yuv4mpegpipe - | .\SvtAv1EncApp -i - --keyint 12s --crf 35 --preset 3 -b .\Big-Buck-Bunny_1920x1080_24fps_8bit_yuv420_crf35_preset3.ivf
 
 Encoding frame 14315 1346.27 kbps 32.47 fps
@@ -7957,7 +7968,7 @@ VMAF 4K: 87.787175, VMAF 1080p: 82.260282
 SSIMULACRA2_rs: Mean: 75.32415905 Median: 75.39024480 Std Dev: 6.96410086 5th Percentile: 63.93803446 95th Percentile: 85.70591457
                 </code></pre>
                 <p><code>--preset 3 --crf 30</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\Big-Buck-Bunny_1920x1080_24fps_8bit_yuv420p.mkv -f yuv4mpegpipe - | .\SvtAv1EncApp -i - --keyint 12s --crf 30 --preset 3 -b .\Big-Buck-Bunny_1920x1080_24fps_8bit_yuv420_crf30_preset3.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -7979,7 +7990,7 @@ SSIMULACRA2_rs: Mean: 78.85317925 Median: 78.87951009 Std Dev: 5.64017338 5th Pe
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（11/22）SVT-AV1 v3.0——Big-Buck-Bunny QM</button>
             <div class="coll-content">
                 <p><code>--preset 3 --crf 35 --enable-qm 1</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\Big-Buck-Bunny_1920x1080_24fps_8bit_yuv420p.mkv -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --crf 35 --preset 3 --enable-qm 1 -b .\Big-Buck-Bunny_1920x1080_24fps_8bit_yuv420_crf35_qm_preset3.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -7998,7 +8009,7 @@ VMAF 4K: 87.791335, VMAF 1080p: 82.277206
 SSIMULACRA2_rs: Mean: 75.27920286 Median: 75.36589160 Std Dev: 6.91814465 5th Percentile: 63.95092010 95th Percentile: 85.45230956
                 </code></pre>
                 <p><code>--preset 3 --crf 30 --enable-qm 1</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\Big-Buck-Bunny_1920x1080_24fps_8bit_yuv420p.mkv -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --crf 30 --preset 3 --enable-qm 1 -b .\Big-Buck-Bunny_1920x1080_24fps_8bit_yuv420_crf30_qm_preset3.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -8017,7 +8028,7 @@ VMAF 4K: 88.161816, VMAF 1080p: 82.745566
 SSIMULACRA2_rs: Mean: 78.79998864 Median: 78.83792127 Std Dev: 5.60273973 5th Percentile: 69.77388681 95th Percentile: 87.09225295
                 </code></pre>
                 <p><code>--preset 3 --crf 35 --enable-qm 1 --qm-min 0</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\Big-Buck-Bunny_1920x1080_24fps_8bit_yuv420p.mkv -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --crf 35 --preset 3 --enable-qm 1 --qm-min 0 -b .\Big-Buck-Bunny_1920x1080_24fps_8bit_yuv420_crf35_qmMin0_preset3.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -8036,7 +8047,7 @@ VMAF 4K: 87.706740, VMAF 1080p: 82.188623
 SSIMULACRA2_rs: Mean: 74.87515728 Median: 74.97725064 Std Dev: 6.88201854 5th Percentile: 63.59227335 95th Percentile: 84.98997361
                 </code></pre>
                 <p><code>--preset 3 --crf 30 --enable-qm 1 --qm-min 0</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\Big-Buck-Bunny_1920x1080_24fps_8bit_yuv420p.mkv -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --crf 30 --preset 3 --enable-qm 1 --qm-min 0 -b .\Big-Buck-Bunny_1920x1080_24fps_8bit_yuv420_crf30_qmMin0_preset3.ivf
 
                     SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -8058,7 +8069,7 @@ SSIMULACRA2_rs: Mean: 78.30231156 Median: 78.36263621 Std Dev: 5.57336865 5th Pe
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（12/22）SVT-AV1 v3.0——Big-Buck-Bunny Tune</button>
             <div class="coll-content">
                 <p><code>--preset 3 --crf 35 --tune 0</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\Big-Buck-Bunny_1920x1080_24fps_8bit_yuv420p.mkv -f yuv4mpegpipe -strict unofficial - | SvtAv1EncApp -i - --keyint 12s --crf 35 --preset 3 --tune 0 -b .\Big-Buck-Bunny_1920x1080_24fps_8bit_yuv420_crf35_tuneVQ_preset3.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -8077,7 +8088,7 @@ VMAF 4K: 87.790515, VMAF 1080p: 82.249598
 SSIMULACRA2_rs: Mean: 75.77570949 Median: 75.86107014 Std Dev: 6.95487455 5th Percentile: 64.25930676 95th Percentile: 86.08970133
                 </code></pre>
                 <p><code>--preset 3 --crf 30 --tune 0</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\Big-Buck-Bunny_1920x1080_24fps_8bit_yuv420p.mkv -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --crf 30 --preset 3 --tune 0 -b .\Big-Buck-Bunny_1920x1080_24fps_8bit_yuv420_crf30_tuneVQ_preset3.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -8097,7 +8108,7 @@ VMAF 4K: 88.171916, VMAF 1080p: 82.733681
 SSIMULACRA2_rs: Mean: 79.26591280 Median: 79.29272234 Std Dev: 5.60606982 5th Percentile: 70.15623321 95th Percentile: 87.64869908
                 </code></pre>
                 <p><code>--preset 3 --crf 35 --tune 2</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\Big-Buck-Bunny_1920x1080_24fps_8bit_yuv420p.mkv -f yuv4mpegpipe - | .\SvtAv1EncApp -i - --keyint 12s --crf 35 --preset 3 --tune 2 -b .\Big-Buck-Bunny_1920x1080_24fps_8bit_yuv420_crf35_tuneSSIM_preset3.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -8116,7 +8127,7 @@ VMAF 4K: 87.644933, VMAF 1080p: 82.078680
 SSIMULACRA2_rs: Mean: 75.14899784 Median: 75.34139171 Std Dev: 6.90857273 5th Percentile: 63.89165676 95th Percentile: 85.37767059
                 </code></pre>
                 <p><code>--preset 3 --crf 30 --tune 2</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\Big-Buck-Bunny_1920x1080_24fps_8bit_yuv420p.mkv -f yuv4mpegpipe -strict unofficial - | SvtAv1EncApp -i - --keyint 12s --crf 30 --preset 3 --tune 2 -b .\Big-Buck-Bunny_1920x1080_24fps_8bit_yuv420_crf30_tuneSSIM_preset3.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -8139,7 +8150,7 @@ SSIMULACRA2_rs: Mean: 78.67407409 Median: 78.87376130 Std Dev: 5.62830977 5th Pe
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（13/22）SVT-AV1 v3.0——ElephantsDream</button>
             <div class="coll-content">
                 <p><code>--preset 3 --crf 35</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\Elephants-Dream_1920x1080_24fps_8bit_yuv420.mkv -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --crf 35 --preset 3 -b .\Elephants-Dream_1920x1080_24fps_8bit_yuv420_crf35_preset3.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -8158,7 +8169,7 @@ VMAF 4K: 83.397669, VMAF 1080p: 76.747974
 SSIMULACRA2_rs: Mean: 73.73228925 Median: 73.37285235 Std Dev: 11.15518315 5th Percentile: 54.85785930 95th Percentile: 93.57457526
                 </code></pre>
                 <p><code>--preset 3 --crf 30</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\Elephants-Dream_1920x1080_24fps_8bit_yuv420.mkv -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --crf 30 --preset 3 -b .\Elephants-Dream_1920x1080_24fps_8bit_yuv420_crf30_preset3.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -8180,7 +8191,7 @@ SSIMULACRA2_rs: Mean: 77.95534397 Median: 77.60633320 Std Dev: 9.06659246 5th Pe
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（14/22）SVT-AV1 v3.0——ElephantsDream QM</button>
             <div class="coll-content">
                 <p><code>--preset 3 --crf 35 --enable-qm 1</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\Elephants-Dream_1920x1080_24fps_8bit_yuv420.mkv -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --crf 35 --preset 3 --enable-qm 1 -b .\Elephants-Dream_1920x1080_24fps_8bit_yuv420_crf35_qm_preset3.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -8199,7 +8210,7 @@ VMAF 4K: 83.403132, VMAF 1080p: 76.755183
 SSIMULACRA2_rs: Mean: 73.73402693 Median: 73.37710154 Std Dev: 11.11831836 5th Percentile: 54.97472344 95th Percentile: 93.56296734
                 </code></pre>
                 <p><code>--preset 3 --crf 30 --enable-qm 1</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\Elephants-Dream_1920x1080_24fps_8bit_yuv420.mkv -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --crf 30 --preset 3 --enable-qm 1 -b .\Elephants-Dream_1920x1080_24fps_8bit_yuv420_crf30_qm_preset3.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -8218,7 +8229,7 @@ VMAF 4K: 83.838933, VMAF 1080p: 77.320776
 SSIMULACRA2_rs: Mean: 77.92935682 Median: 77.58905525 Std Dev: 9.03994764 5th Percentile: 63.31099239 95th Percentile: 94.51506590
                 </code></pre>
                 <p><code>--preset 3 --crf 35 --enable-qm 1 --qm-min 0</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\Elephants-Dream_1920x1080_24fps_8bit_yuv420.mkv -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --crf 35 --preset 3 --enable-qm 1 --qm-min 0 -b .\Elephants-Dream_1920x1080_24fps_8bit_yuv420_crf35_qmMin0_preset3.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -8237,7 +8248,7 @@ VMAF 4K: 83.372865, VMAF 1080p: 76.725816
 SSIMULACRA2_rs: Mean: 73.45726871 Median: 73.05525303 Std Dev: 11.17768033 5th Percentile: 54.67047875 95th Percentile: 93.51371218
                 </code></pre>
                 <p><code>--preset 3 --crf 30 --enable-qm 1 --qm-min 0</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\Elephants-Dream_1920x1080_24fps_8bit_yuv420.mkv -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --crf 30 --preset 3 --enable-qm 1 --qm-min 0 -b .\Elephants-Dream_1920x1080_24fps_8bit_yuv420_crf30_qmMin0_preset3.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -8259,7 +8270,7 @@ SSIMULACRA2_rs: Mean: 77.57799079 Median: 77.16378592 Std Dev: 9.11892568 5th Pe
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（15/22）SVT-AV1 v3.0——ElephantsDream Tune</button>
             <div class="coll-content">
                 <p><code>--preset 3 --crf 35 --tune 0</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\Elephants-Dream_1920x1080_24fps_8bit_yuv420.mkv -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --crf 35 --preset 3 --tune 0 -b .\Elephants-Dream_1920x1080_24fps_8bit_yuv420_crf35_tuneVQ_preset3.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -8278,7 +8289,7 @@ VMAF 4K: 83.459934, VMAF 1080p: 76.814418
 SSIMULACRA2_rs: Mean: 74.14842410 Median: 73.84100191 Std Dev: 10.98839947 5th Percentile: 55.40642910 95th Percentile: 93.51694390
                 </code></pre>
                 <p><code>--preset 3 --crf 30 --tune 0</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\Elephants-Dream_1920x1080_24fps_8bit_yuv420.mkv -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --crf 30 --preset 3 --tune 0 -b .\Elephants-Dream_1920x1080_24fps_8bit_yuv420_crf30_tuneVQ_preset3.ivf
         
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -8297,7 +8308,7 @@ VMAF 4K: 83.893225, VMAF 1080p: 77.376995
 SSIMULACRA2_rs: Mean: 78.28962734 Median: 77.96771217 Std Dev: 8.88251466 5th Percentile: 63.73580664 95th Percentile: 94.47657123
                 </code></pre>
                 <p><code>--preset 3 --crf 35 --tune 2</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\Elephants-Dream_1920x1080_24fps_8bit_yuv420.mkv -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --crf 35 --preset 3 --tune 2 -b .\Elephants-Dream_1920x1080_24fps_8bit_yuv420_crf35_tuneSSIM_preset3.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -8316,7 +8327,7 @@ VMAF 4K: 83.268914, VMAF 1080p: 76.577435
 SSIMULACRA2_rs: Mean: 73.52346418 Median: 73.17031873 Std Dev: 10.92597508 5th Percentile: 55.30870611 95th Percentile: 93.05800747
                 </code></pre>
                 <p><code>--preset 3 --crf 30 --tune 2</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\Elephants-Dream_1920x1080_24fps_8bit_yuv420.mkv -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --crf 30 --preset 3 --tune 2 -b .\Elephants-Dream_1920x1080_24fps_8bit_yuv420_crf30_tuneSSIM_preset3.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -8339,7 +8350,7 @@ SSIMULACRA2_rs: Mean: 77.76087565 Median: 77.42435303 Std Dev: 8.84153156 5th Pe
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（16/22）SVT-AV1 v3.0——MAIDRAGON-S</button>
             <div class="coll-content">
                 <p><code>--preset 3 --crf 35</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\MAIDRAGON-S-Vol.3-1920x1080-23.976fps-8bit-420.m2ts -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --crf 35 --preset 3 -b .\MAIDRAGON-S-23.976fps_8bit_yuv420_crf35_preset3.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -8358,7 +8369,7 @@ VMAF 4K: 85.898294, VMAF 1080p: 79.145894
 SSIMULACRA2_rs: Mean: 77.79595955 Median: 80.76951847 Std Dev: 10.11701970 5th Percentile: 55.35706082 95th Percentile: 87.21367204
                 </code></pre>
                 <p><code>--preset 3 --crf 30</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\MAIDRAGON-S-Vol.3-1920x1080-23.976fps-8bit-420.m2ts -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --crf 30 --preset 3 -b .\MAIDRAGON-S-23.976fps_8bit_yuv420_crf30_preset3.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -8381,7 +8392,7 @@ SSIMULACRA2_rs: Mean: 80.72932330 Median: 83.21056950 Std Dev: 8.14238366 5th Pe
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（17/22）SVT-AV1 v3.0——MAIDRAGON-S QM</button>
             <div class="coll-content">
                 <p><code>--preset 3 --crf 35 --enable-qm 1</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\MAIDRAGON-S-Vol.3-1920x1080-23.976fps-8bit-420.m2ts -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --crf 35 --preset 3 --enable-qm 1 -b .\MAIDRAGON-S-23.976fps_8bit_yuv420_crf35_preset3_qm.ivf
 
                     SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -8400,7 +8411,7 @@ VMAF 4K: 85.894749, VMAF 1080p: 79.146527
 SSIMULACRA2_rs: Mean: 77.69886550 Median: 80.69600714 Std Dev: 10.07073719 5th Percentile: 55.34029248 95th Percentile: 87.02358295
                 </code></pre>
                 <p><code>--preset 3 --crf 30 --enable-qm 1</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\MAIDRAGON-S-Vol.3-1920x1080-23.976fps-8bit-420.m2ts -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --crf 30 --preset 3 --enable-qm 1 -b .\MAIDRAGON-S-23.976fps_8bit_yuv420_crf35_preset3_qmMin0.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -8419,7 +8430,7 @@ VMAF 4K: 86.085526, VMAF 1080p: 79.402306
 SSIMULACRA2_rs: Mean: 80.59807135 Median: 83.09262696 Std Dev: 8.07536797 5th Percentile: 62.58511914 95th Percentile: 88.03572868
                 </code></pre>
                 <p><code>--preset 3 --crf 35 --enable-qm 1 --qm-min 0</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\MAIDRAGON-S-Vol.3-1920x1080-23.976fps-8bit-420.m2ts -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --crf 35 --preset 3 --enable-qm 1 --qm-min 0 -b .\MAIDRAGON-S-23.976fps_8bit_yuv420_crf35_preset3_qmMin0.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -8439,7 +8450,7 @@ VMAF 4K: 85.853214, VMAF 1080p: 79.101217
 SSIMULACRA2_rs: Mean: 77.31179694 Median: 80.33342245 Std Dev: 10.03786961 5th Percentile: 54.98487067 95th Percentile: 86.47179056
                 </code></pre>
                 <p><code>--preset 3 --crf 30 --enable-qm 1 --qm-min 0</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg  -i .\MAIDRAGON-S-Vol.3-1920x1080-23.976fps-8bit-420.m2ts -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --crf 30 --preset 3 --enable-qm 1 --qm-min 0 -b .\MAIDRAGON-S-23.976fps_8bit_yuv420_crf30_preset3_qmMin0.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -8463,7 +8474,7 @@ SSIMULACRA2_rs: Mean: 80.13878722 Median: 82.67207598 Std Dev: 8.06846175 5th Pe
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（18/22）SVT-AV1 v3.0——MAIDRAGON-S Tune</button>
             <div class="coll-content">
                 <p><code>--preset 3 --crf 35 --tune 0</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\MAIDRAGON-S-Vol.3-1920x1080-23.976fps-8bit-420.m2ts -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --crf 35 --preset 3 --tune 0 -b .\MAIDRAGON-S-23.976fps_8bit_yuv420_crf35_preset3_tuneVQ.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -8482,7 +8493,7 @@ VMAF 4K: 85.827040, VMAF 1080p: 79.043595
 SSIMULACRA2_rs: Mean: 78.18404438 Median: 81.09807098 Std Dev: 9.84990473 5th Percentile: 56.41780640 95th Percentile: 87.31498990
                 </code></pre>
                 <p><code>--preset 3 --crf 30 --tune 0</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\MAIDRAGON-S-Vol.3-1920x1080-23.976fps-8bit-420.m2ts -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --crf 30 --preset 3 --tune 0 -b .\MAIDRAGON-S-23.976fps_8bit_yuv420_crf30_preset3_tuneVQ.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -8501,7 +8512,7 @@ VMAF 4K: 86.030722, VMAF 1080p: 79.317153
 SSIMULACRA2_rs: Mean: 81.05760560 Median: 83.45341781 Std Dev: 7.86579295 5th Percentile: 63.52342983 95th Percentile: 88.37986377
                 </code></pre>
                 <p><code>--preset 3 --crf 35 --tune 2</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\MAIDRAGON-S-Vol.3-1920x1080-23.976fps-8bit-420.m2ts -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --crf 35 --preset 3 --tune 2 -b .\MAIDRAGON-S-23.976fps_8bit_yuv420_crf35_preset3_tuneSSIM.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -8520,7 +8531,7 @@ VMAF 4K: 85.782189, VMAF 1080p: 78.989417
 SSIMULACRA2_rs: Mean: 77.31163552 Median: 79.89184789 Std Dev: 9.84733036 5th Percentile: 55.58016882 95th Percentile: 87.02450024
                 </code></pre>
                 <p><code>--preset 3 --crf 30 --tune 2</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\MAIDRAGON-S-Vol.3-1920x1080-23.976fps-8bit-420.m2ts -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --crf 30 --preset 3 --tune 2 -b .\MAIDRAGON-S-23.976fps_8bit_yuv420_crf30_preset3_tuneSSIM.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -8542,8 +8553,8 @@ SSIMULACRA2_rs: Mean: 80.37004198 Median: 82.49914773 Std Dev: 7.94219220 5th Pe
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（19/22）SVT-AV1 v3.0——HYOUKA</button>
             <div class="coll-content">
                 <p><code>--preset 3 --crf 35</code>：</p>
-                <pre><code class="text-smaller">
-ffmpeg -i .\氷菓-Vol.4-1920x1080-23.976fps-8bit-420.m2ts -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --crf 35 --preset 3 -b .\HYOUKA-23.976fps_8bit_yuv420_crf35_preset3.ivf
+                <pre><code class="text-smaller language-powershell">
+ffmpeg -i .\HYOUKA-Vol.4-1920x1080-23.976fps-8bit-420.m2ts -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --crf 35 --preset 3 -b .\HYOUKA-23.976fps_8bit_yuv420_crf35_preset3.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
 Total Frames            Frame Rate              Byte Count              Bitrate
@@ -8562,8 +8573,8 @@ SSIMULACRA2_rs: Mean: 79.82507743 Median: 81.09452443 Std Dev: 6.55502720 5th Pe
 
                 </code></pre>
                 <p><code>--preset 3 --crf 30</code>：</p>
-                <pre><code class="text-smaller">
-ffmpeg -i .\氷菓-Vol.4-1920x1080-23.976fps-8bit-420.m2ts -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --crf 30 --preset 3 -b .\HYOUKA-23.976fps_8bit_yuv420_crf30_preset3.ivf
+                <pre><code class="text-smaller language-powershell">
+ffmpeg -i .\HYOUKA-Vol.4-1920x1080-23.976fps-8bit-420.m2ts -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --crf 30 --preset 3 -b .\HYOUKA-23.976fps_8bit_yuv420_crf30_preset3.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
 Total Frames            Frame Rate              Byte Count              Bitrate
@@ -8582,11 +8593,11 @@ SSIMULACRA2_rs: Mean: 82.03787385 Median: 83.02565519 Std Dev: 5.22592578 5th Pe
                 </code></pre>
             </div>
 
-            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（19/22）SVT-AV1 v3.0——HYOUKA QM</button>
+            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（20/22）SVT-AV1 v3.0——HYOUKA QM</button>
             <div class="coll-content">
                 <p><code>--preset 3 --crf 35 --enable-qm 1</code>：</p>
-                <pre><code class="text-smaller">
-ffmpeg -i .\氷菓-Vol.4-1920x1080-23.976fps-8bit-420.m2ts -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --crf 35 --preset 3 --enable-qm 1 -b .\HYOUKA-23.976fps_8bit_yuv420_crf35_preset3.ivf
+                <pre><code class="text-smaller language-powershell">
+ffmpeg -i .\HYOUKA-Vol.4-1920x1080-23.976fps-8bit-420.m2ts -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --crf 35 --preset 3 --enable-qm 1 -b .\HYOUKA-23.976fps_8bit_yuv420_crf35_preset3.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
 Total Frames            Frame Rate              Byte Count              Bitrate
@@ -8605,8 +8616,8 @@ SSIMULACRA2_rs: Mean: 79.80505612 Median: 81.06671569 Std Dev: 6.52002979 5th Pe
 
                 </code></pre>
                 <p><code>--preset 3 --crf 30 --enable-qm 1</code>：</p>
-                <pre><code class="text-smaller">
-ffmpeg -i .\氷菓-Vol.4-1920x1080-23.976fps-8bit-420.m2ts -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --crf 30 --preset 3  --enable-qm 1 -b .\HYOUKA-23.976fps_8bit_yuv420_crf30_preset3.ivf
+                <pre><code class="text-smaller language-powershell">
+ffmpeg -i .\HYOUKA-Vol.4-1920x1080-23.976fps-8bit-420.m2ts -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --crf 30 --preset 3  --enable-qm 1 -b .\HYOUKA-23.976fps_8bit_yuv420_crf30_preset3.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
 Total Frames            Frame Rate              Byte Count              Bitrate
@@ -8624,8 +8635,8 @@ VMAF 4K: 88.707766, VMAF 1080p: 82.756303
 SSIMULACRA2_rs: Mean: 82.00116606 Median: 82.99097252 Std Dev: 5.19948680 5th Percentile: 72.65484942 95th Percentile: 87.35281267
                 </code></pre>
                 <p><code>--preset 3 --crf 35 --enable-qm 1 --qm-min 0</code>：</p>
-                <pre><code class="text-smaller">
-ffmpeg -i .\氷菓-Vol.4-1920x1080-23.976fps-8bit-420.m2ts -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --crf 35 --preset 3 --enable-qm 1 -b .\HYOUKA-23.976fps_8bit_yuv420_crf35_preset3.ivf
+                <pre><code class="text-smaller language-powershell">
+ffmpeg -i .\HYOUKA-Vol.4-1920x1080-23.976fps-8bit-420.m2ts -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --crf 35 --preset 3 --enable-qm 1 -b .\HYOUKA-23.976fps_8bit_yuv420_crf35_preset3.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
 Total Frames            Frame Rate              Byte Count              Bitrate
@@ -8644,8 +8655,8 @@ SSIMULACRA2_rs: Mean: 79.57465176 Median: 80.79647596 Std Dev: 6.50993171 5th Pe
                 </code></pre>
 
                 <p><code>--preset 3 --crf 30 --enable-qm 1 --qm-min 0</code>：</p>
-                <pre><code class="text-smaller">
-ffmpeg -i .\氷菓-Vol.4-1920x1080-23.976fps-8bit-420.m2ts -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --crf 30 --preset 3  --enable-qm 1 -b .\HYOUKA-23.976fps_8bit_yuv420_crf30_preset3.ivf
+                <pre><code class="text-smaller language-powershell">
+ffmpeg -i .\HYOUKA-Vol.4-1920x1080-23.976fps-8bit-420.m2ts -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --crf 30 --preset 3  --enable-qm 1 -b .\HYOUKA-23.976fps_8bit_yuv420_crf30_preset3.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
 Total Frames            Frame Rate              Byte Count              Bitrate
@@ -8663,11 +8674,11 @@ VMAF 4K: 88.663308, VMAF 1080p: 82.705071
 SSIMULACRA2_rs: Mean: 81.74212195 Median: 82.69693318 Std Dev: 5.20176841 5th Percentile: 72.40613868 95th Percentile: 87.02325300
                 </code></pre>
             </div>
-            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（19/22）SVT-AV1 v3.0——HYOUKA Tune</button>
+            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（21/22）SVT-AV1 v3.0——HYOUKA Tune</button>
             <div class="coll-content">
                 <p><code>--preset 3 --crf 35 --tune 0</code>：</p>
-                <pre><code class="text-smaller">
-ffmpeg -i .\氷菓-Vol.4-1920x1080-23.976fps-8bit-420.m2ts -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --crf 35 --preset 3 --tune 0 -b .\HYOUKA-23.976fps_8bit_yuv420_crf30_preset3_tuneVQ.ivf
+                <pre><code class="text-smaller language-powershell">
+ffmpeg -i .\HYOUKA-Vol.4-1920x1080-23.976fps-8bit-420.m2ts -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --crf 35 --preset 3 --tune 0 -b .\HYOUKA-23.976fps_8bit_yuv420_crf30_preset3_tuneVQ.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
 Total Frames            Frame Rate              Byte Count              Bitrate
@@ -8685,8 +8696,8 @@ VMAF 4K: 88.473032, VMAF 1080p: 82.430565
 SSIMULACRA2_rs: Mean: 80.11321607 Median: 81.29575302 Std Dev: 6.37928685 5th Percentile: 68.60815332 95th Percentile: 86.52427010
                 </code></pre>
                 <p><code>--preset 3 --crf 30 --tune 0</code>：</p>
-                <pre><code class="text-smaller">
-ffmpeg -i .\氷菓-Vol.4-1920x1080-23.976fps-8bit-420.m2ts -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --crf 30 --preset 3 --tune 0 -b .\HYOUKA-23.976fps_8bit_yuv420_crf30_preset3_tuneVQ.ivf
+                <pre><code class="text-smaller language-powershell">
+ffmpeg -i .\HYOUKA-Vol.4-1920x1080-23.976fps-8bit-420.m2ts -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --crf 30 --preset 3 --tune 0 -b .\HYOUKA-23.976fps_8bit_yuv420_crf30_preset3_tuneVQ.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
 Total Frames            Frame Rate              Byte Count              Bitrate
@@ -8704,8 +8715,8 @@ VMAF 4K: 88.664737, VMAF 1080p: 82.685052
 SSIMULACRA2_rs: Mean: 82.24667640 Median: 83.14431623 Std Dev: 5.08056753 5th Percentile: 73.18248350 95th Percentile: 87.50851431
                 </code></pre>
                 <p><code>--preset 3 --crf 35 --tune 2</code>：</p>
-                <pre><code class="text-smaller">
-ffmpeg -i .\氷菓-Vol.4-1920x1080-23.976fps-8bit-420.m2ts -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --crf 35 --preset 3 --tune 2 -b .\HYOUKA-23.976fps_8bit_yuv420_crf35_preset3_tuneSSIM.ivf
+                <pre><code class="text-smaller language-powershell">
+ffmpeg -i .\HYOUKA-Vol.4-1920x1080-23.976fps-8bit-420.m2ts -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --crf 35 --preset 3 --tune 2 -b .\HYOUKA-23.976fps_8bit_yuv420_crf35_preset3_tuneSSIM.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
 Total Frames            Frame Rate              Byte Count              Bitrate
@@ -8723,8 +8734,8 @@ VMAF 4K: 88.418474, VMAF 1080p: 82.371516
 SSIMULACRA2_rs: Mean: 79.60067877 Median: 80.69420144 Std Dev: 6.47687427 5th Percentile: 67.82885960 95th Percentile: 86.27542652
                 </code></pre>
                 <p><code>--preset 3 --crf 30 --tune 2</code>：</p>
-                <pre><code class="text-smaller">
-ffmpeg -i .\氷菓-Vol.4-1920x1080-23.976fps-8bit-420.m2ts -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --crf 30 --preset 3 --tune 2 -b .\HYOUKA-23.976fps_8bit_yuv420_crf30_preset3_tuneSSIM.ivf
+                <pre><code class="text-smaller language-powershell">
+ffmpeg -i .\HYOUKA-Vol.4-1920x1080-23.976fps-8bit-420.m2ts -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --crf 30 --preset 3 --tune 2 -b .\HYOUKA-23.976fps_8bit_yuv420_crf30_preset3_tuneSSIM.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
 Total Frames            Frame Rate              Byte Count              Bitrate
@@ -10129,7 +10140,7 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <li>SVT-AV1 Tune VQ 的综合画质得分最好，但在高动态场景下得分略差于 Tune PSNR</li>
                         <li>SVT-AV1 开启量化矩阵时，在漫画材质动画片源的 VMAF（播放画质、正常观看）、SSIMULACRA2.1（暂停画质、仔细观看）画质会提高</li>
                         <li>SVT-AV1 Tune PSNR（默认）在高动态场景下的画质得分最好，但综合上不高</li>
-                        <li>无论画面类型，只要静态画面偏多，Tune VQ 就相比 Tune PSNR 有优势，如 BigBuckBunny、WindAndNature、MAIDRAGON-S、氷菓，否则 Tune PSNR 最好</li>
+                        <li>无论画面类型，只要静态画面偏多，Tune VQ 就相比 Tune PSNR 有优势，如 BigBuckBunny、WindAndNature、MAIDRAGON-S、HYOUKA，否则 Tune PSNR 最好</li>
                         <li>动态信息越复杂，SVT-AV1 的画质优势越大；否则 x265 的画质优势更大</li>
                     </ol>
                 </li>
@@ -10141,13 +10152,13 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                     </ol>
                 </li>
             </ol>
-            
+
             <h3>测试——SVT-AV1 高暂停画质测试</h3>
             <p>即 Still-image tuning。</p>
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（1/2）SVT-AV1 v3.0——SolLevante-高暂停画质选项</button>
             <div class="coll-content">
                 <p><code>--preset 3 --crf 30 --enable-qm 1 --qm-min 2 --tune 0</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\SolLevante_yuv420p10le_bt709_3840x2160_24fps_yuv420p10le.mkv -f yuv4mpegpipe -pix_fmt yuv420p10le -strict unofficial - | SvtAv1EncApp -i - --keyint 12s --crf 30 --preset 3 --enable-qm 1 --qm-min 2 --tune 0 -b .\SolLevante_yuv420p10le_bt709_CRF30_qmMin2_Tune0.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -10166,7 +10177,7 @@ VMAF 4k: 98.626000, VMAF 1080p: 97.451733
 SSIMULACRA2_rs: Mean: 71.52760837 Median: 66.53989790 Std Dev: 19.01065963 5th Percentile: 44.47004001 95th Percentile: 99.71058625
                 </code></pre>
                 <p><code>--preset 3 --crf 30 --enable-qm 1 --qm-min 2 --tune 0 --enable-variance-boost 1 --variance-boost-strength 1 --variance-boost-curve 2</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\SolLevante_yuv420p10le_bt709_3840x2160_24fps_yuv420p10le.mkv -f yuv4mpegpipe -pix_fmt yuv420p10le -strict unofficial - | SvtAv1EncApp -i - --keyint 12s --crf 30 --preset 3 --enable-qm 1 --qm-min 2 --tune 0 --enable-variance-boost 1 --variance-boost-curve 2 --variance-boost-strength 1 -b .\SolLevante_yuv420p10le_bt709_CRF30_qmMin2_Tune0_VarBoost2_BoostStrength1.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -10186,7 +10197,7 @@ SSIMULACRA2_rs: Mean: 77.11751053 Median: 73.30616969 Std Dev: 14.77053796 5th P
                 </code></pre>
 
                 <p><code>--preset 3 --crf 30 --enable-qm 1 --qm-min 2 --tune 0 --enable-variance-boost 1 --variance-boost-strength 2 --variance-boost-curve 2</code>（默认：variance-boost-strength 2）：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\SolLevante_yuv420p10le_bt709_3840x2160_24fps_yuv420p10le.mkv -f yuv4mpegpipe -pix_fmt yuv420p10le -strict unofficial - | SvtAv1EncApp -i - --keyint 12s --crf 30 --preset 3 --enable-qm 1 --qm-min 2 --tune 0 --enable-variance-boost 1 --variance-boost-strength 2 --variance-boost-curve 2 -b .\SolLevante_yuv420p10le_bt709_CRF30_qmMin2_Tune0_VarBoostCurve2.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -10205,7 +10216,7 @@ VMAF 4k: 98.855014, VMAF 1080p: 97.758044
 SSIMULACRA2_rs: Mean: 78.55870691 Median: 74.84582529 Std Dev: 13.70934750 5th Percentile: 59.02903995 95th Percentile: 100.00000000
                 </code></pre> 
                 <p><code>--preset 3 --crf 30 --enable-qm 1 --qm-min 2 --tune 0 --enable-variance-boost 1 --variance-boost-strength 3</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\SolLevante_yuv420p10le_bt709_3840x2160_24fps_yuv420p10le.mkv -f yuv4mpegpipe -pix_fmt yuv420p10le -strict unofficial - | SvtAv1EncApp -i - --keyint 12s --crf 30 --preset 3 --enable-qm 1 --qm-min 2 --tune 0 --enable-variance-boost 1 --variance-boost-strength 3 -b .\SolLevante_yuv420p10le_bt709_CRF30_qmMin2_Tune0_VarBoost_BoostStrength3.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -10224,7 +10235,7 @@ VMAF 4k: 98.806389, VMAF 1080p: 97.692013
 SSIMULACRA2_rs: Mean: 77.84789625 Median: 74.02788802 Std Dev: 14.29035779 5th Percentile: 57.78096614 95th Percentile: 100.00000000
                 </code></pre>
                 <p><code>--preset 3 --crf 30 --enable-variance-boost 1 --variance-boost-curve 2 --variance-boost-strength 3</code>（Tune 默认）：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\SolLevante_yuv420p10le_bt709_3840x2160_24fps_yuv420p10le.mkv -f yuv4mpegpipe -pix_fmt yuv420p10le -strict unofficial - | SvtAv1EncApp -i - --keyint 12s --crf 30 --preset 3 --enable-variance-boost 1 --variance-boost-curve 2 --variance-boost-strength 3 -b .\SolLevante_yuv420p10le_bt709_CRF30_qmMin2_VarBoost1_BoostCurve2_BoostStrength3.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -10245,7 +10256,7 @@ SSIMULACRA2_rs: Mean: 79.03375770 Median: 75.19569402 Std Dev: 13.30729640 5th P
                 <p><code>--preset 3 --crf 30 --enable-qm 1 --qm-min 2 --tune 0 --variance-octile 4</code>：结果与本轮首项完全一致</p>
                 <p><code>--preset 3 --crf 30 --enable-qm 1 --qm-min 2 --tune 0 --variance-octile 8</code>：结果与本轮首项完全一致</p>
                 <p><code>--preset 3 --crf 30 --enable-qm 1 --qm-min 2 --tune 0 --variance-octile 2 --enable-variance-boost 1 --variance-boost-strength 2 --variance-boost-curve 2</code>（默认：variance-boost-strength 2）：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\Netflix_Boat_4096x2160_60fps_10bit_420.mkv -f yuv4mpegpipe -pix_fmt yuv420p10le -strict unofficial - | SvtAv1EncApp -i - --keyint 12s --crf 30 --preset 3 --enable-qm 1 --qm-min 2 --tune 0 --variance-octile 2 --enable-variance-boost 1 --variance-boost-strength 2 --variance-boost-curve 2 -b .\SolLevante_yuv420p10le_bt709_CRF30_qmMin2_Tune0_.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -10264,7 +10275,7 @@ VMAF 4k: 98.995607, VMAF 1080p: 97.949086
 SSIMULACRA2_rs: Mean: 80.73591880 Median: 77.06076447 Std Dev: 12.30163252 5th Percentile: 62.63733727 95th Percentile: 100.00000000
                 </code></pre>
                 <p><code>--preset 3 --crf 30 --tune 0 --enable-variance-boost 1 --variance-boost-curve 2 --variance-boost-strength 3</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\SolLevante_yuv420p10le_bt709_3840x2160_24fps_yuv420p10le.mkv -f yuv4mpegpipe -pix_fmt yuv420p10le -strict unofficial - | SvtAv1EncApp -i - --keyint 12s --crf 30 --preset 3 --tune 0 --enable-variance-boost 1 --variance-boost-curve 2 --variance-boost-strength 3 -b .\SolLevante_yuv420p10le_bt709_CRF30_qmMin2_Tune0_VarBoost_BoostCurve2_BoostStrength3.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -10283,7 +10294,7 @@ VMAF 4k: 98.883611, VMAF 1080p: 97.775126
 SSIMULACRA2_rs: 79.82330296 Median: 76.53311341 Std Dev: 12.67870103 5th Percentile: 61.14050056 95th Percentile: 99.69831884
                 </code></pre>
                 <p><code>--preset 3 --crf 30 --variance-octile 2 --enable-variance-boost 1 --variance-boost-curve 2 --variance-boost-strength 3</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\SolLevante_yuv420p10le_bt709_3840x2160_24fps_yuv420p10le.mkv -f yuv4mpegpipe -pix_fmt yuv420p10le -strict unofficial - | SvtAv1EncApp -i - --keyint 12s --crf 30 --preset 3 --variance-octile 2 --enable-variance-boost 1 --variance-boost-curve 2 --variance-boost-strength 3 -b .\SolLevante_yuv420p10le_bt709_CRF30_PSNR_VarOct2_VarBoost_BoostCurve2_BoostStrength3.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -10518,7 +10529,7 @@ SSIMULACRA2_rs: Mean: 79.07579506 Median: 75.54317772 Std Dev: 13.21970057 5th P
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（1/2）SVT-AV1 v3.0——ElephantsDream-TF</button>
             <div class="coll-content">
                 <p><code>--preset 3 --crf 30 --enable-tf 2 --tf-strength 1</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\Elephants-Dream_1920x1080_24fps_8bit_yuv420.mkv -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --crf 30 --preset 3 --enable-tf 2 --tf-strength 1 -b .\Elephants-Dream_1920x1080_24fps_8bit_yuv420_crf30_preset3_tf2-Strength1.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -10537,7 +10548,7 @@ VMAF 4k: 83.883905, VMAF 1080p: 77.371160
 SSIMULACRA2_rs: Mean: 78.22777773 Median: 77.90825341 Std Dev: 9.02169880 5th Percentile: 63.48438667 95th Percentile: 94.69709169
                 </code></pre>
                 <p><code>--preset 3 --crf 30 --enable-tf 2 --tf-strength 2</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\Elephants-Dream_1920x1080_24fps_8bit_yuv420.mkv -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --crf 30 --preset 3 --enable-tf 2 --tf-strength 2 -b .\Elephants-Dream_1920x1080_24fps_8bit_yuv420_crf30_preset3_tf2-Strength2.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -10556,7 +10567,7 @@ VMAF 4k: 83.883826, VMAF 1080p: 77.371034
 SSIMULACRA2_rs: Mean: Mean: 78.22557615 Median: 77.90530599 Std Dev: 9.01950210 5th Percentile: 63.51705712 95th Percentile: 94.67345211
                 </code></pre>
                 <p><code>--preset 3 --crf 30 --enable-tf 2 --tf-strength 3</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\Elephants-Dream_1920x1080_24fps_8bit_yuv420.mkv -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --crf 30 --preset 3 --enable-tf 2 --tf-strength 3 -b .\Elephants-Dream_1920x1080_24fps_8bit_yuv420_crf30_preset3_tf2-Strength3.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -10575,7 +10586,7 @@ VMAF 4k: 83.880991, VMAF 1080p: 77.368641
 SSIMULACRA2_rs: Mean: 78.22252190 Median: 77.91453155 Std Dev: 9.02118174 5th Percentile: 63.50577407 95th Percentile: 94.67894894
                 </code></pre>
                 <p><code>--preset 3 --crf 30 --enable-tf 2 --tf-strength 4</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\Elephants-Dream_1920x1080_24fps_8bit_yuv420.mkv -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --crf 30 --preset 3 --enable-tf 2 --tf-strength 4 -b .\Elephants-Dream_1920x1080_24fps_8bit_yuv420_crf30_preset3_tf2-Strength4.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -10594,7 +10605,7 @@ VMAF 4k: 83.875521, VMAF 1080p: 77.365725
 SSIMULACRA2_rs: Mean: 78.22642014 Median: 77.90742740 Std Dev: 9.02076622 5th Percentile: 63.54598795 95th Percentile: 94.68495096
                 </code></pre>
                 <p><code>--preset 3 --crf 30 --tune 0 --enable-tf 2 --tf-strength 1</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\Elephants-Dream_1920x1080_24fps_8bit_yuv420.mkv -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --crf 30 --preset 3 --tune 0 --enable-tf 2 --tf-strength 1 -b .\Elephants-Dream_1920x1080_24fps_8bit_yuv420_crf30_tuneVQ_preset3_tf2-Strength1.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -10613,7 +10624,7 @@ VMAF 4k: 83.923292, VMAF 1080p: 77.415802
 SSIMULACRA2_rs: Mean: 78.34140551 Median: 78.02652168 Std Dev: 8.94275489 5th Percentile: 63.69285703 95th Percentile: 94.68040064
                 </code></pre>
                 <p><code>--preset 3 --crf 30 --tune 0 --enable-tf 2 --tf-strength 2</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\Elephants-Dream_1920x1080_24fps_8bit_yuv420.mkv -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --crf 30 --preset 3 --tune 0 --enable-tf 2 --tf-strength 2 -b .\Elephants-Dream_1920x1080_24fps_8bit_yuv420_crf30_tuneVQ_preset3_tf2-Strength2.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -10632,7 +10643,7 @@ VMAF 4k: 83.917920, VMAF 1080p: 77.411099
 SSIMULACRA2_rs: Mean: 78.34621137 Median: 78.03496570 Std Dev: 8.93514404 5th Percentile: 63.70885484 95th Percentile: 94.68040064
                 </code></pre>
                 <p><code>--preset 3 --crf 30 --tune 0 --enable-tf 2 --tf-strength 3</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\Elephants-Dream_1920x1080_24fps_8bit_yuv420.mkv -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --crf 30 --preset 3 --tune 0 --enable-tf 2 --tf-strength 3 -b .\Elephants-Dream_1920x1080_24fps_8bit_yuv420_crf30_tuneVQ_preset3_tf2-Strength3.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -10651,7 +10662,7 @@ VMAF 4k: 83.919227, VMAF 1080p: 77.410876
 SSIMULACRA2_rs: Mean: 78.34247749 Median: 78.03666873 Std Dev: 8.94058885 5th Percentile: 63.68956267 95th Percentile: 94.67801513
                 </code></pre>
                 <p><code>--preset 3 --crf 30 --tune 0 --enable-tf 2 --tf-strength 4</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\Elephants-Dream_1920x1080_24fps_8bit_yuv420.mkv -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --crf 30 --preset 3 --tune 0 --enable-tf 2 --tf-strength 4 -b .\Elephants-Dream_1920x1080_24fps_8bit_yuv420_crf30_tuneVQ_preset3_tf2-Strength4.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -10867,7 +10878,7 @@ SSIMULACRA2_rs: Mean: 78.34317414 Median: 78.04531049 Std Dev: 8.94038278 5th Pe
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（2/5）SVT-AV1 v3.0——Ultraman1-PSNR-FGS</button>
             <div class="coll-content">
                 <p><code>--preset 3 --crf 30 --tune 1</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\Ultraman1.m2ts -f yuv4mpegpipe -strict -1 - | SvtAv1EncApp -i - --keyint 12s --crf 30 --preset 3 --tune 1 -b .\Ultraman1_crf30_preset3_tunePSNR.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -10886,7 +10897,7 @@ VMAF 4k: 97.738160, VMAF 1080p: 95.464609
 SSIMULACRA2_rs: Mean: 53.36636097 Median: 53.61311143 5th Percentile: 38.06738244 95th Percentile: 70.01810194
                 </code></pre>
                 <p><code>--preset 3 --crf 30 --tune 1 --film-grain 1</code>（经过 2 次反复压制和测量，得到与前者完全相同的分数）：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\Ultraman1.m2ts -f yuv4mpegpipe -strict -1 - | SvtAv1EncApp -i - --keyint 12s --crf 30 --preset 3 --tune 1 --film-grain 1 -b .\Ultraman1_crf30_preset3_tunePSNR_fg1.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -10905,7 +10916,7 @@ VMAF 4k: 97.738160, VMAF 1080p: 95.464609
 SSIMULACRA2_rs: Mean: 53.36636097 Median: 53.61311143 Std Dev: 9.34304536 5th Percentile: 38.06738244 95th Percentile: 70.01810194
                 </code></pre>
                 <p><code>--preset 3 --crf 30 --tune 1 --film-grain 11</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\Ultraman1.m2ts -f yuv4mpegpipe -strict -1 - | SvtAv1EncApp -i - --keyint 12s --crf 30 --preset 3 --tune 1 --film-grain 11 -b .\Ultraman1_crf30_preset3_tunePSNR_fg11.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -10924,7 +10935,7 @@ VMAF 4k: 97.430726, VMAF 1080p: 95.150845
 SSIMULACRA2_rs: Mean: 52.02663259 Median: 52.22005542 Std Dev: 9.37747875 5th Percentile: 36.72168384 95th Percentile: 68.78530314
                 </code></pre>
                 <p><code>--preset 3 --crf 30 --tune 1 --film-grain 21</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\Ultraman1.m2ts -f yuv4mpegpipe -strict -1 - | SvtAv1EncApp -i - --keyint 12s --crf 30 --preset 3 --tune 1 --film-grain 21 -b .\Ultraman1_crf30_preset3_tunePSNR_fg21.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -10943,7 +10954,7 @@ VMAF 4k: 97.235338, VMAF 1080p: 94.835942
 SSIMULACRA2_rs: Mean: 49.62544972 Median: 49.86805064 Std Dev: 9.77985158 5th Percentile: 33.69016033 95th Percentile: 67.56729955
                 </code></pre>
                 <p><code>--preset 3 --crf 30 --tune 1 --film-grain 31</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\Ultraman1.m2ts -f yuv4mpegpipe -strict -1 - | SvtAv1EncApp -i - --keyint 12s --crf 30 --preset 3 --tune 1 --film-grain 31 -b .\Ultraman1_crf30_preset3_tunePSNR_fg31.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -10962,7 +10973,7 @@ VMAF 4k: 97.018645, VMAF 1080p: 94.371972
 SSIMULACRA2_rs: Mean: 46.73252160 Median: 46.97122122 Std Dev: 10.31346476 5th Percentile: 29.83598684 95th Percentile: 65.91101183
                 </code></pre>
                 <p><code>--preset 3 --crf 30 --tune 1 --film-grain 41</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\Ultraman1.m2ts -f yuv4mpegpipe -strict -1 - | SvtAv1EncApp -i - --keyint 12s --crf 30 --preset 3 --tune 1 --film-grain 41 -b .\Ultraman1_crf30_preset3_tunePSNR_fg41.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -10981,7 +10992,7 @@ VMAF 4k: 96.762843, VMAF 1080p: 93.883978
 SSIMULACRA2_rs: Mean: 44.27273142 Median: 44.12428627 Std Dev: 10.76909670 5th Percentile: 26.90948687 95th Percentile: 64.28934544
                 </code></pre>
                 <p><code>--preset 3 --crf 30 --tune 1 --film-grain 50</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\Ultraman1.m2ts -f yuv4mpegpipe -strict -1 - | SvtAv1EncApp -i - --keyint 12s --crf 30 --preset 3 --tune 1 --film-grain 50 -b .\Ultraman1_crf30_preset3_tunePSNR_fg50.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -11003,7 +11014,7 @@ SSIMULACRA2_rs: Mean: 42.76394562 Median: 42.31747622 Std Dev: 11.03823324 5th P
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（3/5）SVT-AV1 v3.0——Ultraman1-VQ-FGS</button>
             <div class="coll-content">
                 <p><code>--preset 3 --crf 30 --tune 0</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\Ultraman1.m2ts -f yuv4mpegpipe -strict -1 - | SvtAv1EncApp -i - --keyint 12s --crf 30 --preset 3 --tune 0 -b .\Ultraman1_crf30_preset3_tuneVQ.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -11022,7 +11033,7 @@ VMAF 4k: 97.748236, VMAF 1080p: 95.534197
 SSIMULACRA2_rs: Mean: 54.83524211 Median: 54.41993554 Std Dev: 8.66763291 5th Percentile: 41.58288237 95th Percentile: 70.84131535
                 </code></pre>
                 <p><code>--preset 3 --crf 30 --tune 0 --film-grain 1</code>（经过 2 次反复压制和测量，得到与前者完全相同的分数）：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\Ultraman1.m2ts -f yuv4mpegpipe -strict -1 - | SvtAv1EncApp -i - --keyint 12s --crf 30 --preset 3 --tune 0 --film-grain 1 -b .\Ultraman1_crf30_preset3_tuneVQ_fg1.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -11041,7 +11052,7 @@ VMAF 4k: 97.748236, VMAF 1080p: 95.534197
 SSIMULACRA2_rs: Mean: 54.83524211 Median: 54.41993554 Std Dev: 8.66763291 5th Percentile: 41.58288237 95th Percentile: 70.84131535
                 </code></pre>
                 <p><code>--preset 3 --crf 30 --tune 0 --film-grain 11</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\Ultraman1.m2ts -f yuv4mpegpipe -strict -1 - | SvtAv1EncApp -i - --keyint 12s --crf 30 --preset 3 --tune 0 --film-grain 11 -b .\Ultraman1_crf30_preset3_tuneVQ_fg11.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -11060,7 +11071,7 @@ VMAF 4k: 97.464271, VMAF 1080p: 95.226487
 SSIMULACRA2_rs: Mean: 53.45703914 Median: 53.01872083 Std Dev: 8.70676988 5th Percentile: 40.16894954 95th Percentile: 69.53730410
                 </code></pre>
                 <p><code>--preset 3 --crf 30 --tune 0 --film-grain 21</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\Ultraman1.m2ts -f yuv4mpegpipe -strict -1 - | SvtAv1EncApp -i - --keyint 12s --crf 30 --preset 3 --tune 0 --film-grain 21 -b .\Ultraman1_crf30_preset3_tuneVQ_fg21.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -11079,7 +11090,7 @@ VMAF 4k: 97.262789, VMAF 1080p: 94.883521
 SSIMULACRA2_rs: Mean: 50.99531869 Median: 50.63241591 Std Dev: 9.08637598 5th Percentile: 37.08947938 95th Percentile: 67.80717058
                 </code></pre>
                 <p><code>--preset 3 --crf 30 --tune 0 --film-grain 31</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\Ultraman1.m2ts -f yuv4mpegpipe -strict -1 - | SvtAv1EncApp -i - --keyint 12s --crf 30 --preset 3 --tune 0 --film-grain 31 -b .\Ultraman1_crf30_preset3_tuneVQ_fg31.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -11098,7 +11109,7 @@ VMAF 4k: 97.033814, VMAF 1080p: 94.387931
 SSIMULACRA2_rs: Mean: 48.03797050 Median: 47.79390298 Std Dev: 9.60530147 5th Percentile: 33.26269500 95th Percentile: 66.06963942
                 </code></pre>
                 <p><code>--preset 3 --crf 30 --tune 0 --film-grain 41</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\Ultraman1.m2ts -f yuv4mpegpipe -strict -1 - | SvtAv1EncApp -i - --keyint 12s --crf 30 --preset 3 --tune 0 --film-grain 41 -b .\Ultraman1_crf30_preset3_tuneVQ_fg41.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -11117,7 +11128,7 @@ VMAF 4k: 96.766543, VMAF 1080p: 93.875865
 SSIMULACRA2_rs: Mean: 45.53317193 Median: 44.99403922 Std Dev: 10.08795588 5th Percentile: 30.26585740 95th Percentile: 64.44994167
                 </code></pre>
                 <p><code>--preset 3 --crf 30 --tune 0 --film-grain 50</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\Ultraman1.m2ts -f yuv4mpegpipe -strict -1 - | SvtAv1EncApp -i - --keyint 12s --crf 30 --preset 3 --tune 0 --film-grain 50 -b .\Ultraman1_crf30_preset3_tuneVQ_fg50.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -11139,7 +11150,7 @@ SSIMULACRA2_rs: Mean: 44.00013351 Median: 43.23395239 Std Dev: 10.38802104 5th P
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（4/5）SVT-AV1 v3.0——Ultraman1-SSIM-FGS</button>
             <div class="coll-content">
                 <p><code>--preset 3 --crf 30 --tune 2</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\Ultraman1.m2ts -f yuv4mpegpipe -strict -1 - | SvtAv1EncApp -i - --keyint 12s --crf 30 --preset 3 --tune 2 -b .\Ultraman1_crf30_preset3_tuneSSIM.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -11158,7 +11169,7 @@ VMAF 4k: 97.656883, VMAF 1080p: 95.386084
 SSIMULACRA2_rs: Mean: 54.10919247 Median: 54.33234161 Std Dev: 8.74666428 5th Percentile: 39.54388416 95th Percentile: 69.48821685
                 </code></pre>
                 <p><code>--preset 3 --crf 30 --tune 2 --film-grain 1</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\Ultraman1.m2ts -f yuv4mpegpipe -strict -1 - | SvtAv1EncApp -i - --keyint 12s --crf 30 --preset 3 --tune 2 --film-grain 1 -b .\Ultraman1_crf30_preset3_tuneSSIM_fg1.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -11177,7 +11188,7 @@ VMAF 4k: 97.656883, VMAF 1080p: 95.386084
 SSIMULACRA2_rs: Mean: 54.10919247 Median: 54.33234161 Std Dev: 8.74666428 5th Percentile: 39.54388416 95th Percentile: 69.48821685
                 </code></pre>
                 <p><code>--preset 3 --crf 30 --tune 2 --film-grain 11</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\Ultraman1.m2ts -f yuv4mpegpipe -strict -1 - | SvtAv1EncApp -i - --keyint 12s --crf 30 --preset 3 --tune 2 --film-grain 11 -b .\Ultraman1_crf30_preset3_tuneSSIM_fg11.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -11196,7 +11207,7 @@ VMAF 4k: 97.348651, VMAF 1080p: 95.067241
 SSIMULACRA2_rs: Mean: 52.75702301 Median: 52.94424333 Std Dev: 8.80849560 5th Percentile: 38.21905581 95th Percentile: 68.44942008
                 </code></pre>
                 <p><code>--preset 3 --crf 30 --tune 2 --film-grain 21</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\Ultraman1.m2ts -f yuv4mpegpipe -strict -1 - | SvtAv1EncApp -i - --keyint 12s --crf 30 --preset 3 --tune 2 --film-grain 21 -b .\Ultraman1_crf30_preset3_tuneSSIM_fg21.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -11215,7 +11226,7 @@ VMAF 4k: 97.149595, VMAF 1080p: 94.741050
 SSIMULACRA2_rs: Mean: 50.32394820 Median: 50.50466871 Std Dev: 9.23091795 5th Percentile: 35.14961239 95th Percentile: 67.04853533
                 </code></pre>
                 <p><code>--preset 3 --crf 30 --tune 2 --film-grain 31</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\Ultraman1.m2ts -f yuv4mpegpipe -strict -1 - | SvtAv1EncApp -i - --keyint 12s --crf 30 --preset 3 --tune 2 --film-grain 31 -b .\Ultraman1_crf30_preset3_tuneSSIM_fg31.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -11234,7 +11245,7 @@ VMAF 4k: 96.929686, VMAF 1080p: 94.266828
 SSIMULACRA2_rs: Mean: 47.39210271 Median: 47.51607786 Std Dev: 9.76784956 5th Percentile: 31.72506727 95th Percentile: 65.42500792
                 </code></pre>
                 <p><code>--preset 3 --crf 30 --tune 2 --film-grain 41</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\Ultraman1.m2ts -f yuv4mpegpipe -strict -1 - | SvtAv1EncApp -i - --keyint 12s --crf 30 --preset 3 --tune 2 --film-grain 41 -b .\Ultraman1_crf30_preset3_tuneSSIM_fg41.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -11253,7 +11264,7 @@ VMAF 4k: 96.672354, VMAF 1080p: 93.772334
 SSIMULACRA2_rs: Mean: 44.90364237 Median: 44.67770204 Std Dev: 10.23623379 5th Percentile: 28.85350838 95th Percentile: 63.80731931
                 </code></pre>
                 <p><code>--preset 3 --crf 30 --tune 2 --film-grain 50</code>：</p>
-                <pre><code class="text-smaller">
+                <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\Ultraman1.m2ts -f yuv4mpegpipe -strict -1 - | SvtAv1EncApp -i - --keyint 12s --crf 30 --preset 3 --tune 2 --film-grain 50 -b .\Ultraman1_crf30_preset3_tuneSSIM_fg50.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -11598,6 +11609,235 @@ SSIMULACRA2_rs: Mean: 43.37989094 Median: 42.86187330 Std Dev: 10.52248577 5th P
                     <ul><li>“涂抹痕迹”指类似于“噪点分辨率降低，变得像色斑”的画面效果，推测是小噪点被平滑模糊，而大噪点还在</li></ul>
                 </li>
             </ol>
+
+            <!--<h3>测试——SVT-AV1 优化范围大小测试</h3>
+            <p>由低阈值 VAQ 触发、锐度优先模式决策选项启用范围更大，速度也更慢的优化选项，有助于使码率分配更平衡。</p>
+            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（1/8）SVT-AV1 v3.0——SolLevante</button>
+            <div class="coll-content">
+                <p><code>--preset 3 --crf 30 --variance-octile 2 --sharpness 4</code>：</p>
+                <pre><code class="text-smaller language-powershell"></code></pre>
+                <p><code>--preset 3 --crf 30 --variance-octile 2 --sharpness 6</code>：</p>
+                <pre><code class="text-smaller language-powershell"></code></pre>
+                <p><code>--preset 3 --crf 30 --variance-octile 4 --sharpness 4</code>：</p>
+                <pre><code class="text-smaller language-powershell"></code></pre>
+                <p><code>--preset 3 --crf 30 --variance-octile 4 --sharpness 6</code>：</p>
+                <pre><code class="text-smaller language-powershell"></code></pre>
+            </div>
+            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（2/8）SVT-AV1 v3.0——Boat</button>
+            <div class="coll-content">
+                <p><code>--preset 3 --crf 30 --variance-octile 2 --sharpness 4</code>：</p>
+                <pre><code class="text-smaller language-powershell"></code></pre>
+                <p><code>--preset 3 --crf 30 --variance-octile 2 --sharpness 6</code>：</p>
+                <pre><code class="text-smaller language-powershell"></code></pre>
+                <p><code>--preset 3 --crf 30 --variance-octile 4 --sharpness 4</code>：</p>
+                <pre><code class="text-smaller language-powershell"></code></pre>
+                <p><code>--preset 3 --crf 30 --variance-octile 4 --sharpness 6</code>：</p>
+                <pre><code class="text-smaller language-powershell"></code></pre>
+            </div>
+            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（3/8）SVT-AV1 v3.0——WindAndNature</button>
+            <div class="coll-content">
+                <p><code>--preset 3 --crf 30 --variance-octile 2 --sharpness 4</code>：</p>
+                <pre><code class="text-smaller language-powershell"></code></pre>
+                <p><code>--preset 3 --crf 30 --variance-octile 2 --sharpness 6</code>：</p>
+                <pre><code class="text-smaller language-powershell"></code></pre>
+                <p><code>--preset 3 --crf 30 --variance-octile 4 --sharpness 4</code>：</p>
+                <pre><code class="text-smaller language-powershell"></code></pre>
+                <p><code>--preset 3 --crf 30 --variance-octile 4 --sharpness 6</code>：</p>
+                <pre><code class="text-smaller language-powershell"></code></pre>
+            </div>
+            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（4/8）SVT-AV1 v3.0——Big-Buck-Bunny</button>
+            <div class="coll-content">
+                <p><code>--preset 3 --crf 30 --variance-octile 2 --sharpness 4</code>：</p>
+                <pre><code class="text-smaller language-powershell"></code></pre>
+                <p><code>--preset 3 --crf 30 --variance-octile 2 --sharpness 6</code>：</p>
+                <pre><code class="text-smaller language-powershell"></code></pre>
+                <p><code>--preset 3 --crf 30 --variance-octile 4 --sharpness 4</code>：</p>
+                <pre><code class="text-smaller language-powershell"></code></pre>
+                <p><code>--preset 3 --crf 30 --variance-octile 4 --sharpness 6</code>：</p>
+                <pre><code class="text-smaller language-powershell"></code></pre>
+            </div>
+            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（5/8）SVT-AV1 v3.0——ElephantsDream</button>
+            <div class="coll-content">
+                <p><code>--preset 3 --crf 30 --variance-octile 2 --sharpness 4</code>：</p>
+                <pre><code class="text-smaller language-powershell"></code></pre>
+                <p><code>--preset 3 --crf 30 --variance-octile 2 --sharpness 6</code>：</p>
+                <pre><code class="text-smaller language-powershell"></code></pre>
+                <p><code>--preset 3 --crf 30 --variance-octile 4 --sharpness 4</code>：</p>
+                <pre><code class="text-smaller language-powershell"></code></pre>
+                <p><code>--preset 3 --crf 30 --variance-octile 4 --sharpness 6</code>：</p>
+                <pre><code class="text-smaller language-powershell"></code></pre>
+            </div>
+            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（6/8）SVT-AV1 v3.0——MAINDRAGON-S</button>
+            <div class="coll-content">
+                <p><code>--preset 3 --crf 30 --variance-octile 2 --sharpness 4</code>：</p>
+                <pre><code class="text-smaller language-powershell"></code></pre>
+                <p><code>--preset 3 --crf 30 --variance-octile 2 --sharpness 6</code>：</p>
+                <pre><code class="text-smaller language-powershell"></code></pre>
+                <p><code>--preset 3 --crf 30 --variance-octile 4 --sharpness 4</code>：</p>
+                <pre><code class="text-smaller language-powershell"></code></pre>
+                <p><code>--preset 3 --crf 30 --variance-octile 4 --sharpness 6</code>：</p>
+                <pre><code class="text-smaller language-powershell"></code></pre>
+            </div>
+            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（7/8）SVT-AV1 v3.0——HYOUKA</button>
+            <div class="coll-content">
+                <p><code>--preset 3 --crf 30 --variance-octile 2 --sharpness 4</code>：</p>
+                <pre><code class="text-smaller language-powershell"></code></pre>
+                <p><code>--preset 3 --crf 30 --variance-octile 2 --sharpness 6</code>：</p>
+                <pre><code class="text-smaller language-powershell"></code></pre>
+                <p><code>--preset 3 --crf 30 --variance-octile 4 --sharpness 4</code>：</p>
+                <pre><code class="text-smaller language-powershell"></code></pre>
+                <p><code>--preset 3 --crf 30 --variance-octile 4 --sharpness 6</code>：</p>
+                <pre><code class="text-smaller language-powershell"></code></pre>
+            </div>
+            <h4>（8/8）SVT-AV1 优化范围大小分析</h4>
+
+            <h3>测试——SVT-AV1 QM 下的优化范围大小测试</h3>
+            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（1/8）SVT-AV1 v3.0——SolLevante</button>
+            <div class="coll-content">
+                <p><code>--preset 3 --crf 30 --variance-octile 2 --sharpness 4 --enable-qm 1</code>：</p>
+                <pre><code class="text-smaller language-powershell"></code></pre>
+                <p><code>--preset 3 --crf 30 --variance-octile 2 --sharpness 6 --enable-qm 1</code>：</p>
+                <pre><code class="text-smaller language-powershell"></code></pre>
+                <p><code>--preset 3 --crf 30 --variance-octile 4 --sharpness 4 --enable-qm 1</code>：</p>
+                <pre><code class="text-smaller language-powershell"></code></pre>
+                <p><code>--preset 3 --crf 30 --variance-octile 4 --sharpness 6 --enable-qm 1</code>：</p>
+                <pre><code class="text-smaller language-powershell"></code></pre>
+            </div>
+            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（2/8）SVT-AV1 v3.0——Boat</button>
+            <div class="coll-content">
+                <p><code>--preset 3 --crf 30 --variance-octile 2 --sharpness 4 --enable-qm 1</code>：</p>
+                <pre><code class="text-smaller language-powershell"></code></pre>
+                <p><code>--preset 3 --crf 30 --variance-octile 2 --sharpness 6 --enable-qm 1</code>：</p>
+                <pre><code class="text-smaller language-powershell"></code></pre>
+                <p><code>--preset 3 --crf 30 --variance-octile 4 --sharpness 4 --enable-qm 1</code>：</p>
+                <pre><code class="text-smaller language-powershell"></code></pre>
+                <p><code>--preset 3 --crf 30 --variance-octile 4 --sharpness 6 --enable-qm 1</code>：</p>
+                <pre><code class="text-smaller language-powershell"></code></pre>
+            </div>
+            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（3/8）SVT-AV1 v3.0——WindAndNature</button>
+            <div class="coll-content">
+                <p><code>--preset 3 --crf 30 --variance-octile 2 --sharpness 4 --enable-qm 1</code>：</p>
+                <pre><code class="text-smaller language-powershell"></code></pre>
+                <p><code>--preset 3 --crf 30 --variance-octile 2 --sharpness 6 --enable-qm 1</code>：</p>
+                <pre><code class="text-smaller language-powershell"></code></pre>
+                <p><code>--preset 3 --crf 30 --variance-octile 4 --sharpness 4 --enable-qm 1</code>：</p>
+                <pre><code class="text-smaller language-powershell"></code></pre>
+                <p><code>--preset 3 --crf 30 --variance-octile 4 --sharpness 6 --enable-qm 1</code>：</p>
+                <pre><code class="text-smaller language-powershell"></code></pre>
+            </div>
+            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（4/8）SVT-AV1 v3.0——Big-Buck-Bunny</button>
+            <div class="coll-content">
+                <p><code>--preset 3 --crf 30 --variance-octile 2 --sharpness 4 --enable-qm 1</code>：</p>
+                <pre><code class="text-smaller language-powershell"></code></pre>
+                <p><code>--preset 3 --crf 30 --variance-octile 2 --sharpness 6 --enable-qm 1</code>：</p>
+                <pre><code class="text-smaller language-powershell"></code></pre>
+                <p><code>--preset 3 --crf 30 --variance-octile 4 --sharpness 4 --enable-qm 1</code>：</p>
+                <pre><code class="text-smaller language-powershell"></code></pre>
+                <p><code>--preset 3 --crf 30 --variance-octile 4 --sharpness 6 --enable-qm 1</code>：</p>
+                <pre><code class="text-smaller language-powershell"></code></pre>
+            </div>
+            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（5/8）SVT-AV1 v3.0——ElephantsDream</button>
+            <div class="coll-content">
+                <p><code>--preset 3 --crf 30 --variance-octile 2 --sharpness 4 --enable-qm 1</code>：</p>
+                <pre><code class="text-smaller language-powershell"></code></pre>
+                <p><code>--preset 3 --crf 30 --variance-octile 2 --sharpness 6 --enable-qm 1</code>：</p>
+                <pre><code class="text-smaller language-powershell"></code></pre>
+                <p><code>--preset 3 --crf 30 --variance-octile 4 --sharpness 4 --enable-qm 1</code>：</p>
+                <pre><code class="text-smaller language-powershell"></code></pre>
+                <p><code>--preset 3 --crf 30 --variance-octile 4 --sharpness 6 --enable-qm 1</code>：</p>
+                <pre><code class="text-smaller language-powershell"></code></pre>
+            </div>
+            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（6/8）SVT-AV1 v3.0——MAINDRAGON-S</button>
+            <div class="coll-content">
+                <p><code>--preset 3 --crf 30 --variance-octile 2 --sharpness 4 --enable-qm 1</code>：</p>
+                <pre><code class="text-smaller language-powershell"></code></pre>
+                <p><code>--preset 3 --crf 30 --variance-octile 2 --sharpness 6 --enable-qm 1</code>：</p>
+                <pre><code class="text-smaller language-powershell"></code></pre>
+                <p><code>--preset 3 --crf 30 --variance-octile 4 --sharpness 4 --enable-qm 1</code>：</p>
+                <pre><code class="text-smaller language-powershell"></code></pre>
+                <p><code>--preset 3 --crf 30 --variance-octile 4 --sharpness 6 --enable-qm 1</code>：</p>
+                <pre><code class="text-smaller language-powershell"></code></pre>
+            </div>
+            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（7/8）SVT-AV1 v3.0——HYOUKA</button>
+            <div class="coll-content">
+                <p><code>--preset 3 --crf 30 --variance-octile 2 --sharpness 4 --enable-qm 1</code>：</p>
+                <pre><code class="text-smaller language-powershell"></code></pre>
+                <p><code>--preset 3 --crf 30 --variance-octile 2 --sharpness 6 --enable-qm 1</code>：</p>
+                <pre><code class="text-smaller language-powershell"></code></pre>
+                <p><code>--preset 3 --crf 30 --variance-octile 4 --sharpness 4 --enable-qm 1</code>：</p>
+                <pre><code class="text-smaller language-powershell"></code></pre>
+                <p><code>--preset 3 --crf 30 --variance-octile 4 --sharpness 6 --enable-qm 1</code>：</p>
+                <pre><code class="text-smaller language-powershell"></code></pre>
+            </div>
+            <h4>（8/8）SVT-AV1 QM 下的优化范围大小分析</h4>
+
+            <h3>测试——SVT-AV1 GOP 长度上限测试</h3>
+            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（1/8）SVT-AV1 v3.0——SolLevante</button>
+            <div class="coll-content">
+                <p><code>--preset 3 --crf 30 --hierarchical-levels 5 --use-fixed-qindex-offsets 2 --key-frame-qindex-offset -5 --keyint 24s --enable-tf 2 --scd 1</code>：</p>
+                <pre><code class="text-smaller language-powershell"></code></pre>
+                <p><code>--preset 3 --crf 30 --hierarchical-levels 5 --use-fixed-qindex-offsets 2 --key-frame-qindex-offset -9 --keyint 36s --enable-tf 2 --scd 1</code>：</p>
+                <pre><code class="text-smaller language-powershell"></code></pre>
+                <p><code>--preset 3 --crf 30 --hierarchical-levels 5 --use-fixed-qindex-offsets 2 --key-frame-qindex-offset -13 --keyint 48s --enable-tf 2 --scd 1</code>：</p>
+                <pre><code class="text-smaller language-powershell"></code></pre>
+            </div>
+            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（2/8）SVT-AV1 v3.0——Boat</button>
+            <div class="coll-content">
+                <p><code>--preset 3 --crf 30 --hierarchical-levels 5 --use-fixed-qindex-offsets 2 --key-frame-qindex-offset -5 --keyint 24s --enable-tf 2 --scd 1</code>：</p>
+                <pre><code class="text-smaller language-powershell"></code></pre>
+                <p><code>--preset 3 --crf 30 --hierarchical-levels 5 --use-fixed-qindex-offsets 2 --key-frame-qindex-offset -9 --keyint 36s --enable-tf 2 --scd 1</code>：</p>
+                <pre><code class="text-smaller language-powershell"></code></pre>
+                <p><code>--preset 3 --crf 30 --hierarchical-levels 5 --use-fixed-qindex-offsets 2 --key-frame-qindex-offset -13 --keyint 48s --enable-tf 2 --scd 1</code>：</p>
+                <pre><code class="text-smaller language-powershell"></code></pre>
+            </div>
+            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（3/8）SVT-AV1 v3.0——WindAndNature</button>
+            <div class="coll-content">
+                <p><code>--preset 3 --crf 30 --hierarchical-levels 5 --use-fixed-qindex-offsets 2 --key-frame-qindex-offset -5 --keyint 24s --enable-tf 2 --scd 1</code>：</p>
+                <pre><code class="text-smaller language-powershell"></code></pre>
+                <p><code>--preset 3 --crf 30 --hierarchical-levels 5 --use-fixed-qindex-offsets 2 --key-frame-qindex-offset -9 --keyint 36s --enable-tf 2 --scd 1</code>：</p>
+                <pre><code class="text-smaller language-powershell"></code></pre>
+                <p><code>--preset 3 --crf 30 --hierarchical-levels 5 --use-fixed-qindex-offsets 2 --key-frame-qindex-offset -13 --keyint 48s --enable-tf 2 --scd 1</code>：</p>
+                <pre><code class="text-smaller language-powershell"></code></pre>
+            </div>
+            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（4/8）SVT-AV1 v3.0——Big-Buck-Bunny</button>
+            <div class="coll-content">
+                <p><code>--preset 3 --crf 30 --hierarchical-levels 5 --use-fixed-qindex-offsets 2 --key-frame-qindex-offset -5 --keyint 24s --enable-tf 2 --scd 1</code>：</p>
+                <pre><code class="text-smaller language-powershell"></code></pre>
+                <p><code>--preset 3 --crf 30 --hierarchical-levels 5 --use-fixed-qindex-offsets 2 --key-frame-qindex-offset -9 --keyint 36s --enable-tf 2 --scd 1</code>：</p>
+                <pre><code class="text-smaller language-powershell"></code></pre>
+                <p><code>--preset 3 --crf 30 --hierarchical-levels 5 --use-fixed-qindex-offsets 2 --key-frame-qindex-offset -13 --keyint 48s --enable-tf 2 --scd 1</code>：</p>
+                <pre><code class="text-smaller language-powershell"></code></pre>
+            </div>
+            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（5/8）SVT-AV1 v3.0——ElephantsDream</button>
+            <div class="coll-content">
+                <p><code>--preset 3 --crf 30 --hierarchical-levels 5 --use-fixed-qindex-offsets 2 --key-frame-qindex-offset -5 --keyint 24s --enable-tf 2 --scd 1</code>：</p>
+                <pre><code class="text-smaller language-powershell"></code></pre>
+                <p><code>--preset 3 --crf 30 --hierarchical-levels 5 --use-fixed-qindex-offsets 2 --key-frame-qindex-offset -9 --keyint 36s --enable-tf 2 --scd 1</code>：</p>
+                <pre><code class="text-smaller language-powershell"></code></pre>
+                <p><code>--preset 3 --crf 30 --hierarchical-levels 5 --use-fixed-qindex-offsets 2 --key-frame-qindex-offset -13 --keyint 48s --enable-tf 2 --scd 1</code>：</p>
+                <pre><code class="text-smaller language-powershell"></code></pre>
+            </div>
+            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（6/8）SVT-AV1 v3.0——MAINDRAGON-S</button>
+            <div class="coll-content">
+                <p><code>--preset 3 --crf 30 --hierarchical-levels 5 --use-fixed-qindex-offsets 2 --key-frame-qindex-offset -5 --keyint 24s --enable-tf 2 --scd 1</code>：</p>
+                <pre><code class="text-smaller language-powershell"></code></pre>
+                <p><code>--preset 3 --crf 30 --hierarchical-levels 5 --use-fixed-qindex-offsets 2 --key-frame-qindex-offset -9 --keyint 36s --enable-tf 2 --scd 1</code>：</p>
+                <pre><code class="text-smaller language-powershell"></code></pre>
+                <p><code>--preset 3 --crf 30 --hierarchical-levels 5 --use-fixed-qindex-offsets 2 --key-frame-qindex-offset -13 --keyint 48s --enable-tf 2 --scd 1</code>：</p>
+                <pre><code class="text-smaller language-powershell"></code></pre>
+            </div>
+            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（7/8）SVT-AV1 v3.0——HYOUKA</button>
+            <div class="coll-content">
+                <p><code>--preset 3 --crf 30 --hierarchical-levels 5 --use-fixed-qindex-offsets 2 --key-frame-qindex-offset -5 --keyint 24s --enable-tf 2 --scd 1</code>：</p>
+                <pre><code class="text-smaller language-powershell"></code></pre>
+                <p><code>--preset 3 --crf 30 --hierarchical-levels 5 --use-fixed-qindex-offsets 2 --key-frame-qindex-offset -9 --keyint 36s --enable-tf 2 --scd 1</code>：</p>
+                <pre><code class="text-smaller language-powershell"></code></pre>
+                <p><code>--preset 3 --crf 30 --hierarchical-levels 5 --use-fixed-qindex-offsets 2 --key-frame-qindex-offset -13 --keyint 48s --enable-tf 2 --scd 1</code>：</p>
+                <pre><code class="text-smaller language-powershell"></code></pre>
+            </div>
+            <h4>（8/8）SVT-AV1 GOP 长度上限测试分析</h4>
+            -->
+
             <h2 id="h2-19">附录：下载</h2>
 
             <h3>下载——SVT-AV1 编码器</h3>
