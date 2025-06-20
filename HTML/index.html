@@ -6550,9 +6550,10 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                             <li>该模型同时利用了参考和失真视频中提取的特征进行预测</li>
                         </ul>
                     </li>
-                    <li><b>观看距离/屏幕尺寸校准</b>：
+                    <li><b>多模型</b>：
                         <ul>
-                            <li>用户可以选用 4K、HDTV、Phone 3 种校准，其中 Phone 校准对高分辨率之间的画质差异不敏感</li>
+                            <li>4k 模型使用了高分辨率素材的训练集，因此注重高频细节的完整</li>
+                            <li>1080p 模型使用了适用于手机的流媒体压缩内容的训练集，因此对二次编码，上采样等失真敏感，如果 4k 得分显著高于 1080p，则可能是触发了这些扣分项</li>
                         </ul>
                     </li>
                 </ul>
@@ -6716,7 +6717,7 @@ InputValue    Score
                 </li>
                 <li><b>色彩空间转换</b>：YUV 色彩空间的源需要经过 YUV → RGB → Linear RGB → XYB 共 3 道有损转换，耗费了大量算力和内存，并且破坏了可靠性</li>
             </ul>
-            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：PowerShell 与 Image Magick 批量嵌入 ICC 配置</button>
+            <!--<button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：PowerShell 与 Image Magick 批量嵌入 ICC 配置</button>
             <div class="coll-content"><pre><code class="text-smaller language-powershell">
 # 将 Image Magick 添加到环境变量，Image Magick 路径添加到环境变量中的 PATH 序列
 # PowerShell 批量将 sRGB 图片嵌入 sRGB ICC 配置，并禁止 Magick 自动将图片转换为灰阶
@@ -6751,7 +6752,7 @@ for ($i=1; $i -le $frames; $i++) {
     }
 }
 "Index: " + $frames + ", Total: " + $value + ", Avg: " + $value/$frames;
-            </code></pre></div>
+            </code></pre></div>-->
             <h4>（5/5）SSIMULACRA 的难点</h4>
             <ul>
                 <li><b>仅读取图片</b> - 若是手动将编码的视频与源一并转换为 JXL 库支持解码的图片序列，如 PNG24，这意味着：
@@ -7196,7 +7197,7 @@ x265 [info]: Weighted B-Frames: Y:5.7% UV:1.0%
 encoded 15691 frames in 2028.92s (7.73 fps), 3041.00 kb/s, Avg QP:28.16
 
 XPSNR average, 15691 frames  y: 32.7897  u: 44.5506  v: 44.2398 (minimum: 32.7897)
-VMAF 4k: 83.679159, 77.135198
+VMAF 4k: 83.679159, VMAF 1080p: 77.135198
 SSIMULACRA2_rs: Mean: 77.79793375 Median: 78.10156956 Std Dev: 4.87145655 5th Percentile: 69.98188935 95th Percentile: 83.80652456
                 </code></pre>
                 <p><code>--crf 18</code>：</p>
