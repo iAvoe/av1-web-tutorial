@@ -80,7 +80,7 @@
         </div>
         <div class="container-mobile rounded-9 border-main">
             <h3>SVT-AV1 测试总结简述</h3>
-            <p>测试结果及隐藏规律见测试栏目。SVT-AV1 在测试中展现出了显著的性能优势：Preset 3，CRF 30 在压缩率与编码速度上均较 x265 veryslow CRF 18 约提升 2 倍；在一般场景有着接近和超越 x265 的播放与暂停画质，并且在高复杂度和分辨率的视频中产生了速度、画质、压缩率完胜的结果。x265 得到的码率均 2 倍于 SVT-AV1，因而产生了纵观上的画质领先。</p>
+            <p>测试结果及隐藏规律见测试版块。SVT-AV1 在测试中展现出了显著的性能优势：Preset 3，CRF 30 在压缩率与编码速度上均较 x265 veryslow CRF 18 约提升 2 倍；在一般场景有着接近和超越 x265 的播放与暂停画质，并且在高复杂度和分辨率的视频中产生了速度、画质、压缩率完胜的结果。x265 得到的码率均 2 倍于 SVT-AV1，因而产生了纵观上的画质领先。</p>
             <p>SVT-AV1 的缺点在于导致失真的机制复杂，以目前的结果只能推测是默认使用单值量化，且在编码各阶段实施了多种“类去块机制”而产生观众可能不适应的某种涂抹失真（失真图案相比 x265 更明显、可能类似于平滑块失真致其面积外溢），使得低对比度或帧间连贯性差的场景出现播放可见的涂抹。不过，只要给予合理的 CRF、Tune、自适应量化方差、开启量化矩阵、以及对有噪声素材启用高强度 FGS 分离即可将失真最小化。</p>
             <p>由于 FGS 只能复现同类噪声，所以尽管强度越高则观感越像，但对画质指标来说区别也越大，因此画质指标均会失效。</p>
             <p>产品设计有“性能”与“体验”两方可选：高端相机有注重延迟、精度、后期和专注便携、易用、好玩之分；高端外设领域有低延迟轻量化和人体工学优先之分；高端轿车有性能车与豪华车之分。虽然 SVT-AV1 速度更快、压缩率更高、极限场景领先、具备胶片颗粒合成能力，是性能之选；在用户体验层面，x265 用码率换来高画质、失真图案更接近原画、在普通场景仍能够提供不错的压缩率、导致失真的机制和预防更直白，在注重画质稳定性的编码上更加可靠，是体验之选。</p>
@@ -6911,7 +6911,7 @@ ffmpeg -i .\Elephants-Dream_1920x1080_24fps_8bit_rgb.video+audio.mkv ^
                 </code></pre>
             </div>
             <h4>（6/7）画质指标得分好坏定义</h4>
-            <p>测试栏目中，数据会以编码参数 + 部分编码信息 + 画质指标信息的方式呈现。部分编码信息记录速度和码率，画质指标信息记录各种画质指标检测的结果，分别为：</p>
+            <p>测试版块中，数据会以编码参数 + 部分编码信息 + 画质指标信息的方式呈现。部分编码信息记录速度和码率，画质指标信息记录各种画质指标检测的结果，分别为：</p>
             <ul>
                 <li><b>XPSNR：</b>播放画质，仔细观看
                     <ul>
@@ -6941,22 +6941,52 @@ ffmpeg -i .\Elephants-Dream_1920x1080_24fps_8bit_rgb.video+audio.mkv ^
             </ul>
             <p>注：如果衡量标准是以手机观看，则应将以上要求降低至少一个等级，如达标→良好。</p>
             <h4>（7/7）XPSNR、VMAF 对齐时间基的使用方法</h4>
-            <p>使用 ffmpeg 测试 XPSNR、VMAF 时，源和编码结果的帧率虽然一样，但时间基 Time Base 可能完全不同，导致一些匪夷所思的跑分，以及“三帧烂一帧”的规律。使用 <code>ffprobe -v debug -show_streams .\视频.mkv</code> 命令可以看出，FFV1 time_base = 1/1000; SVT-AV1 time_base = 1/24，因此在测试的命令中添加手动对齐命令是有必要的。</p>
-            <p>XPSNR + VF-FPS + VF-SetPTS：手动提供视频帧率到 24fps，手动指定 setpts 到两个 time_base 的积（1/1000 * 1/24 = 1/24000）：</p>
+            <p>如果直接运行没有 ffmpeg “DTS 未单调增加”报错，则使用以下普通写法即可：</p>
             <pre><code class="language-powershell">
-ffmpeg -i .\源视频.mkv ^
--i .\压缩后.ivf" ^
--lavfi "[0:v]setpts=N*(1/24000)[src]; [1:v]setpts=N*(1/24000)[enc]; [src][enc]xpsnr=stats_file=-" ^ 
--f null -
+title 测试视频 N 的 XPSNR
+ffmpeg -i .\源视频.mkv -i .\压缩后.ivf -lavfi xpsnr="stats_file=-" -f null -
+
+title 测试视频 N 的 VMAF
+ffmpeg -i .\源视频.mkv -i .\压缩后.ivf -lavfi libvmaf="model=version=vmaf_v0.6.1\\:name=vmaf_1080p|version=vmaf_4k_v0.6.1\\:name=vmaf_4k" -f null -
             </code></pre>
-            <p>注：不精确指定 setpts 不会导致分数统计错误，但可以避免 ffmpeg 产生大量的“DTS 未单调增加”报错。</p>
-            <p>VMAF + VF-FPS + VF-SetPTS：手动提供分辨率以及帧率，手动指定时间基：</p>
+            <p>DTS 未单调增加代表时间基 Time Base 完全不同。使用 ffprobe 命令可以看出，因此在测试的命令中添加手动对齐命令是有必要的：</p>
             <pre><code class="language-powershell">
-ffmpeg -i .\源视频.mkv ^
--i .\压缩后.ivf" ^
--lavfi "[0:v]setpts=N*(1/24000)[src]; [1:v]setpts=N*(1/24000)[enc]; [src][enc]libvmaf=model=version=vmaf_v0.6.1\\:name=vmaf_1080p|version=vmaf_4k_v0.6.1\\:name=vmaf_4k" ^ 
--f null -
+ffprobe -v error -select_streams v:0 -show_entries stream=time_base -of default=noprint_wrappers=1:nokey=0 ".\视频.mkv"
             </code></pre>
+            <p>具体方法手动指定 setpts 到两个 time_base 的积（1/1000 * 1/24 = 1/24000）、或者是计算分母的最小公倍数（= 1/3000）：</p>
+            <pre><code class="language-powershell">
+title 测试时间基对齐视频 N 的 XPSNR
+ffmpeg -i .\源视频.mkv -i .\压缩后.ivf -lavfi "[0:v]setpts=N*(1/24000)[src]; [1:v]setpts=N*(1/24000)[enc]; [src][enc]xpsnr=stats_file=-" -f null -
+
+title 测试时间基对齐视频 N 的 VMAF
+ffmpeg -i .\源视频.mkv -i .\压缩后.ivf -lavfi "[0:v]setpts=N*(1/24000)[src]; [1:v]setpts=N*(1/24000)[enc]; [src][enc]libvmaf=model=version=vmaf_v0.6.1\\:name=vmaf_1080p|version=vmaf_4k_v0.6.1\\:name=vmaf_4k" -f null -
+            </code></pre>
+            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：PowerShell 计算最小公倍数</button>
+            <div class="coll-content"><pre><code class="language-powershell">
+# 最大公约数（GCD）
+function gcd{
+    param([double]$a, [double]$b)
+    if ($b -eq 0) { return $a }
+    # 使用欧几里得算法递归地求最大公约数，
+    # 每次用上一次的较小数 $b 和 $a % $b（余数）作为下一轮的参数，
+    # 直到余数为 0
+    else { return gcd $b ($a % $b) }
+}
+
+# 最小公倍数（LCM）
+function lcm {
+    param([double]$a, [double]$b)
+    if ($a -eq 0 -and $b -eq 0) { return 0 }
+    $z = gcd $a $b;
+    return [Math]::Abs($a * $b) / $z;
+}
+
+# 初始化变量为双精度浮点数，调用LCM函数并输出结果
+[double]$a = 24;
+[double]$b = 1000;
+$result = lcm $a $b;
+Write-Host "最小公倍数是: $result" # 得到 3000
+            </code></pre></div>
 
             <h3>测试——基准测试对照组</h3>
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（1/7）x265 v4.1——SolLevante</button>
