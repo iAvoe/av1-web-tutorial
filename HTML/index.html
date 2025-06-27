@@ -10603,7 +10603,7 @@ SSIMULACRA2_rs: Mean: 79.07579506 Median: 75.54317772 Std Dev: 13.21970057 5th P
                         <td class="px-1 sec">3.935</td>
                         <td class="px-1 sec">28407.58</td>
                         <td class="px-1" style="color:#FFC000">38.1206</td>
-                        <td class="px-1" style="color:#92D050">41.9041</td>
+                        <td class="px-1" style="color:#FFC000">41.9041</td>
                         <td class="px-1" style="color:#92D050">42.9981</td>
                         <td class="px-1" style="color:#00B050">98.787193</td>
                         <td class="px-1" style="color:#00B050">97.657617</td>
@@ -10631,7 +10631,7 @@ SSIMULACRA2_rs: Mean: 79.07579506 Median: 75.54317772 Std Dev: 13.21970057 5th P
                         <td class="px-1">3.715</td>
                         <td class="px-1 trd">30503.94</td>
                         <td class="px-1" style="color:#FFCC00">38.1868</td>
-                        <td class="px-1" style="color:#92D050">41.9916</td>
+                        <td class="px-1" style="color:#FFC000">41.9916</td>
                         <td class="px-1" style="color:#92D050">43.1142</td>
                         <td class="px-1" style="color:#00B050">98.806389</td>
                         <td class="px-1" style="color:#00B050">97.692013</td>
@@ -10687,8 +10687,11 @@ SSIMULACRA2_rs: Mean: 79.07579506 Median: 75.54317772 Std Dev: 13.21970057 5th P
             <p class="text-gray-side">注：悬浮光标到单元格上方以查看完整小数</p>
             <h4>（2/2）SVT-AV1 高暂停画质测试分析</h4>
             <ol>
-                <li>使用 Varaince Boost 相关参数可以实现带来整体画质提升，但强度太高会导致码率翻倍</li>
-                <li>在动态信息复杂的画面中，Tune PSNR 比 Tune VQ 画质更好；QM Min2 Tune PSNR 在码率和画质上同时比 QM Min2 Tune VQ 同时更好</li>
+                <li>注：这里的码率提升并非因为搜索不足等欠算情况限制，而是数据分析后得出“应该给予更多”的结论，码率相对地被分配到了有用之地</li>
+                <li>使用 Varaince Boost 相关参数可以实现带来整体画质提升，但提升幅度最大位于 strength →1（打开）、到 2 上出现收益递减，反而没有启用 Boost Curve 2 的收益大（同样提升画质，但码率增加更少）</li>
+                <li>Tune VQ 的画质综合看好于 PSNR，但码率也大幅提高，而且在动态信息复杂的画面中，Tune PSNR 比 Tune VQ 画质更好
+
+                </li>
                 <li>随着改用更激进的方差自适应量化增强（Variance Boost）设定，速度会下降，码率显著增加，整体画质上升</li>
                 <li><code>--variance-boost-strength 3</code> 的增益不如 <code>--variance-boost-curve 2</code> 好</li>
             </ol>
@@ -10933,8 +10936,7 @@ SSIMULACRA2_rs: Mean: 78.34317414 Median: 78.04531049 Std Dev: 8.94038278 5th Pe
                         <td class="px-1 t-light-gray" style="color:#C65911">达标</td>
                         <td class="px-1 t-light-gray" style="color:#F00">待达标</td>
                         <td class="px-1 t-light-gray"><b>排名：</b></td>
-                        <td class="px-1 ace t-light-gray" colspan="3">冠军</td>
-                        <td class="px-1 t-light-gray" style="color:white;background-color:#FF7C80">落败犯规</td>
+                        <td class="px-1 ace t-light-gray" colspan="4">冠军</td>
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">CRF30 VQ P3 TF2-Strength1</td>
@@ -12502,9 +12504,9 @@ SSIMULACRA2_rs: Mean: 82.71404144, Median: 83.55282859, Std Dev: 4.82887766, 5th
             <h4>（8/8）SVT-AV1 大范围优化测试分析</h4>
             <ol class="text-smaller">
                 <li><code>--variance-octile 4</code> 搭配 <code>--sharpness 4</code> 后，相比默认 6 对画质有平均 1 dB 的播放画质（XPSNR）提升</li>
-                <li><code>--variance-octile 2</code> 与 <code>--variance-octile 4</code> 在全部测试中的结果一致（可能有更苛刻的启用条件，更低的 preset 值，或更高的量化强度）</li>
-                <li><code>--sharpness</code> 变化对码率影响不大，画质提升也不大，还受片源类型影响（可能需要更高的量化强度起效）</li>
-                <li>由于 <code>--variance-octile</code>、<code>--sharpness</code> 并不与其它画面调优设置冲突，因此可以搭配上述测试中得出的优良选项多管齐下</li>
+                <li><code>--variance-octile 2</code> 与 <code>--variance-octile 4</code> 搭配 <code>--sharpness</code> 在全部测试中的结果完全一致（可能有更苛刻的启用条件，更低的 preset 值，或更高的量化强度）</li>
+                <li><code>--sharpness</code> 变化对码率影响不大；虽然画质提升在 VMAF 中显得无效，但却以最小的成本提升了暂停画质（SSIMULACRA），因此可以用于搭配高暂停画质测试选项</li>
+                <li>在高暂停画质测试中，<code>--variance-octile</code> 搭配 Variance Boost 变化明显，但这里搭配功能不太相关的<code>--sharpness</code> 会显得乏力，因此可以得出独木难支的结论</li>
             </ol>
             <!--<h3>测试——SVT-AV1 QM 大范围优化测试</h3>
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（1/8）SVT-AV1 v3.0——SolLevante</button>
