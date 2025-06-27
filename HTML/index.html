@@ -10374,7 +10374,6 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <li>x265 的播放画质（XPSNR）最高，但在其它指标下优势较小</li>
                         <li>x265 编码后的码率为 SVT-AV1 的 2~4 倍，但画质的差距不大，或者是两件编码器都给出视觉无损结果后失去比较意义</li>
                         <li>x265 CRF 22 出现了一次结构性失真状况（-2.62 相关），但 SVT-AV1 没有出现</li>
-                        <li>SVT-AV1 在功能受限（preset 3 禁用多种帧间冗余，只使用默认量化优化）的情况下多次在速度，码率，画质上打平或超越了 x265 的自定义高参结果</li>
                         <li>在画面维持长期渐变/低对比度的情况下，x265 与 SVT-AV1 的画质差不多</li>
                         <li>SVT-AV1 Tune VQ 的综合画质得分最好，但在高动态场景下得分略差于 Tune PSNR</li>
                         <li>SVT-AV1 开启量化矩阵时，在漫画材质动画片源的 VMAF（播放画质、正常观看）、SSIMULACRA2.1（暂停画质、仔细观看）画质会提高</li>
@@ -10388,6 +10387,7 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                     <ol class="text-smaller">
                         <li>SVT-AV1 实现了直接设定关键帧到秒数的配置，这使得设定参数更方便了</li>
                         <li>SVT-AV1 的默认进度条样式看起来像是出问题了，但实际上是正常的</li>
+                        <li>SVT-AV1 在功能受限（preset 3 禁用多种帧间冗余，只使用默认量化优化）的情况下多次在速度，码率，画质上打平或超越了 x265 的自定义高参结果</li>
                     </ol>
                 </li>
             </ol>
@@ -10571,76 +10571,6 @@ SSIMULACRA2_rs: Mean: 79.07579506 Median: 75.54317772 Std Dev: 13.21970057 5th P
                     </tr>
                 </thead>
                 <tbody>
-                    <tr class="border-bottom">
-                        <td class="px-1">CRF30 PSNR P3</td>
-                        <td class="px-1">4.336</td>
-                        <td class="px-1">21280.89</td>
-                        <td class="px-1" style="color:#C65911">37.8511</td>
-                        <td class="px-1" style="color:#FFC000">41.6377</td>
-                        <td class="px-1" style="color:#92D050">42.6135</td>
-                        <td class="px-1" style="color:#00B050">98.615379</td>
-                        <td class="px-1" style="color:#00B050">97.452872</td>
-                        <td class="px-1" style="color:#FFC000">72.01245585</td>
-                        <td class="px-1" style="color:#C65911">66.82872302</td>
-                        <td class="px-1" style="color:#F00">45.26125476</td>
-                        <td class="px-1" style="color:#00B050">99.29705787</td>
-                    </tr>
-                    <tr class="border-bottom">
-                        <td class="px-1">CRF30 PSNR P3 QM</td>
-                        <td class="px-1">4.333</td>
-                        <td class="px-1">21167.47</td>
-                        <td class="px-1" style="color:#C65911">37.8514</td>
-                        <td class="px-1" style="color:#FFC000">41.6337</td>
-                        <td class="px-1" style="color:#92D050">42.6076</td>
-                        <td class="px-1" style="color:#00B050">98.622843</td>
-                        <td class="px-1" style="color:#00B050">97.462467</td>
-                        <td class="px-1" style="color:#FFC000">72.03421424</td>
-                        <td class="px-1" style="color:#C65911">66.91038305</td>
-                        <td class="px-1" style="color:#F00">45.2452499</td>
-                        <td class="px-1 ace" style="color:#00B050">100</td>
-                    </tr>
-                    <tr class="border-bottom">
-                        <td class="px-1">CRF30 QM0 P3</td>
-                        <td class="px-1 trd">4.409</td>
-                        <td class="px-1 sec">20672.63</td>
-                        <td class="px-1" style="color:#C65911">37.8158</td>
-                        <td class="px-1" style="color:#FFC000">41.5928</td>
-                        <td class="px-1" style="color:#92D050">42.5431</td>
-                        <td class="px-1" style="color:#00B050">98.601947</td>
-                        <td class="px-1" style="color:#00B050">97.42399</td>
-                        <td class="px-1" style="color:#FFC000">71.617254</td>
-                        <td class="px-1" style="color:#C65911">66.48754073</td>
-                        <td class="px-1" style="color:#F00">44.37356138</td>
-                        <td class="px-1 ace" style="color:#00B050">100</td>
-                    </tr>
-                    <tr class="border-bottom">
-                        <td class="px-1">CRF30 VQ P3</td>
-                        <td class="px-1 sec">4.432</td>
-                        <td class="px-1">21665.26</td>
-                        <td class="px-1" style="color:#C65911">37.4686</td>
-                        <td class="px-1" style="color:#FFC000">41.3226</td>
-                        <td class="px-1" style="color:#92D050">42.1316</td>
-                        <td class="px-1" style="color:#00B050">98.63212</td>
-                        <td class="px-1" style="color:#00B050">97.439903</td>
-                        <td class="px-1" style="color:#FFC000">72.33149666</td>
-                        <td class="px-1" style="color:#C65911">67.03434155</td>
-                        <td class="px-1" style="color:#F00">45.6597599</td>
-                        <td class="px-1 ace" style="color:#00B050">100</td>
-                    </tr>
-                    <tr class="border-bottom">
-                        <td class="px-1">CRF30 SSIM P3</td>
-                        <td class="px-1">4.383</td>
-                        <td class="px-1 ace">20008.12</td>
-                        <td class="px-1" style="color:#C65911">37.3834</td>
-                        <td class="px-1" style="color:#FFC000">41.2295</td>
-                        <td class="px-1" style="color:#92D050">42.0278</td>
-                        <td class="px-1" style="color:#00B050">98.078654</td>
-                        <td class="px-1" style="color:#00B050">96.63514</td>
-                        <td class="px-1" style="color:#FFC000">71.49626144</td>
-                        <td class="px-1" style="color:#C65911">66.1878533</td>
-                        <td class="px-1" style="color:#F00">44.68539708</td>
-                        <td class="px-1 ace" style="color:#00B050">100</td>
-                    </tr>
                     <tr class="text-smaller">
                         <td class="align-items-center t-light-gray" colspan="2"><b>Netflix SolLevante</b></td>
                         <td class="px-1 t-light-gray"><b>基准：</b></td>
@@ -10657,7 +10587,7 @@ SSIMULACRA2_rs: Mean: 79.07579506 Median: 75.54317772 Std Dev: 13.21970057 5th P
                     <tr class="border-bottom">
                         <td class="px-1">CRF30 VQ QM2 P3</td>
                         <td class="px-1 ace">4.434</td>
-                        <td class="px-1 trd">21029.16</td>
+                        <td class="px-1 ace">21029.16</td>
                         <td class="px-1" style="color:#C65911">37.8142</td>
                         <td class="px-1" style="color:#FFC000">41.6312</td>
                         <td class="px-1" style="color:#92D050">42.5653</td>
@@ -10670,8 +10600,8 @@ SSIMULACRA2_rs: Mean: 79.07579506 Median: 75.54317772 Std Dev: 13.21970057 5th P
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">CRF30 VQ QM2 P3 VB-Curve2Strength1</td>
-                        <td class="px-1">3.935</td>
-                        <td class="px-1">28407.58</td>
+                        <td class="px-1 sec">3.935</td>
+                        <td class="px-1 sec">28407.58</td>
                         <td class="px-1" style="color:#FFC000">38.1206</td>
                         <td class="px-1" style="color:#92D050">41.9041</td>
                         <td class="px-1" style="color:#92D050">42.9981</td>
@@ -10684,7 +10614,7 @@ SSIMULACRA2_rs: Mean: 79.07579506 Median: 75.54317772 Std Dev: 13.21970057 5th P
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">CRF30 VQ QM2 P3 VB-Curve2Strength2</td>
-                        <td class="px-1">3.783</td>
+                        <td class="px-1 trd">3.783</td>
                         <td class="px-1">32068.69</td>
                         <td class="px-1" style="color:#FFC000">38.2139</td>
                         <td class="px-1" style="color:#92D050">42.0063</td>
@@ -10699,7 +10629,7 @@ SSIMULACRA2_rs: Mean: 79.07579506 Median: 75.54317772 Std Dev: 13.21970057 5th P
                     <tr class="border-bottom">
                         <td class="px-1">CRF30 QM2 PSNR P3 VB-Strength3</td>
                         <td class="px-1">3.715</td>
-                        <td class="px-1">30503.94</td>
+                        <td class="px-1 trd">30503.94</td>
                         <td class="px-1" style="color:#FFCC00">38.1868</td>
                         <td class="px-1" style="color:#92D050">41.9916</td>
                         <td class="px-1" style="color:#92D050">43.1142</td>
@@ -10712,7 +10642,7 @@ SSIMULACRA2_rs: Mean: 79.07579506 Median: 75.54317772 Std Dev: 13.21970057 5th P
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">CRF30 VQ QM2 P3 VarOct2 VB-Curve2Strength2</td>
-                        <td class="px-1">3.680</td>
+                        <td class="px-1">3.68</td>
                         <td class="px-1">37849.26</td>
                         <td class="px-1 trd" style="color:#FFCC00">38.2583</td>
                         <td class="px-1 trd" style="color:#92D050">42.0998</td>
@@ -10782,8 +10712,8 @@ Total Execution Time:	579464 ms
 Average Latency:	12984 ms
 Max Latency:		35644 ms
 
-XPSNR average, 15691 frames  y: 33.0077  u: 45.2598  v: 44.5232 (minimum: 33.0077)
-VMAF 4k: 83.883905, VMAF 1080p: 77.371160
+XPSNR average, 15691 frames  y: 42.5085  u: 47.2551  v: 46.9452  (minimum: 42.5085)
+VMAF 4k: 99.237146, VMAF 1080p: 97.795983
 SSIMULACRA2_rs: Mean: 78.22777773 Median: 77.90825341 Std Dev: 9.02169880 5th Percentile: 63.48438667 95th Percentile: 94.69709169
                 </code></pre>
                 <p><code>--preset 3 --crf 30 --enable-tf 2 --tf-strength 2</code>：</p>
@@ -10801,8 +10731,8 @@ Total Execution Time:	579938 ms
 Average Latency:	12990 ms
 Max Latency:		35438 ms
 
-XPSNR average, 15691 frames  y: 33.0076  u: 45.2605  v: 44.5243 (minimum: 33.0076)
-VMAF 4k: 83.883826, VMAF 1080p: 77.371034
+XPSNR average, 15691 frames  y: 42.5077  u: 47.2567  v: 46.9477 (minimum: 42.5077)
+VMAF 4k: 99.238696, VMAF 1080p: 97.797929
 SSIMULACRA2_rs: Mean: Mean: 78.22557615 Median: 77.90530599 Std Dev: 9.01950210 5th Percentile: 63.51705712 95th Percentile: 94.67345211
                 </code></pre>
                 <p><code>--preset 3 --crf 30 --enable-tf 2 --tf-strength 3</code>：</p>
@@ -10820,8 +10750,8 @@ Total Execution Time:	579720 ms
 Average Latency:	12987 ms
 Max Latency:		35645 ms
 
-XPSNR average, 15691 frames  y: 33.0074  u: 45.2613  v: 44.5211 (minimum: 33.0074)
-VMAF 4k: 83.880991, VMAF 1080p: 77.368641
+XPSNR average, 15691 frames  y: 42.5076  u: 47.2566  v: 46.9420 (minimum: 42.5076)
+VMAF 4k: 99.235797, VMAF 1080p: 97.794291
 SSIMULACRA2_rs: Mean: 78.22252190 Median: 77.91453155 Std Dev: 9.02118174 5th Percentile: 63.50577407 95th Percentile: 94.67894894
                 </code></pre>
                 <p><code>--preset 3 --crf 30 --enable-tf 2 --tf-strength 4</code>：</p>
@@ -10839,8 +10769,8 @@ Total Execution Time:	579684 ms
 Average Latency:	12993 ms
 Max Latency:		35463 ms
 
-XPSNR average, 15691 frames  y: 33.0074  u: 45.2620  v: 44.5231 (minimum: 33.0074)
-VMAF 4k: 83.875521, VMAF 1080p: 77.365725
+XPSNR average, 15691 frames  y: 42.5078  u: 47.2588  v: 46.9449 (minimum: 42.5078)
+VMAF 4k: 99.234604, VMAF 1080p: 97.792817
 SSIMULACRA2_rs: Mean: 78.22642014 Median: 77.90742740 Std Dev: 9.02076622 5th Percentile: 63.54598795 95th Percentile: 94.68495096
                 </code></pre>
                 <p><code>--preset 3 --crf 30 --tune 0 --enable-tf 2 --tf-strength 1</code>：</p>
@@ -10858,8 +10788,8 @@ Total Execution Time:	569814 ms
 Average Latency:	12745 ms
 Max Latency:		34960 ms
 
-XPSNR average, 15691 frames  y: 33.0033  u: 45.1779  v: 44.4447 (minimum: 33.0033)
-VMAF 4k: 83.923292, VMAF 1080p: 77.415802
+XPSNR average, 15691 frames  y: 42.5176  u: 47.1738  v: 46.8583 (minimum: 42.5176)
+VMAF 4k: 99.279017, VMAF 1080p: 97.852608
 SSIMULACRA2_rs: Mean: 78.34140551 Median: 78.02652168 Std Dev: 8.94275489 5th Percentile: 63.69285703 95th Percentile: 94.68040064
                 </code></pre>
                 <p><code>--preset 3 --crf 30 --tune 0 --enable-tf 2 --tf-strength 2</code>：</p>
@@ -10877,8 +10807,8 @@ Total Execution Time:	569806 ms
 Average Latency:	12751 ms
 Max Latency:		34618 ms
 
-XPSNR average, 15691 frames  y: 33.0032  u: 45.1805  v: 44.4446 (minimum: 33.0032)
-VMAF 4k: 83.917920, VMAF 1080p: 77.411099
+XPSNR average, 15691 frames  y: 42.5178  u: 47.1775  v: 46.8578 (minimum: 42.5178)
+VMAF 4k: 99.277143, VMAF 1080p: 97.850885
 SSIMULACRA2_rs: Mean: 78.34621137 Median: 78.03496570 Std Dev: 8.93514404 5th Percentile: 63.70885484 95th Percentile: 94.68040064
                 </code></pre>
                 <p><code>--preset 3 --crf 30 --tune 0 --enable-tf 2 --tf-strength 3</code>：</p>
@@ -10896,8 +10826,8 @@ Total Execution Time:	567246 ms
 Average Latency:	12698 ms
 Max Latency:		34187 ms
 
-XPSNR average, 15691 frames  y: 33.0030  u: 45.1770  v: 44.4432 (minimum: 33.0030)
-VMAF 4k: 83.919227, VMAF 1080p: 77.410876
+XPSNR average, 15691 frames  y: 42.5164  u: 47.1725  v: 46.8551 (minimum: 42.5164)
+VMAF 4k: 99.276669, VMAF 1080p: 97.849802
 SSIMULACRA2_rs: Mean: 78.34247749 Median: 78.03666873 Std Dev: 8.94058885 5th Percentile: 63.68956267 95th Percentile: 94.67801513
                 </code></pre>
                 <p><code>--preset 3 --crf 30 --tune 0 --enable-tf 2 --tf-strength 4</code>：</p>
@@ -10915,8 +10845,8 @@ Total Execution Time:	568696 ms
 Average Latency:	12725 ms
 Max Latency:		34603 ms
 
-XPSNR average, 15691 frames  y: 33.0029  u: 45.1808  v: 44.4414 (minimum: 33.0029)
-VMAF 4k: 83.919000, VMAF 1080p: 77.411903
+XPSNR average, 15691 frames  y: 42.5163  u: 47.1771  v: 46.8518 (minimum: 42.5163)
+VMAF 4k: 99.276821, VMAF 1080p: 97.850148
 SSIMULACRA2_rs: Mean: 78.34317414 Median: 78.04531049 Std Dev: 8.94038278 5th Percentile: 63.70302548 95th Percentile: 94.68040064
                 </code></pre>
             </div>
@@ -10939,29 +10869,15 @@ SSIMULACRA2_rs: Mean: 78.34317414 Median: 78.04531049 Std Dev: 8.94038278 5th Pe
                 </thead>
                 <tbody>
                     <tr class="border-bottom">
-                        <td class="px-1">CRF30 PSNR P3</td>
-                        <td class="px-1 sec">27.78</td>
-                        <td class="px-1 ace">2253.69</td>
-                        <td class="px-1" style="color:#C65911">32.9889</td>
-                        <td class="px-1" style="color:#00B050">45.2554</td>
-                        <td class="px-1" style="color:#92D050">44.5165</td>
-                        <td class="px-1" style="color:#FFC000">83.837285</td>
-                        <td class="px-1" style="color:#C65911">77.317822</td>
-                        <td class="px-1" style="color:#FFC000">77.95534397</td>
-                        <td class="px-1" style="color:#FFC000">77.6063332</td>
-                        <td class="px-1" style="color:#C65911">63.26160259</td>
-                        <td class="px-1" style="color:#00B050">94.46343097</td>
-                    </tr>
-                    <tr class="border-bottom">
                         <td class="px-1">CRF30 PSNR P3 TF2-Strength1</td>
-                        <td class="px-1">27.095</td>
-                        <td class="px-1 sec">2291.43</td>
-                        <td class="px-1 ace" style="color:#C65911">33.0077</td>
-                        <td class="px-1" style="color:#00B050">45.2598</td>
-                        <td class="px-1 sec" style="color:#92D050">44.5232</td>
-                        <td class="px-1" style="color:#FFC000">83.883905</td>
-                        <td class="px-1" style="color:#C65911">77.371160</td>
-                        <td class="px-1" style="color:#FFC000">78.22777773</td>
+                        <td class="ace px-1">27.095</td>
+                        <td class="ace px-1">2291.43</td>
+                        <td class="px-1 ace" style="color:#92D050">42.5085</td>
+                        <td class="px-1" style="color:#00B050">47.2551</td>
+                        <td class="px-1" style="color:#00B050">46.9452</td>
+                        <td class="px-1" style="color:#00B050">99.237146</td>
+                        <td class="px-1" style="color:#00B050">97.795983</td>
+                        <td class="px-1 ace" style="color:#FFC000">78.22777773</td>
                         <td class="px-1" style="color:#FFC000">77.90825341</td>
                         <td class="px-1" style="color:#C65911">63.48438667</td>
                         <td class="px-1 ace" style="color:#00B050">94.69709169</td>
@@ -10970,11 +10886,11 @@ SSIMULACRA2_rs: Mean: 78.34317414 Median: 78.04531049 Std Dev: 8.94038278 5th Pe
                         <td class="px-1">CRF30 PSNR P3 TF2-Strength2</td>
                         <td class="px-1">27.074</td>
                         <td class="px-1">2292.45</td>
-                        <td class="px-1 sec" style="color:#C65911">33.0076</td>
-                        <td class="px-1 trd" style="color:#00B050">45.2605</td>
-                        <td class="px-1 ace" style="color:#92D050">44.5243</td>
-                        <td class="px-1" style="color:#FFC000">83.883826</td>
-                        <td class="px-1" style="color:#C65911">77.371034</td>
+                        <td class="px-1" style="color:#92D050">42.5077</td>
+                        <td class="px-1" style="color:#00B050">47.2567</td>
+                        <td class="px-1 ace" style="color:#00B050">46.9477</td>
+                        <td class="px-1 ace" style="color:#00B050">99.238696</td>
+                        <td class="px-1 ace" style="color:#00B050">97.797929</td>
                         <td class="px-1" style="color:#FFC000">78.22557615</td>
                         <td class="px-1" style="color:#FFC000">77.90530599</td>
                         <td class="px-1" style="color:#C65911">63.51705712</td>
@@ -10983,14 +10899,14 @@ SSIMULACRA2_rs: Mean: 78.34317414 Median: 78.04531049 Std Dev: 8.94038278 5th Pe
                     <tr class="border-bottom">
                         <td class="px-1">CRF30 PSNR P3 TF2-Strength3</td>
                         <td class="px-1">27.083</td>
-                        <td class="px-1 trd">2291.70</td>
-                        <td class="px-1 trd" style="color:#C65911">33.0074</td>
-                        <td class="px-1 sec" style="color:#00B050">45.2613</td>
-                        <td class="px-1" style="color:#92D050">44.5211</td>
-                        <td class="px-1" style="color:#FFC000">83.880991</td>
-                        <td class="px-1" style="color:#C65911">77.368641</td>
+                        <td class="px-1">2291.70</td>
+                        <td class="px-1" style="color:#92D050">42.5076</td>
+                        <td class="px-1" style="color:#00B050">47.2566</td>
+                        <td class="px-1" style="color:#00B050">46.9420</td>
+                        <td class="px-1" style="color:#00B050">99.235797</td>
+                        <td class="px-1" style="color:#00B050">97.794291</td>
                         <td class="px-1" style="color:#FFC000">78.22252190</td>
-                        <td class="px-1" style="color:#FFC000">77.91453155</td>
+                        <td class="px-1 ace" style="color:#FFC000">77.91453155</td>
                         <td class="px-1" style="color:#C65911">63.50577407</td>
                         <td class="px-1" style="color:#00B050">94.67894894</td>
                     </tr>
@@ -10998,15 +10914,15 @@ SSIMULACRA2_rs: Mean: 78.34317414 Median: 78.04531049 Std Dev: 8.94038278 5th Pe
                         <td class="px-1">CRF30 PSNR P3 TF2-Strength4</td>
                         <td class="px-1">27.089</td>
                         <td class="px-1">2292.35</td>
-                        <td class="px-1 trd" style="color:#C65911">33.0074</td>
-                        <td class="px-1 ace" style="color:#00B050">45.2620</td>
-                        <td class="px-1 trd" style="color:#92D050">44.5231</td>
-                        <td class="px-1" style="color:#FFC000">83.875521</td>
-                        <td class="px-1" style="color:#C65911">77.365725</td>
+                        <td class="px-1" style="color:#92D050">42.5078</td>
+                        <td class="px-1 ace" style="color:#00B050">47.2588</td>
+                        <td class="px-1" style="color:#00B050">46.9449</td>
+                        <td class="px-1" style="color:#00B050">99.234604</td>
+                        <td class="px-1" style="color:#00B050">97.792817</td>
                         <td class="px-1" style="color:#FFC000">78.22642014</td>
                         <td class="px-1" style="color:#FFC000">77.90742740</td>
-                        <td class="px-1" style="color:#C65911">63.54598795</td>
-                        <td class="px-1 sec" style="color:#00B050">94.68495096</td>
+                        <td class="px-1 ace" style="color:#C65911">63.54598795</td>
+                        <td class="px-1" style="color:#00B050">94.68495096</td>
                     </tr>
                     <tr class="text-smaller">
                         <td class="align-items-center t-light-gray"><b>Blender F. ElephantsDream</b></td>
@@ -11017,64 +10933,48 @@ SSIMULACRA2_rs: Mean: 78.34317414 Median: 78.04531049 Std Dev: 8.94038278 5th Pe
                         <td class="px-1 t-light-gray" style="color:#C65911">达标</td>
                         <td class="px-1 t-light-gray" style="color:#F00">待达标</td>
                         <td class="px-1 t-light-gray"><b>排名：</b></td>
-                        <td class="px-1 ace t-light-gray">冠军</td>
-                        <td class="px-1 sec t-light-gray">亚军</td>
-                        <td class="px-1 trd t-light-gray">季军</td>
+                        <td class="px-1 ace t-light-gray" colspan="3">冠军</td>
                         <td class="px-1 t-light-gray" style="color:white;background-color:#FF7C80">落败犯规</td>
-                    </tr>
-                    <tr class="border-bottom">
-                        <td class="px-1">CRF30 VQ P3</td>
-                        <td class="px-1 ace">28.319</td>
-                        <td class="px-1">2350.97</td>
-                        <td class="px-1" style="color:#C65911">32.9975</td>
-                        <td class="px-1" style="color:#00B050">45.1853</td>
-                        <td class="px-1" style="color:#92D050">44.452</td>
-                        <td class="px-1" style="color:#FFC000">83.893225</td>
-                        <td class="px-1" style="color:#C65911">77.376995</td>
-                        <td class="px-1" style="color:#FFC000">78.28962734</td>
-                        <td class="px-1" style="color:#FFC000">77.96771217</td>
-                        <td class="px-1 ace" style="color:#C65911">63.73580664</td>
-                        <td class="px-1" style="color:#00B050">94.47657123</td>
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">CRF30 VQ P3 TF2-Strength1</td>
                         <td class="px-1">27.559</td>
                         <td class="px-1">2373.84</td>
-                        <td class="px-1" style="color:#C65911">33.0033</td>
-                        <td class="px-1" style="color:#00B050">45.1779</td>
-                        <td class="px-1" style="color:#92D050">44.4447</td>
-                        <td class="px-1 ace" style="color:#FFC000">83.923292</td>
-                        <td class="px-1 ace" style="color:#C65911">77.415802</td>
+                        <td class="px-1" style="color:#92D050">42.5176</td>
+                        <td class="px-1" style="color:#00B050">47.1738</td>
+                        <td class="px-1 ace" style="color:#00B050">46.8583</td>
+                        <td class="px-1 ace" style="color:#00B050">99.279017</td>
+                        <td class="px-1 ace" style="color:#00B050">97.852608</td>
                         <td class="px-1" style="color:#FFC000">78.34140551</td>
                         <td class="px-1" style="color:#FFC000">78.02652168</td>
                         <td class="px-1" style="color:#C65911">63.69285703</td>
-                        <td class="px-1 trd" style="color:#00B050">94.68040064</td>
+                        <td class="px-1 ace" style="color:#00B050">94.68040064</td>
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">CRF30 VQ P3 TF2-Strength2</td>
                         <td class="px-1">27.553</td>
-                        <td class="px-1">2373.05</td>
-                        <td class="px-1" style="color:#C65911">33.0032</td>
-                        <td class="px-1" style="color:#00B050">45.1805</td>
-                        <td class="px-1" style="color:#92D050">44.4446</td>
-                        <td class="px-1" style="color:#FFC000">83.917920</td>
-                        <td class="px-1 trd" style="color:#C65911">77.411099</td>
+                        <td class="px-1 ace">2373.05</td>
+                        <td class="px-1 ace" style="color:#92D050">42.5178</td>
+                        <td class="px-1 ace" style="color:#00B050">47.1775</td>
+                        <td class="px-1" style="color:#00B050">46.8578</td>
+                        <td class="px-1" style="color:#00B050">99.277143</td>
+                        <td class="px-1" style="color:#00B050">97.850885</td>
                         <td class="px-1 ace" style="color:#FFC000">78.34621137</td>
-                        <td class="px-1 trd" style="color:#FFC000">78.03496570</td>
-                        <td class="px-1 sec" style="color:#C65911">63.70885484</td>
-                        <td class="px-1 trd" style="color:#00B050">94.68040064</td>
+                        <td class="px-1" style="color:#FFC000">78.03496570</td>
+                        <td class="px-1 ace" style="color:#C65911">63.70885484</td>
+                        <td class="px-1 ace" style="color:#00B050">94.68040064</td>
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">CRF30 VQ P3 TF2-Strength3</td>
-                        <td class="px-1 trd">27.679</td>
+                        <td class="px-1 ace">27.679</td>
                         <td class="px-1">2374.30</td>
-                        <td class="px-1" style="color:#C65911">33.0030</td>
-                        <td class="px-1" style="color:#00B050">45.1770</td>
-                        <td class="px-1" style="color:#92D050">44.4432</td>
-                        <td class="px-1 sec" style="color:#FFC000">83.919227</td>
-                        <td class="px-1" style="color:#C65911">77.410876</td>
-                        <td class="px-1 trd" style="color:#FFC000">78.34247749</td>
-                        <td class="px-1 sec" style="color:#FFC000">78.03666873</td>
+                        <td class="px-1" style="color:#92D050">42.5164</td>
+                        <td class="px-1" style="color:#00B050">47.1725</td>
+                        <td class="px-1" style="color:#00B050">46.8551</td>
+                        <td class="px-1" style="color:#00B050">99.276669</td>
+                        <td class="px-1" style="color:#00B050">97.849802</td>
+                        <td class="px-1" style="color:#FFC000">78.34247749</td>
+                        <td class="px-1" style="color:#FFC000">78.03666873</td>
                         <td class="px-1" style="color:#C65911">63.68956267</td>
                         <td class="px-1" style="color:#00B050">94.67801513</td>
                     </tr>
@@ -11082,22 +10982,22 @@ SSIMULACRA2_rs: Mean: 78.34317414 Median: 78.04531049 Std Dev: 8.94038278 5th Pe
                         <td class="px-1">CRF30 VQ P3 TF2-Strength4</td>
                         <td class="px-1">27.608</td>
                         <td class="px-1">2373.78</td>
-                        <td class="px-1" style="color:#C65911">33.0029</td>
-                        <td class="px-1" style="color:#00B050">45.1808</td>
-                        <td class="px-1" style="color:#92D050">44.4414</td>
-                        <td class="px-1 trd" style="color:#FFC000">83.919000</td>
-                        <td class="px-1 sec" style="color:#C65911">77.411903</td>
-                        <td class="px-1 sec" style="color:#FFC000">78.34317414</td>
+                        <td class="px-1" style="color:#92D050">42.5163</td>
+                        <td class="px-1" style="color:#00B050">47.1771</td>
+                        <td class="px-1" style="color:#00B050">46.8518</td>
+                        <td class="px-1" style="color:#00B050">99.276821</td>
+                        <td class="px-1" style="color:#00B050">97.850148</td>
+                        <td class="px-1" style="color:#FFC000">78.34317414</td>
                         <td class="px-1 ace" style="color:#FFC000">78.04531049</td>
-                        <td class="px-1 trd" style="color:#C65911">63.70302548</td>
-                        <td class="px-1 trd" style="color:#00B050">94.68040064</td>
+                        <td class="px-1" style="color:#C65911">63.70302548</td>
+                        <td class="px-1 ace" style="color:#00B050">94.68040064</td>
                     </tr>
                 </tbody>
             </table></div>
             <h4>（2/2）SVT-AV1 时域降噪过滤分析</h4>
             <ol>
                 <li>即使去掉 CRF30 PSNR、CRF30 VQ 两个基准结果，编码出的视频仍然是不分高下且差距极小</li>
-                <li>在所有画质指标中，启用 <code>--enable-tf 2</code> 后都隐隐有些画质提升，但这明显是码率增加换来的</li>
+                <li>在所有画质指标中，启用 <code>--enable-tf 2</code> 后都隐隐有些画质提升，但</li>
                 <li>启用 <code>--enable-tf 2</code> 后，1920x1080 视频编码 fps 却下降了 0.707，而降低 CRF 非但能够达到同样的画质提升，并且不会拖累编码速度</li>
                 <li>Elephants-Dream 片源包含了多种动态变化程度的场景，理论上只要有一个场景明显占优势，则测试的一系列选项就应当出现阶段性的上升/下降趋势，但跑分的变化忽高忽低，没有趋势</li>
             </ol>
@@ -11543,7 +11443,7 @@ SSIMULACRA2_rs: Mean: 43.37989094 Median: 42.86187330 Std Dev: 10.52248577 5th P
                 <tbody>
                     <tr class="border-bottom">
                         <td class="px-1">CRF30 PSNR P3</td>
-                        <td class="px-1 ace">28.734</td>
+                        <td class="px-1 sec">28.734</td>
                         <td class="px-1 ace">1669.85</td>
                         <td class="px-1" style="color:#FFC000">38.1204</td>
                         <td class="px-1" style="color:#C65911">36.5504</td>
@@ -11641,7 +11541,7 @@ SSIMULACRA2_rs: Mean: 43.37989094 Median: 42.86187330 Std Dev: 10.52248577 5th P
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">CRF30 VQ P3</td>
-                        <td class="px-1 sec">28.810</td>
+                        <td class="px-1 ace">28.81</td>
                         <td class="px-1">2056.28</td>
                         <td class="px-1" style="color:#FFC000">38.1717</td>
                         <td class="px-1" style="color:#C65911">36.5926</td>
@@ -11739,7 +11639,7 @@ SSIMULACRA2_rs: Mean: 43.37989094 Median: 42.86187330 Std Dev: 10.52248577 5th P
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">CRF30 SSIM P3</td>
-                        <td class="px-1">28.113</td>
+                        <td class="px-1 trd">28.113</td>
                         <td class="px-1">1737.48</td>
                         <td class="px-1" style="color:#FFC000">38.1953</td>
                         <td class="px-1" style="color:#C65911">36.5190</td>
@@ -11837,7 +11737,7 @@ SSIMULACRA2_rs: Mean: 43.37989094 Median: 42.86187330 Std Dev: 10.52248577 5th P
                     </tr>
                 </tbody>
             </table></div>
-            <p class="text-gray-side">注：由于此处的画质与噪点一致性强相关，因此所有画质指标失真，无法再用于判断</p>
+            <p class="text-gray-side">注：由于 FGS 本质上是噪点滤镜，因此“失真程度”不再代表画质</p>
             <p class="text-gray-side">注：悬浮光标到单元格上方以查看完整小数</p>
 
             <h4>（5/5）SVT-AV1 胶片颗粒合成分析</h4>
