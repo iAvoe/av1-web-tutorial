@@ -12720,8 +12720,8 @@ SSIMULACRA2_rs: Mean: 82.71404144, Median: 83.55282859, Std Dev: 4.82887766, 5th
 
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：下载——Windows+LLVM 手动编译 SVT-AV1-PSY、SVT-AV1 编码器</button>
             <div class="coll-content">
-                <p class="text-gray-side">警告：本内容未经验证，转载也未询原作许可，因此请直接阅读原文：<a href="https://discord.com/channels/992019264959676448/1253334764920766505">discord/AV1 weeb edition/scripts-tools-and-guides</a>。无论如何都打不开链接再手动解除此处的注释（浏览器开发者菜单中复制，添加新节点，编辑 HTML，粘贴）</p>
-                <!--<h4>（1/4）下载并安装编译工具</h4>
+                <p class="text-gray-side">警告：本内容未经验证，建议直接阅读原文：<a href="https://discord.com/channels/992019264959676448/1253334764920766505">discord/AV1 weeb edition/scripts-tools-and-guides</a>。</p>
+                <h4>（1/4）下载并安装编译工具</h4>
                 <ol>
                     <li><b>LLVM</b>：<a href="https://github.com/llvm/llvm-project/releases/latest">github.com/llvm/llvm-project/releases/latest</a></li>
                     <li><b>Microsoft C++ Build Tools</b>：<a href="https://visualstudio.microsoft.com/visual-cpp-build-tools">visualstudio.microsoft.com/visual-cpp-build-tools</a>
@@ -12782,8 +12782,7 @@ cmake --fresh -B svt_build -G Ninja \
                 <pre><code class="text-smaller language-powershell hljs">
 ninja -C svt_build
                 </code></pre>
-
-                <h4>（4/4）完整命令</h4>
+                <h4>（4/4）完整编译命令</h4>
                 <p>CMD 命令整体（使用 CMD 原生的 ^ 换行）：</p>
                 <pre><code class="text-smaller language-powershell hljs">
 chcp 65001
@@ -12805,7 +12804,7 @@ cmake --fresh -B svt_build -G Ninja ^
 -DCMAKE_C_FLAGS_RELEASE="-flto /DNDEBUG /clang:-O2 -march=native"
 
 ninja -C svt_build
-                </code></pre>-->
+                </code></pre>
             </div>
 
             <!--失败：<h4>（2/2）Windows Docker Desktop 编译</h4>-->
