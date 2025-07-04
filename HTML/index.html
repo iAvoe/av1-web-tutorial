@@ -12929,7 +12929,10 @@ ninja -C svt_build
                     </li>
                 </ol>
             </div>
-            <p>使用以下命令测试编译出的程序是否正常运行：<code>ssimulacra2.exe 源.png 损.png</code></p>
+            <p>使用以下命令测试编译出的程序是否正常运行：</p>
+            <pre><code class="text-smaller language-powershell">
+ssimulacra2.exe .\原画.png .\压缩.png
+            </code></pre>
 
             <h3>下载——SSIMULACRA2_rs</h3>
             <p>详见：<a href="https://github.com/rust-av/ssimulacra2_bin">GitHub/rust-av</a></p>
@@ -12957,16 +12960,17 @@ ninja -C svt_build
             <p>注：ssimulacra2_rs 在 PowerShell 中无法正常打印信息，需要使用 CMD 运行；LSMAS 缓存文件代表“O__&lt;视频文件名&gt;.lwi” 索引文件，这些文件在运行后不会被删除，下次在相同缓存路径解码相同视频时可以自动跳过，或造成更新后信息与缓存不符的错误。</p>
             
             <h3>下载——SSIMULACRA2 Vapoursynth-HIP</h3>
-            <p>一款支持使用英伟达和 AMD 显卡计算 SSIMULACRA、Butteraugli 的动态链接库，支持直接使用或在 VapourSynth 内调用。下载与使用，参数推荐值，VaporSynth 使用方法等详情见 <a href="https://github.com/Line-fr/Vship">Github/Line-fr</a>。在测试中，虽然速度大幅提高，但所得分数相比本教程提供的 SSIMULACRA2.1 分数平均偏移 -0.3，大到足以影响上表中的前三排名，故不采用。</p>
+            <p>一款支持使用英伟达和 AMD 显卡计算 SSIMULACRA、Butteraugli 的动态链接库，支持直接使用或在 VapourSynth 内调用。下载与使用，参数推荐值，VaporSynth 使用方法等详情见 <a href="https://github.com/Line-fr/Vship">Github/Line-fr</a>。在测试中，虽然速度大幅提高，但所得分数相比基于 CPU 的 ssimulacra2_rs 平均偏移了 -0.3，这个偏差足以影响上表中的前三排名，故不在本教程中采用。</p>
+            <p class="text-gray-side">注：若两组人分别压制了同一片源，则使用 ssimulacra2_rs 计算画质的组得分更高，使用 vship 计算画质的组得分更低而败。</p>
 
             <h4>直接使用流程</h4>
-            <p>此处仍然需要随便提供 <code class="code-bold">--source</code>、<code class="code-bold">--encoded</code> 两个源才能使用 list-gpu 命令，否则会报错，但无大碍。</p>
+            <p>此处仍然需要随便提供 <code class="code-bold">--source</code>、<code class="code-bold">--encoded</code> 两个源才能使用 <code class="code-bold">-list-gpu</code> 命令，否则报错，但无大碍。</p>
             <pre><code class="text-smaller language-powershell">
 FFVship.exe -s .\源视频 -e .\压缩后 --list-gpu
             </code></pre>
             <p>得到显卡编号后运行</p>
             <pre><code class="text-smaller language-powershell">
-FFVship.exe -s .\源视频 -e .\压缩后 -m SSIMULACRA2 --gpu-id &lt;编号&gt; -t 2 -g 3
+FFVship.exe -s .\源视频 -e .\压缩后 -m SSIMULACRA2 --gpu-id &lt;显卡编号&gt; -t 2 -g 3
             </code></pre>
             
             <h2 id="h2-20">参考文献</h2>
