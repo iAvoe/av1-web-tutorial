@@ -7,6 +7,7 @@
         <!-- MathJax JS -->
         <script src="./files/mathJax3-tex-svg.js" defer></script>
         <!-- Custom CSS -->
+        <link rel="preload" href="./files/tutorial.css" as="style">
         <link rel="stylesheet" href="./files/tutorial.css">
         <!-- highlight JS & CSS (language-cpp, language-bash, language-powershell) -->
         <link rel="stylesheet" href="./files/docco.min.css">
@@ -70,9 +71,9 @@
             </ol>
             <h3>打印支持（点击以下按钮）</h3>
             <button type="button" class="border-main rounded-3 ms-1 px-1" onclick="toggleCollapseAll()">1/5. 同步展开/折叠所有内容</button>
-            <button type="button" class="border-main rounded-3 ms-1 px-1" onclick="printMode(printT, printC)">2. 进入打印模式排版</button>
+            <button type="button" class="border-main rounded-3 ms-1 px-1" onclick="printMode()">2. 进入打印模式排版</button>
             <button type="button" class="border-main rounded-3 ms-1 px-1" onclick="window.print()">3. 打印</button>
-            <button type="button" class="border-main rounded-3 ms-1 px-1" onclick="printModeOff(printT, printC, widthOffset)">4. 退出打印排版</button>
+            <button type="button" class="border-main rounded-3 ms-1 px-1" onclick="printModeOff()">4. 退出打印排版</button>
             <p class="font-monospace px-1 text-smaller">推荐设置：彩色模式、不打印背景、0.04 英寸边距、打印页眉页脚</p>
             <!-- } -->
             <h3>移动端支持</h3>
@@ -234,7 +235,7 @@
                 </li>
             </ol>
             <div class="align-items-center">
-                <img src="files/av1-decoder-block-diagram.svg" alt="imageR" class="img-medium">
+                <img loading="lazy" src="files/av1-decoder-block-diagram.svg" alt="imageR" class="img-medium">
                 <p class="text-gray-side mt-0">图：AV1 的简化流程步骤，见 <a href="https://en.wikipedia.org/wiki/AV1">维基百科 - AV1</a></p>
             </div>
 
@@ -858,9 +859,9 @@
                     </li>
                 </ol>
                 <div class="align-items-center mt-3">
-                    <img src="files/obu-vui-sei/obu_header.png" alt="imageR" class="img-small">
+                    <img loading="lazy" src="files/obu-vui-sei/obu_header.png" alt="imageR" class="img-small">
                     <p class="text-gray-side mt-0">图：OBU 数据包的标识头语法结构，见 <a href="https://norkin.org/research/av1_decoder_model/index.html">norkin.org</a></p>
-                    <img src="files/obu-vui-sei/obu_orders.png" alt="imageR" class="img-medium">
+                    <img loading="lazy" src="files/obu-vui-sei/obu_orders.png" alt="imageR" class="img-medium">
                     <p class="text-gray-side mt-0">图：OBU 数据包的时间单位 Temporal unit 排列，见 <a href="https://norkin.org/research/av1_decoder_model/index.html">norkin.org</a></p>
                 </div>
             </div>
@@ -967,7 +968,7 @@
                     <li>其它</li>
                 </ol>
                 <div class="align-items-center">
-                    <img src="files/rate-control/golden-frame-group.png" alt="imageR" class="img-medium">
+                    <img loading="lazy" src="files/rate-control/golden-frame-group.png" alt="imageR" class="img-medium">
                     <p class="text-gray-side mt-0">图：从关键帧或金帧/远距离过去帧开始的显示（先后）与解码（序号）顺序，以及参考溯帧方向（箭头）</p>
                 </div>
             </div>
@@ -1016,7 +1017,7 @@
                 <p>以帧分瓣格式（Frame segment）编码时，位于分瓣边界的混合参考块需要重设为单帧参考块。</p>
             </div>
             <div class="align-items-center mt-3">
-                <img src="files/inter-prediction/interprediction-mind-map.png" alt="imageR" class="img-medium">
+                <img loading="lazy" src="files/inter-prediction/interprediction-mind-map.png" alt="imageR" class="img-medium">
                 <p class="text-gray-side mt-0">图：参考帧选取思维导图。见 <a href="https://wikidocs.net/79849">Wikidocs - Reference frame</a></p>
             </div>
 
@@ -1026,7 +1027,7 @@
             <h3>流结构——分层预测结构/帧间参考层级 Hierarchical levels/时间层 Temporal layers</h3>
             <p>代表支撑每项 GOP 的帧间关系，每个参考帧都只在每个方向上引用一帧被参考帧。而分层预测结构的分层可以理解为 AVC、HEVC 中的尖塔 B 帧（B-Pyramid）参考结构，决定了量化强度精确到帧类型的分配。</p>
             <div class="align-items-center mt-3">
-                <img src="files/lookahead/interprediction-hierarchical-structure.svg" alt="imageR" class="img-medium">
+                <img loading="lazy" src="files/lookahead/interprediction-hierarchical-structure.svg" alt="imageR" class="img-medium">
                 <p class="text-gray-side mt-0">图：5 层 GOP 情况下的分层预测结构，见 <a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/master/Docs/svt-av1-encoder-design.md">SVT-AV1 Docs</a></p>
             </div>
             <p>解码出第 1 号帧时，所需的解码顺序大致为分层预测结构底层（0，16）→中层（8，4）→高层（2，1）。如果第 16 号帧为附有叠加帧 <code>OVERLAY</code> 的支线被参考帧 <code>ALTREF</code>，则可以理解为解码的总帧数 +1。这种解码顺序</p>
@@ -1127,7 +1128,7 @@
             <h3>图片结构——粗分块/特大块 Superblock</h3>
             <p>AV1 支持最大 128x128 与兼容 VP9 的 64x64 亮度 SB。为适配当前市面上的硬件编解码器，128x128 的块会以逻辑上的 64x64 块编解码（类似于将一纸数字横竖各切一刀，再重排顺序）</p>
             <div class="align-items-center">
-                <img src="files/block-splitting/micol-mirow-order.png" alt="imageR" class="img-medium">
+                <img loading="lazy" src="files/block-splitting/micol-mirow-order.png" alt="imageR" class="img-medium">
                 <p class="text-gray-side mt-0">图：按 MiRow、MiCol（Marcoblock Index）行、列顺序解码的 SB，见 <a href="https://wikidocs.net/70813">Wikidocs - Superblock and block</a> </p>
             </div>
             <p>MiRow、MiCol 为细分块提供了帧内大致位置，从而可以获取一些算法需要的空域权重/缩放值。</p>
@@ -1163,7 +1164,7 @@
                     <li><code class="code-bold">PARTITION_HORZ</code>，<code class="code-bold">PARTITION_HORZ_A</code>，<code class="code-bold">PARTITION_HORZ_B</code>，<code class="code-bold">PARTITION_HORZ_4</code></li>
                 </ul>
                 <div class="align-items-center">
-                    <img src="files/block-splitting/partitions.png" alt="imageR" class="img-medium">
+                    <img loading="lazy" src="files/block-splitting/partitions.png" alt="imageR" class="img-medium">
                 </div>
             </div>
 
@@ -1171,7 +1172,7 @@
             <div class="coll-content">
                 <h4>（3/3）细分块递归深度</h4>
                 <div class="align-items-center">
-                    <img src="files/block-splitting/recursive-sizes.png" alt="imageR" class="img-small">
+                    <img loading="lazy" src="files/block-splitting/recursive-sizes.png" alt="imageR" class="img-small">
                     <p class="text-gray-side mt-0">图：见 <a href="https://wikidocs.net/70813">Wikidocs - Superblock and block</a> </p>
                 </div>
             </div>
@@ -1193,7 +1194,7 @@
                 <li>色度平面支持其中最宽和最高 32 的块</li>
             </ul>
             <div class="align-items-center">
-                <img src="files/block-splitting/recursive-partitions.png" alt="imageR" class="img-medium">
+                <img loading="lazy" src="files/block-splitting/recursive-partitions.png" alt="imageR" class="img-medium">
                 <p class="text-gray-side mt-0">图：AV1 的递归细分块方案，以及变换块在各种细分块方案 PARTITION 下的变换块运用</p>
             </div>
 
@@ -1252,7 +1253,7 @@
                 <h3>变换——离散余弦变换 Discrete Cosine Transform（DCT-3）</h3>
                 <p>变换一个 NxN 块的大致过程是将各行、各列分别变换一次，然后将解算出的频域强度加到一起。例如取一行 4x4 块的值记做 Y，设像素值 [0,1,0,0]，得到：</p>
                 <div class="align-items-center">
-                    <img src="files/transforming/dct-0-1-0-0.png" alt="imageR" class="img-medium">
+                    <img loading="lazy" src="files/transforming/dct-0-1-0-0.png" alt="imageR" class="img-medium">
                 </div>
 
                 <p>长度 N 由输入序列 Y 的长度得到。Y 的四点需要设定 X 轴间距和偏移才能置于坐标系中。此步骤由 <span class="text-blue-math">\(X=\frac{\pi}{N}\left(\left[0,...,N-1\right]+\frac{1}{2}\right)\)</span> 实现，其中：</p>
@@ -1262,12 +1263,12 @@
                     <li>或者，将式子换成 <span class="text-blue-math">\(\sin\left(kx\right)\)</span>，虽然结果波形会对齐到这些点上，但原理完全不同）</li></ul></li>
                 </ul>
                 <div class="align-items-center">
-                    <img src="files/transforming/dct-X-scaling.png" alt="imageR" class="img-medium">
+                    <img loading="lazy" src="files/transforming/dct-X-scaling.png" alt="imageR" class="img-medium">
                 </div>
 
                 <p>在求和符号中，可以看到遍历变量 <span class="text-blue-math">\(k\)</span> 从 1 开始数，在这个式子里最多数到 3，而被跳过的 0 是它左侧的 <span class="text-blue-math">\(\frac{1}{N} F\left(0\right)\)</span> 的结果（DC），所以这个式子可以分解为：</p>
                 <div class="align-items-center">
-                    <img src="files/transforming/dct-sum-components-freq-index-k.png" alt="imageR" class="img-medium">
+                    <img loading="lazy" src="files/transforming/dct-sum-components-freq-index-k.png" alt="imageR" class="img-medium">
                 </div>
 
                 <p>缩放值 <span class="text-blue-math">\(F\left(k\right)\)</span>，就是“8x8 DCT 图表”中的某一部分。它也使用了遍历变量 <span class="text-blue-math">\(k\)</span>，从而拆分出 <span class="text-blue-math">\(Y_{k}, X_{k}\)</span> 两个序列中每个位置的强度并加在一起。</p>
@@ -1288,7 +1289,7 @@
                 </ul>
                 <p>上图的可互动例子见 <a href="https://www.desmos.com/calculator/zonmf9kdp1">Desmos</a>可以试着添加更多值到 Y 序列，以及更改这些值的大小等。例如上述“去掉 <span class="text-blue-math">\(\frac{1}{2}\)</span>，换成 <span class="text-blue-math">\(\sin\left(kx\right)\)</span>”构成的一种离散正弦变换 DST：</p>
                 <div class="align-items-center">
-                    <img src="files/transforming/dst-like-transformation.png" alt="imageR" class="img-medium">
+                    <img loading="lazy" src="files/transforming/dst-like-transformation.png" alt="imageR" class="img-medium">
                 </div>
             </div>
             
@@ -1309,7 +1310,7 @@
                 <h3>变换——AV1 变换算法配置</h3>
                 <p>AVC 中使用 DCT 实现变换。HEVC 中搭配使用了整数 DCT（IDCT），DST，一种从 DST 衍生的整数变换（4x4 块 Integer Transform, IT）。AV1 中使用了 DCT，ADST，翻转 ADST（FLIPADST），以及 ID 变换（Identity Transform, IDTX），一维下的频域配置为：</p>
                 <div class="align-items-center">
-                    <img src="files/transforming/transformation-kernel-frequencies.png" alt="imageR" class="img-medium">
+                    <img loading="lazy" src="files/transforming/transformation-kernel-frequencies.png" alt="imageR" class="img-medium">
                 </div>
                 <p>具体算法为 DCT-2：
                     <span class="text-blue-math">\[T_{i}\left(j\right) =
@@ -1479,7 +1480,7 @@ typedef enum { // 一般模式
                     <li>将过滤出的噪声拼合出叠加帧 <code>OVERLAY</code></li>
                 </ol>
                 <div class="align-items-center mt-3">
-                    <img src="files/lookahead/motion-estimation-for-temporal-filtering-window.svg" alt="imageR" class="img-medium">
+                    <img loading="lazy" src="files/lookahead/motion-estimation-for-temporal-filtering-window.svg" alt="imageR" class="img-medium">
                     <p class="text-gray-side mt-0">图：TF 对待处理的帧，相对于邻帧进行 hex 动态搜索，见 <a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/master/Docs/svt-av1-encoder-design.md">SVT-AV1 Docs</a></p>
                 </div>
                 <p>SVT-AV1 中，TF 操作与其它编码进程平行，逐 64x64 块处理。见 <a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/master/Docs/Appendix-Alt-Refs.md#multi-threading">SVT-AV1 Doc</a>。</p>
@@ -1551,11 +1552,11 @@ typedef enum { // 一般模式
                 <h4>（2/4）空域 MVRS</h4>
                 <p>亮度编码块中以 8x8 区域搜索其帧内的顶部、左侧、左上、右上共 4 种相邻块是否溯至同一被参考帧（混合参考帧模式下为同两帧被参考帧）。如 32x32 亮度分块中，顶部代表横向 3 行，每行 4 个 8x8 区域；左侧代表纵向 3 列，每列 4 个 8x8 区域；以及左上角，右上角各一个 8x8 区域。搜索顺序为由近到远，为行 1，列 1，右上，左上，行 2，列 2，行 3，列 3：</p>
                 <div class="align-items-center">
-                    <img src="files/inter-prediction/spatial-mvrs-order.png" alt="imageR" class="img-small">
+                    <img loading="lazy" src="files/inter-prediction/spatial-mvrs-order.png" alt="imageR" class="img-small">
                     <p class="text-gray-side mt-0">图：空域 MVRS 查找顺序</p>
-                    <img src="files/inter-prediction/spatial-mvrs-single.png" alt="imageR" class="img-medium">
+                    <img loading="lazy" src="files/inter-prediction/spatial-mvrs-single.png" alt="imageR" class="img-medium">
                     <p class="text-gray-side mt-0">图：单帧参考帧规划</p>
-                    <img src="files/inter-prediction/spatial-mvrs-compound.png" alt="imageR" class="img-medium">
+                    <img loading="lazy" src="files/inter-prediction/spatial-mvrs-compound.png" alt="imageR" class="img-medium">
                     <p class="text-gray-side mt-0">图：混合参考帧规划</p>
                 </div>
             </div>
@@ -1568,9 +1569,9 @@ typedef enum { // 一般模式
                 <h4>（4/4）时域/向量场 MVRS</h4>
                 <p>采用一种线性投影模型以对齐时域相邻块动态向量的规划法，适合高速直线运动轨迹。以 8x8 块为单位，通过遍历地将被参考帧列表中的动态向量乘进一个缩放值，而得到当前帧的向量场预测。缩放值的取值为被参考帧距离当前帧的帧数，与被参考帧距离前被参考帧之差（帧数距离）的比。</p>
                 <div class="align-items-center">
-                    <img src="files/inter-prediction/temporal-mvrs.png" alt="imageR" class="img-medium">
+                    <img loading="lazy" src="files/inter-prediction/temporal-mvrs.png" alt="imageR" class="img-medium">
                     <p class="text-gray-side mt-0">图：当前帧（Current Frame）通过距离被参考帧的帧数缩放动态向量以及预测量</p>
-                    <img src="files/inter-prediction/temporal-mvrs-order.png" alt="imageR" class="img-small">
+                    <img loading="lazy" src="files/inter-prediction/temporal-mvrs-order.png" alt="imageR" class="img-small">
                     <p class="text-gray-side mt-0">图：被参考帧中的搜索区域，先尝试对准一块 16x16 范围，其次是角落</p>
                 </div>
             </div>
@@ -1589,7 +1590,7 @@ typedef enum { // 一般模式
                     <li><code class="code-bold">GLOBALMV</code>：使用全局动态向量</li>
                 </ul>
                 <div class="align-items-center">
-                    <img src="files/inter-prediction/reference-mv-single.png" alt="imageR" class="img-medium">
+                    <img loading="lazy" src="files/inter-prediction/reference-mv-single.png" alt="imageR" class="img-medium">
                 </div>
             </div>
         
@@ -1607,7 +1608,7 @@ typedef enum { // 一般模式
                     <li><code class="code-bold">GLOBALMV</code>：同上</li>
                 </ul>
                 <div class="align-items-center">
-                    <img src="files/inter-prediction/reference-mv-compound.png" alt="imageR" class="img-medium">
+                    <img loading="lazy" src="files/inter-prediction/reference-mv-compound.png" alt="imageR" class="img-medium">
                 </div>
                 <p>除 <code class="code-bold">NEARESTMV</code>，<code class="code-bold">NEAREST_NEARESTMV</code> 之外，被参考帧的预测差距 MVD 都会被纳入考量。而剩余的模式区别就是采用哪一种预测量的区别。</p>
             </div>
@@ -1669,7 +1670,7 @@ static const int mode_2_counter[] = { // 帧内 + 帧间预测模式表
                 <h4>（1/3）平移运动补偿 Translational MC</h4>
                 <p>选用平移预测模式后，AV1 亮度块会使用 <code>SMOOTH</code>，<code>REGULAR</code> 和 <code>SHARP</code>，共 3 种自适应 8-tap FIR 插值滤镜，代表在横向或纵向 8 个像素中采样并分配权重。如果像素位于块的纵向中间处，则先计算块中的所有横向插值结果，在从中计算纵向插值结果。</p>
                 <div class="align-items-center">
-                    <img src="files/inter-prediction/8-tap-interpolation.png" alt="imageR" class="img-small">
+                    <img loading="lazy" src="files/inter-prediction/8-tap-interpolation.png" alt="imageR" class="img-small">
                     <p class="text-gray-side mt-0">图：8x8 区间（8-tap 范围内）的横向→纵向插值，得到中心的子像素</p>
                 </div>
             </div>
@@ -1811,7 +1812,7 @@ static const int mode_2_counter[] = { // 帧内 + 帧间预测模式表
                 <h4>（2/3）局部仿射变换运动补偿 Local Affine/Warped MC</h4>
                 <p>基于当前块及其空间相邻块，以估计局部的仿射模型参数。如果空间相邻块与当前块指向同一被参考帧，则检查这个空间相邻块中的中心像素与其作对应的，被参考帧中的像素；与其左侧、顶部的 <span class="text-blue-math">\(\frac{1}{4}\)</span> 像素，对应被参考帧的准确映射位置，而得到补偿程度的变换矩阵。</p>
                 <div class="align-items-center">
-                    <img src="files/inter-prediction/local-affine-motion-compensation-derivation.png" alt="imageR" class="img-medium">
+                    <img loading="lazy" src="files/inter-prediction/local-affine-motion-compensation-derivation.png" alt="imageR" class="img-medium">
                 </div>
             </div>
 
@@ -1820,8 +1821,8 @@ static const int mode_2_counter[] = { // 帧内 + 帧间预测模式表
                 <h4>（3/3）重叠块运动补偿 Overlapped block MC</h4>
                 <p>单帧参考帧中，如果当前帧间预测块面积不小于 8x8，且顶部或左侧的相邻块（不含左上块）已被编码时，只要指向同一被参考帧，则可能会有块间画面的重叠。当 OBMC 应用于当前块时，当前块的帧间预测结果会与顶部、左侧相邻块的结果合成；最多支持顶部和左侧块的四个动态向量。虽然运动补偿与预测模式下的权重分配不相关，但合并两个预测结果画面的重叠处时，仍然需要计算预测像素值，为 <span class="text-blue-math">\( P_{1}=m\cdot R_{1}+(64-m)R_{\text{above OR left}} \)</span></p>
                 <div class="align-items-center">
-                    <img src="files/inter-prediction/overlapped-motion-compensation-top-left.png" alt="imageR" class="img-medium">
-                    <img src="files/inter-prediction/overlapped-motion-compensation-order.png" alt="imageR" class="img-small">
+                    <img loading="lazy" src="files/inter-prediction/overlapped-motion-compensation-top-left.png" alt="imageR" class="img-medium">
+                    <img loading="lazy" src="files/inter-prediction/overlapped-motion-compensation-order.png" alt="imageR" class="img-small">
                     <p class="text-gray-side mt-0">图：OBMC 的检测范围，和处理顺序（右/下）</p>
                 </div>
                 <p>预测像素动态向量的比例受到预测像素所在的高（顶部重叠）或宽（左侧重叠）的变化而变化；且受到预测块自身的高（顶部重叠）或宽（左侧重叠）的变化而变化。例如越远离重叠块，则当前预测块的动态向量权重越高；而当前块面积越大，则变化的区间梯度（变化周期宽度）也会变缓。</p>
@@ -1847,7 +1848,7 @@ static const int mode_2_counter[] = { // 帧内 + 帧间预测模式表
                     <li>所有“参考帧上的特征相比原画中特征”中，相关性是否（相比周围是）最高</li>
                 </ul>
                 <div class="align-items-center">
-                    <img src="files/inter-prediction/features-from-accelerated-segment-test.jpg" alt="imageR" class="img-medium">
+                    <img loading="lazy" src="files/inter-prediction/features-from-accelerated-segment-test.jpg" alt="imageR" class="img-medium">
                 </div>
             </div>
 
@@ -1858,7 +1859,7 @@ static const int mode_2_counter[] = { // 帧内 + 帧间预测模式表
                 <p>线性回归分析的目标是从坐标系的某一轴（x 或 y 轴）中，找到相对这条轴的一条最优解直线。这里的<i>最优解</i>指该直线到所有数据点的距离之和最小（通常指垂直距离）。因此，我们认为这条直线最能反映数据的整体趋势。</p>
                 <p>需要注意的是，除了线性回归以外还有主成分分析（PCA）方法。不使用后者通常是因为这组采样点的 x 或 y 坐标可能只是时间序列或其它顺序变量（如隔几秒采样一次），这种情况下，我们更关注变量之间的关系本身，而不是数据的降维处理。</p>
                 <div class="align-items-center">
-                    <img src="files/inter-prediction/least-squares.png" alt="imageR" class="img-small">
+                    <img loading="lazy" src="files/inter-prediction/least-squares.png" alt="imageR" class="img-small">
                     <p class="text-gray-side mt-0">图片来自：<a href="https://www.cuemath.com/data/least-squares/">cuemath.com</a></p>
                 </div>
             </div>
@@ -1914,7 +1915,7 @@ static const int mode_2_counter[] = { // 帧内 + 帧间预测模式表
                     <li>给出合群点数量最多的一次所拟合的模型</li>
                 </ol>
                 <div class="align-items-center">
-                    <img src="files/inter-prediction/ransac-fitted-line.svg" alt="imageR" class="img-small">
+                    <img loading="lazy" src="files/inter-prediction/ransac-fitted-line.svg" alt="imageR" class="img-small">
                     <p class="text-gray-side mt-0">图片来自：<a href="https://zh.wikipedia.org/wiki/%E9%9A%A8%E6%A9%9F%E6%8A%BD%E6%A8%A3%E4%B8%80%E8%87%B4">维基百科</a></p>
                 </div>
             </div>
@@ -1963,7 +1964,7 @@ static const int mode_2_counter[] = { // 帧内 + 帧间预测模式表
                 <h4>（5/6）帧内帧间混合模式分权 Compound InterIntra Predictor</h4>
                 <p>重叠块运动补偿 OBMC 见下方的运动补偿版块中，结合 DC、垂直/水平夹角或平滑/SMOOTH 的帧内编码块，以及仿射预测的帧间编码块。结合的方法包括了楔形蒙版预测的横向和纵向模式，但主要为随坐标变化过渡权重的两种预测结果混合，实现合成。</p>
                 <div class="align-items-center">
-                    <img src="files/inter-prediction/compound-interintra-prediction.png" alt="imageR" class="img-medium">
+                    <img loading="lazy" src="files/inter-prediction/compound-interintra-prediction.png" alt="imageR" class="img-medium">
                     <p class="text-gray-side mt-0">图：重叠合成的可行样式与渐变结构</p>
                 </div>
             </div>
@@ -1990,9 +1991,9 @@ Wedge_Master_Vertical[MASK_MASTER_SIZE] =
             </code></pre></div>
             <p>通过确认当前块横向还是纵向的 4x4 分块数量更多，以预选一批模式，然后循环遍历选取蒙版角度，以及额外用于对齐的 x 偏移与 y 偏移，完成预测：</p>
             <div class="align-items-center">
-                <img src="files/inter-prediction/compound-wedge-prediction.png" alt="imageR" class="img-small">
+                <img loading="lazy" src="files/inter-prediction/compound-wedge-prediction.png" alt="imageR" class="img-small">
                 <p class="text-gray-side mt-0">图：楔形蒙版的 NxN，Nx2N 分类的不同模式</p>
-                <img src="files/inter-prediction/compound-prediction-modes.webp" alt="imageR" class="img-small">
+                <img loading="lazy" src="files/inter-prediction/compound-prediction-modes.webp" alt="imageR" class="img-small">
                 <p class="text-gray-side mt-0">图：不同混合参考帧预测模式的结果对比</p>
             </div>
             <button type="button" class="collapsible border-main rounded-3 my-3">点击展开/折叠内容：蒙版角度及偏移对齐量的筛选</button>
@@ -2072,7 +2073,7 @@ WEDGE_OBLIQUE117, 6, 4
                 <p>HEVC 中的帧内参考源拥有左侧一列，顶部一行，共两排参考源加一个左上角参考源。SVT-AV1 编码器的帧内预测块拥有其所在 Superblock 的左侧和顶部一行一列，外加一个左上肩型序列（Γ），<i>共 3 列</i>。</p>
                 <p>左侧序列约一个 SB 高，可使用帧内编码 SB 的 y 坐标锁定。顶部序列大约有一个图片宽，且包含了原本的左上角参考源像素，可以使用当前块的 x 坐标锁定。</p>
                 <div class="align-items-center">
-                    <img src="files/intra-prediction/intra-reference-neighbour.png" alt="imageR" class="img-medium">
+                    <img loading="lazy" src="files/intra-prediction/intra-reference-neighbour.png" alt="imageR" class="img-medium">
                     <p class="text-gray-side mt-0">图：SVT-AV1 中帧内预测的参考源序列。</p>
                 </div>
                 <p><a href="https://aomediacodec.github.io/av1-spec/#general-11">AV1 Spec - Intra Prediction</a> 中，左上肩序列仍然是分为左侧和顶部两个序列看待的，当参考源缺失时按如下顺序填补。</p>
@@ -2082,22 +2083,22 @@ WEDGE_OBLIQUE117, 6, 4
             <div class="coll-content">
                 <p>仅左侧或上侧参考源可用——以左上角参考源的像素值填补</p>
                 <div class="align-items-center">
-                    <img src="files/intra-prediction/intra-neighbour-replenishment.png" alt="imageR" class="img-small">
+                    <img loading="lazy" src="files/intra-prediction/intra-neighbour-replenishment.png" alt="imageR" class="img-small">
                     <p class="text-gray-side mt-0">图：<code class="code-bold">haveAbove == 0; haveLeft == 1</code> 时的填补</p>
                 </div>
                 <p>两侧参考源皆不可用——设为最大像素值的 <span class="text-blue-math">\(\frac{1}{4}\)</span>。</p>
                 <div class="align-items-center">
-                    <img src="files/intra-prediction/intra-neighbour-replenishment-2.png" alt="imageR" class="img-small">
+                    <img loading="lazy" src="files/intra-prediction/intra-neighbour-replenishment-2.png" alt="imageR" class="img-small">
                     <p class="text-gray-side mt-0">图：<code class="code-bold">haveAbove == 0; haveLeft == 0</code> 时的填补</p>
                 </div>
                 <p>左侧和上侧参考源可用，但右上行参考源缺失——用顶部的最右侧参考源填补。</p>
                 <div class="align-items-center">
-                    <img src="files/intra-prediction/intra-neighbour-replenishment-3.png" alt="imageR" class="img-small">
+                    <img loading="lazy" src="files/intra-prediction/intra-neighbour-replenishment-3.png" alt="imageR" class="img-small">
                     <p class="text-gray-side mt-0">图：<code class="code-bold">haveAbove == 1; haveAboveRight == 0</code> 时的填补</p>
                 </div>
                 <p>左上角的参考源遵循相同的填补逻辑。见：<a href="https://wikidocs.net/71814">Wikidocs</a></p>
                 <div class="align-items-center">
-                    <img src="files/intra-prediction/intra-neighbour-replenishment-4.png" alt="imageR" class="img-medium">
+                    <img loading="lazy" src="files/intra-prediction/intra-neighbour-replenishment-4.png" alt="imageR" class="img-medium">
                 </div>
             </div>
 
@@ -2123,7 +2124,7 @@ WEDGE_OBLIQUE117, 6, 4
                     <li>继续下一个块</li>
                 </ol>
                 <div class="align-items-center">
-                    <img src="files/intra-prediction/intra-reference-neighbour-order.png" alt="imageR" class="img-medium">
+                    <img loading="lazy" src="files/intra-prediction/intra-reference-neighbour-order.png" alt="imageR" class="img-medium">
                     <p class="text-gray-side mt-0">图：帧内预测的参考源序列更新。由于参考模式的不同，所以更新的参考源序列也不同</p>
                 </div>
                 <p>箭头表示了 Z 字型扫描编码细分块的顺序，颜色表示每个块编码所选用的参考模式（图中模式仅供参考）。三个参考源序列中会储存已完成编码的当前块，也包括了它们的参考模式。</p>
@@ -2162,7 +2163,7 @@ WEDGE_OBLIQUE117, 6, 4
                 </ul>
                 <p>偏移角最大和最小的夹角分别为 207+9°和 45-9°，最终相差 180°（Type II 最终相差 176°）。8x8 的小预测块仍然沿用 8 个夹角以节省算力。这种先基本后细化夹角的查找方法类似于 x265 中的 fast-intra 查找。</p>
                 <div class="align-items-center">
-                    <img src="files/intra-prediction/directional-prediction.png" alt="imageR" class="img-medium">
+                    <img loading="lazy" src="files/intra-prediction/directional-prediction.png" alt="imageR" class="img-medium">
                     <p class="text-gray-side mt-0">图：帧内预测的夹角模式，为 8 个夹角中添加了左右各 3 个，每个 3°的偏移角</p>
                 </div>
             </div>
@@ -2176,7 +2177,7 @@ WEDGE_OBLIQUE117, 6, 4
                 <li>二次多项式插值代表“权重 1 × 点 1 + 权重 2 × 点 2 + ... + 权重 N × 点 N”，权重由距离过渡得到</li>
             </ul>
             <div class="align-items-center">
-                <img src="files/intra-prediction/smooth-prediction.png" alt="imageR" class="img-medium">
+                <img loading="lazy" src="files/intra-prediction/smooth-prediction.png" alt="imageR" class="img-medium">
             </div>
 
             <button type="button" class="collapsible border-main rounded-3 mb-3">点击展开/折叠内容：SMOOTH_PRED 插值，Round2 函数伪代码</button>
@@ -2222,7 +2223,7 @@ Round2(x,n) = floor((x+2^(n-1)) / 2^n)
                     <li>这种算法相比单纯执行 <code class="code-bold">TM_PRED</code> 能更好地隔离边缘纹理</li>
                 </ol>
                 <div class="align-items-center">
-                    <img src="files/intra-prediction/tm-prediction.png" alt="imageR" class="img-small">
+                    <img loading="lazy" src="files/intra-prediction/tm-prediction.png" alt="imageR" class="img-small">
                     <p class="text-gray-side mt-0">图：<code class="code-bold">TM_PRED</code> 所对应的顶部，左侧和左上角参考源</p>
                 </div>
             </div>
@@ -2247,8 +2248,8 @@ else
             <h3>帧内预测——递归插值模式 Recursive filter intra</h3>
             <p>使用与 <code class="code-bold">TM_PRED</code> 类似的原理，结合递归逻辑预测一处 8x8 范围。AV1 中定义了 5 种递归模式，每种附带一组 7-tap 滤镜，将当前块划分为 4x2 的细分块，这些细分块由来自顶部和左侧块的 7 个参考源，由滤镜插值得到。每个 4x2 细分块内使用不同的 7-tap 滤镜，且每个完成预测的细分块都被用于下一个 4x2 细分块的预测，构成递归计算的参考结构。</p><!--该预测模式并没有“<code class="code-bold">_PRED</code>”的变量名。-->
             <div class="align-items-center">
-                <img src="files/intra-prediction/recursive-prediction.png" alt="imageR" class="img-small">
-                <img src="files/intra-prediction/recursive-prediction-variables.png" alt="imageR" class="img-small">
+                <img loading="lazy" src="files/intra-prediction/recursive-prediction.png" alt="imageR" class="img-small">
+                <img loading="lazy" src="files/intra-prediction/recursive-prediction-variables.png" alt="imageR" class="img-small">
                 <p class="text-gray-side mt-0">图：递归预测模式与所对应的参考源映射方向，（右/下）分块与变量值图解。见：<a href="https://aomediacodec.github.io/av1-spec/#recursive-intra-prediction-process">AV1 Spec - Recursive intra prediction</a></p>
             </div>
             <p>递归插值模式不是在夹角，DC，PAETH 等模式基础上进行微调，而是作为独立的预测模式存在，所以需要模式决策分别判断率失真程度（<a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/tree/master/Docs/Appendix-Filter-Intra.md">SVT-AV1 Readme</a>）。理论上可以改善“传统帧内预测”应对块中画面微小变化的保真度。</p>
@@ -2462,9 +2463,9 @@ Intra_Filter_Taps[ INTRA_FILTER_MODES ][ 8 ][ 7 ] = {
             <h3>帧内预测——色度填亮度模式 Chroma from luma（CFL，特殊）</h3>
             <p>色度平面的预测像素通过亮度平面的同位像素值生成。高频部分通过重建块减去亮度块平均值预测得到，低频部分取自亮度块 <code class="code-bold">DC_PRED</code> 预测模式的像素值。高低频相加则得到一个色度预测像素，见：<a href="https://aomediacodec.github.io/av1-spec/#predict-chroma-from-luma-process">AV1 Spec - CfL</a></p>
             <div class="align-items-center">
-                <img src="files/intra-prediction/chroma-from-luma-prediction.png" alt="imageR" class="img-medium">
+                <img loading="lazy" src="files/intra-prediction/chroma-from-luma-prediction.png" alt="imageR" class="img-medium">
                 <p class="text-gray-side mt-0">图：色度填亮度预测模式的计算。包括了提取亮度平面残差，乘进缩放值，以及叠加色度平面 <code class="code-bold">DC_PRED</code> 结果</p>
-                <img src="files/intra-prediction/chroma-from-luma-prediction-1.svg" alt="imageR" class="img-medium">
+                <img loading="lazy" src="files/intra-prediction/chroma-from-luma-prediction-1.svg" alt="imageR" class="img-medium">
                 <p class="text-gray-side mt-0">图：<a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/master/Docs/Appendix-CfL.md?ref_type=heads">SVT-AV1 Docs</a> 中的色度填亮度预测模式的计算图例</p>
             </div>
 
@@ -2493,7 +2494,7 @@ scaledLuma = Round2Signed( alpha * ( L[i][j] - lumaAvg ), 6 )
                     <li>使用时，不可用于 IBC 预测的块如下图</li>
                 </ul>
                 <div class="align-items-center">
-                    <img src="files/intra-prediction/intra-block-copy-availability.png" alt="imageR" class="img-medium">
+                    <img loading="lazy" src="files/intra-prediction/intra-block-copy-availability.png" alt="imageR" class="img-medium">
                     <p class="text-gray-side mt-0">图：帧内块拷贝预测的可用块限制</p>
                 </div>
             </div>
@@ -2505,8 +2506,8 @@ scaledLuma = Round2Signed( alpha * ( L[i][j] - lumaAvg ), 6 )
             <div class="coll-content">
                 <p>调色板的映射包括从左，上和左上参考源中筛选出惯用值，再对上下文排序，最后以对角线扫描的顺序映射出预测块。预测每个块都需要更新一遍调色板（上下文）。编码时，编码块的冠军个预测像素会独立选择调色板中的颜色，其余的预测像素使用其顶部、左侧和左上角的参考源作为熵编码的上下文进行编码。见：<a href="https://aomediacodec.github.io/av1-spec/#palette-prediction-process">AV1 Spec - Palette Prediction</a>，<a href="https://aomediacodec.github.io/av1-spec/#palette-color-context-function">AV1 Spec - Palette Color Context</a></p>
                 <div class="align-items-center">
-                    <img src="files/intra-prediction/palette-mode.png" alt="imageR" class="img-small">
-                    <img src="files/intra-prediction/palette-context.png" alt="imageR" class="img-small">
+                    <img loading="lazy" src="files/intra-prediction/palette-mode.png" alt="imageR" class="img-small">
+                    <img loading="lazy" src="files/intra-prediction/palette-context.png" alt="imageR" class="img-small">
                     <p class="text-gray-side mt-0">图：4x4 块调色板模式的扫描顺序，与调色板上下文的例子（右）</p>
                 </div>
             </div>
@@ -2817,7 +2818,7 @@ for(i=0; i &lt; th; i++) { // 遍历分块宽，高
                 <h4>（1/1）QLookup 表</h4>
                 <p>AV1 中的默认量化与逆量化方法的强度。范围为 0~255，由 <code class="code-bold">qp_to_qindex</code> 映射出 0~63。逆量化结果由块中像素值乘进 QLookup 表中对应的数，再将结果的二进制右移一位（÷2）实现。这些值会由偏移值进一步调整：</p>
                 <div class="align-items-center">
-                    <img src="files/rate-control/quantization-qp-qindex.png" alt="imageR" class="img-medium">
+                    <img loading="lazy" src="files/rate-control/quantization-qp-qindex.png" alt="imageR" class="img-medium">
                     <p class="text-gray-side mt-0">图：QLookup 表对应的 0~63 QP 范围。与 0~255 的 QIndex 范围的曲线变化极小</p>
                 </div>
                 <ul class="text-smaller">
@@ -3149,9 +3150,9 @@ int av1_get_qindex(const struct segmentation *seg, int segment_id, int base_qind
                 <h4>（3/3）SVT-AV1 帧内方差自适应量化增强</h4>
                 <p>一种调整方差计算结果强度的方法，称为 Variance boost（VB）。下例为 2 个大小相似的岩石纹理图。纹理逐渐淡化为纯白色、米色和黑色。从中出现了模糊、高频细节丢失、以及显露的变换块基础图案。算法部分详见：<a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/tree/master/Docs/Appendix-Variance-Boost.md">SVT-AV1 Docs</a>：</p>
                 <div class="align-items-center">
-                    <img src="files/rate-control/svt-av1/vb_rock_novb_qp50_22848.webp" alt="imageR" class="img-medium">
+                    <img loading="lazy" src="files/rate-control/svt-av1/vb_rock_novb_qp50_22848.webp" alt="imageR" class="img-medium">
                     <p class="text-gray-side mt-0">图 1：关 VB、QP 50 时得到 22,848 字节的帧</p>
-                    <img src="files/rate-control/svt-av1/vb_rock_novb_qp50_22848.webp" alt="imageR" class="img-medium">
+                    <img loading="lazy" src="files/rate-control/svt-av1/vb_rock_novb_qp50_22848.webp" alt="imageR" class="img-medium">
                     <p class="text-gray-side mt-0">图 2：开 VB、QP 53 时得到 22,352 字节的帧</p>
                 </div>
 
@@ -3159,16 +3160,16 @@ int av1_get_qindex(const struct segmentation *seg, int segment_id, int base_qind
                 <p>注：图片为了适配网页浏览而被转换为 PNG，与原本的 AVIF 格式略有区别。</p>
 
                 <div class="align-items-center">
-                    <img src="files/rate-control/svt-av1/vb_rock_strength_s1_qp55_14767.webp" alt="imageR" class="img-medium">
+                    <img loading="lazy" src="files/rate-control/svt-av1/vb_rock_strength_s1_qp55_14767.webp" alt="imageR" class="img-medium">
                     <p class="text-gray-side mt-0">图 1：VB 强度 1、QP 55 时得到 14,767 字节的帧</p>
 
-                    <img src="files/rate-control/svt-av1/vb_rock_strength_s2_qp55_16403.webp" alt="imageR" class="img-medium">
+                    <img loading="lazy" src="files/rate-control/svt-av1/vb_rock_strength_s2_qp55_16403.webp" alt="imageR" class="img-medium">
                     <p class="text-gray-side mt-0">图 2：VB 强度 2、QP 55 时得到 16,403 字节的帧</p>
 
-                    <img src="files/rate-control/svt-av1/vb_rock_strength_s3_qp55_16826.webp" alt="imageR" class="img-medium">
+                    <img loading="lazy" src="files/rate-control/svt-av1/vb_rock_strength_s3_qp55_16826.webp" alt="imageR" class="img-medium">
                     <p class="text-gray-side mt-0">图 3：VB 强度 3、QP 55 时得到 16,826 字节的帧</p>
 
-                    <img src="files/rate-control/svt-av1/vb_rock_strength_s4_qp55_21351.webp" alt="imageR" class="img-medium">
+                    <img loading="lazy" src="files/rate-control/svt-av1/vb_rock_strength_s4_qp55_21351.webp" alt="imageR" class="img-medium">
                     <p class="text-gray-side mt-0">图 4：VB 强度 4、QP 55 时得到 16,21,351 字节的帧</p>
                 </div>
             </div>
@@ -3256,7 +3257,7 @@ int av1_get_qindex(const struct segmentation *seg, int segment_id, int base_qind
                     其中 X 代表给定的某个 x 轴点。
                 </p>
                 <div class="align-items-center">
-                    <img src="files/entropy-coding/cumulative-distribution-function.png" alt="imageR" class="img-medium">
+                    <img loading="lazy" src="files/entropy-coding/cumulative-distribution-function.png" alt="imageR" class="img-medium">
                     <p class="text-gray-side mt-0">图片来自：<a href="https://deepai.org/machine-learning-glossary-and-terms/cumulative-distribution-function">deepai.org</a></p>
                 </div>
 
@@ -3299,7 +3300,7 @@ int av1_get_qindex(const struct segmentation *seg, int segment_id, int base_qind
                     在两个离散随机变量值（k 或 X）之间时，CDF 值不变；而一旦越过边界，则 <span class="text-blue-math">\(c_X(x)\)</span>（CDF 值）起跳一个 <span class="text-blue-math">\(p_X(x)\)</span>（PMF 值）的高度。可以理解为将一堆离散概率值按顺序扎进了二维坐标系中。
                 </p>
                 <div class="align-items-center">
-                    <img src="files/entropy-coding/cdf-accumulation.png" alt="imageR" class="img-small">
+                    <img loading="lazy" src="files/entropy-coding/cdf-accumulation.png" alt="imageR" class="img-small">
                     <p class="text-gray-side mt-0">图：“CDF 值起跳高度”就是每个 <span class="text-blue-math">\(p_X(x)\)</span> 的概率，所以。见：<a href="https://stats.libretexts.org/Courses/Saint_Mary's_College_Notre_Dame/MATH_345__-_Probability_(Kuter)/3%3A_Discrete_Random_Variables/3.2%3A_Probability_Mass_Functions_(PMFs)_and_Cumulative_Distribution_Functions_(CDFs)_for_Discrete_Random_Variables">Saint Mary's College - MATH345</a></p>
                 </div>
 
@@ -3309,7 +3310,7 @@ int av1_get_qindex(const struct segmentation *seg, int segment_id, int base_qind
 
                 <p>计算 CDF 时还可能会遇到“仅取一部分 PMF 函数”的甲方要求，此时需要在坐标系中标定 k 或 X，代表选取样本空间中的某个离散随机变量，然后从这里求上述的“点 X 左侧阴影面积”。
                 <div class="align-items-center">
-                    <img src="files/entropy-coding/cdf-uniform-pmf.png" alt="imageR" class="img-medium">
+                    <img loading="lazy" src="files/entropy-coding/cdf-uniform-pmf.png" alt="imageR" class="img-medium">
                     <p class="text-gray-side mt-0">图：对等大小（Uniform）PMF <span class="text-blue-math">\(F\left(x\right)\)</span> 下取 CDF <span class="text-blue-math">\(P\left( X \leq x \right)\)</span> 见：<a href="https://www.youtube.com/watch?v=4QeL1ma_XJ0">MIT 公开课</a>图中计算与本文关系不大，可以忽略</p>
                 </div>
             </div>
@@ -3389,7 +3390,7 @@ Default_Partition_W64_Cdf[ PARTITION_CONTEXTS ][ 11 ] = {
                 <p>假设编码某帧中的冠军个 64x64 SB。其左侧和顶部区域不存在（ctx 为 0，对应上述冠军行）。假设其分块模式决定使用 <code class="code-bold">PARTITION_NONE</code>，则选择冠军行，冠军列的 20137（0.615）区间，并更新一遍 CTX。下一个分块会使用亚军行的出字概率</p>
                 <p>预设 0~1 区间（0~32768）的 0.615 倍为，20137，这个数小于 32768，因此需要循环归一化/基本单位化（乘以 2），放大到 40274。</p>
                 <div class="align-items-center">
-                    <img src="files/entropy-coding/arithmetic-coding-1.png" alt="imageR" class="img-medium">
+                    <img loading="lazy" src="files/entropy-coding/arithmetic-coding-1.png" alt="imageR" class="img-medium">
                     <p class="text-gray-side mt-0">图：出字概率被缩减到小于 32768（100%）时，循环地放大下限和上限 2 倍；若新范围的下限高于 32768，则为下限和上限循环地减 32768</p>
                 </div>
                 <ul>
@@ -3422,7 +3423,7 @@ Default_Skip_Cdf[ SKIP_CONTEXTS ][ 3 ] = {
                     <li>编码该语法元素的过程中出现了 6 次下移：<span class="text-blue-math">\(39026 \curvearrowright 6258\)</span>、<span class="text-blue-math">\(200256 \curvearrowright 3648\)</span>。</li>
                 </ul>
                 <div class="align-items-center">
-                    <img src="files/entropy-coding/arithmetic-coding-2.png" alt="imageR" class="img-medium">
+                    <img loading="lazy" src="files/entropy-coding/arithmetic-coding-2.png" alt="imageR" class="img-medium">
                 </div>
                 <ul>
                     <li><span class="text-blue-math">\(39026 \curvearrowright 6258\)</span> 中下移了 1 次，此下移为编码分块模式语法元素的部分，所以改动之前的编码结果为 <code>1b1</code></li>
@@ -3550,7 +3551,7 @@ Default_Intra_Frame_Y_Mode_Cdf[ INTRA_MODE_CONTEXTS ][ INTRA_MODE_CONTEXTS ][ IN
                 
                 <p>在没有可用块时，<code class="code-bold">av1_left_block_mode</code>，<code class="code-bold">av1_top_block_mode</code> 会返回 <code class="code-bold">DC_MODE</code>，映射到上述上下文表中排 aisle、行 row、列 column 的 [0][0][0]，即 0.476。</p>
                 <div class="align-items-center">
-                    <img src="files/entropy-coding/arithmetic-coding-3.png" alt="imageR" class="img-medium">
+                    <img loading="lazy" src="files/entropy-coding/arithmetic-coding-3.png" alt="imageR" class="img-medium">
                 </div>
                 <ul>
                     <li>新区间的下限为 7296，即二进制 <code>15b001_1100_1000_0000</code></li>
@@ -3602,7 +3603,7 @@ Default_Uv_Mode_Cfl_Not_Allowed_Cdf[ INTRA_MODES ][  UV_INTRA_MODES_CFL_NOT_ALLO
                 </code></pre>
                 <p>同为帧内编码的冠军个分块，因此这里编码的色度块仍然使用 [0][0] 处的出字概率 0.691。</p>
                 <div class="align-items-center">
-                    <img src="files/entropy-coding/arithmetic-coding-4.png" alt="imageR" class="img-medium">
+                    <img loading="lazy" src="files/entropy-coding/arithmetic-coding-4.png" alt="imageR" class="img-medium">
                 </div>
                 <ul>
                     <li>该步骤中得到的下限不大于 32768，范围长度/高度也不小于 32768，所以没有用到下移</li>
@@ -3628,7 +3629,7 @@ Default_Tx_64x64_Cdf[ TX_SIZE_CONTEXTS ][ MAX_TX_DEPTH + 2 ] = {
                 </code></pre>
                 <p>假设当前块的变换块分块深度为 0（整块变换），同时上下文长 0，所以使用 [0][0]，即 0.176。</p>
                 <div class="align-items-center">
-                    <img src="files/entropy-coding/arithmetic-coding-5.png" alt="imageR" class="img-medium">
+                    <img loading="lazy" src="files/entropy-coding/arithmetic-coding-5.png" alt="imageR" class="img-medium">
                 </div>
                 <ul>
                     <li>该步骤中 ×2 操作循环了 2 次，并使用了 1 次下移</li>
@@ -3758,7 +3759,7 @@ int av1_compute_rd_mult_based_on_qindex(const AV1_COMP *cpi, int qindex) {
             <h4>（1/2）缩小倍数分母设定</h4>
             <p>SVT-AV1 中定义为 0.89~0.5 倍，即 <span class="text-blue-math">\( \frac{8}{9} \curvearrowright \frac{8}{16} \)</span>。分为降低视频帧的采样，以及二阶段的去块与 CDEF（共 3 步）。解码端通过空域参考缩放滤镜恢复原始大小。见<a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/master/Docs/Appendix-Reference-Scaling.md">SVT-AV1 Docs</a>。</p>
             <div class="align-items-center">
-                <img src="files/loop-filter/downscale-filter.png" alt="imageR" class="img-medium">
+                <img loading="lazy" src="files/loop-filter/downscale-filter.png" alt="imageR" class="img-medium">
                 <p class="text-gray-side mt-0">图：参考缩放环路</p>
             </div>
 
@@ -3781,7 +3782,7 @@ int av1_compute_rd_mult_based_on_qindex(const AV1_COMP *cpi, int qindex) {
             <h3>环路滤镜——超分辨率环路 Super resolution loop</h3>
             <p>与参考缩放环路类似，区别在于在编码后环路还原滤镜，区别在于超采样滤镜会在 CDEF 滤镜之后线性放大视频帧到原始分辨率，然后再运行环路还原滤镜（因此解码器也会在拿到视频流后先放大，再应用配置给完整分辨率的环路还原滤镜），相比参考缩放环路，超分辨率环路能够恢复更多高频信息。见 <a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/master/Docs/Appendix-Super-Resolution.md">SVT-AV1 Docs</a>。</p>
             <div class="align-items-center">
-                <img src="files/loop-filter/superres-filter.png" alt="imageR" class="img-medium">
+                <img loading="lazy" src="files/loop-filter/superres-filter.png" alt="imageR" class="img-medium">
                 <p class="text-gray-side mt-0">图：超分辨率环路</p>
             </div>
 
@@ -3812,7 +3813,7 @@ int av1_compute_rd_mult_based_on_qindex(const AV1_COMP *cpi, int qindex) {
                 <h4>（1/2）定向</h4>
                 <p>检查当前块属于 8 种夹角图案中的哪一种。简单地说就是通过当前块与各个夹角图案中同位像素的值取平均，选其中差距最少的一个。</p>
                 <div class="align-items-center">
-                    <img src="files/loop-filter/cdef-direction-finding.png" alt="imageR" class="img-medium">
+                    <img loading="lazy" src="files/loop-filter/cdef-direction-finding.png" alt="imageR" class="img-medium">
                 </div>
             </div>
 
@@ -3837,9 +3838,9 @@ int av1_compute_rd_mult_based_on_qindex(const AV1_COMP *cpi, int qindex) {
                 </ul>
                 <p>当 <span class="text-blue-math">\( p\left(m,n\right)-p\left(i,j\right) \)</span> 的值偏小时，<span class="text-blue-math">\( f\left(\ldots,S,D\right) = p\left(m,n\right)-p\left(i,j\right)\)</span>，代表当前状态下的滤镜运行类似于 FIR 插值；反过来当 <span class="text-blue-math">\( p\left(m,n\right)-p\left(i,j\right) \)</span> 的值偏大时，<span class="text-blue-math">\( f\left(\ldots,S,D\right) = 0 \)</span>，代表当前状态下滤镜无效。</p>
                 <div class="align-items-center">
-                    <img src="files/loop-filter/cdef-primary-filter.png" alt="imageR" class="img-medium">
+                    <img loading="lazy" src="files/loop-filter/cdef-primary-filter.png" alt="imageR" class="img-medium">
                     <p class="text-gray-side mt-0">图：初阶段的插值取值和权重分配，权重取决于强度为奇数/偶数判断</p>
-                    <img src="files/loop-filter/cdef-secondary-filter.png" alt="imageR" class="img-medium">
+                    <img loading="lazy" src="files/loop-filter/cdef-secondary-filter.png" alt="imageR" class="img-medium">
                     <p class="text-gray-side mt-0">图：二阶段的插值取值和权重分配，权重固定。可以看到这种 FIR 类似于 SAO 滤镜</p>
                 </div>
             </div>
@@ -3886,7 +3887,7 @@ int av1_compute_rd_mult_based_on_qindex(const AV1_COMP *cpi, int qindex) {
                 <h5>（1/7-3/3）现实意义</h5>
                 <p>虽然上式非常难以理解，但现实中是有例可举的。如打靶所瞄准的目标大小和距离 <span class="text-blue-math">\( \mathbb{E}\left( s_k^2 \right) \)</span>  不变，只是将靶心 <span class="text-blue-math">\( \mathbb{E}\left( \hat{s}_k^2 \right) \)</span> 画的更小（<span class="text-blue-math">\( \mathbb{E}\left( \hat{s}_k^2 \right) \)</span> 趋近于 0），就导致了射击 <span class="text-blue-math">\(\mathbb{E}\left(\left( n_k-\hat{n}_k \right)^2\right) \)</span> 散布/噪声越小。</p>
                 <div class="align-items-center">
-                    <img src="files/loop-filter/lms-theory-asms.webp" alt="imageR" class="img-small">
+                    <img loading="lazy" src="files/loop-filter/lms-theory-asms.webp" alt="imageR" class="img-small">
                     <p class="text-gray-side mt-0">图：ASMS。见 <a href="https://www.linkedin.com/pulse/aim-small-miss-shashikant-sethy-jwqdc">Shashikant Sethy</a></p>
                 </div>
                 <p>同样地，噪声残余、弹道散布虽然被尽可能地缩小，但仍然会存在；对应了查找的是最小值，而非确切解（least but not exact）的道理。相对于率失真优化，这相当于“对率失真优化的优化”。</p>
@@ -3933,7 +3934,7 @@ int av1_compute_rd_mult_based_on_qindex(const AV1_COMP *cpi, int qindex) {
                 上式中，查找偏差/失真最小值转化为了对两个权重 W 的调整。<span class="text-blue-math">\(W_0\)</span> 与 <span class="text-blue-math">\(W_1\)</span> 张成的三维空间以及非线性的投影可以画作：
                 </p>
                 <div class="align-items-center">
-                    <img src="files/loop-filter/wiener-filter-error-perf.png" alt="imageR" class="img-small">
+                    <img loading="lazy" src="files/loop-filter/wiener-filter-error-perf.png" alt="imageR" class="img-small">
                     <p class="text-gray-side mt-0">图：维纳滤镜使用矩阵乘法查找 LMS 的算式。见 <a href="https://www.ssyoutube.com/watch?v=yDouldS2g38">自适应滤镜讲座</a></p>
                 </div>
                 <p>由于预测的残余噪声与信号没有相关性，得到噪声残余，即 <span class="text-blue-math">\(\mathbb{E}\left(n_k^2\right)\)</span> 为最小的算式为：</p>
@@ -3983,7 +3984,7 @@ int av1_compute_rd_mult_based_on_qindex(const AV1_COMP *cpi, int qindex) {
                     <li>二者的积为常数，AV1 中为 216</li>
                 </ul>
                 <div class="align-items-center">
-                    <img src="files/loop-filter/wiener-convolution-kernel.png" alt="imageR" class="img-medium">
+                    <img loading="lazy" src="files/loop-filter/wiener-convolution-kernel.png" alt="imageR" class="img-medium">
                     <p class="text-gray-side mt-0">图：SSW 滤镜分横纵向之别所查的卷积内核强度，以及利用对称性而只传输 3 个值的特性</p>
                 </div>
                 <p>注：从原版维纳滤镜的角度看，应当是内核在卷积过程中每位移一次就换一个（内核的所有值通过计算 LMS 得到），但这样可能会让计算过程慢数万倍；但反过来，优化版的 SSW 可能会因为对扫描区域的 LMS 预测不足、扫描区域设定过大、或所有滤镜预设都不适合当前画面的扫描区域而导致额外的失真。</p>
@@ -4016,9 +4017,9 @@ int av1_compute_rd_mult_based_on_qindex(const AV1_COMP *cpi, int qindex) {
                 <h4>（3/7）向量的线性组合 Linear combination of vectors</h4>
                 <p>两个向量的组合由 <span class="text-blue-math">\(w=c_1v+c_2v\)</span> 给出。向量间的线性组合会产生新的向量。见 <a href="https://www.geogebra.org/m/WShmQvQU">GeoGebra 的可互动例</a></p>
                 <div class="align-items-center">
-                    <img src="files/loop-filter/linear-combination-of-vectors-1.png" alt="imageR" class="img-medium">
+                    <img loading="lazy" src="files/loop-filter/linear-combination-of-vectors-1.png" alt="imageR" class="img-medium">
                     <p class="text-gray-side mt-0">图：不同于 <span class="text-blue-math">\(y=mx+b\)</span>，向量 <span class="text-blue-math">\(v\)</span> 并不参与坐标轴的映射，结果仅仅是坐标分量的相加</p>
-                    <img src="files/loop-filter/linear-combination-of-vectors-2.png" alt="imageR" class="img-medium">
+                    <img loading="lazy" src="files/loop-filter/linear-combination-of-vectors-2.png" alt="imageR" class="img-medium">
                     <p class="text-gray-side mt-0">图：两个向量在不同权重下的组合</p>
                 </div>
             </div>
@@ -4037,7 +4038,7 @@ int av1_compute_rd_mult_based_on_qindex(const AV1_COMP *cpi, int qindex) {
                 <h3>复习：欧几里得距离 Euclidean distance</h3>
                 <p>摘自 x265 教程。通过计算两点分别取值的平方差 SSE 获得，如 GPS 的定位与实际位置的距离误差。此处用于测量向量的投影是否构成正交。</p>
                 <div class="align-items-center">
-                    <img src="files/entropy-coding/Euclidean-distance.svg" alt="image48" class="img-small">
+                    <img loading="lazy" src="files/entropy-coding/Euclidean-distance.svg" alt="image48" class="img-small">
                     <p class="text-gray-side mt-0">图：欧几里得距离利用平方差的算法，见<a href="https://en.wikipedia.org/wiki/Euclidean_distance">维基百科</a></p>
                 </div>
             </div>
@@ -4047,7 +4048,7 @@ int av1_compute_rd_mult_based_on_qindex(const AV1_COMP *cpi, int qindex) {
                 <h4>（4/7）正交投影计算推导 Orthogonal projection</h4>
                 <p>本节完全取自 <a href="https://tidystat.com/orthogonal-projection/">tidystat</a>。设定 <span class="text-blue-math">\( \vec{X}=\left[\begin{array}{c} 3 \\ 2 \end{array} \right] \)</span>、<span class="text-blue-math">\( \vec{Y}=\left[\begin{array}{c} 1 \\ 3 \end{array} \right] \)</span> 两条向量，则 <span class="text-blue-math">\( \vec{Y} \)</span> 与 <span class="text-blue-math">\( \vec{X} \)</span> 的最短距离与 <span class="text-blue-math">\( \vec{X} \)</span> 构成的直线垂直：</p>
                 <div class="align-items-center">
-                    <img src="files/loop-filter/orthogonal-projection-finding.png" alt="imageR" class="img-medium">
+                    <img loading="lazy" src="files/loop-filter/orthogonal-projection-finding.png" alt="imageR" class="img-medium">
                     <p class="text-gray-side mt-0">图：见<a href="https://tidystat.com/orthogonal-projection/">tidystat</a></p>
                 </div>
                 <ul>
@@ -4148,7 +4149,7 @@ int av1_compute_rd_mult_based_on_qindex(const AV1_COMP *cpi, int qindex) {
                 <span class="text-blue-math">\[ \vec{Y} = \beta_0 X_0 = \beta_0 \left[\begin{array}{c} 1 \\ 1 \end{array}\right] \]</span>
                 <p>这里的坐标轴由 2 次观测 Observation 得到，观测的具体方法由算法决定。因此，采样 <span class="text-blue-math">\( Y \)</span> 的向量坐标代表了两次观测得到的值。这里跳过观测，设定 <span class="text-blue-math">\( Y = \left[\begin{array}{c} 1 \\ 3 \end{array}\right] \)</span>。</p>
                 <div class="align-items-center">
-                    <img src="files/loop-filter/orthogonal-projection-mean-visualization.png" alt="imageR" class="img-medium">
+                    <img loading="lazy" src="files/loop-filter/orthogonal-projection-mean-visualization.png" alt="imageR" class="img-medium">
                     <p class="text-gray-side mt-0">图：见<a href="https://tidystat.com/linear-regression-and-orthogonal-projection/">tidystat</a></p>
                 </div>
                 <p>找到 <span class="text-blue-math">\( \beta_0 \)</span> 需要满足以下条件：</p>
@@ -4170,12 +4171,12 @@ int av1_compute_rd_mult_based_on_qindex(const AV1_COMP *cpi, int qindex) {
                 \vec{X} =\left[\begin{array}{c} 1 & 2 \\ 1 & 3 \\ 1 & 3 \end{array} \right] \]</span>
                 <p>由 <span class="text-blue-math">\( \vec{X_0} \)</span>、<span class="text-blue-math">\( \vec{X_1} \)</span> 构成的子空间 L 可以视作矩阵的列，所以也叫列空间 Column space：</p>
                 <div class="align-items-center">
-                    <img src="files/loop-filter/orthogonal-projection-in-3d-1.png" alt="imageR" class="img-medium">
+                    <img loading="lazy" src="files/loop-filter/orthogonal-projection-in-3d-1.png" alt="imageR" class="img-medium">
                     <p class="text-gray-side mt-0">图：见<a href="https://tidystat.com/linear-regression-and-orthogonal-projection/">tidystat</a></p>
                 </div>
                 <p>但列空间 L 实际上并不局限于 <span class="text-blue-math">\( \vec{X_0} \)</span>、<span class="text-blue-math">\( \vec{X_1} \)</span> 之间。与二维中的例子一样，这个子空间由直线构成，而且是两个无限长的不平行直线（虽然这里的坐标是手动指定的），所以这个 L 实际上是一个无限大的二维平面，每个点对应了表示 L 的矩阵中某列的值：</p>
                 <div class="align-items-center">
-                    <img src="files/loop-filter/orthogonal-projection-in-3d-2.png" alt="imageR" class="img-medium">
+                    <img loading="lazy" src="files/loop-filter/orthogonal-projection-in-3d-2.png" alt="imageR" class="img-medium">
                     <p class="text-gray-side mt-0">图：见<a href="https://tidystat.com/linear-regression-and-orthogonal-projection/">tidystat</a></p>
                 </div>
                 <p>这里的斜度由 5/7 所推导出的正交投影计算得到（查找列空间 L 上的点）：</p>
@@ -4187,7 +4188,7 @@ int av1_compute_rd_mult_based_on_qindex(const AV1_COMP *cpi, int qindex) {
                 <span class="text-blue-math">\[ \hat{Y} = \beta_0 \vec{X_0} + \beta_1 \vec{X_1} = -1\left[\begin{array}{ccc} 1 \\ 1 \\ 1 \end{array} \right] +1\left[\begin{array}{c} 2 \\ 3 \\ 3 \end{array} \right] = \left[\begin{array}{ccc} 1 \\ 2 \\ 2 \end{array} \right] \]</span>
                 <p>投影结果如图：</p>
                 <div class="align-items-center">
-                    <img src="files/loop-filter/orthogonal-projection-3d-1.png" alt="imageR" class="img-medium">
+                    <img loading="lazy" src="files/loop-filter/orthogonal-projection-3d-1.png" alt="imageR" class="img-medium">
                     <p class="text-gray-side mt-0">图：见<a href="https://tidystat.com/linear-regression-and-orthogonal-projection/">tidystat</a></p>
                 </div>
                 <!--<p>n 维空间下，这种线性回归分析的矩阵写作：</p>
@@ -4235,7 +4236,7 @@ int av1_compute_rd_mult_based_on_qindex(const AV1_COMP *cpi, int qindex) {
                     \left( \left(X_2 - X\right)^T \left(X_2 - X\right) \right)^{-1} \left(X_2 - X\right)^T 
                 \]</span>
                 <div class="align-items-center">
-                    <img src="files/loop-filter/sgr-filter.png" alt="imageR" class="img-medium">
+                    <img loading="lazy" src="files/loop-filter/sgr-filter.png" alt="imageR" class="img-medium">
                 </div>
             </div>
             <!--<button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（8/8）投影矩阵计算</button>
@@ -6045,7 +6046,7 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
             </table>
             <p>每个预设强度的压缩率见 <a href="https://github.com/emrakyz">Discord/Emre</a> 于 <a href="https://discord.com/channels/587033243702788123">AV1 Community</a>SVT-AV1 频道发布的测试图，版本为 SVT-AV1 3.0.1：</p>
             <div class="align-items-center">
-                <img src="files/preset-bd-rate.png" alt="imageR" class="img-medium">
+                <img loading="lazy" src="files/preset-bd-rate.png" alt="imageR" class="img-medium">
             </div>
 
             <h2 id="h2-14">SVT-AV1 报错与警告</h2>
@@ -6189,7 +6190,7 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
             <p>对于测试画质这种说不准的伪客观多变量虚拟单位，即曾仕强教授所言“只能对到一定程度、深度，再往深究就错了”。测量画质的方法论即 Image/Video Quality Assessment。IQA、VQA 分为主观、客观，绝对评价、相对评价，全参考、部分参考和无参考。见 <a href="https://baike.baidu.com/item/IQA/19453034">百度百科</a>。</p>
             <p>主观画质测量指标受到视觉系统差异和认知理解差异拖累，因此需要大量参与者以及耗费大量时间测量和整理数据——需要协调群体完成。相比之下，由于主观评价最能贴近人眼视觉，这类指标成为客观指标的参考依据。客观测试具有结果高度可重复、高效率、无人值守、低成本的优点。当报告图像质量测量结果时，通常使用平均意见分数 Mean opinion score（MOS），或差异 Difference MOS（DMOS）平均意见分数表——以类似星级评价的测量方法（完全看不清~完美），见 <a href="https://videoclarity.com/PDF/Advancing-To-Multi-Scale-SSIM-Final.pdf">videoclarity</a>。VQA 与 IQA 使用了相同的评价体系分类，区别是视频要求观看距离和屏幕尺寸在测试中不变，且不暂停播放。</p>
             <div class="align-items-center">
-                <img src="files/image-quality-metric/vqa.webp" alt="imageR" class="">
+                <img loading="lazy" src="files/image-quality-metric/vqa.webp" alt="imageR" class="">
                 <p class="text-gray-side mt-0">图：VQA 测试。见<a href="https://qualinet.github.io/databases/video/ivp_subjective_quality_video_database/">香港大学 IVP Lab</a></p>
             </div>
 
@@ -6264,9 +6265,9 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
             <div class="coll-content">
                 <h4>（3/3）SROCC、PLCC 评价各种画质评价指标的图表</h4>
                 <div class="align-items-center">
-                    <img src="files/image-quality-metric/spearman-correlation.png" alt="imageR" class="">
+                    <img loading="lazy" src="files/image-quality-metric/spearman-correlation.png" alt="imageR" class="">
                     <p class="text-gray-side mt-0">图：Spearman 等级相关系数（SROCC）所反映的指标相关性。见<a href="https://videoprocessing.ai/benchmarks/video-quality-metrics_frm.html">MSU Graphics Lab</a></p>
-                    <img src="files/image-quality-metric/pearson-correlation.png" alt="imageR" class="">
+                    <img loading="lazy" src="files/image-quality-metric/pearson-correlation.png" alt="imageR" class="">
                     <p class="text-gray-side mt-0">图：Pearson 线性相关系数（PLCC）所反映的指标相关性，对理解视频画质指标的效益起到辅助作用。</p>
                 </div>
             </div>
@@ -6495,7 +6496,7 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                     <li>忽略结构特征的统计和比对，尤其是缩放、模糊后图像的边缘、对比度等的变化衡量能力差</li>
                 </ul>
                 <div class="align-items-center">
-                    <img src="files/image-quality-metric/psnr-fail-1.webp" alt="imageR" class="img-medium">
+                    <img loading="lazy" src="files/image-quality-metric/psnr-fail-1.webp" alt="imageR" class="img-medium">
                     <p class="text-gray-side mt-0">图：PSNR 看不出的各种感知性失真画面（GT 为原图）。见<a href="https://videoprocessing.ai/metrics/ways-of-cheating-on-popular-objective-metrics.html">MSU Graphics Lab</a></p>
                 </div>
             </div>
@@ -6537,7 +6538,7 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                     <li>忽略局部的关键图像特征，使得内容完全不同的图片可以因为亮度、对比度、结构性的相似而拥有比压缩失真结果更高的 SSIM 分数</li>
                 </ul>
                 <div class="align-items-center">
-                    <img src="files/image-quality-metric/ssim-fail-1.webp" alt="imageR" class="img-medium">
+                    <img loading="lazy" src="files/image-quality-metric/ssim-fail-1.webp" alt="imageR" class="img-medium">
                     <p class="text-gray-side mt-0">图：内容不同的图片比失真结果拥有更高的 SSIM 分数。见<a href="https://videoprocessing.ai/metrics/ways-of-cheating-on-popular-objective-metrics.html">MSU Graphics Lab</a></p>
                 </div>
             </div>

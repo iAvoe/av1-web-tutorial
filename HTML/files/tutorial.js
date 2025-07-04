@@ -8,6 +8,7 @@ if (document !== "undefined") {
     // Code that relies on the document object
     document.cookie = 'CookieName=NULL; SameSite=Strict';
 }
+let widthOffset = 18;
 
 /**
  * LaTex formula conversion support
@@ -26,7 +27,6 @@ window.MathJax = {
  * @param {number} widthOffset The width offset for window width <= height check, decides whether change to mobile (taller) or desktop (wider) styling
  * @returns New class configuration for the content div which contains main content
  */
-let widthOffset = 18;
 function switchPlatform(widthOffset) {
     "use strict";
     if (isNaN(widthOffset)) {
@@ -71,7 +71,10 @@ function switchPlatform(widthOffset) {
         }
     }
 }
-window.addEventListener('resize', ()=>{switchPlatform(widthOffset)}, false);
+
+window.addEventListener(
+    'resize', ()=>{switchPlatform(widthOffset)}, false
+);
 window.switchPlatform(widthOffset); // Call this function during load as well
 
 /**
@@ -230,55 +233,44 @@ function toggleCollapseAll() {
     }
 }
 
-let printT = document.querySelector('div.container-title');
-let printC = document.querySelector('div.container-desktop.rounded-9.border-main') || document.querySelector('div.container-mobile.rounded-9.border-main');
+const printT =
+    document.querySelector('div.container-title');
+const printC =
+    document.querySelector('div.container-desktop.rounded-9.border-main')
+    || document.querySelector('div.container-mobile.rounded-9.border-main');
+
 /**
  * Printing support 3 - Remove main div class and background
- * @param {object} title The title div which was captured earlier
- * @param {object} content The content div which was captured earlier
  * @returns New class configuration for the title & content div which contains main content
  */
-function printMode(title, content) {
-    if (title.tagName != 'DIV' || content.tagName != 'DIV') { 
-        console.error("function printMode(): parameter must be title and container divs")
+function printMode() {
+    if (printT.className === "") { 
+        console.log("printMode(): Already in printing mode");
+        return;
     }
-    title.setAttribute("class", "");
-    content.setAttribute("class", "");
+    printT.setAttribute("class", "");
+    printC.setAttribute("class", "");
+    loadAllImages();
 }
 
 /**
  * Printing support 4 - Restore original page
  * Deactivate printing mode by restoring class atttributes of title and main div
- * @param {object} title The title div which was captured earlier
- * @param {object} content The content div which was captured earlier
- * @param {number} widthOffset The width offset for window width <= height check, decides whether change to mobile (taller) or desktop (wider) styling
  * @returns New class configuration for the title & content div which contains main content
  */
-function printModeOff(title, content, widthOffset) {
-    if (title.tagName != 'DIV' || content.tagName != 'DIV') { 
-        console.error("function printMode(): parameter must be title and container divs")
+function printModeOff() {
+    if (printT.className !== "") { 
+        console.log("printModeOff(): Already exited printing mode");
+        return;
     }
-    title.setAttribute("class", "container-title");
+    printT.setAttribute("class", "container-title");
     if (window.innerWidth+widthOffset <= window.innerHeight) { // Mobile / Vertical Layout
-        content.setAttribute("class", "container-mobile rounded-9 border-main");
+        printC.setAttribute("class", "container-mobile rounded-9 border-main");
     }
     else {
-        content.setAttribute("class", "container-desktop rounded-9 border-main");
+        printC.setAttribute("class", "container-desktop rounded-9 border-main");
     }
 }
-
-// printMode(printT, printC);
-// printModeOff(printT, printC, widthOffset); // Call this function
-
-/** 
- * TODO: Custom noun translation
- * function textSwap(swapId, swapTo) {
- *     foreach (span in swapId) {
- *         // Change text inside
- *         span.set(swapTo);
- *     }
- * }
- */
 
 /**
  * Rounding data table to n decimals
@@ -331,4 +323,16 @@ function getDecimalPlaces(float) {
  */
 function isDecimalOverTwo(float) {
     return Math.round(float * 100) / 100 !== float;
+}
+
+/**
+ * Printing support: load all images
+ */
+function loadAllImages() {
+    if (!document.querySelector('img[loading="lazy"]')) return;
+    const images =
+        document.querySelectorAll('img[loading="lazy"]');
+    images.forEach(img => {
+        img.removeAttribute('loading');
+    });
 }
