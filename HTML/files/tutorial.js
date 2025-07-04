@@ -273,6 +273,18 @@ function printModeOff() {
 }
 
 /**
+ * Printing support: load all images
+ */
+function loadAllImages() {
+    if (!document.querySelector('img[loading="lazy"]')) return;
+    const images =
+        document.querySelectorAll('img[loading="lazy"]');
+    images.forEach(img => {
+        img.removeAttribute('loading');
+    });
+}
+
+/**
  * Rounding data table to n decimals
  * @param {*} className Locate tables with a certain class name
  * @param {number} [decimalPlaces=2] Change decimal places
@@ -323,16 +335,4 @@ function getDecimalPlaces(float) {
  */
 function isDecimalOverTwo(float) {
     return Math.round(float * 100) / 100 !== float;
-}
-
-/**
- * Printing support: load all images
- */
-function loadAllImages() {
-    if (!document.querySelector('img[loading="lazy"]')) return;
-    const images =
-        document.querySelectorAll('img[loading="lazy"]');
-    images.forEach(img => {
-        img.removeAttribute('loading');
-    });
 }
