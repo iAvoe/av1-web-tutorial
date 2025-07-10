@@ -6949,7 +6949,7 @@ ffmpeg -i .\Elephants-Dream_1920x1080_24fps_8bit_rgb.video+audio.mkv ^
             <ul>
                 <li><b>XPSNR：</b>播放画质，仔细观看
                     <ul>
-                        <li style="color:#00B050">视觉无损：大于等于 45dB</li>
+                        <li style="color:#31D87D">视觉无损：大于等于 45dB</li>
                         <li style="color:#92D050">优秀：大于等于 42dB</li>
                         <li style="color:#FFC000">良好：大于等于 38dB</li>
                         <li style="color:#C65911">达标：大于等于 32dB</li>
@@ -6958,7 +6958,7 @@ ffmpeg -i .\Elephants-Dream_1920x1080_24fps_8bit_rgb.video+audio.mkv ^
                 <li><b>VMAF 4k：</b>播放画质，远距离观看/客厅电视/影院</li>
                 <li><b>VMAF 1080p：</b>播放画质，中近距离观看/桌面电脑，相比 VMAF 4K 更加苛刻
                     <ul>
-                        <li style="color:#00B050">视觉无损：大于等于 95</li>
+                        <li style="color:#31D87D">视觉无损：大于等于 95</li>
                         <li style="color:#92D050">优秀：大于等于 90</li>
                         <li style="color:#FFC000">良好：大于等于 80</li>
                         <li style="color:#C65911">达标：大于等于 70</li>
@@ -6966,7 +6966,7 @@ ffmpeg -i .\Elephants-Dream_1920x1080_24fps_8bit_rgb.video+audio.mkv ^
                 </li>
                 <li><b>SSIMULACRA2_rs</b>暂停画质，仔细观看。分数说明见 <a href="https://github.com/cloudinary/ssimulacra2?tab=readme-ov-file#usage">Github/cloudinary</a>
                     <ul>
-                        <li style="color:#00B050">视觉无损：大于等于 90</li>
+                        <li style="color:#31D87D">视觉无损：大于等于 90</li>
                         <li style="color:#92D050">优秀：大于等于 80</li>
                         <li style="color:#FFC000">良好：大于等于 70</li>
                         <li style="color:#C65911">达标：大于等于 60</li>
@@ -7154,7 +7154,7 @@ set "setptsCmdB=[0:v]setpts=N*(1/6000)[src]; [1:v]setpts=N*(1/6000)[enc]; [src][
 set "setptsCmdC=[0:v]setpts=N*(1/360000)[src]; [1:v]setpts=N*(1/360000)[enc]; [src][enc]"
 set "xpsnrCmd=xpsnr=stats_file="
 
-set "outputFile=X\\:/\导出测试结果路径\/xpsnr-视频1跑分-两万四千之一.txt"
+set "outputFile=X\\:/\导出测试结果路径\/xpsnr-视频1跑分-两万四千分之一.txt"
 ffmpeg -hide_banner -an ^
 -i "%sourcePath%源视频1.mkv" ^
 -i "%lossyPath%压缩视频1.ivf" ^
@@ -9016,11 +9016,11 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                 <thead>
                     <tr>
                         <th class="px-1 t-light-gray"><b>基准：</b></th>
-                        <th class="px-1 t-light-gray" style="color:#00B050">视无损</th>
+                        <th class="px-1 t-light-gray" style="color:#31D87D">视无损</th>
                         <th class="px-1 t-light-gray" style="color:#92D050">优秀</th>
                         <th class="px-1 t-light-gray" style="color:#FFC000">良好</th>
                         <th class="px-1 t-light-gray" style="color:#C65911">达标</th>
-                        <th class="px-1 t-light-gray" style="color:#F00">待达标</th>
+                        <th class="px-1 t-light-gray" style="color:#541818">待达标</th>
                         <th class="px-1 t-light-gray"><b>排名：</b></th>
                         <th class="px-1 ace t-light-gray">冠军</th>
                         <th class="px-1 sec t-light-gray">亚军</th>
@@ -9065,9 +9065,9 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1">31171.09</td>
                         <td class="px-1 sec" style="color:#FFC000">40.5607</td>
                         <td class="px-1 sec" style="color:#92D050">42.9254</td>
-                        <td class="px-1 sec" style="color:#00B050">45.6857</td>
-                        <td class="px-1" style="color:#00B050">98.049573</td>
-                        <td class="px-1" style="color:#00B050">98.374132</td>
+                        <td class="px-1 sec" style="color:#31D87D">45.6857</td>
+                        <td class="px-1" style="color:#31D87D">98.049573</td>
+                        <td class="px-1" style="color:#31D87D">98.374132</td>
                         <td class="px-1" style="color:#C65911">64.77780339</td>
                         <td class="px-1" style="color:#C65911">63.9109824</td>
                         <td class="px-1" style="color:#C65911">60.0405545</td>
@@ -9081,8 +9081,8 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#C65911">37.4548</td>
                         <td class="px-1" style="color:#FFC000">41.1061</td>
                         <td class="px-1" style="color:#92D050">42.9362</td>
-                        <td class="px-1" style="color:#00B050">96.761755</td>
-                        <td class="px-1" style="color:#00B050">97.272500</td>
+                        <td class="px-1" style="color:#31D87D">96.761755</td>
+                        <td class="px-1" style="color:#31D87D">97.272500</td>
                         <td class="px-1" style="color:#C65911">65.44279924</td>
                         <td class="px-1" style="color:#C65911">65.24821957</td>
                         <td class="px-1" style="color:#C65911">62.76749146</td>
@@ -9096,8 +9096,8 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#C65911">37.4558</td>
                         <td class="px-1" style="color:#FFC000">41.0821</td>
                         <td class="px-1" style="color:#92D050">42.9071</td>
-                        <td class="px-1" style="color:#00B050">96.808976</td>
-                        <td class="px-1" style="color:#00B050">97.305344</td>
+                        <td class="px-1" style="color:#31D87D">96.808976</td>
+                        <td class="px-1" style="color:#31D87D">97.305344</td>
                         <td class="px-1" style="color:#C65911">65.51104289</td>
                         <td class="px-1" style="color:#C65911">65.27929578</td>
                         <td class="px-1" style="color:#C65911">62.79561741</td>
@@ -9111,8 +9111,8 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#C65911">37.4014</td>
                         <td class="px-1" style="color:#FFC000">41.0142</td>
                         <td class="px-1" style="color:#92D050">42.8161</td>
-                        <td class="px-1" style="color:#00B050">96.717327</td>
-                        <td class="px-1" style="color:#00B050">97.243354</td>
+                        <td class="px-1" style="color:#31D87D">96.717327</td>
+                        <td class="px-1" style="color:#31D87D">97.243354</td>
                         <td class="px-1" style="color:#C65911">65.26716472</td>
                         <td class="px-1" style="color:#C65911">65.11628273</td>
                         <td class="px-1" style="color:#C65911">62.6258451</td>
@@ -9126,8 +9126,8 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#C65911">37.4666</td>
                         <td class="px-1" style="color:#FFC000">41.1177</td>
                         <td class="px-1" style="color:#92D050">42.9250</td>
-                        <td class="px-1" style="color:#00B050">97.405106</td>
-                        <td class="px-1" style="color:#00B050">97.781267</td>
+                        <td class="px-1" style="color:#31D87D">97.405106</td>
+                        <td class="px-1" style="color:#31D87D">97.781267</td>
                         <td class="px-1" style="color:#C65911">65.62472343</td>
                         <td class="px-1" style="color:#C65911">65.33376302</td>
                         <td class="px-1" style="color:#C65911">62.92247971</td>
@@ -9141,8 +9141,8 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#C65911">37.4057</td>
                         <td class="px-1" style="color:#FFC000">41.0354</td>
                         <td class="px-1" style="color:#92D050">42.8108</td>
-                        <td class="px-1" style="color:#00B050">96.396343</td>
-                        <td class="px-1" style="color:#00B050">97.006433</td>
+                        <td class="px-1" style="color:#31D87D">96.396343</td>
+                        <td class="px-1" style="color:#31D87D">97.006433</td>
                         <td class="px-1" style="color:#C65911">64.66386301</td>
                         <td class="px-1" style="color:#C65911">64.46980413</td>
                         <td class="px-1" style="color:#C65911">61.83743679</td>
@@ -9155,9 +9155,9 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#FFF;background-color:#FF7C80">60831.26</td>
                         <td class="px-1 ace" style="color:#92D050">42.0499</td>
                         <td class="px-1 ace" style="color:#92D050">44.8382</td>
-                        <td class="px-1 ace" style="color:#00B050">47.8922</td>
-                        <td class="px-1 ace" style="color:#00B050">99.810258</td>
-                        <td class="px-1 ace" style="color:#00B050">99.810258</td>
+                        <td class="px-1 ace" style="color:#31D87D">47.8922</td>
+                        <td class="px-1 ace" style="color:#31D87D">99.810258</td>
+                        <td class="px-1 ace" style="color:#31D87D">99.810258</td>
                         <td class="px-1 ace" style="color:#FFC000">73.25259644</td>
                         <td class="px-1 ace" style="color:#FFC000">71.55939769</td>
                         <td class="px-1 ace" style="color:#C65911">69.44349186</td>
@@ -9171,8 +9171,8 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#C65911">37.7324</td>
                         <td class="px-1 trd" style="color:#FFC000">41.3649</td>
                         <td class="px-1 trd" style="color:#92D050">43.2103</td>
-                        <td class="px-1" style="color:#00B050">98.453038</td>
-                        <td class="px-1" style="color:#00B050">98.437675</td>
+                        <td class="px-1" style="color:#31D87D">98.453038</td>
+                        <td class="px-1" style="color:#31D87D">98.437675</td>
                         <td class="px-1 sec" style="color:#FFC000">70.60364934</td>
                         <td class="px-1 sec" style="color:#FFC000">70.44573796</td>
                         <td class="px-1" style="color:#C65911">68.31306315</td>
@@ -9186,8 +9186,8 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1 trd" style="color:#C65911">37.7331</td>
                         <td class="px-1" style="color:#FFC000">41.3403</td>
                         <td class="px-1" style="color:#92D050">43.1727</td>
-                        <td class="px-1 trd" style="color:#00B050">98.490672</td>
-                        <td class="px-1 trd" style="color:#00B050">98.464479</td>
+                        <td class="px-1 trd" style="color:#31D87D">98.490672</td>
+                        <td class="px-1 trd" style="color:#31D87D">98.464479</td>
                         <td class="px-1 trd" style="color:#FFC000">70.48941736</td>
                         <td class="px-1 trd" style="color:#FFC000">70.34330051</td>
                         <td class="px-1 trd" style="color:#C65911">68.32600577</td>
@@ -9201,8 +9201,8 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#C65911">37.6784</td>
                         <td class="px-1" style="color:#FFC000">41.2721</td>
                         <td class="px-1" style="color:#92D050">43.0866</td>
-                        <td class="px-1" style="color:#00B050">98.421012</td>
-                        <td class="px-1" style="color:#00B050">98.412364</td>
+                        <td class="px-1" style="color:#31D87D">98.421012</td>
+                        <td class="px-1" style="color:#31D87D">98.412364</td>
                         <td class="px-1" style="color:#FFC000">70.20741785</td>
                         <td class="px-1" style="color:#FFC000">70.07957787</td>
                         <td class="px-1" style="color:#C65911">68.14975116</td>
@@ -9216,8 +9216,8 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#C65911">37.6784</td>
                         <td class="px-1" style="color:#FFC000">41.2721</td>
                         <td class="px-1" style="color:#92D050">43.0866</td>
-                        <td class="px-1 sec" style="color:#00B050">98.946131</td>
-                        <td class="px-1 sec" style="color:#00B050">98.855602</td>
+                        <td class="px-1 sec" style="color:#31D87D">98.946131</td>
+                        <td class="px-1 sec" style="color:#31D87D">98.855602</td>
                         <td class="px-1" style="color:#FFC000">70.46943646</td>
                         <td class="px-1" style="color:#FFC000">70.32725873</td>
                         <td class="px-1 sec" style="color:#C65911">68.33790856</td>
@@ -9231,8 +9231,8 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#C65911">37.7025</td>
                         <td class="px-1" style="color:#FFC000">41.2961</td>
                         <td class="px-1" style="color:#92D050">43.1057</td>
-                        <td class="px-1" style="color:#00B050">98.218322</td>
-                        <td class="px-1" style="color:#00B050">98.256601</td>
+                        <td class="px-1" style="color:#31D87D">98.218322</td>
+                        <td class="px-1" style="color:#31D87D">98.256601</td>
                         <td class="px-1" style="color:#C65911">69.94324986</td>
                         <td class="px-1" style="color:#C65911">69.84754035</td>
                         <td class="px-1" style="color:#C65911">67.71075445</td>
@@ -9249,11 +9249,11 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1 sec" style="color:#FFC000">39.8871</td>
                         <td class="px-1" style="color:#92D050">42.1991</td>
                         <td class="px-1" style="color:#92D050">42.3623</td>
-                        <td class="px-1" style="color:#00B050">94.730385</td>
+                        <td class="px-1" style="color:#31D87D">94.730385</td>
                         <td class="px-1" style="color:#92D050">90.708962</td>
                         <td class="px-1" style="color:#C65911">61.03782816</td>
                         <td class="px-1" style="color:#C65911">62.22680342</td>
-                        <td class="px-1" style="color:#F00">53.49027011</td>
+                        <td class="px-1" style="color:#541818">53.49027011</td>
                         <td class="px-1" style="color:#C65911">68.77075281</td>
                     </tr>
                     <tr class="border-bottom">
@@ -9264,11 +9264,11 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#C65911">37.3362</td>
                         <td class="px-1 trd" style="color:#92D050">43.4853</td>
                         <td class="px-1 trd" style="color:#92D050">43.1529</td>
-                        <td class="px-1" style="color:#00B050">96.113360</td>
+                        <td class="px-1" style="color:#31D87D">96.113360</td>
                         <td class="px-1" style="color:#92D050">92.519165</td>
                         <td class="px-1" style="color:#C65911">65.63168941</td>
                         <td class="px-1" style="color:#C65911">67.48283309</td>
-                        <td class="px-1" style="color:#F00">58.42780742</td>
+                        <td class="px-1" style="color:#541818">58.42780742</td>
                         <td class="px-1" style="color:#FFC000">70.4115063</td>
                     </tr>
                     <tr class="border-bottom">
@@ -9279,11 +9279,11 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#C65911">36.7024</td>
                         <td class="px-1" style="color:#92D050">42.7301</td>
                         <td class="px-1" style="color:#FFC000">40.5724</td>
-                        <td class="px-1" style="color:#00B050">97.722582</td>
+                        <td class="px-1" style="color:#31D87D">97.722582</td>
                         <td class="px-1" style="color:#92D050">94.621628</td>
                         <td class="px-1" style="color:#C65911">65.62441101</td>
                         <td class="px-1" style="color:#C65911">67.46571858</td>
-                        <td class="px-1" style="color:#F00">58.31453649</td>
+                        <td class="px-1" style="color:#541818">58.31453649</td>
                         <td class="px-1" style="color:#FFC000">70.38503641</td>
                     </tr>
                     <tr class="border-bottom">
@@ -9294,11 +9294,11 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#C65911">36.6962</td>
                         <td class="px-1" style="color:#92D050">42.6603</td>
                         <td class="px-1" style="color:#FFC000">40.5092</td>
-                        <td class="px-1" style="color:#00B050">97.608784</td>
+                        <td class="px-1" style="color:#31D87D">97.608784</td>
                         <td class="px-1" style="color:#92D050">94.481252</td>
                         <td class="px-1" style="color:#C65911">65.50754114</td>
                         <td class="px-1" style="color:#C65911">67.41629557</td>
-                        <td class="px-1" style="color:#F00">58.2033296</td>
+                        <td class="px-1" style="color:#541818">58.2033296</td>
                         <td class="px-1" style="color:#FFC000">70.29080931</td>
                     </tr>
                     <tr class="border-bottom">
@@ -9309,11 +9309,11 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#C65911">36.7241</td>
                         <td class="px-1" style="color:#92D050">42.7446</td>
                         <td class="px-1" style="color:#FFC000">40.6557</td>
-                        <td class="px-1" style="color:#00B050">97.704765</td>
+                        <td class="px-1" style="color:#31D87D">97.704765</td>
                         <td class="px-1" style="color:#92D050">94.601392</td>
                         <td class="px-1" style="color:#C65911">66.04194395</td>
                         <td class="px-1" style="color:#C65911">67.69334252</td>
-                        <td class="px-1" style="color:#F00">58.6735277</td>
+                        <td class="px-1" style="color:#541818">58.6735277</td>
                         <td class="px-1" style="color:#FFC000">70.90097115</td>
                     </tr>
                     <tr class="border-bottom">
@@ -9324,11 +9324,11 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#C65911">36.6850</td>
                         <td class="px-1" style="color:#92D050">42.6922</td>
                         <td class="px-1" style="color:#FFC000">40.5141</td>
-                        <td class="px-1" style="color:#00B050">97.549183</td>
+                        <td class="px-1" style="color:#31D87D">97.549183</td>
                         <td class="px-1" style="color:#92D050">94.408432</td>
                         <td class="px-1" style="color:#C65911">65.70502123</td>
                         <td class="px-1" style="color:#C65911">67.36990713</td>
-                        <td class="px-1" style="color:#F00">58.95460314</td>
+                        <td class="px-1" style="color:#541818">58.95460314</td>
                         <td class="px-1" style="color:#FFC000">70.03019595</td>
                     </tr>
                     <tr class="border-bottom">
@@ -9339,7 +9339,7 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1 ace" style="color:#FFC000">40.9048</td>
                         <td class="px-1 sec" style="color:#92D050">43.5395</td>
                         <td class="px-1 sec" style="color:#92D050">43.4034</td>
-                        <td class="px-1" style="color:#00B050">96.493359</td>
+                        <td class="px-1" style="color:#31D87D">96.493359</td>
                         <td class="px-1" style="color:#92D050">93.110238</td>
                         <td class="px-1" style="color:#C65911">68.23241143</td>
                         <td class="px-1" style="color:#C65911">68.96018756</td>
@@ -9354,7 +9354,7 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1 trd" style="color:#C65911">37.5399</td>
                         <td class="px-1 ace" style="color:#92D050">43.7761</td>
                         <td class="px-1 ace" style="color:#92D050">43.4111</td>
-                        <td class="px-1" style="color:#00B050">96.840150</td>
+                        <td class="px-1" style="color:#31D87D">96.840150</td>
                         <td class="px-1" style="color:#92D050">93.501026</td>
                         <td class="px-1 trd" style="color:#C65911">68.92250911</td>
                         <td class="px-1 sec" style="color:#FFC000">70.75917283</td>
@@ -9369,8 +9369,8 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#C65911">36.9286</td>
                         <td class="px-1" style="color:#92D050">42.9716</td>
                         <td class="px-1" style="color:#FFC000">40.7229</td>
-                        <td class="px-1 sec" style="color:#00B050">98.307189</td>
-                        <td class="px-1 sec" style="color:#00B050">95.420387</td>
+                        <td class="px-1 sec" style="color:#31D87D">98.307189</td>
+                        <td class="px-1 sec" style="color:#31D87D">95.420387</td>
                         <td class="px-1" style="color:#C65911">68.91905952</td>
                         <td class="px-1 trd" style="color:#FFC000">70.73052286</td>
                         <td class="px-1 sec" style="color:#C65911">62.1007959</td>
@@ -9384,8 +9384,8 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#C65911">36.9126</td>
                         <td class="px-1" style="color:#92D050">42.9124</td>
                         <td class="px-1" style="color:#FFC000">40.6718</td>
-                        <td class="px-1" style="color:#00B050">98.244725</td>
-                        <td class="px-1" style="color:#00B050">95.348606</td>
+                        <td class="px-1" style="color:#31D87D">98.244725</td>
+                        <td class="px-1" style="color:#31D87D">95.348606</td>
                         <td class="px-1" style="color:#C65911">68.80260246</td>
                         <td class="px-1" style="color:#FFC000">70.67784608</td>
                         <td class="px-1" style="color:#C65911">61.91905432</td>
@@ -9399,8 +9399,8 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#C65911">36.9218</td>
                         <td class="px-1" style="color:#92D050">42.9713</td>
                         <td class="px-1" style="color:#FFC000">40.8042</td>
-                        <td class="px-1 ace" style="color:#00B050">98.422313</td>
-                        <td class="px-1 ace" style="color:#00B050">95.579552</td>
+                        <td class="px-1 ace" style="color:#31D87D">98.422313</td>
+                        <td class="px-1 ace" style="color:#31D87D">95.579552</td>
                         <td class="px-1 ace" style="color:#C65911">69.04057766</td>
                         <td class="px-1 ace" style="color:#FFC000">70.76173066</td>
                         <td class="px-1" style="color:#C65911">61.63058503</td>
@@ -9414,8 +9414,8 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#C65911">36.9026</td>
                         <td class="px-1" style="color:#92D050">42.9481</td>
                         <td class="px-1" style="color:#FFC000">40.6723</td>
-                        <td class="px-1 trd" style="color:#00B050">98.295810</td>
-                        <td class="px-1 trd" style="color:#00B050">95.415772</td>
+                        <td class="px-1 trd" style="color:#31D87D">98.295810</td>
+                        <td class="px-1 trd" style="color:#31D87D">95.415772</td>
                         <td class="px-1 sec" style="color:#C65911">68.93928567</td>
                         <td class="px-1" style="color:#FFC000">70.61041299</td>
                         <td class="px-1 ace" style="color:#C65911">62.56205008</td>
@@ -9432,8 +9432,8 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#FFC000">40.4936</td>
                         <td class="px-1" style="color:#92D050">42.5438</td>
                         <td class="px-1" style="color:#92D050">43.8810</td>
-                        <td class="px-1" style="color:#00B050">99.195737</td>
-                        <td class="px-1" style="color:#00B050">97.444827</td>
+                        <td class="px-1" style="color:#31D87D">99.195737</td>
+                        <td class="px-1" style="color:#31D87D">97.444827</td>
                         <td class="px-1" style="color:#FFC000">77.79793375</td>
                         <td class="px-1" style="color:#FFC000">78.10156956</td>
                         <td class="px-1 trd" style="color:#C65911">69.98188935</td>
@@ -9447,8 +9447,8 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#FFC000">40.9029</td>
                         <td class="px-1" style="color:#92D050">43.3569</td>
                         <td class="px-1" style="color:#92D050">44.0441</td>
-                        <td class="px-1" style="color:#00B050">99.008969</td>
-                        <td class="px-1" style="color:#00B050">97.128712</td>
+                        <td class="px-1" style="color:#31D87D">99.008969</td>
+                        <td class="px-1" style="color:#31D87D">97.128712</td>
                         <td class="px-1" style="color:#FFC000">75.32415905</td>
                         <td class="px-1" style="color:#FFC000">75.3902448</td>
                         <td class="px-1" style="color:#C65911">63.93803446</td>
@@ -9462,8 +9462,8 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#FFC000">40.8312</td>
                         <td class="px-1" style="color:#92D050">43.2288</td>
                         <td class="px-1" style="color:#92D050">43.9582</td>
-                        <td class="px-1" style="color:#00B050">99.014436</td>
-                        <td class="px-1" style="color:#00B050">97.145973</td>
+                        <td class="px-1" style="color:#31D87D">99.014436</td>
+                        <td class="px-1" style="color:#31D87D">97.145973</td>
                         <td class="px-1" style="color:#FFC000">75.27920286</td>
                         <td class="px-1" style="color:#FFC000">75.3658916</td>
                         <td class="px-1" style="color:#C65911">63.9509201</td>
@@ -9477,8 +9477,8 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#FFC000">40.5418</td>
                         <td class="px-1" style="color:#92D050">42.9902</td>
                         <td class="px-1" style="color:#92D050">43.7707</td>
-                        <td class="px-1" style="color:#00B050">98.929054</td>
-                        <td class="px-1" style="color:#00B050">97.047796</td>
+                        <td class="px-1" style="color:#31D87D">98.929054</td>
+                        <td class="px-1" style="color:#31D87D">97.047796</td>
                         <td class="px-1" style="color:#FFC000">74.87515728</td>
                         <td class="px-1" style="color:#FFC000">74.97725064</td>
                         <td class="px-1" style="color:#C65911">63.59227335</td>
@@ -9492,8 +9492,8 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#FFC000">40.9249</td>
                         <td class="px-1" style="color:#92D050">43.5258</td>
                         <td class="px-1" style="color:#92D050">44.0412</td>
-                        <td class="px-1" style="color:#00B050">99.019390</td>
-                        <td class="px-1" style="color:#00B050">97.148717</td>
+                        <td class="px-1" style="color:#31D87D">99.019390</td>
+                        <td class="px-1" style="color:#31D87D">97.148717</td>
                         <td class="px-1" style="color:#FFC000">75.77570949</td>
                         <td class="px-1" style="color:#FFC000">75.86107014</td>
                         <td class="px-1" style="color:#C65911">64.25930676</td>
@@ -9507,8 +9507,8 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#FFC000">40.8252</td>
                         <td class="px-1" style="color:#92D050">43.2435</td>
                         <td class="px-1" style="color:#92D050">43.9304</td>
-                        <td class="px-1" style="color:#00B050">98.834626</td>
-                        <td class="px-1" style="color:#00B050">96.901817</td>
+                        <td class="px-1" style="color:#31D87D">98.834626</td>
+                        <td class="px-1" style="color:#31D87D">96.901817</td>
                         <td class="px-1" style="color:#FFC000">75.14899784</td>
                         <td class="px-1" style="color:#FFC000">75.34139171</td>
                         <td class="px-1" style="color:#C65911">63.89165676</td>
@@ -9521,9 +9521,9 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1">4334.79</td>
                         <td class="px-1 ace" style="color:#92D050">42.1004</td>
                         <td class="px-1 ace" style="color:#92D050">44.39</td>
-                        <td class="px-1 ace" style="color:#00B050">45.5117</td>
-                        <td class="px-1 ace" style="color:#00B050">99.728842</td>
-                        <td class="px-1 ace" style="color:#00B050">98.184211</td>
+                        <td class="px-1 ace" style="color:#31D87D">45.5117</td>
+                        <td class="px-1 ace" style="color:#31D87D">99.728842</td>
+                        <td class="px-1 ace" style="color:#31D87D">98.184211</td>
                         <td class="px-1 ace" style="color:#92D050">83.24602058</td>
                         <td class="px-1 ace" style="color:#92D050">83.40918464</td>
                         <td class="px-1 ace" style="color:#FFC000">78.01967156</td>
@@ -9537,8 +9537,8 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1 sec" style="color:#FFC000">41.7447</td>
                         <td class="px-1 trd" style="color:#92D050">44.1381</td>
                         <td class="px-1 sec" style="color:#92D050">44.7859</td>
-                        <td class="px-1" style="color:#00B050">99.407608</td>
-                        <td class="px-1" style="color:#00B050">97.671552</td>
+                        <td class="px-1" style="color:#31D87D">99.407608</td>
+                        <td class="px-1" style="color:#31D87D">97.671552</td>
                         <td class="px-1 trd" style="color:#FFC000">78.85317925</td>
                         <td class="px-1 trd" style="color:#FFC000">78.87951009</td>
                         <td class="px-1" style="color:#C65911">69.75914376</td>
@@ -9552,8 +9552,8 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#FFC000">41.6559</td>
                         <td class="px-1" style="color:#92D050">43.9722</td>
                         <td class="px-1" style="color:#92D050">44.6733</td>
-                        <td class="px-1 trd" style="color:#00B050">99.413037</td>
-                        <td class="px-1 trd" style="color:#00B050">97.691499</td>
+                        <td class="px-1 trd" style="color:#31D87D">99.413037</td>
+                        <td class="px-1 trd" style="color:#31D87D">97.691499</td>
                         <td class="px-1" style="color:#FFC000">78.79998864</td>
                         <td class="px-1" style="color:#FFC000">78.83792127</td>
                         <td class="px-1" style="color:#C65911">69.77388681</td>
@@ -9567,8 +9567,8 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#FFC000">41.2944</td>
                         <td class="px-1" style="color:#92D050">43.7038</td>
                         <td class="px-1" style="color:#92D050">44.4423</td>
-                        <td class="px-1" style="color:#00B050">99.333118</td>
-                        <td class="px-1" style="color:#00B050">97.598158</td>
+                        <td class="px-1" style="color:#31D87D">99.333118</td>
+                        <td class="px-1" style="color:#31D87D">97.598158</td>
                         <td class="px-1" style="color:#FFC000">78.30231156</td>
                         <td class="px-1" style="color:#FFC000">78.36263621</td>
                         <td class="px-1" style="color:#C65911">69.29068078</td>
@@ -9582,8 +9582,8 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1 trd" style="color:#FFC000">41.7399</td>
                         <td class="px-1 sec" style="color:#92D050">44.3139</td>
                         <td class="px-1 trd" style="color:#92D050">44.7807</td>
-                        <td class="px-1 sec" style="color:#00B050">99.434136</td>
-                        <td class="px-1 sec" style="color:#00B050">97.707896</td>
+                        <td class="px-1 sec" style="color:#31D87D">99.434136</td>
+                        <td class="px-1 sec" style="color:#31D87D">97.707896</td>
                         <td class="px-1 sec" style="color:#FFC000">79.2659128</td>
                         <td class="px-1 sec" style="color:#FFC000">79.29272234</td>
                         <td class="px-1 sec" style="color:#FFC000">70.15623321</td>
@@ -9597,8 +9597,8 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#FFC000">41.6677</td>
                         <td class="px-1" style="color:#92D050">44.0184</td>
                         <td class="px-1" style="color:#92D050">44.6708</td>
-                        <td class="px-1" style="color:#00B050">99.278835</td>
-                        <td class="px-1" style="color:#00B050">97.492074</td>
+                        <td class="px-1" style="color:#31D87D">99.278835</td>
+                        <td class="px-1" style="color:#31D87D">97.492074</td>
                         <td class="px-1" style="color:#FFC000">78.67407409</td>
                         <td class="px-1" style="color:#FFC000">78.8737613</td>
                         <td class="px-1" style="color:#C65911">69.61758813</td>
@@ -9613,14 +9613,14 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1">7.73</td>
                         <td class="px-1">3041</td>
                         <td class="px-1" style="color:#FFC000">41.7030</td>
-                        <td class="px-1" style="color:#00B050">46.2944</td>
-                        <td class="px-1" style="color:#00B050">46.6380</td>
-                        <td class="px-1" style="color:#00B050">99.034930</td>
-                        <td class="px-1" style="color:#00B050">97.568271</td>
+                        <td class="px-1" style="color:#31D87D">46.2944</td>
+                        <td class="px-1" style="color:#31D87D">46.6380</td>
+                        <td class="px-1" style="color:#31D87D">99.034930</td>
+                        <td class="px-1" style="color:#31D87D">97.568271</td>
                         <td class="px-1" style="color:#FFC000">78.30652645</td>
                         <td class="px-1 sec" style="color:#FFC000">77.64769382</td>
                         <td class="px-1 sec" style="color:#C65911">64.95131977</td>
-                        <td class="px-1" style="color:#00B050">95.54420489</td>
+                        <td class="px-1" style="color:#31D87D">95.54420489</td>
                     </tr>
                     <tr class="border-bottom">
                         <td>SVTAV1</td>
@@ -9628,14 +9628,14 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1">28.329</td>
                         <td class="px-1">1580.03</td>
                         <td class="px-1" style="color:#92D050">41.3304</td>
-                        <td class="px-1" style="color:#00B050">46.6136</td>
-                        <td class="px-1" style="color:#00B050">46.2288</td>
-                        <td class="px-1" style="color:#00B050">98.670684</td>
-                        <td class="px-1" style="color:#00B050">97.043196</td>
+                        <td class="px-1" style="color:#31D87D">46.6136</td>
+                        <td class="px-1" style="color:#31D87D">46.2288</td>
+                        <td class="px-1" style="color:#31D87D">98.670684</td>
+                        <td class="px-1" style="color:#31D87D">97.043196</td>
                         <td class="px-1" style="color:#FFC000">73.73228925</td>
                         <td class="px-1" style="color:#FFC000">73.37285235</td>
-                        <td class="px-1" style="color:#F00">54.8578593</td>
-                        <td class="px-1" style="color:#00B050">93.57457526</td>
+                        <td class="px-1" style="color:#541818">54.8578593</td>
+                        <td class="px-1" style="color:#31D87D">93.57457526</td>
                     </tr>
                     <tr class="border-bottom">
                         <td>SVTAV1</td>
@@ -9643,14 +9643,14 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1">28.297</td>
                         <td class="px-1">1577.01</td>
                         <td class="px-1" style="color:#92D050">41.2986</td>
-                        <td class="px-1" style="color:#00B050">46.6074</td>
-                        <td class="px-1" style="color:#00B050">46.2146</td>
-                        <td class="px-1" style="color:#00B050">98.673540</td>
-                        <td class="px-1" style="color:#00B050">97.050632</td>
+                        <td class="px-1" style="color:#31D87D">46.6074</td>
+                        <td class="px-1" style="color:#31D87D">46.2146</td>
+                        <td class="px-1" style="color:#31D87D">98.673540</td>
+                        <td class="px-1" style="color:#31D87D">97.050632</td>
                         <td class="px-1" style="color:#FFC000">73.73402693</td>
                         <td class="px-1" style="color:#FFC000">73.37710154</td>
-                        <td class="px-1" style="color:#F00">54.97472344</td>
-                        <td class="px-1" style="color:#00B050">93.56296734</td>
+                        <td class="px-1" style="color:#541818">54.97472344</td>
+                        <td class="px-1" style="color:#31D87D">93.56296734</td>
                     </tr>
                     <tr class="border-bottom">
                         <td>SVTAV1</td>
@@ -9658,14 +9658,14 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1 sec">28.546</td>
                         <td class="px-1 sec">1554.96</td>
                         <td class="px-1" style="color:#92D050">41.1478</td>
-                        <td class="px-1" style="color:#00B050">46.5566</td>
-                        <td class="px-1" style="color:#00B050">46.1390</td>
-                        <td class="px-1" style="color:#00B050">98.637709</td>
-                        <td class="px-1" style="color:#00B050">97.009951</td>
+                        <td class="px-1" style="color:#31D87D">46.5566</td>
+                        <td class="px-1" style="color:#31D87D">46.1390</td>
+                        <td class="px-1" style="color:#31D87D">98.637709</td>
+                        <td class="px-1" style="color:#31D87D">97.009951</td>
                         <td class="px-1" style="color:#FFC000">73.45726871</td>
                         <td class="px-1" style="color:#FFC000">73.05525303</td>
-                        <td class="px-1" style="color:#F00">54.67047875</td>
-                        <td class="px-1" style="color:#00B050">93.51371218</td>
+                        <td class="px-1" style="color:#541818">54.67047875</td>
+                        <td class="px-1" style="color:#31D87D">93.51371218</td>
                     </tr>
                     <tr class="border-bottom">
                         <td>SVTAV1</td>
@@ -9673,14 +9673,14 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1 ace">28.784</td>
                         <td class="px-1 trd">1658.06</td>
                         <td class="px-1" style="color:#92D050">41.4123</td>
-                        <td class="px-1" style="color:#00B050">46.5467</td>
-                        <td class="px-1" style="color:#00B050">46.1661</td>
-                        <td class="px-1" style="color:#00B050">98.741928</td>
-                        <td class="px-1" style="color:#00B050">97.135528</td>
+                        <td class="px-1" style="color:#31D87D">46.5467</td>
+                        <td class="px-1" style="color:#31D87D">46.1661</td>
+                        <td class="px-1" style="color:#31D87D">98.741928</td>
+                        <td class="px-1" style="color:#31D87D">97.135528</td>
                         <td class="px-1" style="color:#FFC000">74.1484241</td>
                         <td class="px-1" style="color:#FFC000">73.84100191</td>
-                        <td class="px-1" style="color:#F00">55.4064291</td>
-                        <td class="px-1" style="color:#00B050">93.5169439</td>
+                        <td class="px-1" style="color:#541818">55.4064291</td>
+                        <td class="px-1" style="color:#31D87D">93.5169439</td>
                     </tr>
                     <tr class="border-bottom">
                         <td>SVTAV1</td>
@@ -9688,14 +9688,14 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1">28.038</td>
                         <td class="px-1 ace">1538.13</td>
                         <td class="px-1" style="color:#FFC000">41.2203</td>
-                        <td class="px-1" style="color:#00B050">46.5391</td>
-                        <td class="px-1" style="color:#00B050">46.1593</td>
-                        <td class="px-1" style="color:#00B050">98.492416</td>
-                        <td class="px-1" style="color:#00B050">96.815940</td>
+                        <td class="px-1" style="color:#31D87D">46.5391</td>
+                        <td class="px-1" style="color:#31D87D">46.1593</td>
+                        <td class="px-1" style="color:#31D87D">98.492416</td>
+                        <td class="px-1" style="color:#31D87D">96.815940</td>
                         <td class="px-1" style="color:#FFC000">73.52346418</td>
                         <td class="px-1" style="color:#FFC000">73.17031873</td>
-                        <td class="px-1" style="color:#F00">55.30870611</td>
-                        <td class="px-1" style="color:#00B050">93.05800747</td>
+                        <td class="px-1" style="color:#541818">55.30870611</td>
+                        <td class="px-1" style="color:#31D87D">93.05800747</td>
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">x265</td>
@@ -9703,14 +9703,14 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1">6.11</td>
                         <td class="px-1">5120.43</td>
                         <td class="px-1" style="color:#92D050">43.6721</td>
-                        <td class="px-1 ace" style="color:#00B050">47.7466</td>
-                        <td class="px-1 ace" style="color:#00B050">48.1249</td>
-                        <td class="px-1 ace" style="color:#00B050">99.658051</td>
-                        <td class="px-1 ace" style="color:#00B050">98.434386</td>
+                        <td class="px-1 ace" style="color:#31D87D">47.7466</td>
+                        <td class="px-1 ace" style="color:#31D87D">48.1249</td>
+                        <td class="px-1 ace" style="color:#31D87D">99.658051</td>
+                        <td class="px-1 ace" style="color:#31D87D">98.434386</td>
                         <td class="px-1 ace" style="color:#92D050">84.12837569</td>
                         <td class="px-1 ace" style="color:#92D050">83.64339310</td>
                         <td class="px-1 ace" style="color:#FFC000">74.46127664</td>
-                        <td class="px-1" style="color:#00B050">96.50134420</td>
+                        <td class="px-1" style="color:#31D87D">96.50134420</td>
                     </tr>
                     <tr class="border-bottom">
                         <td>SVTAV1</td>
@@ -9718,14 +9718,14 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1">27.78</td>
                         <td class="px-1">2253.69</td>
                         <td class="px-1 trd" style="color:#92D050">42.4226</td>
-                        <td class="px-1 sec" style="color:#00B050">47.2423</td>
-                        <td class="px-1 sec" style="color:#00B050">46.9247</td>
-                        <td class="px-1" style="color:#00B050">99.192300</td>
-                        <td class="px-1" style="color:#00B050">97.735401</td>
+                        <td class="px-1 sec" style="color:#31D87D">47.2423</td>
+                        <td class="px-1 sec" style="color:#31D87D">46.9247</td>
+                        <td class="px-1" style="color:#31D87D">99.192300</td>
+                        <td class="px-1" style="color:#31D87D">97.735401</td>
                         <td class="px-1 trd" style="color:#FFC000">77.95534397</td>
                         <td class="px-1" style="color:#FFC000">77.6063332</td>
                         <td class="px-1" style="color:#C65911">63.26160259</td>
-                        <td class="px-1 sec" style="color:#00B050">94.46343097</td>
+                        <td class="px-1 sec" style="color:#31D87D">94.46343097</td>
                     </tr>
                     <tr class="border-bottom">
                         <td>SVTAV1</td>
@@ -9733,14 +9733,14 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1">27.516</td>
                         <td class="px-1">2241.62</td>
                         <td class="px-1" style="color:#92D050">42.3748</td>
-                        <td class="px-1" style="color:#00B050">47.2245</td>
-                        <td class="px-1" style="color:#00B050">46.8932</td>
-                        <td class="px-1 trd" style="color:#00B050">99.192102</td>
-                        <td class="px-1 trd" style="color:#00B050">97.739201</td>
+                        <td class="px-1" style="color:#31D87D">47.2245</td>
+                        <td class="px-1" style="color:#31D87D">46.8932</td>
+                        <td class="px-1 trd" style="color:#31D87D">99.192102</td>
+                        <td class="px-1 trd" style="color:#31D87D">97.739201</td>
                         <td class="px-1" style="color:#FFC000">77.92935682</td>
                         <td class="px-1" style="color:#FFC000">77.58905525</td>
                         <td class="px-1" style="color:#C65911">63.31099239</td>
-                        <td class="px-1 ace" style="color:#00B050">94.5150659</td>
+                        <td class="px-1 ace" style="color:#31D87D">94.5150659</td>
                     </tr>
                     <tr class="border-bottom">
                         <td>SVTAV1</td>
@@ -9748,14 +9748,14 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1">27.992</td>
                         <td class="px-1">2202.75</td>
                         <td class="px-1" style="color:#92D050">42.1578</td>
-                        <td class="px-1" style="color:#00B050">47.1537</td>
-                        <td class="px-1" style="color:#00B050">46.7919</td>
-                        <td class="px-1" style="color:#00B050">99.150203</td>
-                        <td class="px-1" style="color:#00B050">97.690037</td>
+                        <td class="px-1" style="color:#31D87D">47.1537</td>
+                        <td class="px-1" style="color:#31D87D">46.7919</td>
+                        <td class="px-1" style="color:#31D87D">99.150203</td>
+                        <td class="px-1" style="color:#31D87D">97.690037</td>
                         <td class="px-1" style="color:#FFC000">77.57799079</td>
                         <td class="px-1" style="color:#FFC000">77.16378592</td>
                         <td class="px-1" style="color:#C65911">62.90816047</td>
-                        <td class="px-1" style="color:#00B050">94.43395281</td>
+                        <td class="px-1" style="color:#31D87D">94.43395281</td>
                     </tr>
                     <tr class="border-bottom">
                         <td>SVTAV1</td>
@@ -9763,14 +9763,14 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1 trd">28.319</td>
                         <td class="px-1">2350.97</td>
                         <td class="px-1" style="color:#92D050">42.4904</td>
-                        <td class="px-1" style="color:#00B050">47.1816</td>
-                        <td class="px-1" style="color:#00B050">46.8649</td>
-                        <td class="px-1 sec" style="color:#00B050">99.252266</td>
-                        <td class="px-1 sec" style="color:#00B050">97.814671</td>
+                        <td class="px-1" style="color:#31D87D">47.1816</td>
+                        <td class="px-1" style="color:#31D87D">46.8649</td>
+                        <td class="px-1 sec" style="color:#31D87D">99.252266</td>
+                        <td class="px-1 sec" style="color:#31D87D">97.814671</td>
                         <td class="px-1 sec" style="color:#FFC000">78.28962734</td>
                         <td class="px-1 trd" style="color:#FFC000">77.96771217</td>
                         <td class="px-1 trd" style="color:#C65911">63.73580664</td>
-                        <td class="px-1 trd" style="color:#00B050">94.47657123</td>
+                        <td class="px-1 trd" style="color:#31D87D">94.47657123</td>
                     </tr>
                     <tr class="border-bottom">
                         <td>SVTAV1</td>
@@ -9778,14 +9778,14 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1">27.445</td>
                         <td class="px-1">2194.22</td>
                         <td class="px-1" style="color:#92D050">42.3155</td>
-                        <td class="px-1" style="color:#00B050">47.1631</td>
-                        <td class="px-1" style="color:#00B050">46.8466</td>
-                        <td class="px-1" style="color:#00B050">99.059057</td>
-                        <td class="px-1" style="color:#00B050">97.560952</td>
+                        <td class="px-1" style="color:#31D87D">47.1631</td>
+                        <td class="px-1" style="color:#31D87D">46.8466</td>
+                        <td class="px-1" style="color:#31D87D">99.059057</td>
+                        <td class="px-1" style="color:#31D87D">97.560952</td>
                         <td class="px-1" style="color:#FFC000">77.76087565</td>
                         <td class="px-1" style="color:#FFC000">77.42435303</td>
                         <td class="px-1" style="color:#C65911">63.51118754</td>
-                        <td class="px-1" style="color:#00B050">93.97271621</td>
+                        <td class="px-1" style="color:#31D87D">93.97271621</td>
                     </tr>
                     <tr class="text-smaller">
                         <td class="align-items-center t-light-gray" colspan="13"><b>Netflix SolLevante</b></td>
@@ -9795,15 +9795,15 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1">CRF22 Custom</td>
                         <td class="px-1">2.73</td>
                         <td class="px-1">19648.8</td>
-                        <td class="px-1" style="color:#F00">20.9812</td>
+                        <td class="px-1" style="color:#541818">20.9812</td>
                         <td class="px-1" style="color:#FFC000">38.0531</td>
                         <td class="px-1" style="color:#C65911">35.0405</td>
-                        <td class="px-1" style="color:#00B050">98.125428</td>
-                        <td class="px-1" style="color:#00B050">96.795521</td>
+                        <td class="px-1" style="color:#31D87D">98.125428</td>
+                        <td class="px-1" style="color:#31D87D">96.795521</td>
                         <td class="px-1" style="color:#C65911">55.88148851</td>
-                        <td class="px-1" style="color:#F00">52.56807147</td>
+                        <td class="px-1" style="color:#541818">52.56807147</td>
                         <td class="px-1" style="color:#FFF;background-color:#FF7C80">-2.62235865</td>
-                        <td class="px-1 ace" style="color:#00B050">100</td>
+                        <td class="px-1 ace" style="color:#31D87D">100</td>
                     </tr>
                     <tr class="border-bottom">
                         <td>SVTAV1</td>
@@ -9813,12 +9813,12 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#C65911">37.4796</td>
                         <td class="px-1" style="color:#FFC000">41.301</td>
                         <td class="px-1" style="color:#92D050">42.1299</td>
-                        <td class="px-1" style="color:#00B050">98.234294</td>
-                        <td class="px-1" style="color:#00B050">96.876956</td>
+                        <td class="px-1" style="color:#31D87D">98.234294</td>
+                        <td class="px-1" style="color:#31D87D">96.876956</td>
                         <td class="px-1" style="color:#C65911">65.97162016</td>
-                        <td class="px-1" style="color:#F00">59.94357483</td>
-                        <td class="px-1" style="color:#F00">32.53194259</td>
-                        <td class="px-1 ace" style="color:#00B050">100</td>
+                        <td class="px-1" style="color:#541818">59.94357483</td>
+                        <td class="px-1" style="color:#541818">32.53194259</td>
+                        <td class="px-1 ace" style="color:#31D87D">100</td>
                     </tr>
                     <tr class="border-bottom">
                         <td>SVTAV1</td>
@@ -9828,12 +9828,12 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#C65911">37.4825</td>
                         <td class="px-1" style="color:#FFC000">41.2973</td>
                         <td class="px-1" style="color:#92D050">42.1271</td>
-                        <td class="px-1" style="color:#00B050">98.245816</td>
-                        <td class="px-1" style="color:#00B050">96.897842</td>
+                        <td class="px-1" style="color:#31D87D">98.245816</td>
+                        <td class="px-1" style="color:#31D87D">96.897842</td>
                         <td class="px-1" style="color:#C65911">66.03889685</td>
                         <td class="px-1" style="color:#C65911">60.02430719</td>
-                        <td class="px-1" style="color:#F00">32.57622116</td>
-                        <td class="px-1" style="color:#00B050">98.68322379</td>
+                        <td class="px-1" style="color:#541818">32.57622116</td>
+                        <td class="px-1" style="color:#31D87D">98.68322379</td>
                     </tr>
                     <tr class="border-bottom">
                         <td>SVTAV1</td>
@@ -9843,12 +9843,12 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#C65911">37.4555</td>
                         <td class="px-1" style="color:#FFC000">41.2608</td>
                         <td class="px-1" style="color:#92D050">42.0718</td>
-                        <td class="px-1" style="color:#00B050">98.231956</td>
-                        <td class="px-1" style="color:#00B050">96.875528</td>
+                        <td class="px-1" style="color:#31D87D">98.231956</td>
+                        <td class="px-1" style="color:#31D87D">96.875528</td>
                         <td class="px-1" style="color:#C65911">65.73858934</td>
-                        <td class="px-1" style="color:#F00">59.78007333</td>
-                        <td class="px-1" style="color:#F00">32.03486931</td>
-                        <td class="px-1" style="color:#00B050">98.68322379</td>
+                        <td class="px-1" style="color:#541818">59.78007333</td>
+                        <td class="px-1" style="color:#541818">32.03486931</td>
+                        <td class="px-1" style="color:#31D87D">98.68322379</td>
                     </tr>
                     <tr class="border-bottom">
                         <td>SVTAV1</td>
@@ -9858,12 +9858,12 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#C65911">37.4686</td>
                         <td class="px-1" style="color:#FFC000">41.3226</td>
                         <td class="px-1" style="color:#92D050">42.1316</td>
-                        <td class="px-1" style="color:#00B050">98.235196</td>
-                        <td class="px-1" style="color:#00B050">96.859568</td>
+                        <td class="px-1" style="color:#31D87D">98.235196</td>
+                        <td class="px-1" style="color:#31D87D">96.859568</td>
                         <td class="px-1" style="color:#C65911">66.23793043</td>
                         <td class="px-1" style="color:#C65911">60.0486379</td>
-                        <td class="px-1" style="color:#F00">32.76133609</td>
-                        <td class="px-1" style="color:#00B050">98.81171438</td>
+                        <td class="px-1" style="color:#541818">32.76133609</td>
+                        <td class="px-1" style="color:#31D87D">98.81171438</td>
                     </tr>
                     <tr class="border-bottom">
                         <td>SVTAV1</td>
@@ -9873,27 +9873,27 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#C65911">31.4607</td>
                         <td class="px-1 ace" style="color:#FFC000">41.8239</td>
                         <td class="px-1" style="color:#FFC000">39.4703</td>
-                        <td class="px-1" style="color:#00B050">98.078654</td>
-                        <td class="px-1" style="color:#00B050">96.63514</td>
+                        <td class="px-1" style="color:#31D87D">98.078654</td>
+                        <td class="px-1" style="color:#31D87D">96.63514</td>
                         <td class="px-1" style="color:#C65911">65.28679182</td>
-                        <td class="px-1" style="color:#F00">59.20220066</td>
-                        <td class="px-1" style="color:#F00">31.85868858</td>
-                        <td class="px-1 ace" style="color:#00B050">100</td>
+                        <td class="px-1" style="color:#541818">59.20220066</td>
+                        <td class="px-1" style="color:#541818">31.85868858</td>
+                        <td class="px-1 ace" style="color:#31D87D">100</td>
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">x265</td>
                         <td class="px-1">CRF18 Custom</td>
                         <td class="px-1">2.39</td>
                         <td class="px-1">32862.36</td>
-                        <td class="px-1" style="color:#F00">21.0524</td>
+                        <td class="px-1" style="color:#541818">21.0524</td>
                         <td class="px-1" style="color:#FFC000">38.4039</td>
                         <td class="px-1" style="color:#C65911">35.275</td>
-                        <td class="px-1 ace" style="color:#00B050">98.951545</td>
-                        <td class="px-1 ace" style="color:#00B050">98.200316</td>
+                        <td class="px-1 ace" style="color:#31D87D">98.951545</td>
+                        <td class="px-1 ace" style="color:#31D87D">98.200316</td>
                         <td class="px-1" style="color:#C65911">68.8732738</td>
                         <td class="px-1 ace" style="color:#C65911">67.24602694</td>
-                        <td class="px-1" style="color:#F00">28.23977369</td>
-                        <td class="px-1 sec" style="color:#00B050">99.82971151</td>
+                        <td class="px-1" style="color:#541818">28.23977369</td>
+                        <td class="px-1 sec" style="color:#31D87D">99.82971151</td>
                     </tr>
                     <tr class="border-bottom">
                         <td>SVTAV1</td>
@@ -9903,12 +9903,12 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1 sec" style="color:#C65911">37.8511</td>
                         <td class="px-1 sec" style="color:#FFC000">41.6377</td>
                         <td class="px-1 ace" style="color:#92D050">42.6135</td>
-                        <td class="px-1" style="color:#00B050">98.615379</td>
-                        <td class="px-1 trd" style="color:#00B050">97.452872</td>
+                        <td class="px-1" style="color:#31D87D">98.615379</td>
+                        <td class="px-1 trd" style="color:#31D87D">97.452872</td>
                         <td class="px-1 trd" style="color:#FFC000">72.01245585</td>
                         <td class="px-1" style="color:#C65911">66.82872302</td>
-                        <td class="px-1 sec" style="color:#F00">45.26125476</td>
-                        <td class="px-1 trd" style="color:#00B050">99.29705787</td>
+                        <td class="px-1 sec" style="color:#541818">45.26125476</td>
+                        <td class="px-1 trd" style="color:#31D87D">99.29705787</td>
                     </tr>
                     <tr class="border-bottom">
                         <td>SVTAV1</td>
@@ -9918,12 +9918,12 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1 ace" style="color:#C65911">37.8514</td>
                         <td class="px-1 trd" style="color:#FFC000">41.6337</td>
                         <td class="px-1 sec" style="color:#92D050">42.6076</td>
-                        <td class="px-1 trd" style="color:#00B050">98.622843</td>
-                        <td class="px-1 sec" style="color:#00B050">97.462467</td>
+                        <td class="px-1 trd" style="color:#31D87D">98.622843</td>
+                        <td class="px-1 sec" style="color:#31D87D">97.462467</td>
                         <td class="px-1 sec" style="color:#FFC000">72.03421424</td>
                         <td class="px-1 trd" style="color:#C65911">66.91038305</td>
-                        <td class="px-1 trd" style="color:#F00">45.2452499</td>
-                        <td class="px-1 ace" style="color:#00B050">100</td>
+                        <td class="px-1 trd" style="color:#541818">45.2452499</td>
+                        <td class="px-1 ace" style="color:#31D87D">100</td>
                     </tr>
                     <tr class="border-bottom">
                         <td>SVTAV1</td>
@@ -9933,12 +9933,12 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1 trd" style="color:#C65911">37.8158</td>
                         <td class="px-1" style="color:#FFC000">41.5928</td>
                         <td class="px-1 trd" style="color:#92D050">42.5431</td>
-                        <td class="px-1" style="color:#00B050">98.601947</td>
-                        <td class="px-1" style="color:#00B050">97.42399</td>
+                        <td class="px-1" style="color:#31D87D">98.601947</td>
+                        <td class="px-1" style="color:#31D87D">97.42399</td>
                         <td class="px-1" style="color:#FFC000">71.617254</td>
                         <td class="px-1" style="color:#C65911">66.48754073</td>
-                        <td class="px-1" style="color:#F00">44.37356138</td>
-                        <td class="px-1 ace" style="color:#00B050">100</td>
+                        <td class="px-1" style="color:#541818">44.37356138</td>
+                        <td class="px-1 ace" style="color:#31D87D">100</td>
                     </tr>
                     <tr class="border-bottom">
                         <td>SVTAV1</td>
@@ -9948,12 +9948,12 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#C65911">37.4686</td>
                         <td class="px-1" style="color:#FFC000">41.3226</td>
                         <td class="px-1" style="color:#92D050">42.1316</td>
-                        <td class="px-1 sec" style="color:#00B050">98.63212</td>
-                        <td class="px-1" style="color:#00B050">97.439903</td>
+                        <td class="px-1 sec" style="color:#31D87D">98.63212</td>
+                        <td class="px-1" style="color:#31D87D">97.439903</td>
                         <td class="px-1 ace" style="color:#FFC000">72.33149666</td>
                         <td class="px-1 sec" style="color:#C65911">67.03434155</td>
-                        <td class="px-1 ace" style="color:#F00">45.6597599</td>
-                        <td class="px-1 ace" style="color:#00B050">100</td>
+                        <td class="px-1 ace" style="color:#541818">45.6597599</td>
+                        <td class="px-1 ace" style="color:#31D87D">100</td>
                     </tr>
                     <tr class="border-bottom">
                         <td>SVTAV1</td>
@@ -9963,12 +9963,12 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#C65911">37.3834</td>
                         <td class="px-1" style="color:#FFC000">41.2295</td>
                         <td class="px-1" style="color:#92D050">42.0278</td>
-                        <td class="px-1" style="color:#00B050">98.078654</td>
-                        <td class="px-1" style="color:#00B050">96.63514</td>
+                        <td class="px-1" style="color:#31D87D">98.078654</td>
+                        <td class="px-1" style="color:#31D87D">96.63514</td>
                         <td class="px-1" style="color:#FFC000">71.49626144</td>
                         <td class="px-1" style="color:#C65911">66.1878533</td>
-                        <td class="px-1" style="color:#F00">44.68539708</td>
-                        <td class="px-1 ace" style="color:#00B050">100</td>
+                        <td class="px-1" style="color:#541818">44.68539708</td>
+                        <td class="px-1 ace" style="color:#31D87D">100</td>
                     </tr>
                     <tr class="text-smaller">
                         <td class="align-items-center t-light-gray" colspan="13"><b>ドラゴン会. MAIDRAGON-S</b></td>
@@ -9981,11 +9981,11 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1 sec" style="color:#FFC000">40.8455</td>
                         <td class="px-1 sec" style="color:#92D050">42.8648</td>
                         <td class="px-1 sec" style="color:#92D050">43.3141</td>
-                        <td class="px-1" style="color:#00B050">98.989807</td>
-                        <td class="px-1" style="color:#00B050">96.185890</td>
+                        <td class="px-1" style="color:#31D87D">98.989807</td>
+                        <td class="px-1" style="color:#31D87D">96.185890</td>
                         <td class="px-1" style="color:#FFC000">73.91282871</td>
                         <td class="px-1" style="color:#FFC000">77.92521321</td>
-                        <td class="px-1" style="color:#F00">46.40877591</td>
+                        <td class="px-1" style="color:#541818">46.40877591</td>
                         <td class="px-1" style="color:#92D050">85.66813206</td>
                     </tr>
                     <tr class="border-bottom">
@@ -9996,11 +9996,11 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#92D050">42.3045</td>
                         <td class="px-1" style="color:#92D050">43.5883</td>
                         <td class="px-1" style="color:#92D050">43.7628</td>
-                        <td class="px-1" style="color:#00B050">99.244396</td>
-                        <td class="px-1" style="color:#00B050">96.516280</td>
+                        <td class="px-1" style="color:#31D87D">99.244396</td>
+                        <td class="px-1" style="color:#31D87D">96.516280</td>
                         <td class="px-1" style="color:#FFC000">77.79595955</td>
                         <td class="px-1" style="color:#92D050">80.76951847</td>
-                        <td class="px-1" style="color:#F00">55.35706082</td>
+                        <td class="px-1" style="color:#541818">55.35706082</td>
                         <td class="px-1" style="color:#92D050">87.21367204</td>
                     </tr>
                     <tr class="border-bottom">
@@ -10011,11 +10011,11 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#92D050">42.2290</td>
                         <td class="px-1" style="color:#92D050">43.4291</td>
                         <td class="px-1" style="color:#92D050">43.6218</td>
-                        <td class="px-1" style="color:#00B050">99.240111</td>
-                        <td class="px-1" style="color:#00B050">96.516206</td>
+                        <td class="px-1" style="color:#31D87D">99.240111</td>
+                        <td class="px-1" style="color:#31D87D">96.516206</td>
                         <td class="px-1" style="color:#FFC000">77.6988655</td>
                         <td class="px-1" style="color:#92D050">80.69600714</td>
-                        <td class="px-1" style="color:#F00">55.34029248</td>
+                        <td class="px-1" style="color:#541818">55.34029248</td>
                         <td class="px-1" style="color:#92D050">87.02358295</td>
                     </tr>
                     <tr class="border-bottom">
@@ -10026,11 +10026,11 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#FFC000">41.9666</td>
                         <td class="px-1" style="color:#92D050">43.1936</td>
                         <td class="px-1" style="color:#92D050">43.4126</td>
-                        <td class="px-1" style="color:#00B050">99.197680</td>
-                        <td class="px-1" style="color:#00B050">96.468397</td>
+                        <td class="px-1" style="color:#31D87D">99.197680</td>
+                        <td class="px-1" style="color:#31D87D">96.468397</td>
                         <td class="px-1" style="color:#FFC000">77.31179694</td>
                         <td class="px-1" style="color:#92D050">80.33342245</td>
-                        <td class="px-1" style="color:#F00">54.98487067</td>
+                        <td class="px-1" style="color:#541818">54.98487067</td>
                         <td class="px-1" style="color:#92D050">86.47179056</td>
                     </tr>
                     <tr class="border-bottom">
@@ -10041,11 +10041,11 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#92D050">42.2398</td>
                         <td class="px-1" style="color:#92D050">43.6137</td>
                         <td class="px-1" style="color:#92D050">43.7588</td>
-                        <td class="px-1" style="color:#00B050">99.197680</td>
-                        <td class="px-1" style="color:#00B050">96.468397</td>
+                        <td class="px-1" style="color:#31D87D">99.197680</td>
+                        <td class="px-1" style="color:#31D87D">96.468397</td>
                         <td class="px-1" style="color:#FFC000">78.18404438</td>
                         <td class="px-1" style="color:#92D050">81.09807098</td>
-                        <td class="px-1" style="color:#F00">56.4178064</td>
+                        <td class="px-1" style="color:#541818">56.4178064</td>
                         <td class="px-1" style="color:#92D050">87.3149899</td>
                     </tr>
                     <tr class="border-bottom">
@@ -10056,11 +10056,11 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#92D050">42.1163</td>
                         <td class="px-1" style="color:#92D050">43.3465</td>
                         <td class="px-1" style="color:#92D050">43.5296</td>
-                        <td class="px-1" style="color:#00B050">99.087125</td>
-                        <td class="px-1" style="color:#00B050">96.311458</td>
+                        <td class="px-1" style="color:#31D87D">99.087125</td>
+                        <td class="px-1" style="color:#31D87D">96.311458</td>
                         <td class="px-1" style="color:#FFC000">77.31163552</td>
                         <td class="px-1" style="color:#FFC000">79.89184789</td>
-                        <td class="px-1" style="color:#F00">55.58016882</td>
+                        <td class="px-1" style="color:#541818">55.58016882</td>
                         <td class="px-1" style="color:#92D050">87.02450024</td>
                     </tr>
                     <tr class="border-bottom">
@@ -10071,8 +10071,8 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#92D050">42.5171</td>
                         <td class="px-1 trd" style="color:#92D050">44.2124</td>
                         <td class="px-1 ace" style="color:#92D050">44.547</td>
-                        <td class="px-1 sec" style="color:#00B050">99.592478</td>
-                        <td class="px-1 sec" style="color:#00B050">97.058023</td>
+                        <td class="px-1 sec" style="color:#31D87D">99.592478</td>
+                        <td class="px-1 sec" style="color:#31D87D">97.058023</td>
                         <td class="px-1" style="color:#92D050">80.15751958</td>
                         <td class="px-1" style="color:#92D050">82.75859474</td>
                         <td class="px-1" style="color:#C65911">62.41689237</td>
@@ -10086,8 +10086,8 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1 ace" style="color:#92D050">43.2173</td>
                         <td class="px-1 sec" style="color:#92D050">44.2203</td>
                         <td class="px-1 sec" style="color:#92D050">44.3570</td>
-                        <td class="px-1 trd" style="color:#00B050">99.539781</td>
-                        <td class="px-1 trd" style="color:#00B050">96.936797</td>
+                        <td class="px-1 trd" style="color:#31D87D">99.539781</td>
+                        <td class="px-1 trd" style="color:#31D87D">96.936797</td>
                         <td class="px-1 sec" style="color:#92D050">80.7293233</td>
                         <td class="px-1 sec" style="color:#92D050">83.2105695</td>
                         <td class="px-1" style="color:#C65911">62.57713789</td>
@@ -10101,8 +10101,8 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1 trd" style="color:#92D050">43.1181</td>
                         <td class="px-1" style="color:#92D050">44.04</td>
                         <td class="px-1" style="color:#92D050">44.1960</td>
-                        <td class="px-1 ace" style="color:#00B050">99.651511</td>
-                        <td class="px-1 ace" style="color:#00B050">97.180459</td>
+                        <td class="px-1 ace" style="color:#31D87D">99.651511</td>
+                        <td class="px-1 ace" style="color:#31D87D">97.180459</td>
                         <td class="px-1 trd" style="color:#92D050">80.59807135</td>
                         <td class="px-1 trd" style="color:#92D050">83.09262696</td>
                         <td class="px-1 trd" style="color:#C65911">62.58511914</td>
@@ -10116,8 +10116,8 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#92D050">42.7807</td>
                         <td class="px-1" style="color:#92D050">43.7920</td>
                         <td class="px-1" style="color:#92D050">43.9662</td>
-                        <td class="px-1" style="color:#00B050">99.499874</td>
-                        <td class="px-1" style="color:#00B050">96.893528</td>
+                        <td class="px-1" style="color:#31D87D">99.499874</td>
+                        <td class="px-1" style="color:#31D87D">96.893528</td>
                         <td class="px-1" style="color:#92D050">80.13878722</td>
                         <td class="px-1" style="color:#92D050">82.67207598</td>
                         <td class="px-1" style="color:#C65911">62.1303331</td>
@@ -10131,8 +10131,8 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1 sec" style="color:#92D050">43.1374</td>
                         <td class="px-1 ace" style="color:#92D050">44.2474</td>
                         <td class="px-1 trd" style="color:#92D050">44.3534</td>
-                        <td class="px-1" style="color:#00B050">99.485086</td>
-                        <td class="px-1" style="color:#00B050">96.874969</td>
+                        <td class="px-1" style="color:#31D87D">99.485086</td>
+                        <td class="px-1" style="color:#31D87D">96.874969</td>
                         <td class="px-1 ace" style="color:#92D050">81.0576056</td>
                         <td class="px-1 ace" style="color:#92D050">83.45341781</td>
                         <td class="px-1 ace" style="color:#C65911">63.52342983</td>
@@ -10146,8 +10146,8 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#92D050">43.0734</td>
                         <td class="px-1" style="color:#92D050">44.0203</td>
                         <td class="px-1" style="color:#92D050">44.1659</td>
-                        <td class="px-1" style="color:#00B050">99.438195</td>
-                        <td class="px-1" style="color:#00B050">96.792498</td>
+                        <td class="px-1" style="color:#31D87D">99.438195</td>
+                        <td class="px-1" style="color:#31D87D">96.792498</td>
                         <td class="px-1" style="color:#92D050">80.37004198</td>
                         <td class="px-1" style="color:#92D050">82.49914773</td>
                         <td class="px-1 sec" style="color:#C65911">62.83002581</td>
@@ -10164,8 +10164,8 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1 sec" style="color:#FFC000">39.3288</td>
                         <td class="px-1 sec" style="color:#92D050">42.407</td>
                         <td class="px-1 sec" style="color:#92D050">42.984</td>
-                        <td class="px-1" style="color:#00B050">98.861521</td>
-                        <td class="px-1" style="color:#00B050">95.710301</td>
+                        <td class="px-1" style="color:#31D87D">98.861521</td>
+                        <td class="px-1" style="color:#31D87D">95.710301</td>
                         <td class="px-1" style="color:#FFC000">74.36000528</td>
                         <td class="px-1" style="color:#FFC000">75.52608593</td>
                         <td class="px-1" style="color:#C65911">60.49981158</td>
@@ -10179,8 +10179,8 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#FFC000">40.8253</td>
                         <td class="px-1" style="color:#92D050">43.5643</td>
                         <td class="px-1" style="color:#92D050">43.7323</td>
-                        <td class="px-1" style="color:#00B050">99.135122</td>
-                        <td class="px-1" style="color:#00B050">96.076917</td>
+                        <td class="px-1" style="color:#31D87D">99.135122</td>
+                        <td class="px-1" style="color:#31D87D">96.076917</td>
                         <td class="px-1" style="color:#FFC000">79.82507743</td>
                         <td class="px-1" style="color:#92D050">81.09452443</td>
                         <td class="px-1" style="color:#C65911">67.96711951</td>
@@ -10194,8 +10194,8 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#FFC000">40.8003</td>
                         <td class="px-1" style="color:#92D050">43.5060</td>
                         <td class="px-1" style="color:#92D050">43.6861</td>
-                        <td class="px-1" style="color:#00B050">99.136773</td>
-                        <td class="px-1" style="color:#00B050">96.083268</td>
+                        <td class="px-1" style="color:#31D87D">99.136773</td>
+                        <td class="px-1" style="color:#31D87D">96.083268</td>
                         <td class="px-1" style="color:#FFC000">79.80505612</td>
                         <td class="px-1" style="color:#92D050">81.06671569</td>
                         <td class="px-1" style="color:#C65911">67.99861326</td>
@@ -10209,8 +10209,8 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#FFC000">40.6694</td>
                         <td class="px-1" style="color:#92D050">43.4026</td>
                         <td class="px-1" style="color:#92D050">43.5929</td>
-                        <td class="px-1" style="color:#00B050">99.077271</td>
-                        <td class="px-1" style="color:#00B050">96.013092</td>
+                        <td class="px-1" style="color:#31D87D">99.077271</td>
+                        <td class="px-1" style="color:#31D87D">96.013092</td>
                         <td class="px-1" style="color:#FFC000">79.57465176</td>
                         <td class="px-1" style="color:#92D050">80.79647596</td>
                         <td class="px-1" style="color:#C65911">67.84670635</td>
@@ -10224,8 +10224,8 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#FFC000">40.7663</td>
                         <td class="px-1" style="color:#92D050">43.5503</td>
                         <td class="px-1" style="color:#92D050">43.7291</td>
-                        <td class="px-1" style="color:#00B050">99.083751</td>
-                        <td class="px-1" style="color:#00B050">96.013682</td>
+                        <td class="px-1" style="color:#31D87D">99.083751</td>
+                        <td class="px-1" style="color:#31D87D">96.013682</td>
                         <td class="px-1" style="color:#92D050">80.11321607</td>
                         <td class="px-1" style="color:#92D050">81.29575302</td>
                         <td class="px-1" style="color:#C65911">68.60815332</td>
@@ -10239,8 +10239,8 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#FFC000">40.7484</td>
                         <td class="px-1" style="color:#92D050">43.4579</td>
                         <td class="px-1" style="color:#92D050">43.6360</td>
-                        <td class="px-1" style="color:#00B050">98.997302</td>
-                        <td class="px-1" style="color:#00B050">95.897500</td>
+                        <td class="px-1" style="color:#31D87D">98.997302</td>
+                        <td class="px-1" style="color:#31D87D">95.897500</td>
                         <td class="px-1" style="color:#FFC000">79.60067877</td>
                         <td class="px-1" style="color:#92D050">80.69420144</td>
                         <td class="px-1" style="color:#C65911">67.8288596</td>
@@ -10254,8 +10254,8 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#FFC000">40.4798</td>
                         <td class="px-1" style="color:#92D050">43.4753</td>
                         <td class="px-1" style="color:#92D050">43.8205</td>
-                        <td class="px-1 ace" style="color:#00B050">99.462855</td>
-                        <td class="px-1 ace" style="color:#00B050">96.529797</td>
+                        <td class="px-1 ace" style="color:#31D87D">99.462855</td>
+                        <td class="px-1 ace" style="color:#31D87D">96.529797</td>
                         <td class="px-1" style="color:#FFC000">79.68937613</td>
                         <td class="px-1" style="color:#92D050">80.29604784</td>
                         <td class="px-1" style="color:#FFC000">71.18435582</td>
@@ -10269,8 +10269,8 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1 ace" style="color:#FFC000">41.3418</td>
                         <td class="px-1 ace" style="color:#92D050">43.9899</td>
                         <td class="px-1 ace" style="color:#92D050">44.1166</td>
-                        <td class="px-1 trd" style="color:#00B050">99.416563</td>
-                        <td class="px-1 trd" style="color:#00B050">96.456901</td>
+                        <td class="px-1 trd" style="color:#31D87D">99.416563</td>
+                        <td class="px-1 trd" style="color:#31D87D">96.456901</td>
                         <td class="px-1 sec" style="color:#92D050">82.03787385</td>
                         <td class="px-1 sec" style="color:#92D050">83.02565519</td>
                         <td class="px-1 sec" style="color:#FFC000">72.68777288</td>
@@ -10284,8 +10284,8 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1 sec" style="color:#FFC000">41.3132</td>
                         <td class="px-1 trd" style="color:#92D050">43.9222</td>
                         <td class="px-1 trd" style="color:#92D050">44.0566</td>
-                        <td class="px-1 sec" style="color:#00B050">99.417401</td>
-                        <td class="px-1 sec" style="color:#00B050">96.463302</td>
+                        <td class="px-1 sec" style="color:#31D87D">99.417401</td>
+                        <td class="px-1 sec" style="color:#31D87D">96.463302</td>
                         <td class="px-1 trd" style="color:#92D050">82.00116606</td>
                         <td class="px-1 trd" style="color:#92D050">82.99097252</td>
                         <td class="px-1 trd" style="color:#FFC000">72.65484942</td>
@@ -10299,8 +10299,8 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#FFC000">41.1678</td>
                         <td class="px-1" style="color:#92D050">43.7995</td>
                         <td class="px-1" style="color:#92D050">43.9495</td>
-                        <td class="px-1" style="color:#00B050">99.366585</td>
-                        <td class="px-1" style="color:#00B050">96.402913</td>
+                        <td class="px-1" style="color:#31D87D">99.366585</td>
+                        <td class="px-1" style="color:#31D87D">96.402913</td>
                         <td class="px-1" style="color:#92D050">81.74212195</td>
                         <td class="px-1" style="color:#92D050">82.69693318</td>
                         <td class="px-1" style="color:#FFC000">72.40613868</td>
@@ -10314,8 +10314,8 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#FFC000">41.2642</td>
                         <td class="px-1 sec" style="color:#92D050">43.9719</td>
                         <td class="px-1 sec" style="color:#92D050">44.1089</td>
-                        <td class="px-1" style="color:#00B050">99.372739</td>
-                        <td class="px-1" style="color:#00B050">96.403405</td>
+                        <td class="px-1" style="color:#31D87D">99.372739</td>
+                        <td class="px-1" style="color:#31D87D">96.403405</td>
                         <td class="px-1 ace" style="color:#92D050">82.2466764</td>
                         <td class="px-1 ace" style="color:#92D050">83.14431623</td>
                         <td class="px-1 ace" style="color:#FFC000">73.1824835</td>
@@ -10329,8 +10329,8 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1 trd" style="color:#FFC000">41.2802</td>
                         <td class="px-1" style="color:#92D050">43.8967</td>
                         <td class="px-1" style="color:#92D050">44.0327</td>
-                        <td class="px-1" style="color:#00B050">99.317524</td>
-                        <td class="px-1" style="color:#00B050">96.324076</td>
+                        <td class="px-1" style="color:#31D87D">99.317524</td>
+                        <td class="px-1" style="color:#31D87D">96.324076</td>
                         <td class="px-1" style="color:#92D050">81.8559474</td>
                         <td class="px-1" style="color:#92D050">82.74166944</td>
                         <td class="px-1" style="color:#FFC000">72.57400971</td>
@@ -10537,11 +10537,11 @@ SSIMULACRA2_rs: Mean: 79.07579506 Median: 75.54317772 Std Dev: 13.21970057 5th P
                 <thead>
                     <tr>
                         <th class="px-1 t-light-gray"><b>基准：</b></th>
-                        <th class="px-1 t-light-gray" style="color:#00B050">视无损</th>
+                        <th class="px-1 t-light-gray" style="color:#31D87D">视无损</th>
                         <th class="px-1 t-light-gray" style="color:#92D050">优秀</th>
                         <th class="px-1 t-light-gray" style="color:#FFC000">良好</th>
                         <th class="px-1 t-light-gray" style="color:#C65911">达标</th>
-                        <th class="px-1 t-light-gray" style="color:#F00">待达标</th>
+                        <th class="px-1 t-light-gray" style="color:#541818">待达标</th>
                         <th class="px-1 t-light-gray"><b>排名：</b></th>
                         <th class="px-1 ace t-light-gray">冠军</th>
                         <th class="px-1 sec t-light-gray">亚军</th>
@@ -10585,12 +10585,12 @@ SSIMULACRA2_rs: Mean: 79.07579506 Median: 75.54317772 Std Dev: 13.21970057 5th P
                         <td class="px-1" style="color:#C65911">37.8142</td>
                         <td class="px-1" style="color:#FFC000">41.6312</td>
                         <td class="px-1" style="color:#92D050">42.5653</td>
-                        <td class="px-1" style="color:#00B050">98.626000</td>
-                        <td class="px-1" style="color:#00B050">97.451733</td>
+                        <td class="px-1" style="color:#31D87D">98.626000</td>
+                        <td class="px-1" style="color:#31D87D">97.451733</td>
                         <td class="px-1" style="color:#FFC000">71.52760837</td>
                         <td class="px-1" style="color:#FFC000">66.53989790</td>
-                        <td class="px-1" style="color:#F00">44.47004001</td>
-                        <td class="px-1 trd" style="color:#00B050">99.71058625</td>
+                        <td class="px-1" style="color:#541818">44.47004001</td>
+                        <td class="px-1 trd" style="color:#31D87D">99.71058625</td>
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">CRF30 VQ QM2 P3 VB-Curve2Strength1</td>
@@ -10599,12 +10599,12 @@ SSIMULACRA2_rs: Mean: 79.07579506 Median: 75.54317772 Std Dev: 13.21970057 5th P
                         <td class="px-1" style="color:#FFC000">38.1206</td>
                         <td class="px-1" style="color:#FFC000">41.9041</td>
                         <td class="px-1" style="color:#92D050">42.9981</td>
-                        <td class="px-1" style="color:#00B050">98.787193</td>
-                        <td class="px-1" style="color:#00B050">97.657617</td>
+                        <td class="px-1" style="color:#31D87D">98.787193</td>
+                        <td class="px-1" style="color:#31D87D">97.657617</td>
                         <td class="px-1" style="color:#FFC000">77.11751053</td>
                         <td class="px-1" style="color:#FFC000">73.02775126</td>
-                        <td class="px-1" style="color:#F00">56.12591123</td>
-                        <td class="px-1" style="color:#00B050">99.70758759</td>
+                        <td class="px-1" style="color:#541818">56.12591123</td>
+                        <td class="px-1" style="color:#31D87D">99.70758759</td>
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">CRF30 VQ QM2 P3 VB-Curve2Strength2</td>
@@ -10613,12 +10613,12 @@ SSIMULACRA2_rs: Mean: 79.07579506 Median: 75.54317772 Std Dev: 13.21970057 5th P
                         <td class="px-1" style="color:#FFC000">38.2139</td>
                         <td class="px-1" style="color:#92D050">42.0063</td>
                         <td class="px-1" style="color:#92D050">43.1546</td>
-                        <td class="px-1" style="color:#00B050">98.855014</td>
-                        <td class="px-1" style="color:#00B050">97.758044</td>
+                        <td class="px-1" style="color:#31D87D">98.855014</td>
+                        <td class="px-1" style="color:#31D87D">97.758044</td>
                         <td class="px-1" style="color:#FFC000">78.75015548</td>
                         <td class="px-1" style="color:#FFC000">75.21661802</td>
-                        <td class="px-1" style="color:#F00">59.31524830</td>
-                        <td class="px-1" style="color:#00B050">99.70655998</td>
+                        <td class="px-1" style="color:#541818">59.31524830</td>
+                        <td class="px-1" style="color:#31D87D">99.70655998</td>
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">CRF30 QM2 PSNR P3 VB-Strength3</td>
@@ -10627,12 +10627,12 @@ SSIMULACRA2_rs: Mean: 79.07579506 Median: 75.54317772 Std Dev: 13.21970057 5th P
                         <td class="px-1" style="color:#FFCC00">38.1868</td>
                         <td class="px-1" style="color:#FFC000">41.9916</td>
                         <td class="px-1" style="color:#92D050">43.1142</td>
-                        <td class="px-1" style="color:#00B050">98.806389</td>
-                        <td class="px-1" style="color:#00B050">97.692013</td>
+                        <td class="px-1" style="color:#31D87D">98.806389</td>
+                        <td class="px-1" style="color:#31D87D">97.692013</td>
                         <td class="px-1" style="color:#FFC000">79.0337577</td>
                         <td class="px-1" style="color:#FFC000">75.19569402</td>
                         <td class="px-1 trd" style="color:#C65911">60.18905311</td>
-                        <td class="px-1 ace" style="color:#00B050">100</td>
+                        <td class="px-1 ace" style="color:#31D87D">100</td>
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">CRF30 VQ QM2 P3 VarOct2 VB-Curve2Strength2</td>
@@ -10641,12 +10641,12 @@ SSIMULACRA2_rs: Mean: 79.07579506 Median: 75.54317772 Std Dev: 13.21970057 5th P
                         <td class="px-1 trd" style="color:#FFCC00">38.2583</td>
                         <td class="px-1 trd" style="color:#92D050">42.0998</td>
                         <td class="px-1 trd" style="color:#92D050">43.2996</td>
-                        <td class="px-1 ace" style="color:#00B050">99.255388</td>
-                        <td class="px-1 ace" style="color:#00B050">98.668085</td>
+                        <td class="px-1 ace" style="color:#31D87D">99.255388</td>
+                        <td class="px-1 ace" style="color:#31D87D">98.668085</td>
                         <td class="px-1 ace" style="color:#92D050">80.73591880</td>
                         <td class="px-1 ace" style="color:#FFC000">77.06076447</td>
                         <td class="px-1 ace" style="color:#C65911">62.63733727</td>
-                        <td class="px-1 ace" style="color:#00B050">100</td>
+                        <td class="px-1 ace" style="color:#31D87D">100</td>
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">CRF30 PSNR P3 VarOct2 VB-Curve2Strength3</td>
@@ -10655,12 +10655,12 @@ SSIMULACRA2_rs: Mean: 79.07579506 Median: 75.54317772 Std Dev: 13.21970057 5th P
                         <td class="px-1 sec" style="color:#FFCC00">38.3074</td>
                         <td class="px-1 sec" style="color:#92D050">42.1168</td>
                         <td class="px-1 sec" style="color:#92D050">43.3133</td>
-                        <td class="px-1 trd" style="color:#00B050">98.883611</td>
-                        <td class="px-1 trd" style="color:#00B050">97.775126</td>
+                        <td class="px-1 trd" style="color:#31D87D">98.883611</td>
+                        <td class="px-1 trd" style="color:#31D87D">97.775126</td>
                         <td class="px-1 sec" style="color:#FFC000">79.82330296</td>
                         <td class="px-1 sec" style="color:#FFC000">76.53311341</td>
                         <td class="px-1 sec" style="color:#C65911">61.14050056</td>
-                        <td class="px-1" style="color:#00B050">99.69831884</td>
+                        <td class="px-1" style="color:#31D87D">99.69831884</td>
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">CRF30 VQ P3 VB-Curve2Strength3</td>
@@ -10669,12 +10669,12 @@ SSIMULACRA2_rs: Mean: 79.07579506 Median: 75.54317772 Std Dev: 13.21970057 5th P
                         <td class="px-1 ace" style="color:#FFC000">38.4039</td>
                         <td class="px-1 ace" style="color:#92D050">42.2333</td>
                         <td class="px-1 ace" style="color:#92D050">43.4886</td>
-                        <td class="px-1 sec" style="color:#00B050">98.993032</td>
-                        <td class="px-1 sec" style="color:#00B050">97.920108</td>
+                        <td class="px-1 sec" style="color:#31D87D">98.993032</td>
+                        <td class="px-1 sec" style="color:#31D87D">97.920108</td>
                         <td class="px-1 trd" style="color:#FFC000">79.07579506</td>
                         <td class="px-1 trd" style="color:#FFC000">75.54317772</td>
                         <td class="px-1" style="color:#C65911">59.66073892</td>
-                        <td class="px-1 sec" style="color:#00B050">99.71539232</td>
+                        <td class="px-1 sec" style="color:#31D87D">99.71539232</td>
                     </tr>
                 </tbody>
             </table></div>
@@ -10851,11 +10851,11 @@ SSIMULACRA2_rs: Mean: 78.34317414 Median: 78.04531049 Std Dev: 8.94038278 5th Pe
                 <thead>
                     <tr>
                         <th class="px-1 t-light-gray"><b>基准：</b></th>
-                        <th class="px-1 t-light-gray" style="color:#00B050">视无损</th>
+                        <th class="px-1 t-light-gray" style="color:#31D87D">视无损</th>
                         <th class="px-1 t-light-gray" style="color:#92D050">优秀</th>
                         <th class="px-1 t-light-gray" style="color:#FFC000">良好</th>
                         <th class="px-1 t-light-gray" style="color:#C65911">达标</th>
-                        <th class="px-1 t-light-gray" style="color:#F00">待达标</th>
+                        <th class="px-1 t-light-gray" style="color:#541818">待达标</th>
                         <th class="px-1 t-light-gray"><b>排名：</b></th>
                         <th class="px-1 ace t-light-gray">冠军</th>
                         <th class="px-1 sec t-light-gray">亚军</th>
@@ -10897,56 +10897,56 @@ SSIMULACRA2_rs: Mean: 78.34317414 Median: 78.04531049 Std Dev: 8.94038278 5th Pe
                         <td class="ace px-1">27.095</td>
                         <td class="ace px-1">2291.43</td>
                         <td class="px-1 ace" style="color:#92D050">42.5085</td>
-                        <td class="px-1" style="color:#00B050">47.2551</td>
-                        <td class="px-1" style="color:#00B050">46.9452</td>
-                        <td class="px-1" style="color:#00B050">99.237146</td>
-                        <td class="px-1" style="color:#00B050">97.795983</td>
+                        <td class="px-1" style="color:#31D87D">47.2551</td>
+                        <td class="px-1" style="color:#31D87D">46.9452</td>
+                        <td class="px-1" style="color:#31D87D">99.237146</td>
+                        <td class="px-1" style="color:#31D87D">97.795983</td>
                         <td class="px-1 ace" style="color:#FFC000">78.22777773</td>
                         <td class="px-1" style="color:#FFC000">77.90825341</td>
                         <td class="px-1" style="color:#C65911">63.48438667</td>
-                        <td class="px-1 ace" style="color:#00B050">94.69709169</td>
+                        <td class="px-1 ace" style="color:#31D87D">94.69709169</td>
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">CRF30 PSNR P3 TF2-Strength2</td>
                         <td class="px-1">27.074</td>
                         <td class="px-1">2292.45</td>
                         <td class="px-1" style="color:#92D050">42.5077</td>
-                        <td class="px-1" style="color:#00B050">47.2567</td>
-                        <td class="px-1 ace" style="color:#00B050">46.9477</td>
-                        <td class="px-1 ace" style="color:#00B050">99.238696</td>
-                        <td class="px-1 ace" style="color:#00B050">97.797929</td>
+                        <td class="px-1" style="color:#31D87D">47.2567</td>
+                        <td class="px-1 ace" style="color:#31D87D">46.9477</td>
+                        <td class="px-1 ace" style="color:#31D87D">99.238696</td>
+                        <td class="px-1 ace" style="color:#31D87D">97.797929</td>
                         <td class="px-1" style="color:#FFC000">78.22557615</td>
                         <td class="px-1" style="color:#FFC000">77.90530599</td>
                         <td class="px-1" style="color:#C65911">63.51705712</td>
-                        <td class="px-1" style="color:#00B050">94.67345211</td>
+                        <td class="px-1" style="color:#31D87D">94.67345211</td>
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">CRF30 PSNR P3 TF2-Strength3</td>
                         <td class="px-1">27.083</td>
                         <td class="px-1">2291.70</td>
                         <td class="px-1" style="color:#92D050">42.5076</td>
-                        <td class="px-1" style="color:#00B050">47.2566</td>
-                        <td class="px-1" style="color:#00B050">46.9420</td>
-                        <td class="px-1" style="color:#00B050">99.235797</td>
-                        <td class="px-1" style="color:#00B050">97.794291</td>
+                        <td class="px-1" style="color:#31D87D">47.2566</td>
+                        <td class="px-1" style="color:#31D87D">46.9420</td>
+                        <td class="px-1" style="color:#31D87D">99.235797</td>
+                        <td class="px-1" style="color:#31D87D">97.794291</td>
                         <td class="px-1" style="color:#FFC000">78.22252190</td>
                         <td class="px-1 ace" style="color:#FFC000">77.91453155</td>
                         <td class="px-1" style="color:#C65911">63.50577407</td>
-                        <td class="px-1" style="color:#00B050">94.67894894</td>
+                        <td class="px-1" style="color:#31D87D">94.67894894</td>
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">CRF30 PSNR P3 TF2-Strength4</td>
                         <td class="px-1">27.089</td>
                         <td class="px-1">2292.35</td>
                         <td class="px-1" style="color:#92D050">42.5078</td>
-                        <td class="px-1 ace" style="color:#00B050">47.2588</td>
-                        <td class="px-1" style="color:#00B050">46.9449</td>
-                        <td class="px-1" style="color:#00B050">99.234604</td>
-                        <td class="px-1" style="color:#00B050">97.792817</td>
+                        <td class="px-1 ace" style="color:#31D87D">47.2588</td>
+                        <td class="px-1" style="color:#31D87D">46.9449</td>
+                        <td class="px-1" style="color:#31D87D">99.234604</td>
+                        <td class="px-1" style="color:#31D87D">97.792817</td>
                         <td class="px-1" style="color:#FFC000">78.22642014</td>
                         <td class="px-1" style="color:#FFC000">77.90742740</td>
                         <td class="px-1 ace" style="color:#C65911">63.54598795</td>
-                        <td class="px-1" style="color:#00B050">94.68495096</td>
+                        <td class="px-1" style="color:#31D87D">94.68495096</td>
                     </tr>
                     <tr class="text-smaller">
                         <td class="align-items-center t-light-gray" colspan="13"><b>Blender F. ElephantsDream Tune VQ</b></td>
@@ -10956,56 +10956,56 @@ SSIMULACRA2_rs: Mean: 78.34317414 Median: 78.04531049 Std Dev: 8.94038278 5th Pe
                         <td class="px-1">27.559</td>
                         <td class="px-1">2373.84</td>
                         <td class="px-1" style="color:#92D050">42.5176</td>
-                        <td class="px-1" style="color:#00B050">47.1738</td>
-                        <td class="px-1 ace" style="color:#00B050">46.8583</td>
-                        <td class="px-1 ace" style="color:#00B050">99.279017</td>
-                        <td class="px-1 ace" style="color:#00B050">97.852608</td>
+                        <td class="px-1" style="color:#31D87D">47.1738</td>
+                        <td class="px-1 ace" style="color:#31D87D">46.8583</td>
+                        <td class="px-1 ace" style="color:#31D87D">99.279017</td>
+                        <td class="px-1 ace" style="color:#31D87D">97.852608</td>
                         <td class="px-1" style="color:#FFC000">78.34140551</td>
                         <td class="px-1" style="color:#FFC000">78.02652168</td>
                         <td class="px-1" style="color:#C65911">63.69285703</td>
-                        <td class="px-1 ace" style="color:#00B050">94.68040064</td>
+                        <td class="px-1 ace" style="color:#31D87D">94.68040064</td>
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">CRF30 VQ P3 TF2-Strength2</td>
                         <td class="px-1">27.553</td>
                         <td class="px-1 ace">2373.05</td>
                         <td class="px-1 ace" style="color:#92D050">42.5178</td>
-                        <td class="px-1 ace" style="color:#00B050">47.1775</td>
-                        <td class="px-1" style="color:#00B050">46.8578</td>
-                        <td class="px-1" style="color:#00B050">99.277143</td>
-                        <td class="px-1" style="color:#00B050">97.850885</td>
+                        <td class="px-1 ace" style="color:#31D87D">47.1775</td>
+                        <td class="px-1" style="color:#31D87D">46.8578</td>
+                        <td class="px-1" style="color:#31D87D">99.277143</td>
+                        <td class="px-1" style="color:#31D87D">97.850885</td>
                         <td class="px-1 ace" style="color:#FFC000">78.34621137</td>
                         <td class="px-1" style="color:#FFC000">78.03496570</td>
                         <td class="px-1 ace" style="color:#C65911">63.70885484</td>
-                        <td class="px-1 ace" style="color:#00B050">94.68040064</td>
+                        <td class="px-1 ace" style="color:#31D87D">94.68040064</td>
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">CRF30 VQ P3 TF2-Strength3</td>
                         <td class="px-1 ace">27.679</td>
                         <td class="px-1">2374.30</td>
                         <td class="px-1" style="color:#92D050">42.5164</td>
-                        <td class="px-1" style="color:#00B050">47.1725</td>
-                        <td class="px-1" style="color:#00B050">46.8551</td>
-                        <td class="px-1" style="color:#00B050">99.276669</td>
-                        <td class="px-1" style="color:#00B050">97.849802</td>
+                        <td class="px-1" style="color:#31D87D">47.1725</td>
+                        <td class="px-1" style="color:#31D87D">46.8551</td>
+                        <td class="px-1" style="color:#31D87D">99.276669</td>
+                        <td class="px-1" style="color:#31D87D">97.849802</td>
                         <td class="px-1" style="color:#FFC000">78.34247749</td>
                         <td class="px-1" style="color:#FFC000">78.03666873</td>
                         <td class="px-1" style="color:#C65911">63.68956267</td>
-                        <td class="px-1" style="color:#00B050">94.67801513</td>
+                        <td class="px-1" style="color:#31D87D">94.67801513</td>
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">CRF30 VQ P3 TF2-Strength4</td>
                         <td class="px-1">27.608</td>
                         <td class="px-1">2373.78</td>
                         <td class="px-1" style="color:#92D050">42.5163</td>
-                        <td class="px-1" style="color:#00B050">47.1771</td>
-                        <td class="px-1" style="color:#00B050">46.8518</td>
-                        <td class="px-1" style="color:#00B050">99.276821</td>
-                        <td class="px-1" style="color:#00B050">97.850148</td>
+                        <td class="px-1" style="color:#31D87D">47.1771</td>
+                        <td class="px-1" style="color:#31D87D">46.8518</td>
+                        <td class="px-1" style="color:#31D87D">99.276821</td>
+                        <td class="px-1" style="color:#31D87D">97.850148</td>
                         <td class="px-1" style="color:#FFC000">78.34317414</td>
                         <td class="px-1 ace" style="color:#FFC000">78.04531049</td>
                         <td class="px-1" style="color:#C65911">63.70302548</td>
-                        <td class="px-1 ace" style="color:#00B050">94.68040064</td>
+                        <td class="px-1 ace" style="color:#31D87D">94.68040064</td>
                     </tr>
                 </tbody>
             </table></div>
@@ -11442,11 +11442,11 @@ SSIMULACRA2_rs: Mean: 43.37989094 Median: 42.86187330 Std Dev: 10.52248577 5th P
                 <thead>
                     <tr>
                         <th class="px-1 t-light-gray"><b>基准：</b></th>
-                        <th class="px-1 t-light-gray" style="color:#00B050">视无损</th>
+                        <th class="px-1 t-light-gray" style="color:#31D87D">视无损</th>
                         <th class="px-1 t-light-gray" style="color:#92D050">优秀</th>
                         <th class="px-1 t-light-gray" style="color:#FFC000">良好</th>
                         <th class="px-1 t-light-gray" style="color:#C65911">达标</th>
-                        <th class="px-1 t-light-gray" style="color:#F00">待达标</th>
+                        <th class="px-1 t-light-gray" style="color:#541818">待达标</th>
                         <th class="px-1 t-light-gray"><b>排名：</b></th>
                         <th class="px-1 ace t-light-gray">冠军</th>
                         <th class="px-1 sec t-light-gray">亚军</th>
@@ -11490,11 +11490,11 @@ SSIMULACRA2_rs: Mean: 43.37989094 Median: 42.86187330 Std Dev: 10.52248577 5th P
                         <td class="px-1" style="color:#FFC000">38.1204</td>
                         <td class="px-1" style="color:#C65911">36.5504</td>
                         <td class="px-1" style="color:#FFC000">41.9289</td>
-                        <td class="px-1" style="color:#00B050">97.738160</td>
-                        <td class="px-1" style="color:#00B050">95.464609</td>
-                        <td class="px-1" style="color:#F00">53.36636097</td>
-                        <td class="px-1" style="color:#F00">53.61311143</td>
-                        <td class="px-1" style="color:#F00">38.06738244</td>
+                        <td class="px-1" style="color:#31D87D">97.738160</td>
+                        <td class="px-1" style="color:#31D87D">95.464609</td>
+                        <td class="px-1" style="color:#541818">53.36636097</td>
+                        <td class="px-1" style="color:#541818">53.61311143</td>
+                        <td class="px-1" style="color:#541818">38.06738244</td>
                         <td class="px-1" style="color:#FFC000">70.01810194</td>
                     </tr>
                     <tr class="border-bottom">
@@ -11504,11 +11504,11 @@ SSIMULACRA2_rs: Mean: 43.37989094 Median: 42.86187330 Std Dev: 10.52248577 5th P
                         <td class="px-1" style="color:#FFC000">38.1204</td>
                         <td class="px-1" style="color:#C65911">36.5504</td>
                         <td class="px-1" style="color:#FFC000">41.9289</td>
-                        <td class="px-1" style="color:#00B050">97.738160</td>
-                        <td class="px-1" style="color:#00B050">95.464609</td>
-                        <td class="px-1" style="color:#F00">53.36636097</td>
-                        <td class="px-1" style="color:#F00">53.61311143</td>
-                        <td class="px-1" style="color:#F00">38.06738244</td>
+                        <td class="px-1" style="color:#31D87D">97.738160</td>
+                        <td class="px-1" style="color:#31D87D">95.464609</td>
+                        <td class="px-1" style="color:#541818">53.36636097</td>
+                        <td class="px-1" style="color:#541818">53.61311143</td>
+                        <td class="px-1" style="color:#541818">38.06738244</td>
                         <td class="px-1" style="color:#FFC000">70.01810194</td>
                     </tr>
                     <tr class="border-bottom">
@@ -11518,11 +11518,11 @@ SSIMULACRA2_rs: Mean: 43.37989094 Median: 42.86187330 Std Dev: 10.52248577 5th P
                         <td class="px-1" style="color:#C65911">36.5453</td>
                         <td class="px-1" style="color:#C65911">35.3250</td>
                         <td class="px-1" style="color:#FFC000">39.5036</td>
-                        <td class="px-1" style="color:#00B050">97.430726</td>
-                        <td class="px-1" style="color:#00B050">95.150845</td>
-                        <td class="px-1" style="color:#F00">52.02663259</td>
-                        <td class="px-1" style="color:#F00">52.22005542</td>
-                        <td class="px-1" style="color:#F00">36.72168384</td>
+                        <td class="px-1" style="color:#31D87D">97.430726</td>
+                        <td class="px-1" style="color:#31D87D">95.150845</td>
+                        <td class="px-1" style="color:#541818">52.02663259</td>
+                        <td class="px-1" style="color:#541818">52.22005542</td>
+                        <td class="px-1" style="color:#541818">36.72168384</td>
                         <td class="px-1" style="color:#C65911">68.78530314</td>
                     </tr>
                     <tr class="border-bottom">
@@ -11532,11 +11532,11 @@ SSIMULACRA2_rs: Mean: 43.37989094 Median: 42.86187330 Std Dev: 10.52248577 5th P
                         <td class="px-1" style="color:#C65911">35.5426</td>
                         <td class="px-1" style="color:#C65911">34.1543</td>
                         <td class="px-1" style="color:#FFC000">39.0581</td>
-                        <td class="px-1" style="color:#00B050">97.235338</td>
+                        <td class="px-1" style="color:#31D87D">97.235338</td>
                         <td class="px-1" style="color:#92D050">94.835942</td>
-                        <td class="px-1" style="color:#F00">49.62544972</td>
-                        <td class="px-1" style="color:#F00">49.86805064</td>
-                        <td class="px-1" style="color:#F00">33.69016033</td>
+                        <td class="px-1" style="color:#541818">49.62544972</td>
+                        <td class="px-1" style="color:#541818">49.86805064</td>
+                        <td class="px-1" style="color:#541818">33.69016033</td>
                         <td class="px-1" style="color:#C65911">67.56729955</td>
                     </tr>
                     <tr class="border-bottom">
@@ -11546,11 +11546,11 @@ SSIMULACRA2_rs: Mean: 43.37989094 Median: 42.86187330 Std Dev: 10.52248577 5th P
                         <td class="px-1" style="color:#C65911">34.7929</td>
                         <td class="px-1" style="color:#C65911">33.5515</td>
                         <td class="px-1" style="color:#FFC000">38.8744</td>
-                        <td class="px-1" style="color:#00B050">97.018645</td>
+                        <td class="px-1" style="color:#31D87D">97.018645</td>
                         <td class="px-1" style="color:#92D050">94.371972</td>
-                        <td class="px-1" style="color:#F00">46.73252160</td>
-                        <td class="px-1" style="color:#F00">46.97122122</td>
-                        <td class="px-1" style="color:#F00">29.83598684</td>
+                        <td class="px-1" style="color:#541818">46.73252160</td>
+                        <td class="px-1" style="color:#541818">46.97122122</td>
+                        <td class="px-1" style="color:#541818">29.83598684</td>
                         <td class="px-1" style="color:#C65911">65.91101183</td>
                     </tr>
                     <tr class="border-bottom">
@@ -11560,11 +11560,11 @@ SSIMULACRA2_rs: Mean: 43.37989094 Median: 42.86187330 Std Dev: 10.52248577 5th P
                         <td class="px-1" style="color:#C65911">34.3394</td>
                         <td class="px-1" style="color:#C65911">33.2685</td>
                         <td class="px-1" style="color:#FFC000">38.7830</td>
-                        <td class="px-1" style="color:#00B050">96.762843</td>
+                        <td class="px-1" style="color:#31D87D">96.762843</td>
                         <td class="px-1" style="color:#92D050">93.883978</td>
-                        <td class="px-1" style="color:#F00">44.27273142</td>
-                        <td class="px-1" style="color:#F00">44.12428627</td>
-                        <td class="px-1" style="color:#F00">26.90948687</td>
+                        <td class="px-1" style="color:#541818">44.27273142</td>
+                        <td class="px-1" style="color:#541818">44.12428627</td>
+                        <td class="px-1" style="color:#541818">26.90948687</td>
                         <td class="px-1" style="color:#C65911">64.28934544</td>
                     </tr>
                     <tr class="border-bottom">
@@ -11574,11 +11574,11 @@ SSIMULACRA2_rs: Mean: 43.37989094 Median: 42.86187330 Std Dev: 10.52248577 5th P
                         <td class="px-1" style="color:#C65911">34.1353</td>
                         <td class="px-1" style="color:#C65911">33.1400</td>
                         <td class="px-1" style="color:#FFC000">38.7444</td>
-                        <td class="px-1" style="color:#00B050">96.582379</td>
+                        <td class="px-1" style="color:#31D87D">96.582379</td>
                         <td class="px-1" style="color:#92D050">93.552727</td>
-                        <td class="px-1" style="color:#F00">42.76394562</td>
-                        <td class="px-1" style="color:#F00">42.31747622</td>
-                        <td class="px-1" style="color:#F00">25.38934990</td>
+                        <td class="px-1" style="color:#541818">42.76394562</td>
+                        <td class="px-1" style="color:#541818">42.31747622</td>
+                        <td class="px-1" style="color:#541818">25.38934990</td>
                         <td class="px-1" style="color:#C65911">63.16879872</td>
                     </tr>
                     <tr class="text-smaller">
@@ -11591,11 +11591,11 @@ SSIMULACRA2_rs: Mean: 43.37989094 Median: 42.86187330 Std Dev: 10.52248577 5th P
                         <td class="px-1" style="color:#FFC000">38.1717</td>
                         <td class="px-1" style="color:#C65911">36.5926</td>
                         <td class="px-1" style="color:#FFC000">41.8143</td>
-                        <td class="px-1" style="color:#00B050">97.748236</td>
-                        <td class="px-1" style="color:#00B050">95.534197</td>
-                        <td class="px-1" style="color:#F00">54.83524211</td>
-                        <td class="px-1" style="color:#F00">54.41993554</td>
-                        <td class="px-1" style="color:#F00">41.58288237</td>
+                        <td class="px-1" style="color:#31D87D">97.748236</td>
+                        <td class="px-1" style="color:#31D87D">95.534197</td>
+                        <td class="px-1" style="color:#541818">54.83524211</td>
+                        <td class="px-1" style="color:#541818">54.41993554</td>
+                        <td class="px-1" style="color:#541818">41.58288237</td>
                         <td class="px-1" style="color:#FFC000">70.84131535</td>
                     </tr>
                     <tr class="border-bottom">
@@ -11605,11 +11605,11 @@ SSIMULACRA2_rs: Mean: 43.37989094 Median: 42.86187330 Std Dev: 10.52248577 5th P
                         <td class="px-1" style="color:#FFC000">38.1717</td>
                         <td class="px-1" style="color:#C65911">36.5926</td>
                         <td class="px-1" style="color:#FFC000">41.8143</td>
-                        <td class="px-1" style="color:#00B050">97.748236</td>
-                        <td class="px-1" style="color:#00B050">95.534197</td>
-                        <td class="px-1" style="color:#F00">54.83524211</td>
-                        <td class="px-1" style="color:#F00">54.41993554</td>
-                        <td class="px-1" style="color:#F00">41.58288237</td>
+                        <td class="px-1" style="color:#31D87D">97.748236</td>
+                        <td class="px-1" style="color:#31D87D">95.534197</td>
+                        <td class="px-1" style="color:#541818">54.83524211</td>
+                        <td class="px-1" style="color:#541818">54.41993554</td>
+                        <td class="px-1" style="color:#541818">41.58288237</td>
                         <td class="px-1" style="color:#FFC000">70.84131535</td>
                     </tr>
                     <tr class="border-bottom">
@@ -11619,11 +11619,11 @@ SSIMULACRA2_rs: Mean: 43.37989094 Median: 42.86187330 Std Dev: 10.52248577 5th P
                         <td class="px-1" style="color:#C65911">36.5799</td>
                         <td class="px-1" style="color:#C65911">35.3581</td>
                         <td class="px-1" style="color:#FFC000">39.4388</td>
-                        <td class="px-1" style="color:#00B050">97.464271</td>
-                        <td class="px-1" style="color:#00B050">95.226487</td>
-                        <td class="px-1" style="color:#F00">53.45703914</td>
-                        <td class="px-1" style="color:#F00">53.01872083</td>
-                        <td class="px-1" style="color:#F00">40.16894954</td>
+                        <td class="px-1" style="color:#31D87D">97.464271</td>
+                        <td class="px-1" style="color:#31D87D">95.226487</td>
+                        <td class="px-1" style="color:#541818">53.45703914</td>
+                        <td class="px-1" style="color:#541818">53.01872083</td>
+                        <td class="px-1" style="color:#541818">40.16894954</td>
                         <td class="px-1" style="color:#C65911">69.53730410</td>
                     </tr>
                     <tr class="border-bottom">
@@ -11633,11 +11633,11 @@ SSIMULACRA2_rs: Mean: 43.37989094 Median: 42.86187330 Std Dev: 10.52248577 5th P
                         <td class="px-1" style="color:#C65911">35.5684</td>
                         <td class="px-1" style="color:#C65911">34.1787</td>
                         <td class="px-1" style="color:#FFC000">38.9998</td>
-                        <td class="px-1" style="color:#00B050">97.262789</td>
+                        <td class="px-1" style="color:#31D87D">97.262789</td>
                         <td class="px-1" style="color:#92D050">94.883521</td>
-                        <td class="px-1" style="color:#F00">50.99531869</td>
-                        <td class="px-1" style="color:#F00">50.63241591</td>
-                        <td class="px-1" style="color:#F00">37.08947938</td>
+                        <td class="px-1" style="color:#541818">50.99531869</td>
+                        <td class="px-1" style="color:#541818">50.63241591</td>
+                        <td class="px-1" style="color:#541818">37.08947938</td>
                         <td class="px-1" style="color:#C65911">67.80717058</td>
                     </tr>
                     <tr class="border-bottom">
@@ -11647,11 +11647,11 @@ SSIMULACRA2_rs: Mean: 43.37989094 Median: 42.86187330 Std Dev: 10.52248577 5th P
                         <td class="px-1" style="color:#C65911">34.8137</td>
                         <td class="px-1" style="color:#C65911">33.5719</td>
                         <td class="px-1" style="color:#FFC000">38.8185</td>
-                        <td class="px-1" style="color:#00B050">97.033814</td>
+                        <td class="px-1" style="color:#31D87D">97.033814</td>
                         <td class="px-1" style="color:#92D050">94.387931</td>
-                        <td class="px-1" style="color:#F00">48.03797050</td>
-                        <td class="px-1" style="color:#F00">47.79390298</td>
-                        <td class="px-1" style="color:#F00">33.26269500</td>
+                        <td class="px-1" style="color:#541818">48.03797050</td>
+                        <td class="px-1" style="color:#541818">47.79390298</td>
+                        <td class="px-1" style="color:#541818">33.26269500</td>
                         <td class="px-1" style="color:#C65911">66.06963942</td>
                     </tr>
                     <tr class="border-bottom">
@@ -11661,11 +11661,11 @@ SSIMULACRA2_rs: Mean: 43.37989094 Median: 42.86187330 Std Dev: 10.52248577 5th P
                         <td class="px-1" style="color:#C65911">34.3581</td>
                         <td class="px-1" style="color:#C65911">33.2872</td>
                         <td class="px-1" style="color:#FFC000">38.7283</td>
-                        <td class="px-1" style="color:#00B050">96.766543</td>
+                        <td class="px-1" style="color:#31D87D">96.766543</td>
                         <td class="px-1" style="color:#92D050">93.875865</td>
-                        <td class="px-1" style="color:#F00">45.53317193</td>
-                        <td class="px-1" style="color:#F00">44.99403922</td>
-                        <td class="px-1" style="color:#F00">30.26585740</td>
+                        <td class="px-1" style="color:#541818">45.53317193</td>
+                        <td class="px-1" style="color:#541818">44.99403922</td>
+                        <td class="px-1" style="color:#541818">30.26585740</td>
                         <td class="px-1" style="color:#C65911">64.44994167</td>
                     </tr>
                     <tr class="border-bottom">
@@ -11675,11 +11675,11 @@ SSIMULACRA2_rs: Mean: 43.37989094 Median: 42.86187330 Std Dev: 10.52248577 5th P
                         <td class="px-1" style="color:#C65911">34.1539</td>
                         <td class="px-1" style="color:#C65911">33.1581</td>
                         <td class="px-1" style="color:#FFC000">38.6901</td>
-                        <td class="px-1" style="color:#00B050">96.580212</td>
+                        <td class="px-1" style="color:#31D87D">96.580212</td>
                         <td class="px-1" style="color:#92D050">93.532338</td>
-                        <td class="px-1" style="color:#F00">44.00013351</td>
-                        <td class="px-1" style="color:#F00">43.23395239</td>
-                        <td class="px-1" style="color:#F00">28.67493008</td>
+                        <td class="px-1" style="color:#541818">44.00013351</td>
+                        <td class="px-1" style="color:#541818">43.23395239</td>
+                        <td class="px-1" style="color:#541818">28.67493008</td>
                         <td class="px-1" style="color:#C65911">63.32191585</td>
                     </tr>
                     <tr class="text-smaller">
@@ -11692,11 +11692,11 @@ SSIMULACRA2_rs: Mean: 43.37989094 Median: 42.86187330 Std Dev: 10.52248577 5th P
                         <td class="px-1" style="color:#FFC000">38.1953</td>
                         <td class="px-1" style="color:#C65911">36.5190</td>
                         <td class="px-1" style="color:#FFC000">41.8161</td>
-                        <td class="px-1" style="color:#00B050">97.656883</td>
-                        <td class="px-1" style="color:#00B050">95.386084</td>
-                        <td class="px-1" style="color:#F00">54.10919247</td>
-                        <td class="px-1" style="color:#F00">54.33234161</td>
-                        <td class="px-1" style="color:#F00">39.54388416</td>
+                        <td class="px-1" style="color:#31D87D">97.656883</td>
+                        <td class="px-1" style="color:#31D87D">95.386084</td>
+                        <td class="px-1" style="color:#541818">54.10919247</td>
+                        <td class="px-1" style="color:#541818">54.33234161</td>
+                        <td class="px-1" style="color:#541818">39.54388416</td>
                         <td class="px-1" style="color:#C65911">69.48821685</td>
                     </tr>
                     <tr class="border-bottom">
@@ -11706,11 +11706,11 @@ SSIMULACRA2_rs: Mean: 43.37989094 Median: 42.86187330 Std Dev: 10.52248577 5th P
                         <td class="px-1" style="color:#FFC000">38.1953</td>
                         <td class="px-1" style="color:#C65911">36.5190</td>
                         <td class="px-1" style="color:#FFC000">41.8161</td>
-                        <td class="px-1" style="color:#00B050">97.656883</td>
-                        <td class="px-1" style="color:#00B050">95.386084</td>
-                        <td class="px-1" style="color:#F00">54.10919247</td>
-                        <td class="px-1" style="color:#F00">54.33234161</td>
-                        <td class="px-1" style="color:#F00">39.54388416</td>
+                        <td class="px-1" style="color:#31D87D">97.656883</td>
+                        <td class="px-1" style="color:#31D87D">95.386084</td>
+                        <td class="px-1" style="color:#541818">54.10919247</td>
+                        <td class="px-1" style="color:#541818">54.33234161</td>
+                        <td class="px-1" style="color:#541818">39.54388416</td>
                         <td class="px-1" style="color:#C65911">69.48821685</td>
                     </tr>
                     <tr class="border-bottom">
@@ -11720,11 +11720,11 @@ SSIMULACRA2_rs: Mean: 43.37989094 Median: 42.86187330 Std Dev: 10.52248577 5th P
                         <td class="px-1" style="color:#C65911">36.5975</td>
                         <td class="px-1" style="color:#C65911">35.3025</td>
                         <td class="px-1" style="color:#FFC000">39.4389</td>
-                        <td class="px-1" style="color:#00B050">97.348651</td>
-                        <td class="px-1" style="color:#00B050">95.067241</td>
-                        <td class="px-1" style="color:#F00">52.75702301</td>
-                        <td class="px-1" style="color:#F00">52.94424333</td>
-                        <td class="px-1" style="color:#F00">38.21905581</td>
+                        <td class="px-1" style="color:#31D87D">97.348651</td>
+                        <td class="px-1" style="color:#31D87D">95.067241</td>
+                        <td class="px-1" style="color:#541818">52.75702301</td>
+                        <td class="px-1" style="color:#541818">52.94424333</td>
+                        <td class="px-1" style="color:#541818">38.21905581</td>
                         <td class="px-1" style="color:#C65911">68.44942008</td>
                     </tr>
                     <tr class="border-bottom">
@@ -11734,11 +11734,11 @@ SSIMULACRA2_rs: Mean: 43.37989094 Median: 42.86187330 Std Dev: 10.52248577 5th P
                         <td class="px-1" style="color:#C65911">35.5834</td>
                         <td class="px-1" style="color:#C65911">34.1366</td>
                         <td class="px-1" style="color:#FFC000">39.0004</td>
-                        <td class="px-1" style="color:#00B050">97.149595</td>
+                        <td class="px-1" style="color:#31D87D">97.149595</td>
                         <td class="px-1" style="color:#92D050">94.741050</td>
-                        <td class="px-1" style="color:#F00">50.32394820</td>
-                        <td class="px-1" style="color:#F00">50.50466871</td>
-                        <td class="px-1" style="color:#F00">35.14961239</td>
+                        <td class="px-1" style="color:#541818">50.32394820</td>
+                        <td class="px-1" style="color:#541818">50.50466871</td>
+                        <td class="px-1" style="color:#541818">35.14961239</td>
                         <td class="px-1" style="color:#C65911">67.04853533</td>
                     </tr>
                     <tr class="border-bottom">
@@ -11748,11 +11748,11 @@ SSIMULACRA2_rs: Mean: 43.37989094 Median: 42.86187330 Std Dev: 10.52248577 5th P
                         <td class="px-1" style="color:#C65911">34.8267</td>
                         <td class="px-1" style="color:#C65911">33.5357</td>
                         <td class="px-1" style="color:#FFC000">38.8195</td>
-                        <td class="px-1" style="color:#00B050">96.929686</td>
+                        <td class="px-1" style="color:#31D87D">96.929686</td>
                         <td class="px-1" style="color:#92D050">94.266828</td>
-                        <td class="px-1" style="color:#F00">47.39210271</td>
-                        <td class="px-1" style="color:#F00">47.51607786</td>
-                        <td class="px-1" style="color:#F00">31.72506727</td>
+                        <td class="px-1" style="color:#541818">47.39210271</td>
+                        <td class="px-1" style="color:#541818">47.51607786</td>
+                        <td class="px-1" style="color:#541818">31.72506727</td>
                         <td class="px-1" style="color:#C65911">65.42500792</td>
                     </tr>
                     <tr class="border-bottom">
@@ -11762,11 +11762,11 @@ SSIMULACRA2_rs: Mean: 43.37989094 Median: 42.86187330 Std Dev: 10.52248577 5th P
                         <td class="px-1" style="color:#C65911">34.3698</td>
                         <td class="px-1" style="color:#C65911">33.2536</td>
                         <td class="px-1" style="color:#FFC000">38.7295</td>
-                        <td class="px-1" style="color:#00B050">96.672354</td>
+                        <td class="px-1" style="color:#31D87D">96.672354</td>
                         <td class="px-1" style="color:#92D050">93.772334</td>
-                        <td class="px-1" style="color:#F00">44.90364237</td>
-                        <td class="px-1" style="color:#F00">44.67770204</td>
-                        <td class="px-1" style="color:#F00">28.85350838</td>
+                        <td class="px-1" style="color:#541818">44.90364237</td>
+                        <td class="px-1" style="color:#541818">44.67770204</td>
+                        <td class="px-1" style="color:#541818">28.85350838</td>
                         <td class="px-1" style="color:#C65911">63.80731931</td>
                     </tr>
                     <tr class="border-bottom">
@@ -11776,11 +11776,11 @@ SSIMULACRA2_rs: Mean: 43.37989094 Median: 42.86187330 Std Dev: 10.52248577 5th P
                         <td class="px-1" style="color:#C65911">34.1650</td>
                         <td class="px-1" style="color:#C65911">33.1257</td>
                         <td class="px-1" style="color:#FFC000">38.6915</td>
-                        <td class="px-1" style="color:#00B050">96.492425</td>
+                        <td class="px-1" style="color:#31D87D">96.492425</td>
                         <td class="px-1" style="color:#92D050">93.439512</td>
-                        <td class="px-1" style="color:#F00">43.37989094</td>
-                        <td class="px-1" style="color:#F00">42.86187330</td>
-                        <td class="px-1" style="color:#F00">27.33426194</td>
+                        <td class="px-1" style="color:#541818">43.37989094</td>
+                        <td class="px-1" style="color:#541818">42.86187330</td>
+                        <td class="px-1" style="color:#541818">27.33426194</td>
                         <td class="px-1" style="color:#C65911">62.78089483</td>
                     </tr>
                 </tbody>
@@ -12105,11 +12105,11 @@ SSIMULACRA2_rs: Mean: 82.71404144, Median: 83.55282859, Std Dev: 4.82887766, 5th
                 <thead>
                     <tr>
                         <th class="px-1 t-light-gray"><b>基准：</b></th>
-                        <th class="px-1 t-light-gray" style="color:#00B050">视无损</th>
+                        <th class="px-1 t-light-gray" style="color:#31D87D">视无损</th>
                         <th class="px-1 t-light-gray" style="color:#92D050">优秀</th>
                         <th class="px-1 t-light-gray" style="color:#FFC000">良好</th>
                         <th class="px-1 t-light-gray" style="color:#C65911">达标</th>
-                        <th class="px-1 t-light-gray" style="color:#F00">待达标</th>
+                        <th class="px-1 t-light-gray" style="color:#541818">待达标</th>
                         <th class="px-1 t-light-gray"><b>排名：</b></th>
                         <th class="px-1 ace t-light-gray">冠军</th>
                         <th class="px-1 sec t-light-gray">亚军</th>
@@ -12153,8 +12153,8 @@ SSIMULACRA2_rs: Mean: 82.71404144, Median: 83.55282859, Std Dev: 4.82887766, 5th
                         <td class="px-1 ace" style="color:#C65911">37.7780</td>
                         <td class="px-1" style="color:#FFC000">41.6035</td>
                         <td class="px-1" style="color:#92D050">43.5482</td>
-                        <td class="px-1" style="color:#00B050">98.351882</td>
-                        <td class="px-1" style="color:#00B050">98.330377</td>
+                        <td class="px-1" style="color:#31D87D">98.351882</td>
+                        <td class="px-1" style="color:#31D87D">98.330377</td>
                         <td class="px-1 ace" style="color:#FFC000">72.40393052</td>
                         <td class="px-1 ace" style="color:#FFC000">72.42377592</td>
                         <td class="px-1 ace" style="color:#C65911">70.10772502</td>
@@ -12167,8 +12167,8 @@ SSIMULACRA2_rs: Mean: 82.71404144, Median: 83.55282859, Std Dev: 4.82887766, 5th
                         <td class="px-1" style="color:#C65911">37.7574</td>
                         <td class="px-1 ace" style="color:#FFC000">41.6517</td>
                         <td class="px-1 ace" style="color:#92D050">43.6419</td>
-                        <td class="px-1" style="color:#00B050">98.164098</td>
-                        <td class="px-1" style="color:#00B050">98.055403</td>
+                        <td class="px-1" style="color:#31D87D">98.164098</td>
+                        <td class="px-1" style="color:#31D87D">98.055403</td>
                         <td class="px-1" style="color:#FFC000">72.14692563</td>
                         <td class="px-1" style="color:#FFC000">72.11854599</td>
                         <td class="px-1" style="color:#C65911">69.59369402</td>
@@ -12181,8 +12181,8 @@ SSIMULACRA2_rs: Mean: 82.71404144, Median: 83.55282859, Std Dev: 4.82887766, 5th
                         <td class="px-1" style="color:#C65911">32.2176</td>
                         <td class="px-1" style="color:#FFC000">40.7572</td>
                         <td class="px-1" style="color:#92D050">42.7955</td>
-                        <td class="px-1" style="color:#00B050">98.421012</td>
-                        <td class="px-1" style="color:#00B050">98.412364</td>
+                        <td class="px-1" style="color:#31D87D">98.421012</td>
+                        <td class="px-1" style="color:#31D87D">98.412364</td>
                         <td class="px-1" style="color:#FFC000">70.20741785</td>
                         <td class="px-1" style="color:#FFC000">70.07957787</td>
                         <td class="px-1" style="color:#C65911">68.14975116</td>
@@ -12195,8 +12195,8 @@ SSIMULACRA2_rs: Mean: 82.71404144, Median: 83.55282859, Std Dev: 4.82887766, 5th
                         <td class="px-1" style="color:#C65911">32.2371</td>
                         <td class="px-1" style="color:#FFC000">40.8458</td>
                         <td class="px-1" style="color:#92D050">42.8932</td>
-                        <td class="px-1 ace" style="color:#00B050">98.946131</td>
-                        <td class="px-1 ace" style="color:#00B050">98.855602</td>
+                        <td class="px-1 ace" style="color:#31D87D">98.946131</td>
+                        <td class="px-1 ace" style="color:#31D87D">98.855602</td>
                         <td class="px-1" style="color:#FFC000">70.46943646</td>
                         <td class="px-1" style="color:#FFC000">70.32725873</td>
                         <td class="px-1" style="color:#C65911">68.33790856</td>
@@ -12212,8 +12212,8 @@ SSIMULACRA2_rs: Mean: 82.71404144, Median: 83.55282859, Std Dev: 4.82887766, 5th
                         <td class="px-1 ace" style="color:#C65911">36.9506</td>
                         <td class="px-1" style="color:#92D050">43.2836</td>
                         <td class="px-1" style="color:#FFC000">40.9497</td>
-                        <td class="px-1 ace" style="color:#00B050">98.436272</td>
-                        <td class="px-1 ace" style="color:#00B050">95.584718</td>
+                        <td class="px-1 ace" style="color:#31D87D">98.436272</td>
+                        <td class="px-1 ace" style="color:#31D87D">95.584718</td>
                         <td class="px-1 ace" style="color:#C65911">69.93547059</td>
                         <td class="px-1 ace" style="color:#FFC000">72.02165699</td>
                         <td class="px-1 ace" style="color:#C65911">62.49686317</td>
@@ -12226,8 +12226,8 @@ SSIMULACRA2_rs: Mean: 82.71404144, Median: 83.55282859, Std Dev: 4.82887766, 5th
                         <td class="px-1" style="color:#C65911">36.9230</td>
                         <td class="px-1 ace" style="color:#92D050">43.3215</td>
                         <td class="px-1 ace" style="color:#FFC000">40.9769</td>
-                        <td class="px-1" style="color:#00B050">98.418351</td>
-                        <td class="px-1" style="color:#00B050">95.550267</td>
+                        <td class="px-1" style="color:#31D87D">98.418351</td>
+                        <td class="px-1" style="color:#31D87D">95.550267</td>
                         <td class="px-1" style="color:#C65911">69.68736029</td>
                         <td class="px-1" style="color:#FFC000">71.96413622</td>
                         <td class="px-1" style="color:#C65911">61.62786558</td>
@@ -12240,8 +12240,8 @@ SSIMULACRA2_rs: Mean: 82.71404144, Median: 83.55282859, Std Dev: 4.82887766, 5th
                         <td class="px-1" style="color:#C65911">34.5935</td>
                         <td class="px-1" style="color:#92D050">42.6956</td>
                         <td class="px-1" style="color:#FFC000">40.593</td>
-                        <td class="px-1" style="color:#00B050">98.244725</td>
-                        <td class="px-1" style="color:#00B050">95.348606</td>
+                        <td class="px-1" style="color:#31D87D">98.244725</td>
+                        <td class="px-1" style="color:#31D87D">95.348606</td>
                         <td class="px-1" style="color:#C65911">68.80260246</td>
                         <td class="px-1" style="color:#FFC000">70.67784608</td>
                         <td class="px-1" style="color:#C65911">61.91905432</td>
@@ -12254,8 +12254,8 @@ SSIMULACRA2_rs: Mean: 82.71404144, Median: 83.55282859, Std Dev: 4.82887766, 5th
                         <td class="px-1" style="color:#C65911">34.5941</td>
                         <td class="px-1" style="color:#92D050">42.732</td>
                         <td class="px-1" style="color:#FFC000">40.7056</td>
-                        <td class="px-1" style="color:#00B050">98.422313</td>
-                        <td class="px-1" style="color:#00B050">95.579552</td>
+                        <td class="px-1" style="color:#31D87D">98.422313</td>
+                        <td class="px-1" style="color:#31D87D">95.579552</td>
                         <td class="px-1" style="color:#C65911">69.04057766</td>
                         <td class="px-1" style="color:#FFC000">70.76173066</td>
                         <td class="px-1" style="color:#C65911">61.63058503</td>
@@ -12270,9 +12270,9 @@ SSIMULACRA2_rs: Mean: 82.71404144, Median: 83.55282859, Std Dev: 4.82887766, 5th
                         <td class="px-1">2132.27</td>
                         <td class="px-1" style="color:#FFC000">41.9978</td>
                         <td class="px-1" style="color:#92D050">44.6105</td>
-                        <td class="px-1" style="color:#00B050">45.2615</td>
-                        <td class="px-1 ace" style="color:#00B050">99.473124</td>
-                        <td class="px-1 ace" style="color:#00B050">97.763646</td>
+                        <td class="px-1" style="color:#31D87D">45.2615</td>
+                        <td class="px-1 ace" style="color:#31D87D">99.473124</td>
+                        <td class="px-1 ace" style="color:#31D87D">97.763646</td>
                         <td class="px-1 ace" style="color:#92D050">80.16393211</td>
                         <td class="px-1" style="color:#92D050">80.30066873</td>
                         <td class="px-1 ace" style="color:#C65911">71.66992501</td>
@@ -12284,9 +12284,9 @@ SSIMULACRA2_rs: Mean: 82.71404144, Median: 83.55282859, Std Dev: 4.82887766, 5th
                         <td class="px-1">2229.82</td>
                         <td class="px-1 ace" style="color:#92D050">42.0018</td>
                         <td class="px-1 ace" style="color:#92D050">44.6737</td>
-                        <td class="px-1 ace" style="color:#00B050">45.3419</td>
-                        <td class="px-1" style="color:#00B050">99.449854</td>
-                        <td class="px-1" style="color:#00B050">97.728519</td>
+                        <td class="px-1 ace" style="color:#31D87D">45.3419</td>
+                        <td class="px-1" style="color:#31D87D">99.449854</td>
+                        <td class="px-1" style="color:#31D87D">97.728519</td>
                         <td class="px-1" style="color:#92D050">80.15161320</td>
                         <td class="px-1 ace" style="color:#92D050">80.37899632</td>
                         <td class="px-1" style="color:#FFC000">71.41724127</td>
@@ -12299,8 +12299,8 @@ SSIMULACRA2_rs: Mean: 82.71404144, Median: 83.55282859, Std Dev: 4.82887766, 5th
                         <td class="px-1" style="color:#FFC000">41.2944</td>
                         <td class="px-1" style="color:#92D050">43.7038</td>
                         <td class="px-1" style="color:#92D050">44.4423</td>
-                        <td class="px-1" style="color:#00B050">99.333118</td>
-                        <td class="px-1" style="color:#00B050">97.598158</td>
+                        <td class="px-1" style="color:#31D87D">99.333118</td>
+                        <td class="px-1" style="color:#31D87D">97.598158</td>
                         <td class="px-1" style="color:#FFC000">78.30231156</td>
                         <td class="px-1" style="color:#FFC000">78.36263621</td>
                         <td class="px-1" style="color:#C65911">69.29068078</td>
@@ -12313,8 +12313,8 @@ SSIMULACRA2_rs: Mean: 82.71404144, Median: 83.55282859, Std Dev: 4.82887766, 5th
                         <td class="px-1" style="color:#FFC000">41.7399</td>
                         <td class="px-1" style="color:#92D050">44.3139</td>
                         <td class="px-1" style="color:#92D050">44.7807</td>
-                        <td class="px-1" style="color:#00B050">99.434136</td>
-                        <td class="px-1" style="color:#00B050">97.707896</td>
+                        <td class="px-1" style="color:#31D87D">99.434136</td>
+                        <td class="px-1" style="color:#31D87D">97.707896</td>
                         <td class="px-1" style="color:#FFC000">79.2659128</td>
                         <td class="px-1" style="color:#FFC000">79.29272234</td>
                         <td class="px-1" style="color:#FFC000">70.15623321</td>
@@ -12328,10 +12328,10 @@ SSIMULACRA2_rs: Mean: 82.71404144, Median: 83.55282859, Std Dev: 4.82887766, 5th
                         <td class="px-1">27.659</td>
                         <td class="px-1">2596.92</td>
                         <td class="px-1" style="color:#92D050">42.7320</td>
-                        <td class="px-1" style="color:#00B050">47.7134</td>
-                        <td class="px-1" style="color:#00B050">47.4411</td>
-                        <td class="px-1 ace" style="color:#00B050">99.280471</td>
-                        <td class="px-1 ace" style="color:#00B050">97.853006</td>
+                        <td class="px-1" style="color:#31D87D">47.7134</td>
+                        <td class="px-1" style="color:#31D87D">47.4411</td>
+                        <td class="px-1 ace" style="color:#31D87D">99.280471</td>
+                        <td class="px-1 ace" style="color:#31D87D">97.853006</td>
                         <td class="px-1" style="color:#FFC000">79.39059832</td>
                         <td class="px-1" style="color:#FFC000">79.09108544</td>
                         <td class="px-1 ace" style="color:#C65911">65.82060219</td>
@@ -12342,10 +12342,10 @@ SSIMULACRA2_rs: Mean: 82.71404144, Median: 83.55282859, Std Dev: 4.82887766, 5th
                         <td class="px-1">27.449</td>
                         <td class="px-1">2723.74</td>
                         <td class="px-1 ace" style="color:#92D050">42.7557</td>
-                        <td class="px-1 ace" style="color:#00B050">47.8355</td>
-                        <td class="px-1 ace" style="color:#00B050">47.5582</td>
-                        <td class="px-1" style="color:#00B050">99.249226</td>
-                        <td class="px-1" style="color:#00B050">97.810048</td>
+                        <td class="px-1 ace" style="color:#31D87D">47.8355</td>
+                        <td class="px-1 ace" style="color:#31D87D">47.5582</td>
+                        <td class="px-1" style="color:#31D87D">99.249226</td>
+                        <td class="px-1" style="color:#31D87D">97.810048</td>
                         <td class="px-1 ace" style="color:#FFC000">79.43103579</td>
                         <td class="px-1 ace" style="color:#FFC000">79.17019473</td>
                         <td class="px-1" style="color:#C65911">65.75786270</td>
@@ -12356,28 +12356,28 @@ SSIMULACRA2_rs: Mean: 82.71404144, Median: 83.55282859, Std Dev: 4.82887766, 5th
                         <td class="px-1">27.992</td>
                         <td class="px-1">2202.75</td>
                         <td class="px-1" style="color:#92D050">42.1578</td>
-                        <td class="px-1" style="color:#00B050">47.1537</td>
-                        <td class="px-1" style="color:#00B050">46.7919</td>
-                        <td class="px-1" style="color:#00B050">99.150203</td>
-                        <td class="px-1" style="color:#00B050">97.690037</td>
+                        <td class="px-1" style="color:#31D87D">47.1537</td>
+                        <td class="px-1" style="color:#31D87D">46.7919</td>
+                        <td class="px-1" style="color:#31D87D">99.150203</td>
+                        <td class="px-1" style="color:#31D87D">97.690037</td>
                         <td class="px-1" style="color:#FFC000">77.57799079</td>
                         <td class="px-1" style="color:#FFC000">77.16378592</td>
                         <td class="px-1" style="color:#C65911">62.90816047</td>
-                        <td class="px-1" style="color:#00B050">94.43395281</td>
+                        <td class="px-1" style="color:#31D87D">94.43395281</td>
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">~CRF30 VQ P3</td>
                         <td class="px-1">28.319</td>
                         <td class="px-1">2350.97</td>
                         <td class="px-1" style="color:#92D050">42.4904</td>
-                        <td class="px-1" style="color:#00B050">47.1816</td>
-                        <td class="px-1" style="color:#00B050">46.8649</td>
-                        <td class="px-1" style="color:#00B050">99.252266</td>
-                        <td class="px-1" style="color:#00B050">97.814671</td>
+                        <td class="px-1" style="color:#31D87D">47.1816</td>
+                        <td class="px-1" style="color:#31D87D">46.8649</td>
+                        <td class="px-1" style="color:#31D87D">99.252266</td>
+                        <td class="px-1" style="color:#31D87D">97.814671</td>
                         <td class="px-1" style="color:#FFC000">78.28962734</td>
                         <td class="px-1" style="color:#FFC000">77.96771217</td>
                         <td class="px-1" style="color:#C65911">63.73580664</td>
-                        <td class="px-1" style="color:#00B050">94.47657123</td>
+                        <td class="px-1" style="color:#31D87D">94.47657123</td>
                     </tr>
                     <tr class="text-smaller">
                         <td class="align-items-center t-light-gray" colspan="12"><b>Netflix SolLevante</b></td>
@@ -12389,12 +12389,12 @@ SSIMULACRA2_rs: Mean: 82.71404144, Median: 83.55282859, Std Dev: 4.82887766, 5th
                         <td class="px-1 ace" style="color:#C65911">37.9366</td>
                         <td class="px-1" style="color:#FFC000">41.8746</td>
                         <td class="px-1" style="color:#92D050">42.9372</td>
-                        <td class="px-1 ace" style="color:#00B050">99.280471</td>
-                        <td class="px-1 ace" style="color:#00B050">97.853006</td>
+                        <td class="px-1 ace" style="color:#31D87D">99.280471</td>
+                        <td class="px-1 ace" style="color:#31D87D">97.853006</td>
                         <td class="px-1" style="color:#FFC000">73.59818290</td>
                         <td class="px-1" style="color:#C65911">69.05681942</td>
-                        <td class="px-1 ace" style="color:#F00">49.11113058</td>
-                        <td class="px-1" style="color:#00B050">99.65378475</td>
+                        <td class="px-1 ace" style="color:#541818">49.11113058</td>
+                        <td class="px-1" style="color:#31D87D">99.65378475</td>
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">CRF30 PSNR VarOct4 Sharp6</td>
@@ -12403,12 +12403,12 @@ SSIMULACRA2_rs: Mean: 82.71404144, Median: 83.55282859, Std Dev: 4.82887766, 5th
                         <td class="px-1" style="color:#C65911">37.9356</td>
                         <td class="px-1 ace" style="color:#FFC000">41.9344</td>
                         <td class="px-1 ace" style="color:#92D050">43.0127</td>
-                        <td class="px-1" style="color:#00B050">98.617526</td>
-                        <td class="px-1" style="color:#00B050">97.445262</td>
+                        <td class="px-1" style="color:#31D87D">98.617526</td>
+                        <td class="px-1" style="color:#31D87D">97.445262</td>
                         <td class="px-1 ace" style="color:#FFC000">73.64555984</td>
                         <td class="px-1 ace" style="color:#C65911">69.16459719</td>
-                        <td class="px-1" style="color:#F00">48.84941258</td>
-                        <td class="px-1" style="color:#00B050">99.68029509</td>
+                        <td class="px-1" style="color:#541818">48.84941258</td>
+                        <td class="px-1" style="color:#31D87D">99.68029509</td>
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">~CRF30 PSNR QM0 P3</td>
@@ -12417,12 +12417,12 @@ SSIMULACRA2_rs: Mean: 82.71404144, Median: 83.55282859, Std Dev: 4.82887766, 5th
                         <td class="px-1" style="color:#C65911">37.8158</td>
                         <td class="px-1" style="color:#FFC000">41.5928</td>
                         <td class="px-1" style="color:#92D050">42.5431</td>
-                        <td class="px-1" style="color:#00B050">98.601947</td>
-                        <td class="px-1" style="color:#00B050">97.42399</td>
+                        <td class="px-1" style="color:#31D87D">98.601947</td>
+                        <td class="px-1" style="color:#31D87D">97.42399</td>
                         <td class="px-1" style="color:#FFC000">71.617254</td>
                         <td class="px-1" style="color:#C65911">66.48754073</td>
-                        <td class="px-1" style="color:#F00">44.37356138</td>
-                        <td class="px-1 ace" style="color:#00B050">100</td>
+                        <td class="px-1" style="color:#541818">44.37356138</td>
+                        <td class="px-1 ace" style="color:#31D87D">100</td>
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">~CRF30 VQ P3</td>
@@ -12431,12 +12431,12 @@ SSIMULACRA2_rs: Mean: 82.71404144, Median: 83.55282859, Std Dev: 4.82887766, 5th
                         <td class="px-1" style="color:#C65911">37.4686</td>
                         <td class="px-1" style="color:#FFC000">41.3226</td>
                         <td class="px-1" style="color:#92D050">42.1316</td>
-                        <td class="px-1" style="color:#00B050">98.63212</td>
-                        <td class="px-1" style="color:#00B050">97.439903</td>
+                        <td class="px-1" style="color:#31D87D">98.63212</td>
+                        <td class="px-1" style="color:#31D87D">97.439903</td>
                         <td class="px-1" style="color:#FFC000">72.33149666</td>
                         <td class="px-1" style="color:#C65911">67.03434155</td>
-                        <td class="px-1" style="color:#F00">45.6597599</td>
-                        <td class="px-1 ace" style="color:#00B050">100</td>
+                        <td class="px-1" style="color:#541818">45.6597599</td>
+                        <td class="px-1 ace" style="color:#31D87D">100</td>
                     </tr>
                     <tr class="text-smaller">
                         <td class="align-items-center t-light-gray" colspan="12"><b>ドラゴン会. MAIDRAGON-S</b></td>
@@ -12448,8 +12448,8 @@ SSIMULACRA2_rs: Mean: 82.71404144, Median: 83.55282859, Std Dev: 4.82887766, 5th
                         <td class="px-1 ace" style="color:#92D050">43.4176</td>
                         <td class="px-1" style="color:#92D050">44.5330</td>
                         <td class="px-1" style="color:#92D050">44.6729</td>
-                        <td class="px-1 ace" style="color:#00B050">99.576204</td>
-                        <td class="px-1 ace" style="color:#00B050">96.993265</td>
+                        <td class="px-1 ace" style="color:#31D87D">99.576204</td>
+                        <td class="px-1 ace" style="color:#31D87D">96.993265</td>
                         <td class="px-1 ace" style="color:#92D050">81.60664098</td>
                         <td class="px-1" style="color:#92D050">83.87342514</td>
                         <td class="px-1 ace" style="color:#C65911">64.41000186</td>
@@ -12462,8 +12462,8 @@ SSIMULACRA2_rs: Mean: 82.71404144, Median: 83.55282859, Std Dev: 4.82887766, 5th
                         <td class="px-1" style="color:#92D050">43.4038</td>
                         <td class="px-1 ace" style="color:#92D050">44.5455</td>
                         <td class="px-1 ace" style="color:#92D050">44.6917</td>
-                        <td class="px-1" style="color:#00B050">99.561552,</td>
-                        <td class="px-1" style="color:#00B050">96.971028</td>
+                        <td class="px-1" style="color:#31D87D">99.561552,</td>
+                        <td class="px-1" style="color:#31D87D">96.971028</td>
                         <td class="px-1" style="color:#92D050">81.58295017</td>
                         <td class="px-1 ace" style="color:#92D050">83.93074174</td>
                         <td class="px-1" style="color:#C65911">63.63556010</td>
@@ -12476,8 +12476,8 @@ SSIMULACRA2_rs: Mean: 82.71404144, Median: 83.55282859, Std Dev: 4.82887766, 5th
                         <td class="px-1" style="color:#92D050">42.7807</td>
                         <td class="px-1" style="color:#92D050">43.7920</td>
                         <td class="px-1" style="color:#92D050">43.9662</td>
-                        <td class="px-1" style="color:#00B050">99.499874</td>
-                        <td class="px-1" style="color:#00B050">96.893528</td>
+                        <td class="px-1" style="color:#31D87D">99.499874</td>
+                        <td class="px-1" style="color:#31D87D">96.893528</td>
                         <td class="px-1" style="color:#92D050">80.13878722</td>
                         <td class="px-1" style="color:#92D050">82.67207598</td>
                         <td class="px-1" style="color:#C65911">62.1303331</td>
@@ -12490,8 +12490,8 @@ SSIMULACRA2_rs: Mean: 82.71404144, Median: 83.55282859, Std Dev: 4.82887766, 5th
                         <td class="px-1" style="color:#92D050">43.1374</td>
                         <td class="px-1" style="color:#92D050">44.2474</td>
                         <td class="px-1" style="color:#92D050">44.3534</td>
-                        <td class="px-1" style="color:#00B050">99.485086</td>
-                        <td class="px-1" style="color:#00B050">96.874969</td>
+                        <td class="px-1" style="color:#31D87D">99.485086</td>
+                        <td class="px-1" style="color:#31D87D">96.874969</td>
                         <td class="px-1" style="color:#92D050">81.0576056</td>
                         <td class="px-1" style="color:#92D050">83.45341781</td>
                         <td class="px-1" style="color:#C65911">63.52342983</td>
@@ -12507,8 +12507,8 @@ SSIMULACRA2_rs: Mean: 82.71404144, Median: 83.55282859, Std Dev: 4.82887766, 5th
                         <td class="px-1" style="color:#FFC000">41.4313</td>
                         <td class="px-1" style="color:#92D050">44.1557</td>
                         <td class="px-1" style="color:#92D050">44.2669</td>
-                        <td class="px-1 ace" style="color:#00B050">99.468693</td>
-                        <td class="px-1" style="color:#00B050">96.530549</td>
+                        <td class="px-1 ace" style="color:#31D87D">99.468693</td>
+                        <td class="px-1" style="color:#31D87D">96.530549</td>
                         <td class="px-1" style="color:#92D050">82.66629557</td>
                         <td class="px-1 ace" style="color:#92D050">83.87342514</td>
                         <td class="px-1" style="color:#FFC000">74.12805535</td>
@@ -12521,8 +12521,8 @@ SSIMULACRA2_rs: Mean: 82.71404144, Median: 83.55282859, Std Dev: 4.82887766, 5th
                         <td class="px-1 ace" style="color:#FFC000">41.4331</td>
                         <td class="px-1 ace" style="color:#92D050">44.1651</td>
                         <td class="px-1 ace" style="color:#92D050">44.2771</td>
-                        <td class="px-1" style="color:#00B050">99.468020</td>
-                        <td class="px-1 ace" style="color:#00B050">96.531517</td>
+                        <td class="px-1" style="color:#31D87D">99.468020</td>
+                        <td class="px-1 ace" style="color:#31D87D">96.531517</td>
                         <td class="px-1 ace" style="color:#92D050">82.71404144</td>
                         <td class="px-1" style="color:#92D050">83.55282859</td>
                         <td class="px-1 ace" style="color:#FFC000">74.20108975</td>
@@ -12535,8 +12535,8 @@ SSIMULACRA2_rs: Mean: 82.71404144, Median: 83.55282859, Std Dev: 4.82887766, 5th
                         <td class="px-1" style="color:#FFC000">41.1678</td>
                         <td class="px-1" style="color:#92D050">43.7995</td>
                         <td class="px-1" style="color:#92D050">43.9495</td>
-                        <td class="px-1" style="color:#00B050">99.366585</td>
-                        <td class="px-1" style="color:#00B050">96.402913</td>
+                        <td class="px-1" style="color:#31D87D">99.366585</td>
+                        <td class="px-1" style="color:#31D87D">96.402913</td>
                         <td class="px-1" style="color:#92D050">81.74212195</td>
                         <td class="px-1" style="color:#92D050">82.69693318</td>
                         <td class="px-1" style="color:#FFC000">72.40613868</td>
@@ -12549,8 +12549,8 @@ SSIMULACRA2_rs: Mean: 82.71404144, Median: 83.55282859, Std Dev: 4.82887766, 5th
                         <td class="px-1" style="color:#FFC000">41.2642</td>
                         <td class="px-1" style="color:#92D050">43.9719</td>
                         <td class="px-1" style="color:#92D050">44.1089</td>
-                        <td class="px-1" style="color:#00B050">99.372739</td>
-                        <td class="px-1" style="color:#00B050">96.403405</td>
+                        <td class="px-1" style="color:#31D87D">99.372739</td>
+                        <td class="px-1" style="color:#31D87D">96.403405</td>
                         <td class="px-1" style="color:#92D050">82.2466764</td>
                         <td class="px-1" style="color:#92D050">83.14431623</td>
                         <td class="px-1" style="color:#FFC000">73.1824835</td>
