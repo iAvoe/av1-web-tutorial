@@ -9012,10 +9012,10 @@ VMAF 4K: 99.317524, VMAF 1080p: 96.324076
 SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Percentile: 72.57400971 95th Percentile: 87.35136827
                 </code></pre>
             </div>
-            <div class="overflow-auto mt-3"><table class="table-center text-xs two-decimals">
+            <div class="overflow-auto mt-3"><table class="table-center text-smaller two-decimals">
                 <thead>
                     <tr>
-                        <th class="t-light-gray"><b>基准：</b></th>
+                        <th class="px-1 t-light-gray"><b>基准：</b></th>
                         <th class="px-1 t-light-gray" style="color:#00B050">视无损</th>
                         <th class="px-1 t-light-gray" style="color:#92D050">优秀</th>
                         <th class="px-1 t-light-gray" style="color:#FFC000">良好</th>
@@ -9030,22 +9030,28 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                 </thead>
             </table></div>
 
-            <div class="overflow-auto mt-3"><table class="table-center text-xs two-decimals">
+            <div class="overflow-auto mt-3"><table class="table-center text-smaller two-decimals">
                 <thead>
-                    <tr>
+                    <tr class="border-lr">
+                        <th colspan="4">基准测试</th>
+                        <th class="px-1" colspan="3">XPSNR</th>
+                        <th class="px-1" colspan="2">VMAF 0.6.1</th>
+                        <th class="px-1" colspan="4">SSIMULACRA 2.1</th>
+                    </tr>
+                    <tr class="border-lr">
                         <th class="px-1">编码器</th>
                         <th class="px-1">编码选项</th>
                         <th class="px-1">速度 fps</th>
                         <th class="px-1">码率 kbps</th>
-                        <th class="px-1">XPSNR-Y dB</th>
-                        <th class="px-1">XPSNR-U dB</th>
-                        <th class="px-1">XPSNR-V dB</th>
-                        <th class="px-1">VMAF 4k</th>
-                        <th class="px-1">VMAF 1080p</th>
-                        <th class="px-1">S2.1：均值</th>
-                        <th class="px-1">S2.1：中位</th>
-                        <th class="px-1">S2.1：第 5%</th>
-                        <th class="px-1">S2.1：第 95%</th>
+                        <th class="px-1">Y dB</th>
+                        <th class="px-1">U dB</th>
+                        <th class="px-1">V dB</th>
+                        <th class="px-1">4k</th>
+                        <th class="px-1">1080p</th>
+                        <th class="px-1">均值</th>
+                        <th class="px-1">中位</th>
+                        <th class="px-1">第 5%</th>
+                        <th class="px-1">第 95%</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -9068,7 +9074,7 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#FFC000">71.22150529</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">SVT-AV1</td>
+                        <td>SVTAV1</td>
                         <td class="px-1">CRF35 PSNR P3</td>
                         <td class="px-1 trd">3.515</td>
                         <td class="px-1 trd">21798.79</td>
@@ -9083,7 +9089,7 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#C65911">68.60554732</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">SVT-AV1</td>
+                        <td>SVTAV1</td>
                         <td class="px-1">CRF35 PSNR QM P3</td>
                         <td class="px-1">3.512</td>
                         <td class="px-1">21871.53</td>
@@ -9098,7 +9104,7 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#C65911">68.67732264</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">SVT-AV1</td>
+                        <td>SVTAV1</td>
                         <td class="px-1">CRF35 PSNR QM0 P3</td>
                         <td class="px-1">3.473</td>
                         <td class="px-1 sec">21475.98</td>
@@ -9113,7 +9119,7 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#C65911">68.37429589</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">SVT-AV1</td>
+                        <td>SVTAV1</td>
                         <td class="px-1">CRF35 VQ P3</td>
                         <td class="px-1 ace">3.537</td>
                         <td class="px-1">22308.7</td>
@@ -9128,7 +9134,7 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#C65911">68.71991106</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">SVT-AV1</td>
+                        <td>SVTAV1</td>
                         <td class="px-1">CRF35 SSIM P3</td>
                         <td class="px-1">3.449</td>
                         <td class="px-1 ace">21179.37</td>
@@ -9158,7 +9164,7 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1 ace" style="color:#FFCC00">79.86377007</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">SVT-AV1</td>
+                        <td>SVTAV1</td>
                         <td class="px-1">CRF30 PSNR P3</td>
                         <td class="px-1">3.35</td>
                         <td class="px-1">31292.89</td>
@@ -9173,7 +9179,7 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1 sec" style="color:#FFC000">73.43305347</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">SVT-AV1</td>
+                        <td>SVTAV1</td>
                         <td class="px-1">CRF30 PSNR QM P3</td>
                         <td class="px-1">3.368</td>
                         <td class="px-1">30147.1</td>
@@ -9188,7 +9194,7 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1 trd" style="color:#FFC000">73.00726519</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">SVT-AV1</td>
+                        <td>SVTAV1</td>
                         <td class="px-1">CRF30 PSNR QM0 P3</td>
                         <td class="px-1">3.293</td>
                         <td class="px-1">29498.61</td>
@@ -9203,7 +9209,7 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#FFC000">72.58938147</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">SVT-AV1</td>
+                        <td>SVTAV1</td>
                         <td class="px-1">CRF30 VQ P3</td>
                         <td class="px-1 sec">3.53</td>
                         <td class="px-1">22308.7</td>
@@ -9218,7 +9224,7 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#FFC000">73.00295684</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">SVT-AV1</td>
+                        <td>SVTAV1</td>
                         <td class="px-1">CRF30 SSIM P3</td>
                         <td class="px-1">3.36</td>
                         <td class="px-1">29453.41</td>
@@ -9251,7 +9257,7 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#C65911">68.77075281</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">SVT-AV1</td>
+                        <td>SVTAV1</td>
                         <td class="px-1">CRF35 PSNR P3</td>
                         <td class="px-1 ace">6</td>
                         <td class="px-1">6665.2</td>
@@ -9266,7 +9272,7 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#FFC000">70.4115063</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">SVT-AV1</td>
+                        <td>SVTAV1</td>
                         <td class="px-1">CRF35 PSNR QM P3</td>
                         <td class="px-1 trd">5.606</td>
                         <td class="px-1 trd">6638.52</td>
@@ -9281,7 +9287,7 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#FFC000">70.38503641</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">SVT-AV1</td>
+                        <td>SVTAV1</td>
                         <td class="px-1">CRF35 PSNR QM0 P3</td>
                         <td class="px-1">5.555</td>
                         <td class="px-1 sec">6593.4</td>
@@ -9296,7 +9302,7 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#FFC000">70.29080931</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">SVT-AV1</td>
+                        <td>SVTAV1</td>
                         <td class="px-1">CRF35 VQ P3</td>
                         <td class="px-1 sec">5.623</td>
                         <td class="px-1">7124.16</td>
@@ -9311,7 +9317,7 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#FFC000">70.90097115</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">SVT-AV1</td>
+                        <td>SVTAV1</td>
                         <td class="px-1">CRF35 SSIM P3</td>
                         <td class="px-1">5.573</td>
                         <td class="px-1 ace">6578.42</td>
@@ -9341,7 +9347,7 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1 ace" style="color:#FFCC00">76.03682341</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">SVT-AV1</td>
+                        <td>SVTAV1</td>
                         <td class="px-1">CRF30 PSNR P3</td>
                         <td class="px-1">5.3</td>
                         <td class="px-1">9261.1</td>
@@ -9356,7 +9362,7 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#FFC000">73.04270951</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">SVT-AV1</td>
+                        <td>SVTAV1</td>
                         <td class="px-1">CRF30 PSNR QM P3</td>
                         <td class="px-1">5.076</td>
                         <td class="px-1">9171.44</td>
@@ -9371,7 +9377,7 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1 trd" style="color:#FFC000">73.08080131</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">SVT-AV1</td>
+                        <td>SVTAV1</td>
                         <td class="px-1">CRF30 PSNR QM0 P3</td>
                         <td class="px-1">5.046</td>
                         <td class="px-1">9171.44</td>
@@ -9386,7 +9392,7 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#FFC000">73.02160275</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">SVT-AV1</td>
+                        <td>SVTAV1</td>
                         <td class="px-1">CRF30 VQ P3</td>
                         <td class="px-1">5.125</td>
                         <td class="px-1">10062.18</td>
@@ -9401,7 +9407,7 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1 sec" style="color:#FFC000">73.41046502</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">SVT-AV1</td>
+                        <td>SVTAV1</td>
                         <td class="px-1">CRF30 SSIM P3</td>
                         <td class="px-1">5.174</td>
                         <td class="px-1">9141.92</td>
@@ -9434,7 +9440,7 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#92D050">83.80652456</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">SVT-AV1</td>
+                        <td>SVTAV1</td>
                         <td class="px-1">CRF35 PSNR P3</td>
                         <td class="px-1 trd">32.473</td>
                         <td class="px-1">1346.27</td>
@@ -9449,7 +9455,7 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#92D050">85.70591457</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">SVT-AV1</td>
+                        <td>SVTAV1</td>
                         <td class="px-1">CRF35 PSNR QM P3</td>
                         <td class="px-1">32.462</td>
                         <td class="px-1 trd">1327.51</td>
@@ -9464,7 +9470,7 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#92D050">85.45230956</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">SVT-AV1</td>
+                        <td>SVTAV1</td>
                         <td class="px-1">CRF35 PSNR QM0 P3</td>
                         <td class="px-1">32.369</td>
                         <td class="px-1 sec">1305.69</td>
@@ -9479,7 +9485,7 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#92D050">84.98997361</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">SVT-AV1</td>
+                        <td>SVTAV1</td>
                         <td class="px-1">CRF35 VQ P3</td>
                         <td class="px-1 ace">34.039</td>
                         <td class="px-1">1432.71</td>
@@ -9494,7 +9500,7 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#92D050">86.08970133</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">SVT-AV1</td>
+                        <td>SVTAV1</td>
                         <td class="px-1">CRF35 SSIM P3</td>
                         <td class="px-1">31.926</td>
                         <td class="px-1 ace">1301.26</td>
@@ -9524,7 +9530,7 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1 sec" style="color:#92D050">87.57657407</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">SVT-AV1</td>
+                        <td>SVTAV1</td>
                         <td class="px-1">CRF30 PSNR P3</td>
                         <td class="px-1">31.806</td>
                         <td class="px-1">1843.32</td>
@@ -9539,7 +9545,7 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1 trd" style="color:#92D050">87.17429615</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">SVT-AV1</td>
+                        <td>SVTAV1</td>
                         <td class="px-1">CRF30 PSNR QM P3</td>
                         <td class="px-1">31.701</td>
                         <td class="px-1">1810.23</td>
@@ -9554,7 +9560,7 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#92D050">87.09225295</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">SVT-AV1</td>
+                        <td>SVTAV1</td>
                         <td class="px-1">CRF30 PSNR QM0 P3</td>
                         <td class="px-1">31.602</td>
                         <td class="px-1">1766.73</td>
@@ -9569,7 +9575,7 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#92D050">86.43200391</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">SVT-AV1</td>
+                        <td>SVTAV1</td>
                         <td class="px-1">CRF30 VQ P3</td>
                         <td class="px-1 sec">33.204</td>
                         <td class="px-1">1947.9</td>
@@ -9584,7 +9590,7 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1 ace" style="color:#92D050">87.64869908</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">SVT-AV1</td>
+                        <td>SVTAV1</td>
                         <td class="px-1">CRF30 SSIM P3</td>
                         <td class="px-1">31.3</td>
                         <td class="px-1">1773.06</td>
@@ -9617,7 +9623,7 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#00B050">95.54420489</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">SVT-AV1</td>
+                        <td>SVTAV1</td>
                         <td class="px-1">CRF35 PSNR P3</td>
                         <td class="px-1">28.329</td>
                         <td class="px-1">1580.03</td>
@@ -9632,7 +9638,7 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#00B050">93.57457526</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">SVT-AV1</td>
+                        <td>SVTAV1</td>
                         <td class="px-1">CRF35 PSNR QM P3</td>
                         <td class="px-1">28.297</td>
                         <td class="px-1">1577.01</td>
@@ -9647,7 +9653,7 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#00B050">93.56296734</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">SVT-AV1</td>
+                        <td>SVTAV1</td>
                         <td class="px-1">CRF35 PSNR QM0 P3</td>
                         <td class="px-1 sec">28.546</td>
                         <td class="px-1 sec">1554.96</td>
@@ -9662,7 +9668,7 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#00B050">93.51371218</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">SVT-AV1</td>
+                        <td>SVTAV1</td>
                         <td class="px-1">CRF35 VQ P3</td>
                         <td class="px-1 ace">28.784</td>
                         <td class="px-1 trd">1658.06</td>
@@ -9677,7 +9683,7 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#00B050">93.5169439</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">SVT-AV1</td>
+                        <td>SVTAV1</td>
                         <td class="px-1">CRF35 SSIM P3</td>
                         <td class="px-1">28.038</td>
                         <td class="px-1 ace">1538.13</td>
@@ -9707,7 +9713,7 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#00B050">96.50134420</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">SVT-AV1</td>
+                        <td>SVTAV1</td>
                         <td class="px-1">CRF30 PSNR P3</td>
                         <td class="px-1">27.78</td>
                         <td class="px-1">2253.69</td>
@@ -9722,7 +9728,7 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1 sec" style="color:#00B050">94.46343097</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">SVT-AV1</td>
+                        <td>SVTAV1</td>
                         <td class="px-1">CRF30 PSNR QM P3</td>
                         <td class="px-1">27.516</td>
                         <td class="px-1">2241.62</td>
@@ -9737,7 +9743,7 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1 ace" style="color:#00B050">94.5150659</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">SVT-AV1</td>
+                        <td>SVTAV1</td>
                         <td class="px-1">CRF30 PSNR QM0 P3</td>
                         <td class="px-1">27.992</td>
                         <td class="px-1">2202.75</td>
@@ -9752,7 +9758,7 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#00B050">94.43395281</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">SVT-AV1</td>
+                        <td>SVTAV1</td>
                         <td class="px-1">CRF30 VQ P3</td>
                         <td class="px-1 trd">28.319</td>
                         <td class="px-1">2350.97</td>
@@ -9767,7 +9773,7 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1 trd" style="color:#00B050">94.47657123</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">SVT-AV1</td>
+                        <td>SVTAV1</td>
                         <td class="px-1">CRF30 SSIM P3</td>
                         <td class="px-1">27.445</td>
                         <td class="px-1">2194.22</td>
@@ -9800,7 +9806,7 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1 ace" style="color:#00B050">100</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">SVT-AV1</td>
+                        <td>SVTAV1</td>
                         <td class="px-1">CRF35 PSNR P3</td>
                         <td class="px-1">4.334</td>
                         <td class="px-1 sec">15048.56</td>
@@ -9815,7 +9821,7 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1 ace" style="color:#00B050">100</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">SVT-AV1</td>
+                        <td>SVTAV1</td>
                         <td class="px-1">CRF35 PSNR QM P3</td>
                         <td class="px-1">4.379</td>
                         <td class="px-1 trd">15081.03</td>
@@ -9830,7 +9836,7 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#00B050">98.68322379</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">SVT-AV1</td>
+                        <td>SVTAV1</td>
                         <td class="px-1">CRF35 PSNR QM0 P3</td>
                         <td class="px-1">4.377</td>
                         <td class="px-1 ace">14778.57</td>
@@ -9845,7 +9851,7 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#00B050">98.68322379</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">SVT-AV1</td>
+                        <td>SVTAV1</td>
                         <td class="px-1">CRF35 VQ P3</td>
                         <td class="px-1 trd">4.399</td>
                         <td class="px-1">15332.42</td>
@@ -9860,7 +9866,7 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#00B050">98.81171438</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">SVT-AV1</td>
+                        <td>SVTAV1</td>
                         <td class="px-1">CRF35 SSIM P3</td>
                         <td class="px-1">4.111</td>
                         <td class="px-1">16413.47</td>
@@ -9890,7 +9896,7 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1 sec" style="color:#00B050">99.82971151</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">SVT-AV1</td>
+                        <td>SVTAV1</td>
                         <td class="px-1">CRF30 PSNR P3</td>
                         <td class="px-1">4.336</td>
                         <td class="px-1">21280.89</td>
@@ -9905,7 +9911,7 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1 trd" style="color:#00B050">99.29705787</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">SVT-AV1</td>
+                        <td>SVTAV1</td>
                         <td class="px-1">CRF30 PSNR QM P3</td>
                         <td class="px-1">4.333</td>
                         <td class="px-1">21167.47</td>
@@ -9920,7 +9926,7 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1 ace" style="color:#00B050">100</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">SVT-AV1</td>
+                        <td>SVTAV1</td>
                         <td class="px-1">CRF30 PSNR QM0 P3</td>
                         <td class="px-1 sec">4.409</td>
                         <td class="px-1">20672.63</td>
@@ -9935,7 +9941,7 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1 ace" style="color:#00B050">100</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">SVT-AV1</td>
+                        <td>SVTAV1</td>
                         <td class="px-1">CRF30 VQ P3</td>
                         <td class="px-1 ace">4.432</td>
                         <td class="px-1">21665.26</td>
@@ -9950,7 +9956,7 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1 ace" style="color:#00B050">100</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">SVT-AV1</td>
+                        <td>SVTAV1</td>
                         <td class="px-1">CRF30 SSIM P3</td>
                         <td class="px-1">4.383</td>
                         <td class="px-1">20008.12</td>
@@ -9983,7 +9989,7 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#92D050">85.66813206</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">SVT-AV1</td>
+                        <td>SVTAV1</td>
                         <td class="px-1">CRF35 PSNR P3</td>
                         <td class="px-1 trd">35.645</td>
                         <td class="px-1">1289.57</td>
@@ -9998,7 +10004,7 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#92D050">87.21367204</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">SVT-AV1</td>
+                        <td>SVTAV1</td>
                         <td class="px-1">CRF35 PSNR QM P3</td>
                         <td class="px-1">35.269</td>
                         <td class="px-1 trd">1264.48</td>
@@ -10013,7 +10019,7 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#92D050">87.02358295</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">SVT-AV1</td>
+                        <td>SVTAV1</td>
                         <td class="px-1">CRF35 PSNR QM0 P3</td>
                         <td class="px-1">35.512</td>
                         <td class="px-1 sec">1258.04</td>
@@ -10028,7 +10034,7 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#92D050">86.47179056</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">SVT-AV1</td>
+                        <td>SVTAV1</td>
                         <td class="px-1">CRF35 VQ P3</td>
                         <td class="px-1 ace">37.573</td>
                         <td class="px-1">1358.55</td>
@@ -10043,7 +10049,7 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#92D050">87.3149899</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">SVT-AV1</td>
+                        <td>SVTAV1</td>
                         <td class="px-1">CRF35 SSIM P3</td>
                         <td class="px-1">34.559</td>
                         <td class="px-1 ace">1220.44</td>
@@ -10073,7 +10079,7 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#92D050">88.08307654</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">SVT-AV1</td>
+                        <td>SVTAV1</td>
                         <td class="px-1">CRF30 PSNR P3</td>
                         <td class="px-1">34.714</td>
                         <td class="px-1">1746.96</td>
@@ -10088,7 +10094,7 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1 sec" style="color:#92D050">88.27199543</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">SVT-AV1</td>
+                        <td>SVTAV1</td>
                         <td class="px-1">CRF30 PSNR QM P3</td>
                         <td class="px-1">34.394</td>
                         <td class="px-1">1701.28</td>
@@ -10103,7 +10109,7 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#92D050">88.03572868</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">SVT-AV1</td>
+                        <td>SVTAV1</td>
                         <td class="px-1">CRF30 PSNR QM0 P3</td>
                         <td class="px-1">34.683</td>
                         <td class="px-1">1678.91</td>
@@ -10118,7 +10124,7 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#92D050">87.57267954</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">SVT-AV1</td>
+                        <td>SVTAV1</td>
                         <td class="px-1">CRF30 VQ P3</td>
                         <td class="px-1 sec">36.461</td>
                         <td class="px-1">1841.98</td>
@@ -10133,7 +10139,7 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1 ace" style="color:#92D050">88.37986377</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">SVT-AV1</td>
+                        <td>SVTAV1</td>
                         <td class="px-1">CRF30 SSIM P3</td>
                         <td class="px-1">33.994</td>
                         <td class="px-1">1665.26</td>
@@ -10166,7 +10172,7 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#92D050">83.57375015</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">SVT-AV1</td>
+                        <td>SVTAV1</td>
                         <td class="px-1">CRF35 PSNR P3</td>
                         <td class="px-1">44.83</td>
                         <td class="px-1">626</td>
@@ -10181,7 +10187,7 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#92D050">86.41015394</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">SVT-AV1</td>
+                        <td>SVTAV1</td>
                         <td class="px-1">CRF35 QM P3</td>
                         <td class="px-1 sec">45.157</td>
                         <td class="px-1 trd">616</td>
@@ -10196,7 +10202,7 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#92D050">86.31858358</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">SVT-AV1</td>
+                        <td>SVTAV1</td>
                         <td class="px-1">CRF35 QM0 P3</td>
                         <td class="px-1 trd">45.103</td>
                         <td class="px-1 sec">605.16</td>
@@ -10211,7 +10217,7 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#92D050">86.04946409</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">SVT-AV1</td>
+                        <td>SVTAV1</td>
                         <td class="px-1">CRF35 VQ P3</td>
                         <td class="px-1 ace">46.994</td>
                         <td class="px-1">664.75</td>
@@ -10226,7 +10232,7 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#92D050">86.5242701</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">SVT-AV1</td>
+                        <td>SVTAV1</td>
                         <td class="px-1">CRF35 SSIM P3</td>
                         <td class="px-1">44.168</td>
                         <td class="px-1 ace">604.44</td>
@@ -10256,7 +10262,7 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#92D050">86.6893906</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">SVT-AV1</td>
+                        <td>SVTAV1</td>
                         <td class="px-1">CRF30 PSNR P3</td>
                         <td class="px-1">43.113</td>
                         <td class="px-1">849.51</td>
@@ -10271,7 +10277,7 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1 sec" style="color:#92D050">87.46544644</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">SVT-AV1</td>
+                        <td>SVTAV1</td>
                         <td class="px-1">CRF30 PSNR QM</td>
                         <td class="px-1">43.246</td>
                         <td class="px-1">830.18</td>
@@ -10286,7 +10292,7 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1 trd" style="color:#92D050">87.35281267</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">SVT-AV1</td>
+                        <td>SVTAV1</td>
                         <td class="px-1">CRF30 PSNR QM0 P3</td>
                         <td class="px-1">43.43</td>
                         <td class="px-1">807.47</td>
@@ -10301,7 +10307,7 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1" style="color:#92D050">87.023253</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">SVT-AV1</td>
+                        <td>SVTAV1</td>
                         <td class="px-1">CRF30 VQ P3</td>
                         <td class="px-1">44.81</td>
                         <td class="px-1">907.2</td>
@@ -10527,10 +10533,10 @@ VMAF 4k: 98.993032, VMAF 1080p: 97.920108
 SSIMULACRA2_rs: Mean: 79.07579506 Median: 75.54317772 Std Dev: 13.21970057 5th Percentile: 59.66073892 95th Percentile: 99.71539232
                 </code></pre>
             </div>
-            <div class="overflow-auto mt-3"><table class="table-center text-xs two-decimals">
+            <div class="overflow-auto mt-3"><table class="table-center text-smaller two-decimals">
                 <thead>
                     <tr>
-                        <th class="t-light-gray"><b>基准：</b></th>
+                        <th class="px-1 t-light-gray"><b>基准：</b></th>
                         <th class="px-1 t-light-gray" style="color:#00B050">视无损</th>
                         <th class="px-1 t-light-gray" style="color:#92D050">优秀</th>
                         <th class="px-1 t-light-gray" style="color:#FFC000">良好</th>
@@ -10545,21 +10551,27 @@ SSIMULACRA2_rs: Mean: 79.07579506 Median: 75.54317772 Std Dev: 13.21970057 5th P
                 </thead>
             </table></div>
 
-            <div class="overflow-auto mt-3"><table class="table-center text-xs two-decimals">
+            <div class="overflow-auto mt-3"><table class="table-center text-smaller two-decimals">
                 <thead>
-                    <tr>
-                        <th class="px-1">SVT-AV1 编码选项</th>
+                    <tr class="border-lr">
+                        <th colspan="3">高暂停画质选项测试</th>
+                        <th class="px-1" colspan="3">XPSNR</th>
+                        <th class="px-1" colspan="2">VMAF 0.6.1</th>
+                        <th class="px-1" colspan="4">SSIMULACRA 2.1</th>
+                    </tr>
+                    <tr class="border-lr">
+                        <th class="px-1">编码选项</th>
                         <th class="px-1">速度 fps</th>
                         <th class="px-1">码率 kbps</th>
-                        <th class="px-1">XPSNR-Y dB</th>
-                        <th class="px-1">XPSNR-U dB</th>
-                        <th class="px-1">XPSNR-V dB</th>
-                        <th class="px-1">VMAF 4k</th>
-                        <th class="px-1">VMAF 1080p</th>
-                        <th class="px-1">S2.1：均值</th>
-                        <th class="px-1">S2.1：中位</th>
-                        <th class="px-1">S2.1：第 5%</th>
-                        <th class="px-1">S2.1：第 95%</th>
+                        <th class="px-1">Y dB</th>
+                        <th class="px-1">U dB</th>
+                        <th class="px-1">V dB</th>
+                        <th class="px-1">4k</th>
+                        <th class="px-1">1080p</th>
+                        <th class="px-1">均值</th>
+                        <th class="px-1">中位</th>
+                        <th class="px-1">第 5%</th>
+                        <th class="px-1">第 95%</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -10835,10 +10847,10 @@ VMAF 4k: 99.276821, VMAF 1080p: 97.850148
 SSIMULACRA2_rs: Mean: 78.34317414 Median: 78.04531049 Std Dev: 8.94038278 5th Percentile: 63.70302548 95th Percentile: 94.68040064
                 </code></pre>
             </div>
-            <div class="overflow-auto mt-3"><table class="table-center text-xs two-decimals">
+            <div class="overflow-auto mt-3"><table class="table-center text-smaller two-decimals">
                 <thead>
                     <tr>
-                        <th class="t-light-gray"><b>基准：</b></th>
+                        <th class="px-1 t-light-gray"><b>基准：</b></th>
                         <th class="px-1 t-light-gray" style="color:#00B050">视无损</th>
                         <th class="px-1 t-light-gray" style="color:#92D050">优秀</th>
                         <th class="px-1 t-light-gray" style="color:#FFC000">良好</th>
@@ -10853,21 +10865,27 @@ SSIMULACRA2_rs: Mean: 78.34317414 Median: 78.04531049 Std Dev: 8.94038278 5th Pe
                 </thead>
             </table></div>
 
-            <div class="overflow-auto mt-3"><table class="table-center text-xs two-decimals">
+            <div class="overflow-auto mt-3"><table class="table-center text-smaller two-decimals">
                 <thead>
-                    <tr>
-                        <th class="px-1">SVT-AV1 编码选项</th>
+                    <tr class="border-lr">
+                        <th colspan="3">时域降噪过滤测试</th>
+                        <th class="px-1" colspan="3">XPSNR</th>
+                        <th class="px-1" colspan="2">VMAF 0.6.1</th>
+                        <th class="px-1" colspan="4">SSIMULACRA 2.1</th>
+                    </tr>
+                    <tr class="border-lr">
+                        <th class="px-1">编码选项</th>
                         <th class="px-1">速度 fps</th>
                         <th class="px-1">码率 kbps</th>
-                        <th class="px-1">XPSNR-Y dB</th>
-                        <th class="px-1">XPSNR-U dB</th>
-                        <th class="px-1">XPSNR-V dB</th>
-                        <th class="px-1">VMAF 4k</th>
-                        <th class="px-1">VMAF 1080p</th>
-                        <th class="px-1">S2.1：均值</th>
-                        <th class="px-1">S2.1：中位</th>
-                        <th class="px-1">S2.1：第 5%</th>
-                        <th class="px-1">S2.1：第 95%</th>
+                        <th class="px-1">Y dB</th>
+                        <th class="px-1">U dB</th>
+                        <th class="px-1">V dB</th>
+                        <th class="px-1">4k</th>
+                        <th class="px-1">1080p</th>
+                        <th class="px-1">均值</th>
+                        <th class="px-1">中位</th>
+                        <th class="px-1">第 5%</th>
+                        <th class="px-1">第 95%</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -11420,10 +11438,10 @@ VMAF 4k: 96.492425, VMAF 1080p: 93.439512
 SSIMULACRA2_rs: Mean: 43.37989094 Median: 42.86187330 Std Dev: 10.52248577 5th Percentile: 27.33426194 95th Percentile: 62.78089483
                 </code></pre>
             </div>
-            <div class="overflow-auto mt-3"><table class="table-center text-xs two-decimals">
+            <div class="overflow-auto mt-3"><table class="table-center text-smaller two-decimals">
                 <thead>
                     <tr>
-                        <th class="t-light-gray"><b>基准：</b></th>
+                        <th class="px-1 t-light-gray"><b>基准：</b></th>
                         <th class="px-1 t-light-gray" style="color:#00B050">视无损</th>
                         <th class="px-1 t-light-gray" style="color:#92D050">优秀</th>
                         <th class="px-1 t-light-gray" style="color:#FFC000">良好</th>
@@ -11438,21 +11456,27 @@ SSIMULACRA2_rs: Mean: 43.37989094 Median: 42.86187330 Std Dev: 10.52248577 5th P
                 </thead>
             </table></div>
 
-            <div class="overflow-auto mt-3"><table class="table-center text-xs two-decimals">
+            <div class="overflow-auto mt-3"><table class="table-center text-smaller two-decimals">
                 <thead>
-                    <tr>
-                        <th class="px-1">SVT-AV1 编码选项</th>
+                    <tr class="border-lr">
+                        <th colspan="3">胶片颗粒合成测试</th>
+                        <th class="px-1" colspan="3">XPSNR</th>
+                        <th class="px-1" colspan="2">VMAF 0.6.1</th>
+                        <th class="px-1" colspan="4">SSIMULACRA 2.1</th>
+                    </tr>
+                    <tr class="border-lr">
+                        <th class="px-1">编码选项</th>
                         <th class="px-1">速度 fps</th>
                         <th class="px-1">码率 kbps</th>
-                        <th class="px-1">XPSNR-Y dB</th>
-                        <th class="px-1">XPSNR-U dB</th>
-                        <th class="px-1">XPSNR-V dB</th>
-                        <th class="px-1">VMAF 4k</th>
-                        <th class="px-1">VMAF 1080p</th>
-                        <th class="px-1">S2.1：均值</th>
-                        <th class="px-1">S2.1：中位</th>
-                        <th class="px-1">S2.1：第 5%</th>
-                        <th class="px-1">S2.1：第 95%</th>
+                        <th class="px-1">Y dB</th>
+                        <th class="px-1">U dB</th>
+                        <th class="px-1">V dB</th>
+                        <th class="px-1">4k</th>
+                        <th class="px-1">1080p</th>
+                        <th class="px-1">均值</th>
+                        <th class="px-1">中位</th>
+                        <th class="px-1">第 5%</th>
+                        <th class="px-1">第 95%</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -12077,10 +12101,10 @@ SSIMULACRA2_rs: Mean: 82.71404144, Median: 83.55282859, Std Dev: 4.82887766, 5th
                 <p><code>--preset 3 --crf 30 --variance-octile 2 --sharpness 4</code>：结果与 VarOct 4 sharpness 4 完全一致</p>
                 <p><code>--preset 3 --crf 30 --variance-octile 2 --sharpness 6</code>：结果与 VarOct 4 sharpness 6 完全一致</p>
             </div>
-            <div class="overflow-auto mt-3"><table class="table-center text-xs two-decimals">
+            <div class="overflow-auto mt-3"><table class="table-center text-smaller two-decimals">
                 <thead>
                     <tr>
-                        <th class="t-light-gray"><b>基准：</b></th>
+                        <th class="px-1 t-light-gray"><b>基准：</b></th>
                         <th class="px-1 t-light-gray" style="color:#00B050">视无损</th>
                         <th class="px-1 t-light-gray" style="color:#92D050">优秀</th>
                         <th class="px-1 t-light-gray" style="color:#FFC000">良好</th>
@@ -12095,21 +12119,27 @@ SSIMULACRA2_rs: Mean: 82.71404144, Median: 83.55282859, Std Dev: 4.82887766, 5th
                 </thead>
             </table></div>
 
-            <div class="overflow-auto mt-3"><table class="table-center text-xs two-decimals">
+            <div class="overflow-auto mt-3"><table class="table-center text-smaller two-decimals">
                 <thead>
-                    <tr>
+                    <tr class="border-lr">
+                        <th colspan="3">大范围优化测试</th>
+                        <th class="px-1" colspan="3">XPSNR</th>
+                        <th class="px-1" colspan="2">VMAF 0.6.1</th>
+                        <th class="px-1" colspan="4">SSIMULACRA 2.1</th>
+                    </tr>
+                    <tr class="border-lr">
                         <th class="px-1">编码选项</th>
                         <th class="px-1">速度 fps</th>
                         <th class="px-1">码率 kbps</th>
-                        <th class="px-1">XPSNR-Y dB</th>
-                        <th class="px-1">XPSNR-U dB</th>
-                        <th class="px-1">XPSNR-V dB</th>
-                        <th class="px-1">VMAF 4k</th>
-                        <th class="px-1">VMAF 1080p</th>
-                        <th class="px-1">S2.1：均值</th>
-                        <th class="px-1">S2.1：中位</th>
-                        <th class="px-1">S2.1：第 5%</th>
-                        <th class="px-1">S2.1：第 95%</th>
+                        <th class="px-1">Y dB</th>
+                        <th class="px-1">U dB</th>
+                        <th class="px-1">V dB</th>
+                        <th class="px-1">4k</th>
+                        <th class="px-1">1080p</th>
+                        <th class="px-1">均值</th>
+                        <th class="px-1">中位</th>
+                        <th class="px-1">第 5%</th>
+                        <th class="px-1">第 95%</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -12350,8 +12380,7 @@ SSIMULACRA2_rs: Mean: 82.71404144, Median: 83.55282859, Std Dev: 4.82887766, 5th
                         <td class="px-1" style="color:#00B050">94.47657123</td>
                     </tr>
                     <tr class="text-smaller">
-                        <td class="align-items-center t-light-gray" colspan="2"><b>Netflix SolLevante</b></td>
-                        <td class="t-light-gray" colspan="10"></td>
+                        <td class="align-items-center t-light-gray" colspan="12"><b>Netflix SolLevante</b></td>
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">CRF30 PSNR VarOct4 Sharp4</td>
