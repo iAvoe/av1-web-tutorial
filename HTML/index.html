@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang='zh-hans'>
 	<head>
-        <meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="initial-scale=1">
+        <meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1">
         <!-- JS Codes -->
         <script src="./files/tutorial.js" defer></script>
         <!-- MathJax JS -->
@@ -4670,7 +4670,7 @@ SvtAv1EncApp.exe -i .\输入.yuv -w 3840 -h 2160 --input-depth 10 --color-format
                 <li><b>L(max,min): </b> 见源视频的元数据。SDR 视频的光强是 (1000,1)，单位 <span class="text-blue-math">\(\text{candela}\times 10000\)</span></li>
             </ul>
             <code class="code-bold">--content-light</code>
-            <p class="font-monospace pl-5 m-0 overflow-auto">&lt;逗号分隔整数 MaxCLL,MaxFall&gt;根据源视频的元数据设置最大内容光强与最大平均光强。</p>
+            <p class="font-monospace pl-5 m-0 overflow-auto">&lt;逗号分隔整数 MaxCLL,MaxFall&gt;根据源视频的元数据设置最大内容光强（Max content light level）与最大平均光强（Max Frame-Avg Light level）。</p>
 
             <h4>（6/12）编解码场景、<span class="text-blue-emph">兼容性</span></h4>
             <code class="code-bold">--nb</code>
@@ -7097,6 +7097,7 @@ ffmpeg -i .\源视频.mkv -i .\压缩后.ivf -lavfi "[0:v]setpts=N*(1/24000)[src
             <p class="text-side-gray">GCD：最大公约数；LCM：最小公倍数：</p>
             <span class="text-blue-math overflow-auto">\[
                 {T}_{common} = {GCD}\left(\frac{1}{90000}, \frac{1001}{24000}\right)
+            \]\[
                 = \frac{{GCD}\left(1,1001\right)}{{LCM}\left(90000,24000\right)}
                 = \frac{1}{360000}
             \]</span>
@@ -12982,7 +12983,7 @@ ssimulacra2.exe .\原画.png .\压缩.png
             <p>注：ssimulacra2_rs 在 PowerShell 中无法正常打印信息，需要使用 CMD 运行；LSMAS 缓存文件代表“O__&lt;视频文件名&gt;.lwi” 索引文件，这些文件在运行后不会被删除，下次在相同缓存路径解码相同视频时可以自动跳过，或造成更新后信息与缓存不符的错误。</p>
             
             <h3>下载——SSIMULACRA2 Vapoursynth-HIP</h3>
-            <p>一款支持使用英伟达和 AMD 显卡计算 SSIMULACRA、Butteraugli 的动态链接库，支持直接使用或在 VapourSynth 内调用。下载与使用，参数推荐值，VaporSynth 使用方法等详情见 <a href="https://github.com/Line-fr/Vship">Github/Line-fr</a>。在测试中，虽然速度大幅提高，但所得分数相比基于 CPU 的 ssimulacra2_rs 平均偏移了 -0.3，这个偏差足以影响上表中的前三排名，故不在本教程中采用。</p>
+            <p>一款支持使用英伟达和 AMD 显卡计算 SSIMULACRA、Butteraugli 的动态链接库，支持直接以自带的 FFVSHIP 使用，或在 VapourSynth 内调用。下载与使用，参数推荐值，VaporSynth 使用方法等详情见 <a href="https://github.com/Line-fr/Vship">Github/Line-fr</a>。在测试中，虽然速度大幅提高，但所得分数相比基于 CPU 的 ssimulacra2_rs 平均偏移了 -0.3，这个偏差足以影响上表中的前三排名，故不在本教程中采用。</p>
             <p class="text-gray-side">注：若两组人分别压制了同一片源，则使用 ssimulacra2_rs 计算画质的组得分更高，使用 vship 计算画质的组得分更低而败。</p>
 
             <h4>直接使用流程</h4>
