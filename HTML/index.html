@@ -4769,6 +4769,7 @@ switch (curve) {
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 1~4，默认 2：弱&gt;指定<u>帧内</u>方差自适应量化的增强强度——1：微，2：弱，3：中：4：强</p>
             <code class="code-bold">--variance-octile</code>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 1~8，默认 6：高要求&gt;指定<u>帧内（Superblock）</u>方差自适应量化增强（Variance Boost）的方差自适应量化开启条件——但凡特大块中某个分块的面积达到全块的 variance-octile÷8，并且内容为低对比度，则对该 Superblock 启用方差自适应量化增强。这样可以减少其中紧挨着“复杂块”的“简单块”被连带着分配了过高量化强度所致的模糊块失真。</p>
+            <p class="text-gray-side">注：在大范围优化测试（见下方测试版块）中，发现指定 2、4、6（默认）时，对所有测试视频都没能产生任何影响，也没有触发参数无效警告。因此可能需要在远超 CRF30 所致的高量化强度、指定极值、或搭配参数使用。</p>
             <ul class="list-dotless text-smaller">
                 <li>分子越小，则越多紧邻纹理线条/烟雾破片的平面/斜面的区域被开启 VAQ、计算量越大、码率越高、块内视觉对比度一致性也越高</li>
                 <li>分子越大，则越少紧邻纹理线条/烟雾破片的平面/斜面的区域被开启 VAQ、计算量越大、码率越低、块内视觉对比度一致性也越低</li>
@@ -4778,6 +4779,7 @@ switch (curve) {
                 <li>建议：一开始给予较低 CRF 强度、宽限 VBR 的情况下可以保持默认，否则根据高频细节与平面的紧邻程度和分辨率来调整。</li>
                 <li>建议：官方建议范围 4~7，此外的值会导致码率翻倍或画质自适应不足。详见 <a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/master/Docs/Appendix-Variance-Boost.md?ref_type=heads#--variance-octile-1-8">SVT-AV1 Readme</a></li>
             </ul>
+
             <code class="code-bold">--aq-mode</code>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~2，默认 2：分瓣 VAQ + QP 偏移预测&gt;指定帧间方差自适应量化模式——0：关，1：分瓣 VAQ 调整；2：并且使用 QP 偏移预测</p>
 
@@ -5161,8 +5163,15 @@ typedef enum SvtAv1PredStructure {
                 <li><b>小于 0: </b>增加死区量化器大小，减少量化舍入进位宽限</li>
                 <li><b>大于 0: </b>去块强度减半，减少死区量化器大小</li>
                 <li><b>大于 4: </b>去块强度减四分之三，减少死区量化器大小，增加量化舍入进位宽限</li>
+                <li><b>7：</b>最大值，但下方测试结果显示这个强度在所有情况下都反而会降低画质，因此不推荐</li>
+
+                <li><code>-4</code> 相比 <code>--qm-min 0</code> 与 <code>--tune 1 --sharpness 0</code>（默认）下的画质反而高一点，并且降低了码率；除此之外不如 <code>--tune 0 --sharpness 0</code> 的画质提升，不失为专注降低码率的有效选项</li>
+                <li><code>0~4</code> 对码率的影响，以及画质的影响取决于片源；画质提升在 VMAF 中显得无效，低强度（0~4）相比其他参数可以有效提升暂停画质，因此可以用于搭配高暂停画质测试选项，但高强度下对码率的影响会明显增加（5%~10%）</li>
+                <li><code>6~7</code> 在动态信息复杂的 3D 动画、漫画材质动画（富含锐利纹理场景）中画质提升显著（SSIMULACRA2.1 +5 分），除此之外提升不大（SSIMULACRA2.1 +1~3 分），但码率的增加又与画质的提升不相关（更类似于线性增加 5~10%）</li>
+                <li><code>7</code> 相比 6 出现了副作用，码率照旧增加，但画质反而降低了（一定会复现，结合 -4 强度的现象，推测是遇到了码率分配受限的问题）</li>
             </ul>
-            <p>注：虽然 &gt; 0 也会增加量化舍入进位宽限，但影响太小。</p>
+            <p class="text-blue-side">注：该参数对压制结果体积或码率的影响较大（5%~10%），但对画质的影响较小，因此不适合除画质绝对优先情况下使用。详见下方测试版块的大范围优化测试。</p>
+            <p class="text-blue-side">注：尽管 &gt; 0 也会增加量化舍入进位宽限，但其影响在画面简单，容易压缩的视频源上有限。</p>
 
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：sharpness 相关源码分析</button>
             <div class="coll-content"><code>deblocking_filter.c</code>：设定环路滤镜强度
@@ -6832,6 +6841,7 @@ for ($i=1; $i -le $frames; $i++) {
                 <li><b>关键帧间隔：</b>由于测试项目较多，所以只使用 12 秒间隔，理想时间条件下应当额外测试 5 秒关键帧间隔
                     <ul><li>该距离虽略长于串流用途（提高解码难度和延迟），但作为测试，这有助于编码器时域冗余能力得到充分发挥</li></ul>
                 </li>
+                <li><b>空间/时间加边（Padding）：</b>不得有任何黑边，或累计时长打达到影片 10% 长度的黑场；黑边黑场的编解码过于简单，导致原本影片的分数异常升高而失信</li>
             </ul>
             <h4>（2/7）测试内容画面</h4>
             <h5>（2/7——1/3）电影、录像</h5>
@@ -6975,6 +6985,7 @@ ffmpeg -i .\Elephants-Dream_1920x1080_24fps_8bit_rgb.video+audio.mkv ^
             </ul>
             <p class="text-gray-side">若衡量标准是以手机观看，则应将以上要求降低至少一个等级，如达标→良好。</p>
             <p class="text-gray-side">若任意测量中出现负值相关性，则并非是画面糊了那么简单，而更可能是错给了两条不相关的视频。</p>
+            <p class="text-gray-side">若同视频不同参数下，SSIMULACRA 排位第 95% 的帧得分很高（95~100%）时，不一定代表画面真的更好，反而更可能是因为影片有很长的的黑场画面存在；同样地，图片加黑边时，由于此处的画面容易编解码，因此会变相的提高跑分。</p>
             <h4>（7/9）时间基对齐问题</h4>
             <p>任何偏差都会导致分数计算得分分布异常，画质指标分数大幅降低。以下是时间基（tiome base）不同的 XPSNR 跑分运行状态（VMAF 同样受影响）：</p>
             <pre><code class="text-smaller language-powershell">
@@ -11801,180 +11812,46 @@ SSIMULACRA2_rs: Mean: 43.37989094 Median: 42.86187330 Std Dev: 10.52248577 5th P
 
             <h3>测试——SVT-AV1 大范围优化测试</h3>
             <p>降低启用 VAQ 的 Superblock 结构区分阈值、指定锐度优先的模式决策选项。</p>
-            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（2/8）SVT-AV1 v3.0——Boat</button>
-            <div class="coll-content">
-                <p><code>--preset 3 --crf 30 --variance-octile 4 --sharpness 4</code>：</p>
-                <pre><code class="text-smaller language-powershell">
-ffmpeg -i .\Netflix_Boat_4096x2160_60fps_10bit_420.mkv -f yuv4mpegpipe -pix_fmt yuv420p10le -strict unofficial - | SvtAv1EncApp -i - --keyint 12s --preset 3 --crf 30 --variance-octile 4 --sharpness 4 -b .\Netflix_Boat_yuv420p10le_varOct4_sharpness4.ivf
-
-SUMMARY --------------------------------- Channel 1  --------------------------------
-Total Frames		Frame Rate		Byte Count		Bitrate
-         300		60.00 fps		  21382861		34212.58 kbps
-
-Channel 1
-Average Speed:		3.597 fps
-Total Encoding Time:	83410 ms
-Total Execution Time:	84536 ms
-Average Latency:	46079 ms
-Max Latency:		73953 ms
-
-XPSNR average, 300 frames  y: 37.7780  u: 41.6035  v: 43.5482 (minimum: 37.7780)
-VMAF 4k: 98.351882, VMAF 1080p: 98.330377
-SSIMULACRA2_rs: Mean: 72.40393052, Median: 72.42377592, Std Dev: 1.53203186, 5th Percentile: 70.10772502, 95th Percentile: 75.00945373
-                </code></pre>
-                <p><code>--preset 3 --crf 30 --variance-octile 4 --sharpness 6</code>：</p>
-                <pre><code class="text-smaller language-powershell">
-ffmpeg -i .\Netflix_Boat_4096x2160_60fps_10bit_420.mkv -f yuv4mpegpipe -pix_fmt yuv420p10le -strict unofficial - | SvtAv1EncApp -i - --keyint 12s --preset 3 --crf 30 --variance-octile 4 --sharpness 6 -b .\Netflix_Boat_yuv420p10le_varOct4_sharpness6.ivf
-
-SUMMARY --------------------------------- Channel 1  --------------------------------
-Total Frames		Frame Rate		Byte Count		Bitrate
-         300		60.00 fps		  22411999		35859.20 kbps
-
-Channel 1
-Average Speed:		3.666 fps
-Total Encoding Time:	81842 ms
-Total Execution Time:	83012 ms
-Average Latency:	45066 ms
-Max Latency:		72274 ms
-
-XPSNR average, 300 frames  y: 37.7574  u: 41.6517  v: 43.6419 (minimum: 37.7574)
-VMAF 4k: 98.164098, VMAF 1080p: 98.055403
-SSIMULACRA2_rs: Mean: 72.14692563, Median: 72.11854599, Std Dev: 1.72572335, 5th Percentile: 69.59369402, 95th Percentile: 74.93923985
-                </code></pre>
-                <p><code>--preset 3 --crf 30 --variance-octile 2 --sharpness 4</code>：结果与 VarOct 4 sharpness 4 完全一致</p>
-                <p><code>--preset 3 --crf 30 --variance-octile 2 --sharpness 6</code>：结果与 VarOct 4 sharpness 6 完全一致</p>
-            </div>
-            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（3/8）SVT-AV1 v3.0——WindAndNature</button>
-            <div class="coll-content">
-                <p><code>--preset 3 --crf 30 --variance-octile 4 --sharpness 4</code>：</p>
-                <pre><code class="text-smaller language-powershell">
-ffmpeg -i .\Netflix_WindAndNature_4096x2160_60fps_10bit_420.video.mkv -f yuv4mpegpipe -pix_fmt yuv420p10le -strict -1 - | SvtAv1EncApp -i - --keyint 12s --preset 3 --crf 30 --variance-octile 4 --sharpness 4 -b .\WindAndNature_4096x2160_60fps_10bit_yuv420_varOct4_sharpness4.ivf
-
-SUMMARY --------------------------------- Channel 1  --------------------------------
-Total Frames		Frame Rate		Byte Count		Bitrate
-        1199		60.00 fps		  26780649		10721.19 kbps
-
-Channel 1
-Average Speed:		5.089 fps
-Total Encoding Time:	235596 ms
-Total Execution Time:	236980 ms
-Average Latency:	57044 ms
-Max Latency:		81474 ms
-
-XPSNR average, 1199 frames  y: 36.9506  u: 43.2836  v: 40.9497 (minimum: 36.9506)
-VMAF 4k: 98.436272, VMAF 1080p: 95.584718
-SSIMULACRA2_rs: Mean: 69.93547059, Median: 72.02165699, Std Dev: 4.12987469, 5th Percentile: 62.49686317, 95th Percentile: 74.18941581
-                </code></pre>
-                <p><code>--preset 3 --crf 30 --variance-octile 4 --sharpness 6</code>：</p>
-                <pre><code class="text-smaller language-powershell">
-ffmpeg -i .\Netflix_WindAndNature_4096x2160_60fps_10bit_420.video.mkv -f yuv4mpegpipe -pix_fmt yuv420p10le -strict -1 - | SvtAv1EncApp -i - --keyint 12s --preset 3 --crf 30 --variance-octile 4 --sharpness 6 -b .\WindAndNature_4096x2160_60fps_10bit_yuv420_varOct4_sharpness6.ivf
-
-SUMMARY --------------------------------- Channel 1  --------------------------------
-Total Frames		Frame Rate		Byte Count		Bitrate
-        1199		60.00 fps		  28146449		11267.97 kbps
-
-Channel 1
-Average Speed:		5.024 fps
-Total Encoding Time:	238676 ms
-Total Execution Time:	239830 ms
-Average Latency:	57884 ms
-Max Latency:		82151 ms
-
-XPSNR average, 1199 frames  y: 36.9230  u: 43.3215  v: 40.9769 (minimum: 36.9230)
-VMAF 4k: 98.418351, VMAF 1080p: 95.550267
-SSIMULACRA2_rs: Mean: 69.68736029, Median: 71.96413622, Std Dev: 4.43996726, 5th Percentile: 61.62786558, 95th Percentile: 74.19731887
-                </code></pre>
-                <p><code>--preset 3 --crf 30 --variance-octile 2 --sharpness 4</code>：结果与 VarOct 4 sharpness 4 完全一致</p>
-                <p><code>--preset 3 --crf 30 --variance-octile 2 --sharpness 6</code>：结果与 VarOct 4 sharpness 6 完全一致</p>
-            </div>
-            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（4/8）SVT-AV1 v3.0——Big-Buck-Bunny</button>
-            <div class="coll-content">
-                <p><code>--preset 3 --crf 30 --variance-octile 4 --sharpness 4</code>：</p>
-                <pre><code class="text-smaller language-powershell">
-ffmpeg -i .\Big-Buck-Bunny_1920x1080_24fps_8bit_yuv420p.mkv -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --preset 3 --crf 30 --variance-octile 4 --sharpness 4 -b .\Big-Buck-Bunny_1920x1080_24fps_8bit_yuv420_varOct4_sharpness4.ivf
-
-SUMMARY --------------------------------- Channel 1  --------------------------------
-Total Frames		Frame Rate		Byte Count		Bitrate
-       14315		24.00 fps		 158976017		2132.27 kbps
-
-Channel 1
-Average Speed:		31.819 fps
-Total Encoding Time:	449884 ms
-Total Execution Time:	450232 ms
-Average Latency:	10787 ms
-Max Latency:		20301 ms
-
-XPSNR average, 14315 frames  y: 41.9978  u: 44.6105  v: 45.2615 (minimum: 41.9978)
-VMAF 4k: 99.473124, VMAF 1080p: 97.763646
-SSIMULACRA2_rs: Mean: 80.16393211, Median: 80.30066873, Std Dev: 5.16796143, 5th Percentile: 71.66992501, 95th Percentile: 87.64317683
-                </code></pre>
-                <p><code>--preset 3 --crf 30 --variance-octile 4 --sharpness 6</code>：</p>
-                <pre><code class="text-smaller language-powershell">
-ffmpeg -i .\Big-Buck-Bunny_1920x1080_24fps_8bit_yuv420p.mkv -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --preset 3 --crf 30 --variance-octile 4 --sharpness 6 -b .\Big-Buck-Bunny_1920x1080_24fps_8bit_yuv420_varOct4_sharpness6.ivf
-
-SUMMARY --------------------------------- Channel 1  --------------------------------
-Total Frames		Frame Rate		Byte Count		Bitrate
-       14315		24.00 fps		 166249634		2229.82 kbps
-
-Channel 1
-Average Speed:		31.849 fps
-Total Encoding Time:	449472 ms
-Total Execution Time:	449816 ms
-Average Latency:	10789 ms
-Max Latency:		20106 ms
-
-XPSNR average, 14315 frames  y: 42.0018  u: 44.6737  v: 45.3419 (minimum: 42.0018)
-VMAF 4k: 99.449854, VMAF 1080p: 97.728519
-SSIMULACRA2_rs: Mean: 80.15161320, Median: 80.37899632, Std Dev: 5.24311288, 5th Percentile: 71.41724127, 95th Percentile: 87.70318448
-                </code></pre>
-                <p><code>--preset 3 --crf 30 --variance-octile 2 --sharpness 4</code>：结果与 VarOct 4 sharpness 4 完全一致</p>
-                <p><code>--preset 3 --crf 30 --variance-octile 2 --sharpness 6</code>：结果与 VarOct 4 sharpness 6 完全一致</p>
-            </div>
-            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（5/8）SVT-AV1 v3.0——ElephantsDream</button>
-            <div class="coll-content">
-                <p><code>--preset 3 --crf 30 --variance-octile 4 --sharpness 4</code>：</p>
-                <pre><code class="text-smaller language-powershell">
-ffmpeg -i .\Elephants-Dream_1920x1080_24fps_8bit_yuv420.mkv -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --preset 3 --crf 30 --variance-octile 4 --sharpness 4 -b .\Elephants-Dream_1920x1080_24fps_8bit_yuv420_varOct4_sharpness4.ivf
-
-SUMMARY --------------------------------- Channel 1  --------------------------------
-Total Frames		Frame Rate		Byte Count		Bitrate
-       15691		24.00 fps		 212230205		2596.92 kbps
-
-Channel 1
-Average Speed:		27.659 fps
-Total Encoding Time:	567304 ms
-Total Execution Time:	567636 ms
-Average Latency:	12716 ms
-Max Latency:		34960 ms
-
-XPSNR average, 15691 frames  y: 42.7320  u: 47.7134  v: 47.4411 (minimum: 42.7320)
-VMAF 4k: 99.280471, VMAF 1080p: 97.853006
-SSIMULACRA2_rs: Mean: 79.39059832, Median: 79.09108544, Std Dev: 8.35808579, 5th Percentile: 65.82060219, 95th Percentile: 94.60718743
-                </code></pre>
-                <p><code>--preset 3 --crf 30 --variance-octile 4 --sharpness 6</code>：</p>
-                <pre><code class="text-smaller language-powershell">
-ffmpeg -i .\Elephants-Dream_1920x1080_24fps_8bit_yuv420.mkv -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --preset 3 --crf 30 --variance-octile 4 --sharpness 6 -b .\Elephants-Dream_1920x1080_24fps_8bit_yuv420_varOct4_sharpness6.ivf
-
-SUMMARY --------------------------------- Channel 1  --------------------------------
-Total Frames		Frame Rate		Byte Count		Bitrate
-       15691		24.00 fps		 222594799		2723.74 kbps
-
-Channel 1
-Average Speed:		27.449 fps
-Total Encoding Time:	571638 ms
-Total Execution Time:	572058 ms
-Average Latency:	12829 ms
-Max Latency:		34474 ms
-
-XPSNR average, 15691 frames  y: 42.7557  u: 47.8355  v: 47.5582 (minimum: 42.7557)
-VMAF 4k: 99.249226, VMAF 1080p: 97.810048
-SSIMULACRA2_rs: Mean: 79.43103579, Median: 79.17019473, Std Dev: 8.38901830, 5th Percentile: 65.75786270, 95th Percentile: 94.64559855
-                </code></pre>
-                <p><code>--preset 3 --crf 30 --variance-octile 2 --sharpness 4</code>：结果与 VarOct 4 sharpness 4 完全一致</p>
-                <p><code>--preset 3 --crf 30 --variance-octile 2 --sharpness 6</code>：结果与 VarOct 4 sharpness 6 完全一致</p>
-            </div>
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（1/8）SVT-AV1 v3.0——SolLevante</button>
             <div class="coll-content">
+                <p><code>--preset 3 --crf 30 --sharpness -4</code>：</p>
+                <pre><code class="text-smaller language-powershell">
+ffmpeg -i .\SolLevante_yuv420p10le_bt709_3840x2160_24fps_yuv420p10le.mkv -f yuv4mpegpipe -strict -1 - | SvtAv1EncApp -i - --keyint 12s --preset 3 --crf 30 --sharpness -4 -b .\Encoding-SVTAV1-sharpness\SolLevante_yuv420p10le_bt709_sharpness-4.ivf
+
+SUMMARY --------------------------------- Channel 1  --------------------------------
+Total Frames		Frame Rate		Byte Count		Bitrate
+        6314		24.00 fps		 700233684		21293.14 kbps
+
+Channel 1
+Average Speed:		4.375 fps
+Total Encoding Time:	1443290 ms
+Total Execution Time:	1444524 ms
+Average Latency:	81568 ms
+Max Latency:		178620 ms
+
+XPSNR average, 6314 frames  y: 37.8526  u: 41.6389  v: 42.6158 (minimum: 37.8526)
+VMAF 4k: 98.617551, VMAF 1080p: 97.460014
+SSIMULACRA2_rs: Mean: 71.39326874, Median: 66.46212194, Std Dev: 19.12876498, 5th Percentile: 44.23334100, 95th Percentile: 99.70832394
+                </code></pre>
+                <p><code>--preset 3 --crf 30 --sharpness 7</code>：</p>
+                <pre><code class="text-smaller language-powershell">
+ffmpeg -i .\SolLevante_yuv420p10le_bt709_3840x2160_24fps_yuv420p10le.mkv -f yuv4mpegpipe -strict -1 - | SvtAv1EncApp -i - --keyint 12s --preset 3 --crf 30 --sharpness 7 -b .\Encoding-SVTAV1-sharpness\SolLevante_yuv420p10le_bt709_sharpness7.ivf
+
+SUMMARY --------------------------------- Channel 1  --------------------------------
+Total Frames		Frame Rate		Byte Count		Bitrate
+        6314		24.00 fps		 880181393		26765.10 kbps
+
+Channel 1
+Average Speed:		4.300 fps
+Total Encoding Time:	1468500 ms
+Total Execution Time:	1469660 ms
+Average Latency:	82979 ms
+Max Latency:		188282 ms
+
+XPSNR average, 6314 frames  y: 37.9283  u: 41.9407  v: 43.0179 (minimum: 37.9283)
+VMAF 4k: 98.614205, VMAF 1080p: 97.442568
+SSIMULACRA2_rs: Mean: 73.56907648, Median: 69.12810867, Std Dev: 17.62359176, 5th Percentile: 48.62165015, 95th Percentile: 99.67355643
+                </code></pre>
                 <p><code>--preset 3 --crf 30 --variance-octile 4 --sharpness 4</code>：</p>
                 <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\SolLevante_yuv420p10le_bt709_3840x2160_24fps_yuv420p10le.mkv -f yuv4mpegpipe -strict -1 - | SvtAv1EncApp -i - --keyint 12s --preset 3 --crf 30 --variance-octile 4 --sharpness 4 -b .\SolLevante_yuv420p10le_bt709_varOct4_sharpness4.ivf
@@ -12013,11 +11890,363 @@ XPSNR average, 6314 frames  y: 37.9356  u: 41.9344  v: 43.0127 (minimum: 37.9356
 VMAF 4k: 98.617526, VMAF 1080p: 97.445262
 SSIMULACRA2_rs: Mean: 73.64555984, Median: 69.16459719, Std Dev: 17.54444722, 5th Percentile: 48.84941258, 95th Percentile: 99.68029509
                 </code></pre>
-                <p><code>--preset 3 --crf 30 --variance-octile 2 --sharpness 4</code>：结果与 VarOct 4 sharpness 4 完全一致</p>
-                <p><code>--preset 3 --crf 30 --variance-octile 2 --sharpness 6</code>：结果与 VarOct 4 sharpness 6 完全一致</p>
+            </div>
+            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（2/8）SVT-AV1 v3.0——Boat</button>
+            <div class="coll-content">
+                <p><code>--preset 3 --crf 30 --sharpness -4</code>：</p>
+                <pre><code class="text-smaller language-powershell">
+ffmpeg -i .\Netflix_Boat_4096x2160_60fps_10bit_420.mkv -f yuv4mpegpipe -pix_fmt yuv420p10le -strict unofficial - | SvtAv1EncApp -i - --keyint 12s --preset 3 --crf 30 --sharpness -4 -b .\Encoding-SVTAV1-sharpness\Netflix_Boat_yuv420p10le_sharpness-4.ivf
+
+SUMMARY --------------------------------- Channel 1  --------------------------------
+Total Frames		Frame Rate		Byte Count		Bitrate
+         300		60.00 fps		  18875392		30200.63 kbps
+
+Channel 1
+Average Speed:		3.393 fps
+Total Encoding Time:	88424 ms
+Total Execution Time:	89908 ms
+Average Latency:	48790 ms
+Max Latency:		78677 ms
+
+XPSNR average, 300 frames  y: 37.7367  u: 41.3634  v: 43.2249 (minimum: 37.7367)
+VMAF 4k: 98.496979, VMAF 1080p: 98.469081
+SSIMULACRA2_rs: Mean: 70.53741946, Median: 70.38764815, Std Dev: 1.41955405, 5th Percentile: 68.47460552, 95th Percentile: 73.02422406
+                </code></pre>
+                <p><code>--preset 3 --crf 30 --sharpness 7</code>：</p>
+                <pre><code class="text-smaller language-powershell">
+ffmpeg -i .\Netflix_Boat_4096x2160_60fps_10bit_420.mkv -f yuv4mpegpipe -pix_fmt yuv420p10le -strict unofficial - | SvtAv1EncApp -i - --keyint 12s --preset 3 --crf 30 --sharpness 7 -b .\Encoding-SVTAV1-sharpness\Netflix_Boat_yuv420p10le_sharpness7.ivf
+
+SUMMARY --------------------------------- Channel 1  --------------------------------
+Total Frames		Frame Rate		Byte Count		Bitrate
+         300		60.00 fps		  22626636		36202.62 kbps
+
+Channel 1
+Average Speed:		3.652 fps
+Total Encoding Time:	82158 ms
+Total Execution Time:	83322 ms
+Average Latency:	45285 ms
+Max Latency:		71822 ms
+
+XPSNR average, 300 frames  y: 37.7489  u: 41.6589  v: 43.6475 (minimum: 37.7489)
+VMAF 4k: 97.978343, VMAF 1080p: 98.109212
+SSIMULACRA2_rs: Mean: 72.03051429, Median: 72.05892614, Std Dev: 1.75385215, 5th Percentile: 69.41311781, 95th Percentile: 74.86018379
+                </code></pre>
+                <p><code>--preset 3 --crf 30 --variance-octile 4 --sharpness 4</code>：</p>
+                <pre><code class="text-smaller language-powershell">
+ffmpeg -i .\Netflix_Boat_4096x2160_60fps_10bit_420.mkv -f yuv4mpegpipe -pix_fmt yuv420p10le -strict unofficial - | SvtAv1EncApp -i - --keyint 12s --preset 3 --crf 30 --variance-octile 4 --sharpness 4 -b .\Netflix_Boat_yuv420p10le_varOct4_sharpness4.ivf
+
+SUMMARY --------------------------------- Channel 1  --------------------------------
+Total Frames		Frame Rate		Byte Count		Bitrate
+         300		60.00 fps		  21382861		34212.58 kbps
+
+Channel 1
+Average Speed:		3.597 fps
+Total Encoding Time:	83410 ms
+Total Execution Time:	84536 ms
+Average Latency:	46079 ms
+Max Latency:		73953 ms
+
+XPSNR average, 300 frames  y: 37.7780  u: 41.6035  v: 43.5482 (minimum: 37.7780)
+VMAF 4k: 98.351882, VMAF 1080p: 98.330377
+SSIMULACRA2_rs: Mean: 72.40393052, Median: 72.42377592, Std Dev: 1.53203186, 5th Percentile: 70.10772502, 95th Percentile: 75.00945373
+                </code></pre>
+                <p><code>--preset 3 --crf 30 --variance-octile 4 --sharpness 6</code>：</p>
+                <pre><code class="text-smaller language-powershell">
+ffmpeg -i .\Netflix_Boat_4096x2160_60fps_10bit_420.mkv -f yuv4mpegpipe -pix_fmt yuv420p10le -strict unofficial - | SvtAv1EncApp -i - --keyint 12s --preset 3 --crf 30 --variance-octile 4 --sharpness 6 -b .\Netflix_Boat_yuv420p10le_varOct4_sharpness6.ivf
+
+SUMMARY --------------------------------- Channel 1  --------------------------------
+Total Frames		Frame Rate		Byte Count		Bitrate
+         300		60.00 fps		  22411999		35859.20 kbps
+
+Channel 1
+Average Speed:		3.666 fps
+Total Encoding Time:	81842 ms
+Total Execution Time:	83012 ms
+Average Latency:	45066 ms
+Max Latency:		72274 ms
+
+XPSNR average, 300 frames  y: 37.7574  u: 41.6517  v: 43.6419 (minimum: 37.7574)
+VMAF 4k: 98.164098, VMAF 1080p: 98.055403
+SSIMULACRA2_rs: Mean: 72.14692563, Median: 72.11854599, Std Dev: 1.72572335, 5th Percentile: 69.59369402, 95th Percentile: 74.93923985
+                </code></pre>
+            </div>
+            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（3/8）SVT-AV1 v3.0——WindAndNature</button>
+            <div class="coll-content">
+                <p><code>--preset 3 --crf 30 --sharpness -4</code>：</p>
+                <pre><code class="text-smaller language-powershell">
+ffmpeg .\Netflix_WindAndNature_4096x2160_60fps_10bit_420.video.mkv -f yuv4mpegpipe -pix_fmt yuv420p10le -strict -1 - | SvtAv1EncApp -i - --keyint 12s --preset 3 --crf 30 --sharpness -4 -b .\WindAndNature_sharpness-4.ivf
+
+SUMMARY --------------------------------- Channel 1  --------------------------------
+Total Frames		Frame Rate		Byte Count		Bitrate
+        1199		60.00 fps		  23161509		9272.33 kbps
+
+Channel 1
+Average Speed:		5.214 fps
+Total Encoding Time:	229978 ms
+Total Execution Time:	231406 ms
+Average Latency:	55746 ms
+Max Latency:		79839 ms
+
+XPSNR average, 1199 frames  y: 36.9318  u: 42.9919  v: 40.7470 (minimum: 36.9318)
+VMAF 4k: 98.381549, VMAF 1080p: 95.514520
+SSIMULACRA2_rs: Mean: 68.95440678, Median: 70.74238004, Std Dev: 3.75860356, 5th Percentile: 62.19728635, 95th Percentile: 73.05469714
+                </code></pre>
+                <p><code>--preset 3 --crf 30 --sharpness 7</code>：</p>
+                <pre><code class="text-smaller language-powershell">
+ffmpeg .\Netflix_WindAndNature_4096x2160_60fps_10bit_420.video.mkv -f yuv4mpegpipe -pix_fmt yuv420p10le -strict -1 - | SvtAv1EncApp -i - --keyint 12s --preset 3 --crf 30 --sharpness 7 -b .\WindAndNature_sharpness7.ivf
+
+SUMMARY --------------------------------- Channel 1  --------------------------------
+Total Frames		Frame Rate		Byte Count		Bitrate
+        1199		60.00 fps		  28381634		11362.12 kbps
+
+Channel 1
+Average Speed:		4.903 fps
+Total Encoding Time:	244538 ms
+Total Execution Time:	245662 ms
+Average Latency:	59378 ms
+Max Latency:		84796 ms
+
+XPSNR average, 1199 frames  y: 36.9136  u: 43.3211  v: 40.9821 (minimum: 36.9136)
+VMAF 4k: 98.348606, VMAF 1080p: 95.461319
+SSIMULACRA2_rs: Mean: 69.55518284, Median: 71.87262372, Std Dev: 4.51632497, 5th Percentile: 61.33852667, 95th Percentile: 74.12504793
+                </code></pre>
+                <p><code>--preset 3 --crf 30 --variance-octile 4 --sharpness 4</code>：</p>
+                <pre><code class="text-smaller language-powershell">
+ffmpeg -i .\Netflix_WindAndNature_4096x2160_60fps_10bit_420.video.mkv -f yuv4mpegpipe -pix_fmt yuv420p10le -strict -1 - | SvtAv1EncApp -i - --keyint 12s --preset 3 --crf 30 --variance-octile 4 --sharpness 4 -b .\WindAndNature_4096x2160_60fps_10bit_yuv420_varOct4_sharpness4.ivf
+
+SUMMARY --------------------------------- Channel 1  --------------------------------
+Total Frames		Frame Rate		Byte Count		Bitrate
+        1199		60.00 fps		  26780649		10721.19 kbps
+
+Channel 1
+Average Speed:		5.089 fps
+Total Encoding Time:	235596 ms
+Total Execution Time:	236980 ms
+Average Latency:	57044 ms
+Max Latency:		81474 ms
+
+XPSNR average, 1199 frames  y: 36.9506  u: 43.2836  v: 40.9497 (minimum: 36.9506)
+VMAF 4k: 98.436272, VMAF 1080p: 95.584718
+SSIMULACRA2_rs: Mean: 69.93547059, Median: 72.02165699, Std Dev: 4.12987469, 5th Percentile: 62.49686317, 95th Percentile: 74.18941581
+                </code></pre>
+                <p><code>--preset 3 --crf 30 --variance-octile 4 --sharpness 6</code>：</p>
+                <pre><code class="text-smaller language-powershell">
+ffmpeg -i .\Netflix_WindAndNature_4096x2160_60fps_10bit_420.video.mkv -f yuv4mpegpipe -pix_fmt yuv420p10le -strict -1 - | SvtAv1EncApp -i - --keyint 12s --preset 3 --crf 30 --variance-octile 4 --sharpness 6 -b .\WindAndNature_4096x2160_60fps_10bit_yuv420_varOct4_sharpness6.ivf
+
+SUMMARY --------------------------------- Channel 1  --------------------------------
+Total Frames		Frame Rate		Byte Count		Bitrate
+        1199		60.00 fps		  28146449		11267.97 kbps
+
+Channel 1
+Average Speed:		5.024 fps
+Total Encoding Time:	238676 ms
+Total Execution Time:	239830 ms
+Average Latency:	57884 ms
+Max Latency:		82151 ms
+
+XPSNR average, 1199 frames  y: 36.9230  u: 43.3215  v: 40.9769 (minimum: 36.9230)
+VMAF 4k: 98.418351, VMAF 1080p: 95.550267
+SSIMULACRA2_rs: Mean: 69.68736029, Median: 71.96413622, Std Dev: 4.43996726, 5th Percentile: 61.62786558, 95th Percentile: 74.19731887
+                </code></pre>
+            </div>
+            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（4/8）SVT-AV1 v3.0——Big-Buck-Bunny</button>
+            <div class="coll-content">
+                <p><code>--preset 3 --crf 30 --sharpness -4</code>：</p>
+                <pre><code class="text-smaller language-powershell">
+ffmpeg .\Big-Buck-Bunny_1920x1080_24fps_8bit_yuv420p.mkv -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --preset 3 --crf 30 --sharpness -4 -b .\Big-Buck-Bunny_1920x1080_24fps_8bit_yuv420_sharpness-4.ivf
+
+SUMMARY --------------------------------- Channel 1  --------------------------------
+Total Frames		Frame Rate		Byte Count		Bitrate
+       14315		24.00 fps		 137597897		1845.53 kbps
+
+Channel 1
+Average Speed:		31.130 fps
+Total Encoding Time:	459842 ms
+Total Execution Time:	460226 ms
+Average Latency:	11038 ms
+Max Latency:		20587 ms
+
+XPSNR average, 14315 frames  y: 41.7481  u: 44.1375  v: 44.7901 (minimum: 41.7481)
+VMAF 4k: 99.409823, VMAF 1080p: 97.674849
+SSIMULACRA2_rs: Mean: 78.87837612, Median: 78.92618400, Std Dev: 5.62310767, 5th Percentile: 69.82498734, 95th Percentile: 87.16717944
+                </code></pre>
+                <p><code>--preset 3 --crf 30 --sharpness 7</code>：</p>
+                <pre><code class="text-smaller language-powershell">
+ffmpeg .\Big-Buck-Bunny_1920x1080_24fps_8bit_yuv420p.mkv -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --preset 3 --crf 30 --sharpness 7 -b .\Big-Buck-Bunny_1920x1080_24fps_8bit_yuv420_sharpness7.ivf
+
+SUMMARY --------------------------------- Channel 1  --------------------------------
+Total Frames		Frame Rate		Byte Count		Bitrate
+       14315		24.00 fps		 167281439		2243.66 kbps
+
+Channel 1
+Average Speed:		31.182 fps
+Total Encoding Time:	459082 ms
+Total Execution Time:	459442 ms
+Average Latency:	11021 ms
+Max Latency:		20700 ms
+
+XPSNR average, 14315 frames  y: 41.9934  u: 44.6798  v: 45.3542 (minimum: 41.9934)
+VMAF 4k: 99.442550, VMAF 1080p: 97.718648
+SSIMULACRA2_rs: Mean: 80.10027427, Median: 80.33368144, Std Dev: 5.28446460, 5th Percentile: 71.22452404, 95th Percentile: 87.64426182
+                </code></pre>
+                <p><code>--preset 3 --crf 30 --variance-octile 4 --sharpness 4</code>：</p>
+                <pre><code class="text-smaller language-powershell">
+ffmpeg -i .\Big-Buck-Bunny_1920x1080_24fps_8bit_yuv420p.mkv -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --preset 3 --crf 30 --variance-octile 4 --sharpness 4 -b .\Big-Buck-Bunny_1920x1080_24fps_8bit_yuv420_varOct4_sharpness4.ivf
+
+SUMMARY --------------------------------- Channel 1  --------------------------------
+Total Frames		Frame Rate		Byte Count		Bitrate
+       14315		24.00 fps		 158976017		2132.27 kbps
+
+Channel 1
+Average Speed:		31.819 fps
+Total Encoding Time:	449884 ms
+Total Execution Time:	450232 ms
+Average Latency:	10787 ms
+Max Latency:		20301 ms
+
+XPSNR average, 14315 frames  y: 41.9978  u: 44.6105  v: 45.2615 (minimum: 41.9978)
+VMAF 4k: 99.473124, VMAF 1080p: 97.763646
+SSIMULACRA2_rs: Mean: 80.16393211, Median: 80.30066873, Std Dev: 5.16796143, 5th Percentile: 71.66992501, 95th Percentile: 87.64317683
+                </code></pre>
+                <p><code>--preset 3 --crf 30 --variance-octile 4 --sharpness 6</code>：</p>
+                <pre><code class="text-smaller language-powershell">
+ffmpeg -i .\Big-Buck-Bunny_1920x1080_24fps_8bit_yuv420p.mkv -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --preset 3 --crf 30 --variance-octile 4 --sharpness 6 -b .\Big-Buck-Bunny_1920x1080_24fps_8bit_yuv420_varOct4_sharpness6.ivf
+
+SUMMARY --------------------------------- Channel 1  --------------------------------
+Total Frames		Frame Rate		Byte Count		Bitrate
+       14315		24.00 fps		 166249634		2229.82 kbps
+
+Channel 1
+Average Speed:		31.849 fps
+Total Encoding Time:	449472 ms
+Total Execution Time:	449816 ms
+Average Latency:	10789 ms
+Max Latency:		20106 ms
+
+XPSNR average, 14315 frames  y: 42.0018  u: 44.6737  v: 45.3419 (minimum: 42.0018)
+VMAF 4k: 99.449854, VMAF 1080p: 97.728519
+SSIMULACRA2_rs: Mean: 80.15161320, Median: 80.37899632, Std Dev: 5.24311288, 5th Percentile: 71.41724127, 95th Percentile: 87.70318448
+                </code></pre>
+            </div>
+            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（5/8）SVT-AV1 v3.0——ElephantsDream</button>
+            <div class="coll-content">
+                <p><code>--preset 3 --crf 30 --sharpness -4</code>：</p>
+                <pre><code class="text-smaller language-powershell">
+ffmpeg .\Elephants-Dream_1920x1080_24fps_8bit_yuv420.mkv -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --preset 3 --crf 30 --sharpness -4 -b .\Elephants-Dream_sharpness-4.ivf
+
+SUMMARY --------------------------------- Channel 1  --------------------------------
+Total Frames		Frame Rate		Byte Count		Bitrate
+       15691		24.00 fps		 184297737		2255.12 kbps
+
+Channel 1
+Average Speed:		27.179 fps
+Total Encoding Time:	577320 ms
+Total Execution Time:	577676 ms
+Average Latency:	12956 ms
+Max Latency:		35616 ms
+
+XPSNR average, 15691 frames  y: 42.4261  u: 47.2401  v: 46.9269 (minimum: 42.4261)
+VMAF 4k: 99.198864, VMAF 1080p: 97.743535
+SSIMULACRA2_rs: Mean: 77.98601451, Median: 77.66520187, Std Dev: 9.04238615, 5th Percentile: 63.30624455, 95th Percentile: 94.50297387
+                </code></pre>
+                <p><code>--preset 3 --crf 30 --sharpness 7</code>：</p>
+                <pre><code class="text-smaller language-powershell">
+ffmpeg .\Elephants-Dream_1920x1080_24fps_8bit_yuv420.mkv -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --preset 3 --crf 30 --sharpness 7 -b .\Elephants-Dream_sharpness7.ivf
+
+SUMMARY --------------------------------- Channel 1  --------------------------------
+Total Frames		Frame Rate		Byte Count		Bitrate
+       15691		24.00 fps		 224325880		2744.92 kbps
+
+Channel 1
+Average Speed:		26.993 fps
+Total Encoding Time:	581310 ms
+Total Execution Time:	581656 ms
+Average Latency:	13052 ms
+Max Latency:		35350 ms
+
+XPSNR average, 15691 frames  y: 42.7494  u: 47.8512  v: 47.5722 (minimum: 42.7494)
+VMAF 4k: 99.243406, VMAF 1080p: 97.801530
+SSIMULACRA2_rs: Mean: 79.37981615, Median: 79.12843803, Std Dev: 8.43298267, 5th Percentile: 65.60445560, 95th Percentile: 94.55790120
+                </code></pre>
+                <p><code>--preset 3 --crf 30 --variance-octile 4 --sharpness 4</code>：</p>
+                <pre><code class="text-smaller language-powershell">
+ffmpeg -i .\Elephants-Dream_1920x1080_24fps_8bit_yuv420.mkv -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --preset 3 --crf 30 --variance-octile 4 --sharpness 4 -b .\Elephants-Dream_1920x1080_24fps_8bit_yuv420_varOct4_sharpness4.ivf
+
+SUMMARY --------------------------------- Channel 1  --------------------------------
+Total Frames		Frame Rate		Byte Count		Bitrate
+       15691		24.00 fps		 212230205		2596.92 kbps
+
+Channel 1
+Average Speed:		27.659 fps
+Total Encoding Time:	567304 ms
+Total Execution Time:	567636 ms
+Average Latency:	12716 ms
+Max Latency:		34960 ms
+
+XPSNR average, 15691 frames  y: 42.7320  u: 47.7134  v: 47.4411 (minimum: 42.7320)
+VMAF 4k: 99.280471, VMAF 1080p: 97.853006
+SSIMULACRA2_rs: Mean: 79.39059832, Median: 79.09108544, Std Dev: 8.35808579, 5th Percentile: 65.82060219, 95th Percentile: 94.60718743
+                </code></pre>
+                <p><code>--preset 3 --crf 30 --variance-octile 4 --sharpness 6</code>：</p>
+                <pre><code class="text-smaller language-powershell">
+ffmpeg -i .\Elephants-Dream_1920x1080_24fps_8bit_yuv420.mkv -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --preset 3 --crf 30 --variance-octile 4 --sharpness 6 -b .\Elephants-Dream_1920x1080_24fps_8bit_yuv420_varOct4_sharpness6.ivf
+
+SUMMARY --------------------------------- Channel 1  --------------------------------
+Total Frames		Frame Rate		Byte Count		Bitrate
+       15691		24.00 fps		 222594799		2723.74 kbps
+
+Channel 1
+Average Speed:		27.449 fps
+Total Encoding Time:	571638 ms
+Total Execution Time:	572058 ms
+Average Latency:	12829 ms
+Max Latency:		34474 ms
+
+XPSNR average, 15691 frames  y: 42.7557  u: 47.8355  v: 47.5582 (minimum: 42.7557)
+VMAF 4k: 99.249226, VMAF 1080p: 97.810048
+SSIMULACRA2_rs: Mean: 79.43103579, Median: 79.17019473, Std Dev: 8.38901830, 5th Percentile: 65.75786270, 95th Percentile: 94.64559855
+                </code></pre>
             </div>
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（6/8）SVT-AV1 v3.0——MAINDRAGON-S</button>
             <div class="coll-content">
+                <p><code>--preset 3 --crf 30 --sharpness -4</code>：</p>
+                <pre><code class="text-smaller language-powershell">
+ffmpeg .\MAIDRAGON-S-Vol.3-1920x1080-23.976fps-8bit-420.m2ts -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --preset 3 --crf 30 --sharpness -4 -b .\MAIDRAGON-S-Vol.3-1920x1080-23.976fps_8bit_yuv420_sharpness-4.ivf
+
+SUMMARY --------------------------------- Channel 1  --------------------------------
+Total Frames		Frame Rate		Byte Count		Bitrate
+       34080		23.98 fps		 310728426		1748.83 kbps
+
+Channel 1
+Average Speed:		34.131 fps
+Total Encoding Time:	998500 ms
+Total Execution Time:	998900 ms
+Average Latency:	10038 ms
+Max Latency:		23203 ms
+
+XPSNR average, 34080 frames  y: 43.2197  u: 44.2228  v: 44.3593 (minimum: 43.2197)
+VMAF 4k: 99.542126, VMAF 1080p: 96.940731
+SSIMULACRA2_rs: Mean: 80.75135291, Median: 83.23015219, Std Dev: 8.09634825, 5th Percentile: 62.76311131, 95th Percentile: 88.25091879
+                </code></pre>
+                <p><code>--preset 3 --crf 30 --sharpness 7</code>：</p>
+                <pre><code class="text-smaller language-powershell">
+ffmpeg .\MAIDRAGON-S-Vol.3-1920x1080-23.976fps-8bit-420.m2ts -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --preset 3 --crf 30 --sharpness 7 -b .\MAIDRAGON-S-Vol.3-1920x1080-23.976fps_8bit_yuv420_sharpness7.ivf
+
+SUMMARY --------------------------------- Channel 1  --------------------------------
+Total Frames		Frame Rate		Byte Count		Bitrate
+       34080		23.98 fps		 372159167		2094.58 kbps
+
+Channel 1
+Average Speed:		34.293 fps
+Total Encoding Time:	993778 ms
+Total Execution Time:	994198 ms
+Average Latency:	9982 ms
+Max Latency:		23508 ms
+
+XPSNR average, 34080 frames  y: 43.3979  u: 44.5454  v: 44.6909  (minimum: 43.3979)
+VMAF 4k: 99.556616, VMAF 1080p: 96.964112
+SSIMULACRA2_rs: Mean: 81.54915159, Median: 83.93295163, Std Dev: 8.01001192, 5th Percentile: 63.38714191, 95th Percentile: 89.01016059
+                </code></pre>
                 <p><code>--preset 3 --crf 30 --variance-octile 4 --sharpness 4</code>：</p>
                 <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\MAIDRAGON-S-Vol.3-1920x1080-23.976fps-8bit-420.m2ts -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --preset 3 --crf 30 --variance-octile 4 --sharpness 4 -b .\MAIDRAGON-S-Vol.3-1920x1080-23.976fps_8bit_yuv420_varOct4_sharpness4.ivf
@@ -12056,11 +12285,47 @@ XPSNR average, 34080 frames  y: 43.4038  u: 44.5455  v: 44.6917 (minimum: 43.403
 VMAF 4k: 99.561552, VMAF 1080p: 96.971028
 SSIMULACRA2_rs: Mean: 81.58295017, Median: 83.93074174, Std Dev: 7.93248959, 5th Percentile: 63.63556010, 95th Percentile: 89.00044052
                 </code></pre>
-                <p><code>--preset 3 --crf 30 --variance-octile 2 --sharpness 4</code>：结果与 VarOct 4 sharpness 4 完全一致</p>
-                <p><code>--preset 3 --crf 30 --variance-octile 2 --sharpness 6</code>：结果与 VarOct 4 sharpness 6 完全一致</p>
             </div>
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（7/8）SVT-AV1 v3.0——HYOUKA</button>
             <div class="coll-content">
+                <p><code>--preset 3 --crf 30 --sharpness -4</code>：</p>
+                <pre><code class="text-smaller language-powershell">
+ffmpeg .\HYOUKA-Vol.4-1920x1080-23.976fps-8bit-420.m2ts -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --preset 3 --crf 30 --sharpness -4 -b .\HYOUKA_8bit_yuv420_sharpness-4.ivf
+
+SUMMARY --------------------------------- Channel 1  --------------------------------
+Total Frames		Frame Rate		Byte Count		Bitrate
+       36996		23.98 fps		 163837972		849.43 kbps
+
+Channel 1
+Average Speed:		43.312 fps
+Total Encoding Time:	854176 ms
+Total Execution Time:	854518 ms
+Average Latency:	7868 ms
+Max Latency:		20980 ms
+
+XPSNR average, 36996 frames  y: 41.3422  u: 43.9899  v: 44.1144 (minimum: 41.3422)
+VMAF 4k: 99.417102, VMAF 1080p: 96.457463
+SSIMULACRA2_rs: Mean: 82.03956196, Median: 83.02276494, Std Dev: 5.22218128, 5th Percentile: 72.70159427, 95th Percentile: 87.43146630
+                </code></pre>
+                <p><code>--preset 3 --crf 30 --sharpness 7</code>：</p>
+                <pre><code class="text-smaller language-powershell">
+ffmpeg .\HYOUKA-Vol.4-1920x1080-23.976fps-8bit-420.m2ts -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --preset 3 --crf 30 --sharpness 7 -b .\HYOUKA_8bit_yuv420_sharpness7.ivf
+
+SUMMARY --------------------------------- Channel 1  --------------------------------
+Total Frames		Frame Rate		Byte Count		Bitrate
+       36996		23.98 fps		 199448550		1034.05 kbps
+
+Channel 1
+Average Speed:		42.666 fps
+Total Encoding Time:	867110 ms
+Total Execution Time:	867462 ms
+Average Latency:	7994 ms
+Max Latency:		22343 ms
+
+XPSNR average, 36996 frames  y: 41.4302  u: 44.1618  v: 44.2773 (minimum: 41.4302)
+VMAF 4k: 99.476968, VMAF 1080p: 96.714112
+SSIMULACRA2_rs: Mean: 82.69596542, Median: 83.53691322, Std Dev: 4.84536568, 5th Percentile: 74.13583208, 95th Percentile: 87.73552867
+                </code></pre>
                 <p><code>--preset 3 --crf 30 --variance-octile 4 --sharpness 4</code>：</p>
                 <pre><code class="text-smaller language-powershell">
 ffmpeg -i .\HYOUKA-Vol.4-1920x1080-23.976fps-8bit-420.m2ts -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --preset 3 --crf 30 --variance-octile 4 --sharpness 4 -b .\ICECREAM_8bit_yuv420_varOct4_sharpness4.ivf
@@ -12099,9 +12364,8 @@ XPSNR average, 36996 frames  y: 41.4331  u: 44.1651  v: 44.2771 (minimum: 41.433
 VMAF 4k: 99.468020, VMAF 1080p: 96.531517
 SSIMULACRA2_rs: Mean: 82.71404144, Median: 83.55282859, Std Dev: 4.82887766, 5th Percentile: 74.20108975, 95th Percentile: 87.75174639
                 </code></pre>
-                <p><code>--preset 3 --crf 30 --variance-octile 2 --sharpness 4</code>：结果与 VarOct 4 sharpness 4 完全一致</p>
-                <p><code>--preset 3 --crf 30 --variance-octile 2 --sharpness 6</code>：结果与 VarOct 4 sharpness 6 完全一致</p>
             </div>
+            <p>简化说明：（<code>--preset 3 --crf 30</code>）<code>--sharpness 4</code>、<code>--variance-octile 2 --sharpness 4</code>、<code>--variance-octile 4 --sharpness 4</code> 于所有视频体积、跑分结果完全一致；<code>--sharpness 6</code>、<code>--variance-octile 2 --sharpness 6</code>、<code>--variance-octile 4 --sharpness 6</code> 于所有视频体积、跑分结果完全一致，因此判断单独开启 VarOct 无效，且不再表中展示 VarOct 结果。</p>
             <div class="overflow-auto mt-3"><table class="table-center text-smaller two-decimals">
                 <thead>
                     <tr>
@@ -12148,32 +12412,18 @@ SSIMULACRA2_rs: Mean: 82.71404144, Median: 83.55282859, Std Dev: 4.82887766, 5th
                         <td class="align-items-center t-light-gray" colspan="12"><b>Netflix Boat</b></td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">CRF30 PSNR P3 VarOct4 Sharp4</td>
-                        <td class="px-1">3.597</td>
-                        <td class="px-1">31292.89</td>
-                        <td class="px-1 ace" style="color:#C65911">37.7780</td>
-                        <td class="px-1" style="color:#FFC000">41.6035</td>
-                        <td class="px-1" style="color:#92D050">43.5482</td>
-                        <td class="px-1" style="color:#31D87D">98.351882</td>
-                        <td class="px-1" style="color:#31D87D">98.330377</td>
-                        <td class="px-1 ace" style="color:#FFC000">72.40393052</td>
-                        <td class="px-1 ace" style="color:#FFC000">72.42377592</td>
-                        <td class="px-1 ace" style="color:#C65911">70.10772502</td>
-                        <td class="px-1 ace" style="color:#FFC000">75.00945373</td>
-                    </tr>
-                    <tr class="border-bottom">
-                        <td class="px-1">CRF30 PSNR P3 VarOct4 Sharp6</td>
-                        <td class="px-1 ace">3.666</td>
-                        <td class="px-1">35859.2</td>
-                        <td class="px-1" style="color:#C65911">37.7574</td>
-                        <td class="px-1 ace" style="color:#FFC000">41.6517</td>
-                        <td class="px-1 ace" style="color:#92D050">43.6419</td>
-                        <td class="px-1" style="color:#31D87D">98.164098</td>
-                        <td class="px-1" style="color:#31D87D">98.055403</td>
-                        <td class="px-1" style="color:#FFC000">72.14692563</td>
-                        <td class="px-1" style="color:#FFC000">72.11854599</td>
-                        <td class="px-1" style="color:#C65911">69.59369402</td>
-                        <td class="px-1" style="color:#FFC000">74.93923985</td>
+                        <td class="px-1">CRF30 PSNR P3 Sharp-4</td>
+                        <td class="px-1">3.393</td>
+                        <td class="px-1">30200.63</td>
+                        <td class="px-1" style="color:#C65911">37.7367</td>
+                        <td class="px-1" style="color:#FFC000">41.3634</td>
+                        <td class="px-1" style="color:#92D050">43.2249</td>
+                        <td class="px-1" style="color:#31D87D">98.496979</td>
+                        <td class="px-1" style="color:#31D87D">98.469081</td>
+                        <td class="px-1" style="color:#FFC000">70.53741946</td>
+                        <td class="px-1" style="color:#FFC000">70.38764815</td>
+                        <td class="px-1" style="color:#C65911">68.47460552</td>
+                        <td class="px-1" style="color:#FFC000">73.02422406</td>
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">~CRF30 PSNR QM0 P3</td>
@@ -12203,36 +12453,64 @@ SSIMULACRA2_rs: Mean: 82.71404144, Median: 83.55282859, Std Dev: 4.82887766, 5th
                         <td class="px-1" style="color:#C65911">68.33790856</td>
                         <td class="px-1" style="color:#FFC000">73.00295684</td>
                     </tr>
+                    <tr class="border-bottom">
+                        <td class="px-1">CRF30 PSNR P3 Sharp4</td>
+                        <td class="px-1">3.597</td>
+                        <td class="px-1">31292.89</td>
+                        <td class="px-1 ace" style="color:#C65911">37.7780</td>
+                        <td class="px-1" style="color:#FFC000">41.6035</td>
+                        <td class="px-1" style="color:#92D050">43.5482</td>
+                        <td class="px-1" style="color:#31D87D">98.351882</td>
+                        <td class="px-1" style="color:#31D87D">98.330377</td>
+                        <td class="px-1 ace" style="color:#FFC000">72.40393052</td>
+                        <td class="px-1 ace" style="color:#FFC000">72.42377592</td>
+                        <td class="px-1 ace" style="color:#C65911">70.10772502</td>
+                        <td class="px-1 ace" style="color:#FFC000">75.00945373</td>
+                    </tr>
+                    <tr class="border-bottom">
+                        <td class="px-1">CRF30 PSNR P3 Sharp6</td>
+                        <td class="px-1 ace">3.666</td>
+                        <td class="px-1">35859.2</td>
+                        <td class="px-1" style="color:#C65911">37.7574</td>
+                        <td class="px-1" style="color:#FFC000">41.6517</td>
+                        <td class="px-1" style="color:#92D050">43.6419</td>
+                        <td class="px-1" style="color:#31D87D">98.164098</td>
+                        <td class="px-1" style="color:#31D87D">98.055403</td>
+                        <td class="px-1" style="color:#FFC000">72.14692563</td>
+                        <td class="px-1" style="color:#FFC000">72.11854599</td>
+                        <td class="px-1" style="color:#C65911">69.59369402</td>
+                        <td class="px-1" style="color:#FFC000">74.93923985</td>
+                    </tr>
+                    <tr class="border-bottom">
+                        <td class="px-1">CRF30 PSNR P3 Sharp7</td>
+                        <td class="px-1">3.535</td>
+                        <td class="px-1">36202.62</td>
+                        <td class="px-1" style="color:#C65911">37.7489</td>
+                        <td class="px-1 ace" style="color:#FFC000">41.6589</td>
+                        <td class="px-1 ace" style="color:#92D050">43.6475</td>
+                        <td class="px-1" style="color:#31D87D">97.978343</td>
+                        <td class="px-1" style="color:#31D87D">98.109212</td>
+                        <td class="px-1" style="color:#FFC000">72.03051429</td>
+                        <td class="px-1" style="color:#FFC000">72.05892614</td>
+                        <td class="px-1" style="color:#C65911">69.41311781</td>
+                        <td class="px-1" style="color:#FFC000">74.86018379</td>
+                    </tr>
                     <tr class="text-smaller">
                         <td class="align-items-center t-light-gray" colspan="12"><b>Netflix WindAndNature</b></td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">CRF30 PSNR VarOct4 Sharp4</td>
-                        <td class="px-1">5.089</td>
-                        <td class="px-1">10721.19</td>
-                        <td class="px-1 ace" style="color:#C65911">36.9506</td>
-                        <td class="px-1" style="color:#92D050">43.2836</td>
-                        <td class="px-1" style="color:#FFC000">40.9497</td>
-                        <td class="px-1 ace" style="color:#31D87D">98.436272</td>
-                        <td class="px-1 ace" style="color:#31D87D">95.584718</td>
-                        <td class="px-1 ace" style="color:#C65911">69.93547059</td>
-                        <td class="px-1 ace" style="color:#FFC000">72.02165699</td>
-                        <td class="px-1 ace" style="color:#C65911">62.49686317</td>
-                        <td class="px-1" style="color:#FFC000">74.18941581</td>
-                    </tr>
-                    <tr class="border-bottom">
-                        <td class="px-1">CRF30 PSNR VarOct4 Sharp6</td>
-                        <td class="px-1">5.024</td>
-                        <td class="px-1">11267.97</td>
-                        <td class="px-1" style="color:#C65911">36.9230</td>
-                        <td class="px-1 ace" style="color:#92D050">43.3215</td>
-                        <td class="px-1 ace" style="color:#FFC000">40.9769</td>
-                        <td class="px-1" style="color:#31D87D">98.418351</td>
-                        <td class="px-1" style="color:#31D87D">95.550267</td>
-                        <td class="px-1" style="color:#C65911">69.68736029</td>
-                        <td class="px-1" style="color:#FFC000">71.96413622</td>
-                        <td class="px-1" style="color:#C65911">61.62786558</td>
-                        <td class="px-1 ace" style="color:#FFC000">74.19731887</td>
+                        <td class="px-1">CRF30 PSNR P3 Sharp-4</td>
+                        <td class="px-1">5.214</td>
+                        <td class="px-1">9272.33</td>
+                        <td class="px-1" style="color:#C65911">36.9318</td>
+                        <td class="px-1" style="color:#92D050">42.9919</td>
+                        <td class="px-1" style="color:#FFC000">40.747</td>
+                        <td class="px-1" style="color:#31D87D">98.381549</td>
+                        <td class="px-1" style="color:#31D87D">95.514520</td>
+                        <td class="px-1" style="color:#C65911">68.95440678</td>
+                        <td class="px-1" style="color:#FFC000">70.74238004</td>
+                        <td class="px-1" style="color:#C65911">62.19728635</td>
+                        <td class="px-1" style="color:#FFC000">73.05469714</td>
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">~CRF30 PSNR QM0 P3</td>
@@ -12262,36 +12540,64 @@ SSIMULACRA2_rs: Mean: 82.71404144, Median: 83.55282859, Std Dev: 4.82887766, 5th
                         <td class="px-1" style="color:#C65911">61.63058503</td>
                         <td class="px-1" style="color:#FFC000">73.41046502</td>
                     </tr>
+                    <tr class="border-bottom">
+                        <td class="px-1">CRF30 PSNR P3 Sharp4</td>
+                        <td class="px-1">5.089</td>
+                        <td class="px-1">10721.19</td>
+                        <td class="px-1 ace" style="color:#C65911">36.9506</td>
+                        <td class="px-1" style="color:#92D050">43.2836</td>
+                        <td class="px-1" style="color:#FFC000">40.9497</td>
+                        <td class="px-1 ace" style="color:#31D87D">98.436272</td>
+                        <td class="px-1 ace" style="color:#31D87D">95.584718</td>
+                        <td class="px-1 ace" style="color:#C65911">69.93547059</td>
+                        <td class="px-1 ace" style="color:#FFC000">72.02165699</td>
+                        <td class="px-1 ace" style="color:#C65911">62.49686317</td>
+                        <td class="px-1" style="color:#FFC000">74.18941581</td>
+                    </tr>
+                    <tr class="border-bottom">
+                        <td class="px-1">CRF30 PSNR P3 Sharp6</td>
+                        <td class="px-1">5.024</td>
+                        <td class="px-1">11267.97</td>
+                        <td class="px-1" style="color:#C65911">36.9230</td>
+                        <td class="px-1 ace" style="color:#92D050">43.3215</td>
+                        <td class="px-1" style="color:#FFC000">40.9769</td>
+                        <td class="px-1" style="color:#31D87D">98.418351</td>
+                        <td class="px-1" style="color:#31D87D">95.550267</td>
+                        <td class="px-1" style="color:#C65911">69.68736029</td>
+                        <td class="px-1" style="color:#FFC000">71.96413622</td>
+                        <td class="px-1" style="color:#C65911">61.62786558</td>
+                        <td class="px-1 ace" style="color:#FFC000">74.19731887</td>
+                    </tr>
+                    <tr class="border-bottom">
+                        <td class="px-1">CRF30 PSNR P3 Sharp7</td>
+                        <td class="px-1">4.903</td>
+                        <td class="px-1">11362.12</td>
+                        <td class="px-1" style="color:#C65911">36.9136</td>
+                        <td class="px-1" style="color:#92D050">43.3211</td>
+                        <td class="px-1 ace" style="color:#FFC000">40.9821</td>
+                        <td class="px-1" style="color:#31D87D">98.348606</td>
+                        <td class="px-1" style="color:#31D87D">95.461319</td>
+                        <td class="px-1" style="color:#C65911">69.55518284</td>
+                        <td class="px-1" style="color:#FFC000">71.87262372</td>
+                        <td class="px-1" style="color:#C65911">61.33852667</td>
+                        <td class="px-1" style="color:#FFC000">74.12504793</td>
+                    </tr>
                     <tr class="text-smaller">
                         <td class="align-items-center t-light-gray" colspan="12"><b>Blender Foundation BigBuckBunny</b></td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">CRF30 PSNR VarOct4 Sharp4</td>
-                        <td class="px-1">31.819</td>
-                        <td class="px-1">2132.27</td>
-                        <td class="px-1" style="color:#FFC000">41.9978</td>
-                        <td class="px-1" style="color:#92D050">44.6105</td>
-                        <td class="px-1" style="color:#31D87D">45.2615</td>
-                        <td class="px-1 ace" style="color:#31D87D">99.473124</td>
-                        <td class="px-1 ace" style="color:#31D87D">97.763646</td>
-                        <td class="px-1 ace" style="color:#92D050">80.16393211</td>
-                        <td class="px-1" style="color:#92D050">80.30066873</td>
-                        <td class="px-1 ace" style="color:#C65911">71.66992501</td>
-                        <td class="px-1" style="color:#92D050">87.64317683</td>
-                    </tr>
-                    <tr class="border-bottom">
-                        <td class="px-1">CRF30 PSNR VarOct4 Sharp6</td>
-                        <td class="px-1">31.849</td>
-                        <td class="px-1">2229.82</td>
-                        <td class="px-1 ace" style="color:#92D050">42.0018</td>
-                        <td class="px-1 ace" style="color:#92D050">44.6737</td>
-                        <td class="px-1 ace" style="color:#31D87D">45.3419</td>
-                        <td class="px-1" style="color:#31D87D">99.449854</td>
-                        <td class="px-1" style="color:#31D87D">97.728519</td>
-                        <td class="px-1" style="color:#92D050">80.15161320</td>
-                        <td class="px-1 ace" style="color:#92D050">80.37899632</td>
-                        <td class="px-1" style="color:#FFC000">71.41724127</td>
-                        <td class="px-1 ace" style="color:#92D050">87.70318448</td>
+                        <td class="px-1">CRF30 PSNR P3 Sharp-4</td>
+                        <td class="px-1">31.13</td>
+                        <td class="px-1">1845.53</td>
+                        <td class="px-1" style="color:#FFC000">41.7481</td>
+                        <td class="px-1" style="color:#92D050">44.1375</td>
+                        <td class="px-1" style="color:#92D050">44.7901</td>
+                        <td class="px-1" style="color:#31D87D">99.409823</td>
+                        <td class="px-1" style="color:#31D87D">97.674849</td>
+                        <td class="px-1" style="color:#FFC000">78.87837612</td>
+                        <td class="px-1" style="color:#FFC000">78.92618400</td>
+                        <td class="px-1" style="color:#C65911">69.82498734</td>
+                        <td class="px-1" style="color:#92D050">87.16717944</td>
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">~CRF30 PSNR QM0 P3</td>
@@ -12321,36 +12627,64 @@ SSIMULACRA2_rs: Mean: 82.71404144, Median: 83.55282859, Std Dev: 4.82887766, 5th
                         <td class="px-1" style="color:#FFC000">70.15623321</td>
                         <td class="px-1" style="color:#92D050">87.64869908</td>
                     </tr>
+                    <tr class="border-bottom">
+                        <td class="px-1">CRF30 PSNR P3 Sharp4</td>
+                        <td class="px-1">31.819</td>
+                        <td class="px-1">2132.27</td>
+                        <td class="px-1" style="color:#FFC000">41.9978</td>
+                        <td class="px-1" style="color:#92D050">44.6105</td>
+                        <td class="px-1" style="color:#31D87D">45.2615</td>
+                        <td class="px-1 ace" style="color:#31D87D">99.473124</td>
+                        <td class="px-1 ace" style="color:#31D87D">97.763646</td>
+                        <td class="px-1 ace" style="color:#92D050">80.16393211</td>
+                        <td class="px-1" style="color:#92D050">80.30066873</td>
+                        <td class="px-1 ace" style="color:#FFC000">71.66992501</td>
+                        <td class="px-1" style="color:#92D050">87.64317683</td>
+                    </tr>
+                    <tr class="border-bottom">
+                        <td class="px-1">CRF30 PSNR P3 Sharp6</td>
+                        <td class="px-1">31.849</td>
+                        <td class="px-1">2229.82</td>
+                        <td class="px-1 ace" style="color:#92D050">42.0018</td>
+                        <td class="px-1" style="color:#92D050">44.6737</td>
+                        <td class="px-1" style="color:#31D87D">45.3419</td>
+                        <td class="px-1" style="color:#31D87D">99.449854</td>
+                        <td class="px-1" style="color:#31D87D">97.728519</td>
+                        <td class="px-1" style="color:#92D050">80.15161320</td>
+                        <td class="px-1 ace" style="color:#92D050">80.37899632</td>
+                        <td class="px-1" style="color:#FFC000">71.41724127</td>
+                        <td class="px-1 ace" style="color:#92D050">87.70318448</td>
+                    </tr>
+                    <tr class="border-bottom">
+                        <td class="px-1">CRF30 PSNR P3 Sharp7</td>
+                        <td class="px-1">31.182</td>
+                        <td class="px-1">2243.66</td>
+                        <td class="px-1" style="color:#FFC000">41.9934</td>
+                        <td class="px-1 ace" style="color:#92D050">44.6798</td>
+                        <td class="px-1 ace" style="color:#31D87D">45.3542</td>
+                        <td class="px-1" style="color:#31D87D">99.442550</td>
+                        <td class="px-1" style="color:#31D87D">97.718648</td>
+                        <td class="px-1" style="color:#92D050">80.10027427</td>
+                        <td class="px-1" style="color:#92D050">80.33368144</td>
+                        <td class="px-1" style="color:#FFC000">71.22452404</td>
+                        <td class="px-1" style="color:#92D050">87.64426182</td>
+                    </tr>
                     <tr class="text-smaller">
                         <td class="align-items-center t-light-gray" colspan="12"><b>Blender Foundation ElephantsDream</b></td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">CRF30 PSNR VarOct4 Sharp4</td>
-                        <td class="px-1">27.659</td>
-                        <td class="px-1">2596.92</td>
-                        <td class="px-1" style="color:#92D050">42.7320</td>
-                        <td class="px-1" style="color:#31D87D">47.7134</td>
-                        <td class="px-1" style="color:#31D87D">47.4411</td>
-                        <td class="px-1 ace" style="color:#31D87D">99.280471</td>
-                        <td class="px-1 ace" style="color:#31D87D">97.853006</td>
-                        <td class="px-1" style="color:#FFC000">79.39059832</td>
-                        <td class="px-1" style="color:#FFC000">79.09108544</td>
-                        <td class="px-1 ace" style="color:#C65911">65.82060219</td>
-                        <td class="px-1" style="color:#92D050">94.60718743</td>
-                    </tr>
-                    <tr class="border-bottom">
-                        <td class="px-1">CRF30 PSNR VarOct4 Sharp6</td>
-                        <td class="px-1">27.449</td>
-                        <td class="px-1">2723.74</td>
-                        <td class="px-1 ace" style="color:#92D050">42.7557</td>
-                        <td class="px-1 ace" style="color:#31D87D">47.8355</td>
-                        <td class="px-1 ace" style="color:#31D87D">47.5582</td>
-                        <td class="px-1" style="color:#31D87D">99.249226</td>
-                        <td class="px-1" style="color:#31D87D">97.810048</td>
-                        <td class="px-1 ace" style="color:#FFC000">79.43103579</td>
-                        <td class="px-1 ace" style="color:#FFC000">79.17019473</td>
-                        <td class="px-1" style="color:#C65911">65.75786270</td>
-                        <td class="px-1 ace" style="color:#92D050">94.64559855</td>
+                        <td class="px-1">CRF30 PSNR P3 Sharp-4</td>
+                        <td class="px-1">27.179</td>
+                        <td class="px-1">2255.12</td>
+                        <td class="px-1" style="color:#92D050">42.4261</td>
+                        <td class="px-1" style="color:#31D87D">47.2401</td>
+                        <td class="px-1" style="color:#31D87D">46.9269</td>
+                        <td class="px-1" style="color:#31D87D">99.198864</td>
+                        <td class="px-1" style="color:#31D87D">97.743535</td>
+                        <td class="px-1" style="color:#FFC000">77.98601451</td>
+                        <td class="px-1" style="color:#FFC000">77.66520187</td>
+                        <td class="px-1" style="color:#C65911">63.30624455</td>
+                        <td class="px-1" style="color:#31D87D">94.50297387</td>
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">~CRF30 PSNR QM0 P3</td>
@@ -12368,7 +12702,7 @@ SSIMULACRA2_rs: Mean: 82.71404144, Median: 83.55282859, Std Dev: 4.82887766, 5th
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">~CRF30 VQ P3</td>
-                        <td class="px-1">28.319</td>
+                        <td class="px-1 ace">28.319</td>
                         <td class="px-1">2350.97</td>
                         <td class="px-1" style="color:#92D050">42.4904</td>
                         <td class="px-1" style="color:#31D87D">47.1816</td>
@@ -12380,36 +12714,64 @@ SSIMULACRA2_rs: Mean: 82.71404144, Median: 83.55282859, Std Dev: 4.82887766, 5th
                         <td class="px-1" style="color:#C65911">63.73580664</td>
                         <td class="px-1" style="color:#31D87D">94.47657123</td>
                     </tr>
+                    <tr class="border-bottom">
+                        <td class="px-1">CRF30 PSNR P3 Sharp4</td>
+                        <td class="px-1">27.659</td>
+                        <td class="px-1">2596.92</td>
+                        <td class="px-1" style="color:#92D050">42.7320</td>
+                        <td class="px-1" style="color:#31D87D">47.7134</td>
+                        <td class="px-1" style="color:#31D87D">47.4411</td>
+                        <td class="px-1 ace" style="color:#31D87D">99.280471</td>
+                        <td class="px-1 ace" style="color:#31D87D">97.853006</td>
+                        <td class="px-1" style="color:#FFC000">79.39059832</td>
+                        <td class="px-1" style="color:#FFC000">79.09108544</td>
+                        <td class="px-1 ace" style="color:#C65911">65.82060219</td>
+                        <td class="px-1" style="color:#31D87D">94.60718743</td>
+                    </tr>
+                    <tr class="border-bottom">
+                        <td class="px-1">CRF30 PSNR P3 Sharp6</td>
+                        <td class="px-1">27.449</td>
+                        <td class="px-1">2723.74</td>
+                        <td class="px-1 ace" style="color:#92D050">42.7557</td>
+                        <td class="px-1" style="color:#31D87D">47.8355</td>
+                        <td class="px-1" style="color:#31D87D">47.5582</td>
+                        <td class="px-1" style="color:#31D87D">99.249226</td>
+                        <td class="px-1" style="color:#31D87D">97.810048</td>
+                        <td class="px-1 ace" style="color:#FFC000">79.43103579</td>
+                        <td class="px-1 ace" style="color:#FFC000">79.17019473</td>
+                        <td class="px-1" style="color:#C65911">65.75786270</td>
+                        <td class="px-1 ace" style="color:#31D87D">94.64559855</td>
+                    </tr>
+                    <tr class="border-bottom">
+                        <td class="px-1">CRF30 PSNR P3 Sharp7</td>
+                        <td class="px-1">26.993</td>
+                        <td class="px-1">2744.92</td>
+                        <td class="px-1" style="color:#92D050">42.7494</td>
+                        <td class="px-1 ace" style="color:#31D87D">47.8512</td>
+                        <td class="px-1 ace" style="color:#31D87D">47.5722</td>
+                        <td class="px-1" style="color:#31D87D">99.243406</td>
+                        <td class="px-1" style="color:#31D87D">97.801530</td>
+                        <td class="px-1" style="color:#FFC000">79.37981615</td>
+                        <td class="px-1" style="color:#FFC000">79.12843803</td>
+                        <td class="px-1" style="color:#C65911">65.60445560</td>
+                        <td class="px-1" style="color:#31D87D">94.55790120</td>
+                    </tr>
                     <tr class="text-smaller">
                         <td class="align-items-center t-light-gray" colspan="12"><b>Netflix SolLevante</b></td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">CRF30 PSNR VarOct4 Sharp4</td>
-                        <td class="px-1">4.382</td>
-                        <td class="px-1">25051.08</td>
-                        <td class="px-1 ace" style="color:#C65911">37.9366</td>
-                        <td class="px-1" style="color:#FFC000">41.8746</td>
-                        <td class="px-1" style="color:#92D050">42.9372</td>
-                        <td class="px-1 ace" style="color:#31D87D">99.280471</td>
-                        <td class="px-1 ace" style="color:#31D87D">97.853006</td>
-                        <td class="px-1" style="color:#FFC000">73.59818290</td>
-                        <td class="px-1" style="color:#C65911">69.05681942</td>
-                        <td class="px-1 ace" style="color:#541818">49.11113058</td>
-                        <td class="px-1" style="color:#31D87D">99.65378475</td>
-                    </tr>
-                    <tr class="border-bottom">
-                        <td class="px-1">CRF30 PSNR VarOct4 Sharp6</td>
-                        <td class="px-1">4.376</td>
-                        <td class="px-1">26521.52</td>
-                        <td class="px-1" style="color:#C65911">37.9356</td>
-                        <td class="px-1 ace" style="color:#FFC000">41.9344</td>
-                        <td class="px-1 ace" style="color:#92D050">43.0127</td>
-                        <td class="px-1" style="color:#31D87D">98.617526</td>
-                        <td class="px-1" style="color:#31D87D">97.445262</td>
-                        <td class="px-1 ace" style="color:#FFC000">73.64555984</td>
-                        <td class="px-1 ace" style="color:#C65911">69.16459719</td>
-                        <td class="px-1" style="color:#541818">48.84941258</td>
-                        <td class="px-1" style="color:#31D87D">99.68029509</td>
+                        <td class="px-1">CRF30 PSNR P3 Sharp-4</td>
+                        <td class="px-1">4.375</td>
+                        <td class="px-1">21293.14</td>
+                        <td class="px-1" style="color:#C65911">37.8526</td>
+                        <td class="px-1" style="color:#FFC000">41.6389</td>
+                        <td class="px-1" style="color:#92D050">42.6158</td>
+                        <td class="px-1" style="color:#31D87D">98.617551</td>
+                        <td class="px-1" style="color:#31D87D">97.460014</td>
+                        <td class="px-1" style="color:#FFC000">71.39326874</td>
+                        <td class="px-1" style="color:#C65911">66.46212194</td>
+                        <td class="px-1" style="color:#541818">44.23334100</td>
+                        <td class="px-1" style="color:#31D87D">99.70832394</td>
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">~CRF30 PSNR QM0 P3</td>
@@ -12439,12 +12801,96 @@ SSIMULACRA2_rs: Mean: 82.71404144, Median: 83.55282859, Std Dev: 4.82887766, 5th
                         <td class="px-1" style="color:#541818">45.6597599</td>
                         <td class="px-1 ace" style="color:#31D87D">100</td>
                     </tr>
+                    <tr class="border-bottom">
+                        <td class="px-1">CRF30 PSNR P3 Sharp4</td>
+                        <td class="px-1">4.382</td>
+                        <td class="px-1">25051.08</td>
+                        <td class="px-1 ace" style="color:#C65911">37.9366</td>
+                        <td class="px-1" style="color:#FFC000">41.8746</td>
+                        <td class="px-1" style="color:#92D050">42.9372</td>
+                        <td class="px-1 ace" style="color:#31D87D">99.280471</td>
+                        <td class="px-1 ace" style="color:#31D87D">97.853006</td>
+                        <td class="px-1" style="color:#FFC000">73.59818290</td>
+                        <td class="px-1" style="color:#C65911">69.05681942</td>
+                        <td class="px-1 ace" style="color:#541818">49.11113058</td>
+                        <td class="px-1" style="color:#31D87D">99.65378475</td>
+                    </tr>
+                    <tr class="border-bottom">
+                        <td class="px-1">CRF30 PSNR P3 Sharp6</td>
+                        <td class="px-1">4.376</td>
+                        <td class="px-1">26521.52</td>
+                        <td class="px-1" style="color:#C65911">37.9356</td>
+                        <td class="px-1" style="color:#FFC000">41.9344</td>
+                        <td class="px-1" style="color:#92D050">43.0127</td>
+                        <td class="px-1" style="color:#31D87D">98.617526</td>
+                        <td class="px-1" style="color:#31D87D">97.445262</td>
+                        <td class="px-1 ace" style="color:#FFC000">73.64555984</td>
+                        <td class="px-1 ace" style="color:#C65911">69.16459719</td>
+                        <td class="px-1" style="color:#541818">48.84941258</td>
+                        <td class="px-1" style="color:#31D87D">99.68029509</td>
+                    </tr>
+                    <tr class="border-bottom">
+                        <td class="px-1">CRF30 PSNR P3 Sharp7</td>
+                        <td class="px-1">4.3</td>
+                        <td class="px-1">26765.1</td>
+                        <td class="px-1" style="color:#C65911">37.9283</td>
+                        <td class="px-1 ace" style="color:#FFC000">41.9407</td>
+                        <td class="px-1 ace" style="color:#92D050">43.0179</td>
+                        <td class="px-1" style="color:#31D87D">98.614205</td>
+                        <td class="px-1" style="color:#31D87D">97.442568</td>
+                        <td class="px-1" style="color:#FFC000">73.56907648</td>
+                        <td class="px-1" style="color:#C65911">69.12810867</td>
+                        <td class="px-1" style="color:#541818">48.62165015</td>
+                        <td class="px-1" style="color:#31D87D">99.67355643</td>
+                    </tr>
                     <tr class="text-smaller">
                         <td class="align-items-center t-light-gray" colspan="12"><b>ドラゴン会. MAIDRAGON-S</b></td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">CRF30 PSNR VarOct4 Sharp4</td>
-                        <td class="px-1 ace">34.811</td>
+                        <td class="px-1">CRF30 PSNR P3 Sharp-4</td>
+                        <td class="px-1">34.131</td>
+                        <td class="px-1">1748.83</td>
+                        <td class="px-1" style="color:#92D050">43.2197</td>
+                        <td class="px-1" style="color:#92D050">44.2228</td>
+                        <td class="px-1" style="color:#92D050">44.3593</td>
+                        <td class="px-1" style="color:#31D87D">99.468693</td>
+                        <td class="px-1" style="color:#31D87D">96.530549</td>
+                        <td class="px-1" style="color:#92D050">80.75135291</td>
+                        <td class="px-1" style="color:#92D050">83.23015219</td>
+                        <td class="px-1" style="color:#C65911">62.76311131</td>
+                        <td class="px-1" style="color:#92D050">88.25091879</td>
+                    </tr>
+                    <tr class="border-bottom">
+                        <td class="px-1">~CRF30 PSNR QM0 P3</td>
+                        <td class="px-1">34.683</td>
+                        <td class="px-1">1678.91</td>
+                        <td class="px-1" style="color:#92D050">43.3979</td>
+                        <td class="px-1" style="color:#92D050">44.5454</td>
+                        <td class="px-1" style="color:#92D050">44.6909</td>
+                        <td class="px-1" style="color:#31D87D">99.499874</td>
+                        <td class="px-1" style="color:#31D87D">96.893528</td>
+                        <td class="px-1" style="color:#92D050">80.13878722</td>
+                        <td class="px-1" style="color:#92D050">82.67207598</td>
+                        <td class="px-1" style="color:#C65911">62.1303331</td>
+                        <td class="px-1" style="color:#92D050">87.57267954</td>
+                    </tr>
+                    <tr class="border-bottom">
+                        <td class="px-1">~CRF30 VQ P3</td>
+                        <td class="px-1 ace">36.461</td>
+                        <td class="px-1">1841.98</td>
+                        <td class="px-1" style="color:#92D050">43.1374</td>
+                        <td class="px-1" style="color:#92D050">44.2474</td>
+                        <td class="px-1" style="color:#92D050">44.3534</td>
+                        <td class="px-1" style="color:#31D87D">99.485086</td>
+                        <td class="px-1" style="color:#31D87D">96.874969</td>
+                        <td class="px-1" style="color:#92D050">81.0576056</td>
+                        <td class="px-1" style="color:#92D050">83.45341781</td>
+                        <td class="px-1" style="color:#C65911">63.52342983</td>
+                        <td class="px-1" style="color:#92D050">88.37986377</td>
+                    </tr>
+                    <tr class="border-bottom">
+                        <td class="px-1">CRF30 PSNR P3 Sharp4</td>
+                        <td class="px-1">34.811</td>
                         <td class="px-1">2008.59</td>
                         <td class="px-1 ace" style="color:#92D050">43.4176</td>
                         <td class="px-1" style="color:#92D050">44.5330</td>
@@ -12457,7 +12903,7 @@ SSIMULACRA2_rs: Mean: 82.71404144, Median: 83.55282859, Std Dev: 4.82887766, 5th
                         <td class="px-1" style="color:#92D050">88.89335786</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">CRF30 PSNR VarOct4 Sharp6</td>
+                        <td class="px-1">CRF30 PSNR P3 Sharp6</td>
                         <td class="px-1">34.803</td>
                         <td class="px-1">2086.19</td>
                         <td class="px-1" style="color:#92D050">43.4038</td>
@@ -12466,68 +12912,40 @@ SSIMULACRA2_rs: Mean: 82.71404144, Median: 83.55282859, Std Dev: 4.82887766, 5th
                         <td class="px-1" style="color:#31D87D">99.561552,</td>
                         <td class="px-1" style="color:#31D87D">96.971028</td>
                         <td class="px-1" style="color:#92D050">81.58295017</td>
-                        <td class="px-1 ace" style="color:#92D050">83.93074174</td>
+                        <td class="px-1" style="color:#92D050">83.93074174</td>
                         <td class="px-1" style="color:#C65911">63.63556010</td>
-                        <td class="px-1 ace" style="color:#92D050">89.00044052</td>
+                        <td class="px-1" style="color:#92D050">89.00044052</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">~CRF30 PSNR QM0 P3</td>
-                        <td class="px-1">34.683</td>
-                        <td class="px-1">1678.91</td>
-                        <td class="px-1" style="color:#92D050">42.7807</td>
-                        <td class="px-1" style="color:#92D050">43.7920</td>
-                        <td class="px-1" style="color:#92D050">43.9662</td>
-                        <td class="px-1" style="color:#31D87D">99.499874</td>
-                        <td class="px-1" style="color:#31D87D">96.893528</td>
-                        <td class="px-1" style="color:#92D050">80.13878722</td>
-                        <td class="px-1" style="color:#92D050">82.67207598</td>
-                        <td class="px-1" style="color:#C65911">62.1303331</td>
-                        <td class="px-1" style="color:#92D050">87.57267954</td>
-                    </tr>
-                    <tr class="border-bottom">
-                        <td class="px-1">~CRF30 VQ P3</td>
-                        <td class="px-1">36.461</td>
-                        <td class="px-1">1841.98</td>
-                        <td class="px-1" style="color:#92D050">43.1374</td>
-                        <td class="px-1" style="color:#92D050">44.2474</td>
-                        <td class="px-1" style="color:#92D050">44.3534</td>
-                        <td class="px-1" style="color:#31D87D">99.485086</td>
-                        <td class="px-1" style="color:#31D87D">96.874969</td>
-                        <td class="px-1" style="color:#92D050">81.0576056</td>
-                        <td class="px-1" style="color:#92D050">83.45341781</td>
-                        <td class="px-1" style="color:#C65911">63.52342983</td>
-                        <td class="px-1" style="color:#92D050">88.37986377</td>
+                        <td class="px-1">CRF30 PSNR P3 Sharp7</td>
+                        <td class="px-1">23.98</td>
+                        <td class="px-1">2094.58</td>
+                        <td class="px-1" style="color:#92D050">43.3781</td>
+                        <td class="px-1" style="color:#92D050">44.0750</td>
+                        <td class="px-1" style="color:#92D050">44.4807</td>
+                        <td class="px-1" style="color:#31D87D">99.556616</td>
+                        <td class="px-1" style="color:#31D87D">96.964112</td>
+                        <td class="px-1" style="color:#92D050">81.54915159</td>
+                        <td class="px-1 ace" style="color:#92D050">83.93295163</td>
+                        <td class="px-1" style="color:#C65911">63.38714191</td>
+                        <td class="px-1 ace" style="color:#92D050">89.01016059</td>
                     </tr>
                     <tr class="text-smaller">
                         <td class="align-items-center t-light-gray" colspan="12"><b>OB 会. HYOUKA</b></td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">CRF30 PSNR VarOct4 Sharp4</td>
-                        <td class="px-1">43.785</td>
-                        <td class="px-1">976.15</td>
-                        <td class="px-1" style="color:#FFC000">41.4313</td>
-                        <td class="px-1" style="color:#92D050">44.1557</td>
-                        <td class="px-1" style="color:#92D050">44.2669</td>
-                        <td class="px-1 ace" style="color:#31D87D">99.468693</td>
-                        <td class="px-1" style="color:#31D87D">96.530549</td>
-                        <td class="px-1" style="color:#92D050">82.66629557</td>
-                        <td class="px-1 ace" style="color:#92D050">83.87342514</td>
-                        <td class="px-1" style="color:#FFC000">74.12805535</td>
-                        <td class="px-1" style="color:#92D050">87.74530647</td>
-                    </tr>
-                    <tr class="border-bottom">
-                        <td class="px-1">CRF30 PSNR VarOct4 Sharp6</td>
-                        <td class="px-1">43.524</td>
-                        <td class="px-1">1027.28</td>
-                        <td class="px-1 ace" style="color:#FFC000">41.4331</td>
-                        <td class="px-1 ace" style="color:#92D050">44.1651</td>
-                        <td class="px-1 ace" style="color:#92D050">44.2771</td>
-                        <td class="px-1" style="color:#31D87D">99.468020</td>
-                        <td class="px-1 ace" style="color:#31D87D">96.531517</td>
-                        <td class="px-1 ace" style="color:#92D050">82.71404144</td>
-                        <td class="px-1" style="color:#92D050">83.55282859</td>
-                        <td class="px-1 ace" style="color:#FFC000">74.20108975</td>
-                        <td class="px-1 ace" style="color:#92D050">87.75174639</td>
+                        <td class="px-1">CRF30 PSNR P3 Sharp-4</td>
+                        <td class="px-1">43.312</td>
+                        <td class="px-1">849.43</td>
+                        <td class="px-1" style="color:#FFC000">41.3422</td>
+                        <td class="px-1" style="color:#92D050">43.9899</td>
+                        <td class="px-1" style="color:#92D050">44.1144</td>
+                        <td class="px-1" style="color:#31D87D">99.417102</td>
+                        <td class="px-1" style="color:#31D87D">96.457463</td>
+                        <td class="px-1" style="color:#92D050">82.03956196</td>
+                        <td class="px-1" style="color:#92D050">83.02276494</td>
+                        <td class="px-1" style="color:#FFC000">72.70159427</td>
+                        <td class="px-1" style="color:#92D050">87.43146630</td>
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">~CRF30 PSNR QM0 P3</td>
@@ -12557,14 +12975,57 @@ SSIMULACRA2_rs: Mean: 82.71404144, Median: 83.55282859, Std Dev: 4.82887766, 5th
                         <td class="px-1" style="color:#FFC000">73.1824835</td>
                         <td class="px-1" style="color:#92D050">87.50851431</td>
                     </tr>
+                    <tr class="border-bottom">
+                        <td class="px-1">CRF30 PSNR P3 Sharp4</td>
+                        <td class="px-1">43.785</td>
+                        <td class="px-1">976.15</td>
+                        <td class="px-1" style="color:#FFC000">41.4313</td>
+                        <td class="px-1" style="color:#92D050">44.1557</td>
+                        <td class="px-1" style="color:#92D050">44.2669</td>
+                        <td class="px-1" style="color:#31D87D">99.468693</td>
+                        <td class="px-1" style="color:#31D87D">96.530549</td>
+                        <td class="px-1" style="color:#92D050">82.66629557</td>
+                        <td class="px-1 ace" style="color:#92D050">83.87342514</td>
+                        <td class="px-1" style="color:#FFC000">74.12805535</td>
+                        <td class="px-1" style="color:#92D050">87.74530647</td>
+                    </tr>
+                    <tr class="border-bottom">
+                        <td class="px-1">CRF30 PSNR P3 Sharp6</td>
+                        <td class="px-1">43.524</td>
+                        <td class="px-1">1027.28</td>
+                        <td class="px-1 ace" style="color:#FFC000">41.4331</td>
+                        <td class="px-1 ace" style="color:#92D050">44.1651</td>
+                        <td class="px-1" style="color:#92D050">44.2771</td>
+                        <td class="px-1" style="color:#31D87D">99.468020</td>
+                        <td class="px-1" style="color:#31D87D">96.531517</td>
+                        <td class="px-1 ace" style="color:#92D050">82.71404144</td>
+                        <td class="px-1" style="color:#92D050">83.55282859</td>
+                        <td class="px-1 ace" style="color:#FFC000">74.20108975</td>
+                        <td class="px-1 ace" style="color:#92D050">87.75174639</td>
+                    </tr>
+                    <tr class="border-bottom">
+                        <td class="px-1">CRF30 PSNR P3 Sharp7</td>
+                        <td class="px-1">42.666</td>
+                        <td class="px-1">1034.05</td>
+                        <td class="px-1" style="color:#FFC000">41.4302</td>
+                        <td class="px-1" style="color:#92D050">44.1618</td>
+                        <td class="px-1 ace" style="color:#92D050">44.2773</td>
+                        <td class="px-1 ace" style="color:#31D87D">99.476968</td>
+                        <td class="px-1 ace" style="color:#31D87D">96.714112</td>
+                        <td class="px-1" style="color:#92D050">82.69596542</td>
+                        <td class="px-1" style="color:#92D050">83.53691322</td>
+                        <td class="px-1" style="color:#FFC000">74.13583208</td>
+                        <td class="px-1" style="color:#92D050">87.73552867</td>
+                    </tr>
                 </tbody>
             </table>
             <h4>（8/8）SVT-AV1 大范围优化测试分析</h4>
             <ol class="text-smaller">
-                <li><code>--variance-octile 4</code> 搭配 <code>--sharpness 4</code> 后，相比默认 6 对画质有平均 1 dB 的播放画质（XPSNR）提升</li>
-                <li><code>--variance-octile 2</code> 与 <code>--variance-octile 4</code> 搭配 <code>--sharpness</code> 在全部测试中的结果完全一致（可能有更苛刻的启用条件，更低的 preset 值，或更高的量化强度）</li>
-                <li><code>--sharpness</code> 变化对码率影响不大；虽然画质提升在 VMAF 中显得无效，但却以最小的成本提升了暂停画质（SSIMULACRA），因此可以用于搭配高暂停画质测试选项</li>
-                <li>在高暂停画质测试中，<code>--variance-octile</code> 搭配 Variance Boost 变化明显，但这里搭配功能不太相关的<code>--sharpness</code> 会显得乏力，因此可以得出独木难支的结论</li>
+                <li>单独开启 Variance Octile 几乎无效，或在低强度（4）下完全无效</li>
+                <li><code>--sharpness -4</code> 相比 <code>--qm-min 0</code> 与 <code>--tune 1 --sharpness 0</code>（默认）下的画质反而高一点，并且降低了码率；除此之外不如 <code>--tune 0 --sharpness 0</code> 的画质提升，不失为专注降低码率的有效选项</li>
+                <li><code>--sharpness 0~4</code> 对码率的影响，以及画质的影响取决于片源；画质提升在 VMAF 中显得无效，低强度（0~4）相比其他参数可以有效提升暂停画质，因此可以用于搭配高暂停画质测试选项，但高强度下对码率的影响较大</li>
+                <li><code>--sharpness 6~7</code> 在动态信息复杂的 3D 动画、漫画材质动画（富含锐利纹理场景）中画质提升显著（SSIMULACRA2.1 +5 分），除此之外提升不大（SSIMULACRA2.1 +1~3 分），但码率的增加又与画质的提升不相关（更类似于线性增加 5~10%）</li>
+                <li><code>--sharpness 7</code> 相比 6 出现了副作用，码率照旧增加，但画质反而降低了（一定会复现，结合 -4 强度的现象，推测是遇到了码率分配受限的问题）</li>
             </ol>
             <!--<h3>测试——SVT-AV1 QM 大范围优化测试</h3>
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（1/8）SVT-AV1 v3.0——SolLevante</button>
