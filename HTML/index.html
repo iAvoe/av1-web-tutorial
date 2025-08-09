@@ -12365,7 +12365,8 @@ VMAF 4k: 99.468020, VMAF 1080p: 96.531517
 SSIMULACRA2_rs: Mean: 82.71404144, Median: 83.55282859, Std Dev: 4.82887766, 5th Percentile: 74.20108975, 95th Percentile: 87.75174639
                 </code></pre>
             </div>
-            <p>简化说明：（<code>--preset 3 --crf 30</code>）<code>--sharpness 4</code>、<code>--variance-octile 2 --sharpness 4</code>、<code>--variance-octile 4 --sharpness 4</code> 于所有视频体积、跑分结果完全一致；<code>--sharpness 6</code>、<code>--variance-octile 2 --sharpness 6</code>、<code>--variance-octile 4 --sharpness 6</code> 于所有视频体积、跑分结果完全一致，因此判断单独开启 VarOct 无效，且不再表中展示 VarOct 结果。</p>
+            <h4>简化说明</h4>
+            <p><code>--preset 3 --crf 30</code> 下，<code>--sharpness 4</code> 测试、<code>--variance-octile 2 --sharpness 4</code> 测试、<code>--variance-octile 4 --sharpness 4</code> 测试于所有视频体积、跑分结果完全一致；<code>--sharpness 6</code> 测试、<code>--variance-octile 2 --sharpness 6</code> 测试、<code>--variance-octile 4 --sharpness 6</code> 测试于所有视频体积、跑分结果完全一致，因此判断单独开启 VarOct 无效，且不再表中展示 VarOct 结果。</p>
             <div class="overflow-auto mt-3"><table class="table-center text-smaller two-decimals">
                 <thead>
                     <tr>
@@ -13027,152 +13028,448 @@ SSIMULACRA2_rs: Mean: 82.71404144, Median: 83.55282859, Std Dev: 4.82887766, 5th
                 <li><code>--sharpness 6~7</code> 在动态信息复杂的 3D 动画、漫画材质动画（富含锐利纹理场景）中画质提升显著（SSIMULACRA2.1 +5 分），除此之外提升不大（SSIMULACRA2.1 +1~3 分），但码率的增加又与画质的提升不相关（更类似于线性增加 5~10%）</li>
                 <li><code>--sharpness 7</code> 相比 6 出现了副作用，码率照旧增加，但画质反而降低了（一定会复现，结合 -4 强度的现象，推测是遇到了码率分配受限的问题）</li>
             </ol>
-            <!--<h3>测试——SVT-AV1 QM 大范围优化测试</h3>
+            <h3>测试——SVT-AV1 GOP 长度测试</h3>
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（1/8）SVT-AV1 v3.0——SolLevante</button>
             <div class="coll-content">
-                <p><code>--preset 3 --crf 30 --variance-octile 2 --sharpness 4 --enable-qm 1</code>：</p>
-                <pre><code class="text-smaller language-powershell"></code></pre>
-                <p><code>--preset 3 --crf 30 --variance-octile 2 --sharpness 6 --enable-qm 1</code>：</p>
-                <pre><code class="text-smaller language-powershell"></code></pre>
-                <p><code>--preset 3 --crf 30 --variance-octile 4 --sharpness 4 --enable-qm 1</code>：</p>
-                <pre><code class="text-smaller language-powershell"></code></pre>
-                <p><code>--preset 3 --crf 30 --variance-octile 4 --sharpness 6 --enable-qm 1</code>：</p>
-                <pre><code class="text-smaller language-powershell"></code></pre>
-            </div>
-            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（2/8）SVT-AV1 v3.0——Boat</button>
-            <div class="coll-content">
-                <p><code>--preset 3 --crf 30 --variance-octile 2 --sharpness 4 --enable-qm 1</code>：</p>
-                <pre><code class="text-smaller language-powershell"></code></pre>
-                <p><code>--preset 3 --crf 30 --variance-octile 2 --sharpness 6 --enable-qm 1</code>：</p>
-                <pre><code class="text-smaller language-powershell"></code></pre>
-                <p><code>--preset 3 --crf 30 --variance-octile 4 --sharpness 4 --enable-qm 1</code>：</p>
-                <pre><code class="text-smaller language-powershell"></code></pre>
-                <p><code>--preset 3 --crf 30 --variance-octile 4 --sharpness 6 --enable-qm 1</code>：</p>
-                <pre><code class="text-smaller language-powershell"></code></pre>
-            </div>
-            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（3/8）SVT-AV1 v3.0——WindAndNature</button>
-            <div class="coll-content">
-                <p><code>--preset 3 --crf 30 --variance-octile 2 --sharpness 4 --enable-qm 1</code>：</p>
-                <pre><code class="text-smaller language-powershell"></code></pre>
-                <p><code>--preset 3 --crf 30 --variance-octile 2 --sharpness 6 --enable-qm 1</code>：</p>
-                <pre><code class="text-smaller language-powershell"></code></pre>
-                <p><code>--preset 3 --crf 30 --variance-octile 4 --sharpness 4 --enable-qm 1</code>：</p>
-                <pre><code class="text-smaller language-powershell"></code></pre>
-                <p><code>--preset 3 --crf 30 --variance-octile 4 --sharpness 6 --enable-qm 1</code>：</p>
-                <pre><code class="text-smaller language-powershell"></code></pre>
-            </div>
-            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（4/8）SVT-AV1 v3.0——Big-Buck-Bunny</button>
-            <div class="coll-content">
-                <p><code>--preset 3 --crf 30 --variance-octile 2 --sharpness 4 --enable-qm 1</code>：</p>
-                <pre><code class="text-smaller language-powershell"></code></pre>
-                <p><code>--preset 3 --crf 30 --variance-octile 2 --sharpness 6 --enable-qm 1</code>：</p>
-                <pre><code class="text-smaller language-powershell"></code></pre>
-                <p><code>--preset 3 --crf 30 --variance-octile 4 --sharpness 4 --enable-qm 1</code>：</p>
-                <pre><code class="text-smaller language-powershell"></code></pre>
-                <p><code>--preset 3 --crf 30 --variance-octile 4 --sharpness 6 --enable-qm 1</code>：</p>
-                <pre><code class="text-smaller language-powershell"></code></pre>
-            </div>
-            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（5/8）SVT-AV1 v3.0——ElephantsDream</button>
-            <div class="coll-content">
-                <p><code>--preset 3 --crf 30 --variance-octile 2 --sharpness 4 --enable-qm 1</code>：</p>
-                <pre><code class="text-smaller language-powershell"></code></pre>
-                <p><code>--preset 3 --crf 30 --variance-octile 2 --sharpness 6 --enable-qm 1</code>：</p>
-                <pre><code class="text-smaller language-powershell"></code></pre>
-                <p><code>--preset 3 --crf 30 --variance-octile 4 --sharpness 4 --enable-qm 1</code>：</p>
-                <pre><code class="text-smaller language-powershell"></code></pre>
-                <p><code>--preset 3 --crf 30 --variance-octile 4 --sharpness 6 --enable-qm 1</code>：</p>
-                <pre><code class="text-smaller language-powershell"></code></pre>
-            </div>
-            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（6/8）SVT-AV1 v3.0——MAINDRAGON-S</button>
-            <div class="coll-content">
-                <p><code>--preset 3 --crf 30 --variance-octile 2 --sharpness 4 --enable-qm 1</code>：</p>
-                <pre><code class="text-smaller language-powershell"></code></pre>
-                <p><code>--preset 3 --crf 30 --variance-octile 2 --sharpness 6 --enable-qm 1</code>：</p>
-                <pre><code class="text-smaller language-powershell"></code></pre>
-                <p><code>--preset 3 --crf 30 --variance-octile 4 --sharpness 4 --enable-qm 1</code>：</p>
-                <pre><code class="text-smaller language-powershell"></code></pre>
-                <p><code>--preset 3 --crf 30 --variance-octile 4 --sharpness 6 --enable-qm 1</code>：</p>
-                <pre><code class="text-smaller language-powershell"></code></pre>
-            </div>
-            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（7/8）SVT-AV1 v3.0——HYOUKA</button>
-            <div class="coll-content">
-                <p><code>--preset 3 --crf 30 --variance-octile 2 --sharpness 4 --enable-qm 1</code>：</p>
-                <pre><code class="text-smaller language-powershell"></code></pre>
-                <p><code>--preset 3 --crf 30 --variance-octile 2 --sharpness 6 --enable-qm 1</code>：</p>
-                <pre><code class="text-smaller language-powershell"></code></pre>
-                <p><code>--preset 3 --crf 30 --variance-octile 4 --sharpness 4 --enable-qm 1</code>：</p>
-                <pre><code class="text-smaller language-powershell"></code></pre>
-                <p><code>--preset 3 --crf 30 --variance-octile 4 --sharpness 6 --enable-qm 1</code>：</p>
-                <pre><code class="text-smaller language-powershell"></code></pre>
-            </div>
-            <h4>（8/8）SVT-AV1 QM 下的优化范围大小分析</h4>
+                <p><code>--preset 3 --crf 30 --hierarchical-levels 5 --use-fixed-qindex-offsets 2 --key-frame-qindex-offset -1 --keyint 12s --enable-tf 2 --scd 1</code>：</p>
+                <pre><code class="text-smaller language-powershell">
+SUMMARY --------------------------------- Channel 1  --------------------------------
+Total Frames		Frame Rate		Byte Count		Bitrate
+        6314		24.00 fps		 705479798		21452.66 kbps
 
-            <h3>测试——SVT-AV1 GOP 长度上限测试</h3>
-            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（1/8）SVT-AV1 v3.0——SolLevante</button>
-            <div class="coll-content">
+Channel 1
+Average Speed:		4.228 fps
+Total Encoding Time:	1493438 ms
+Total Execution Time:	1494512 ms
+Average Latency:	84536 ms
+Max Latency:		188483 ms
+                </code></pre>
                 <p><code>--preset 3 --crf 30 --hierarchical-levels 5 --use-fixed-qindex-offsets 2 --key-frame-qindex-offset -5 --keyint 24s --enable-tf 2 --scd 1</code>：</p>
-                <pre><code class="text-smaller language-powershell"></code></pre>
+                <pre><code class="text-smaller language-powershell">
+SUMMARY --------------------------------- Channel 1  --------------------------------
+Total Frames		Frame Rate		Byte Count		Bitrate
+        6314		24.00 fps		 703002016		21377.32 kbps
+
+Channel 1
+Average Speed:		3.831 fps
+Total Encoding Time:	1648168 ms
+Total Execution Time:	1649410 ms
+Average Latency:	86778 ms
+Max Latency:		207931 ms
+                </code></pre>
                 <p><code>--preset 3 --crf 30 --hierarchical-levels 5 --use-fixed-qindex-offsets 2 --key-frame-qindex-offset -9 --keyint 36s --enable-tf 2 --scd 1</code>：</p>
-                <pre><code class="text-smaller language-powershell"></code></pre>
-                <p><code>--preset 3 --crf 30 --hierarchical-levels 5 --use-fixed-qindex-offsets 2 --key-frame-qindex-offset -13 --keyint 48s --enable-tf 2 --scd 1</code>：</p>
-                <pre><code class="text-smaller language-powershell"></code></pre>
+                <pre><code class="text-smaller language-powershell">
+SUMMARY --------------------------------- Channel 1  --------------------------------
+Total Frames		Frame Rate		Byte Count		Bitrate
+        6314		24.00 fps		 702472084		21361.20 kbps
+
+
+Channel 1
+Average Speed:		3.851 fps
+Total Encoding Time:	1639582 ms
+Total Execution Time:	1640754 ms
+Average Latency:	84435 ms
+Max Latency:		193014 ms
+                </code></pre>
             </div>
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（2/8）SVT-AV1 v3.0——Boat</button>
             <div class="coll-content">
+                <p><code>--preset 3 --crf 30 --hierarchical-levels 5 --use-fixed-qindex-offsets 2 --key-frame-qindex-offset -1 --keyint 12s --enable-tf 2 --scd 1</code>：</p>
+                <pre><code class="text-smaller language-powershell">
+SUMMARY --------------------------------- Channel 1  --------------------------------
+Total Frames		Frame Rate		Byte Count		Bitrate
+         300		60.00 fps		  19543119		31268.99 kbps
+
+Channel 1
+Average Speed:		3.013 fps
+Total Encoding Time:	99578 ms
+Total Execution Time:	100762 ms
+Average Latency:	54872 ms
+Max Latency:		90061 ms
+
+                </code></pre>
                 <p><code>--preset 3 --crf 30 --hierarchical-levels 5 --use-fixed-qindex-offsets 2 --key-frame-qindex-offset -5 --keyint 24s --enable-tf 2 --scd 1</code>：</p>
-                <pre><code class="text-smaller language-powershell"></code></pre>
+                <pre><code class="text-smaller language-powershell">
+SUMMARY --------------------------------- Channel 1  --------------------------------
+Total Frames		Frame Rate		Byte Count		Bitrate
+         300		60.00 fps		  19658405		31453.45 kbps
+
+Channel 1
+Average Speed:		3.055 fps
+Total Encoding Time:	98198 ms
+Total Execution Time:	99376 ms
+Average Latency:	54089 ms
+Max Latency:		88161 ms
+                </code></pre>
                 <p><code>--preset 3 --crf 30 --hierarchical-levels 5 --use-fixed-qindex-offsets 2 --key-frame-qindex-offset -9 --keyint 36s --enable-tf 2 --scd 1</code>：</p>
-                <pre><code class="text-smaller language-powershell"></code></pre>
-                <p><code>--preset 3 --crf 30 --hierarchical-levels 5 --use-fixed-qindex-offsets 2 --key-frame-qindex-offset -13 --keyint 48s --enable-tf 2 --scd 1</code>：</p>
-                <pre><code class="text-smaller language-powershell"></code></pre>
+                <pre><code class="text-smaller language-powershell">
+SUMMARY --------------------------------- Channel 1  --------------------------------
+Total Frames		Frame Rate		Byte Count		Bitrate
+         300		60.00 fps		  19721444		31554.31 kbps
+
+Channel 1
+Average Speed:		3.008 fps
+Total Encoding Time:	99718 ms
+Total Execution Time:	100918 ms
+Average Latency:	55182 ms
+Max Latency:		89809 ms
+                </code></pre>
             </div>
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（3/8）SVT-AV1 v3.0——WindAndNature</button>
             <div class="coll-content">
+                <p><code>--preset 3 --crf 30 --hierarchical-levels 5 --use-fixed-qindex-offsets 2 --key-frame-qindex-offset -1 --keyint 12s --enable-tf 2 --scd 1</code>：</p>
+                <pre><code class="text-smaller language-powershell">
+SUMMARY --------------------------------- Channel 1  --------------------------------
+Total Frames		Frame Rate		Byte Count		Bitrate
+        1199		60.00 fps		  24035315		9622.14 kbps
+
+Channel 1
+Average Speed:		5.061 fps
+Total Encoding Time:	236904 ms
+Total Execution Time:	238220 ms
+Average Latency:	57427 ms
+Max Latency:		81379 ms
+
+                </code></pre>
                 <p><code>--preset 3 --crf 30 --hierarchical-levels 5 --use-fixed-qindex-offsets 2 --key-frame-qindex-offset -5 --keyint 24s --enable-tf 2 --scd 1</code>：</p>
-                <pre><code class="text-smaller language-powershell"></code></pre>
+                <pre><code class="text-smaller language-powershell">
+SUMMARY --------------------------------- Channel 1  --------------------------------
+Total Frames		Frame Rate		Byte Count		Bitrate
+        1199		60.00 fps		  23900687		9568.25 kbps
+
+Channel 1
+Average Speed:		4.917 fps
+Total Encoding Time:	243836 ms
+Total Execution Time:	245042 ms
+Average Latency:	56940 ms
+Max Latency:		75642 ms
+                </code></pre>
                 <p><code>--preset 3 --crf 30 --hierarchical-levels 5 --use-fixed-qindex-offsets 2 --key-frame-qindex-offset -9 --keyint 36s --enable-tf 2 --scd 1</code>：</p>
-                <pre><code class="text-smaller language-powershell"></code></pre>
-                <p><code>--preset 3 --crf 30 --hierarchical-levels 5 --use-fixed-qindex-offsets 2 --key-frame-qindex-offset -13 --keyint 48s --enable-tf 2 --scd 1</code>：</p>
-                <pre><code class="text-smaller language-powershell"></code></pre>
+                <pre><code class="text-smaller language-powershell">
+SUMMARY --------------------------------- Channel 1  --------------------------------
+Total Frames		Frame Rate		Byte Count		Bitrate
+        1199		60.00 fps		  23962240		9592.89 kbps
+
+Channel 1
+Average Speed:		5.057 fps
+Total Encoding Time:	237086 ms
+Total Execution Time:	238356 ms
+Average Latency:	55358 ms
+Max Latency:		73008 ms
+                </code></pre>
             </div>
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（4/8）SVT-AV1 v3.0——Big-Buck-Bunny</button>
             <div class="coll-content">
+                <p><code>--preset 3 --crf 30 --hierarchical-levels 5 --use-fixed-qindex-offsets 2 --key-frame-qindex-offset -1 --keyint 12s --enable-tf 2 --scd 1</code>：</p>
+                <pre><code class="text-smaller language-powershell">
+SUMMARY --------------------------------- Channel 1  --------------------------------
+Total Frames		Frame Rate		Byte Count		Bitrate
+       14315		24.00 fps		 140043253		1878.33 kbps
+
+Channel 1
+Average Speed:		28.897 fps
+Total Encoding Time:	495388 ms
+Total Execution Time:	495730 ms
+Average Latency:	11849 ms
+Max Latency:		22103 ms
+                </code></pre>
                 <p><code>--preset 3 --crf 30 --hierarchical-levels 5 --use-fixed-qindex-offsets 2 --key-frame-qindex-offset -5 --keyint 24s --enable-tf 2 --scd 1</code>：</p>
-                <pre><code class="text-smaller language-powershell"></code></pre>
+                <pre><code class="text-smaller language-powershell">
+SUMMARY --------------------------------- Channel 1  --------------------------------
+Total Frames		Frame Rate		Byte Count		Bitrate
+       14315		24.00 fps		 137248105		1840.84 kbps
+
+Channel 1
+Average Speed:		24.964 fps
+Total Encoding Time:	573430 ms
+Total Execution Time:	573834 ms
+Average Latency:	12829 ms
+Max Latency:		24383 ms
+                </code></pre>
                 <p><code>--preset 3 --crf 30 --hierarchical-levels 5 --use-fixed-qindex-offsets 2 --key-frame-qindex-offset -9 --keyint 36s --enable-tf 2 --scd 1</code>：</p>
-                <pre><code class="text-smaller language-powershell"></code></pre>
-                <p><code>--preset 3 --crf 30 --hierarchical-levels 5 --use-fixed-qindex-offsets 2 --key-frame-qindex-offset -13 --keyint 48s --enable-tf 2 --scd 1</code>：</p>
-                <pre><code class="text-smaller language-powershell"></code></pre>
+                <pre><code class="text-smaller language-powershell">
+SUMMARY --------------------------------- Channel 1  --------------------------------
+Total Frames		Frame Rate		Byte Count		Bitrate
+       14315		24.00 fps		 136363695		1828.98 kbps
+
+Channel 1
+Average Speed:		23.925 fps
+Total Encoding Time:	598318 ms
+Total Execution Time:	598730 ms
+Average Latency:	13226 ms
+Max Latency:		24711 ms
+                </code></pre>
             </div>
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（5/8）SVT-AV1 v3.0——ElephantsDream</button>
             <div class="coll-content">
+                <p><code>--preset 3 --crf 30 --hierarchical-levels 5 --use-fixed-qindex-offsets 2 --key-frame-qindex-offset -1 --keyint 12s --enable-tf 2 --scd 1</code>：</p>
+                <pre><code class="text-smaller language-powershell">
+SUMMARY --------------------------------- Channel 1  --------------------------------
+Total Frames		Frame Rate		Byte Count		Bitrate
+       15691		24.00 fps		 187511375		2294.45 kbps
+
+Channel 1
+Average Speed:		27.124 fps
+Total Encoding Time:	578494 ms
+Total Execution Time:	578840 ms
+Average Latency:	12976 ms
+Max Latency:		35314 ms
+                </code></pre>
                 <p><code>--preset 3 --crf 30 --hierarchical-levels 5 --use-fixed-qindex-offsets 2 --key-frame-qindex-offset -5 --keyint 24s --enable-tf 2 --scd 1</code>：</p>
-                <pre><code class="text-smaller language-powershell"></code></pre>
+                <pre><code class="text-smaller language-powershell">
+SUMMARY --------------------------------- Channel 1  --------------------------------
+Total Frames		Frame Rate		Byte Count		Bitrate
+       15691		24.00 fps		 184895611		2262.44 kbps
+
+Channel 1
+Average Speed:		24.100 fps
+Total Encoding Time:	651078 ms
+Total Execution Time:	651408 ms
+Average Latency:	13596 ms
+Max Latency:		35055 ms
+                </code></pre>
                 <p><code>--preset 3 --crf 30 --hierarchical-levels 5 --use-fixed-qindex-offsets 2 --key-frame-qindex-offset -9 --keyint 36s --enable-tf 2 --scd 1</code>：</p>
-                <pre><code class="text-smaller language-powershell"></code></pre>
-                <p><code>--preset 3 --crf 30 --hierarchical-levels 5 --use-fixed-qindex-offsets 2 --key-frame-qindex-offset -13 --keyint 48s --enable-tf 2 --scd 1</code>：</p>
-                <pre><code class="text-smaller language-powershell"></code></pre>
+                <pre><code class="text-smaller language-powershell">
+SUMMARY --------------------------------- Channel 1  --------------------------------
+Total Frames		Frame Rate		Byte Count		Bitrate
+       15691		24.00 fps		 184413826		2256.55 kbps
+
+Channel 1
+Average Speed:		23.102 fps
+Total Encoding Time:	679200 ms
+Total Execution Time:	679558 ms
+Average Latency:	13828 ms
+Max Latency:		32531 ms
+                </code></pre>
             </div>
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（6/8）SVT-AV1 v3.0——MAINDRAGON-S</button>
             <div class="coll-content">
+                <p><code>--preset 3 --crf 30 --hierarchical-levels 5 --use-fixed-qindex-offsets 2 --key-frame-qindex-offset -1 --keyint 12s --enable-tf 2 --scd 1</code>：</p>
+                <pre><code class="text-smaller language-powershell">
+SUMMARY --------------------------------- Channel 1  --------------------------------
+Total Frames		Frame Rate		Byte Count		Bitrate
+       34080		23.98 fps		 318086337		1790.25 kbps
+
+Channel 1
+Average Speed:		32.629 fps
+Total Encoding Time:	1044482 ms
+Total Execution Time:	1044842 ms
+Average Latency:	10485 ms
+Max Latency:		25680 ms
+                </code></pre>
                 <p><code>--preset 3 --crf 30 --hierarchical-levels 5 --use-fixed-qindex-offsets 2 --key-frame-qindex-offset -5 --keyint 24s --enable-tf 2 --scd 1</code>：</p>
-                <pre><code class="text-smaller language-powershell"></code></pre>
+                <pre><code class="text-smaller language-powershell">
+SUMMARY --------------------------------- Channel 1  --------------------------------
+Total Frames		Frame Rate		Byte Count		Bitrate
+       34080		23.98 fps		 312606787		1759.41 kbps
+
+Channel 1
+Average Speed:		26.522 fps
+Total Encoding Time:	1284986 ms
+Total Execution Time:	1285316 ms
+Average Latency:	12192 ms
+Max Latency:		30838 ms
+                </code></pre>
                 <p><code>--preset 3 --crf 30 --hierarchical-levels 5 --use-fixed-qindex-offsets 2 --key-frame-qindex-offset -9 --keyint 36s --enable-tf 2 --scd 1</code>：</p>
-                <pre><code class="text-smaller language-powershell"></code></pre>
-                <p><code>--preset 3 --crf 30 --hierarchical-levels 5 --use-fixed-qindex-offsets 2 --key-frame-qindex-offset -13 --keyint 48s --enable-tf 2 --scd 1</code>：</p>
-                <pre><code class="text-smaller language-powershell"></code></pre>
+                <pre><code class="text-smaller language-powershell">
+SUMMARY --------------------------------- Channel 1  --------------------------------
+Total Frames		Frame Rate		Byte Count		Bitrate
+       34080		23.98 fps		 313101987		1762.19 kbps
+
+Channel 1
+Average Speed:		25.198 fps
+Total Encoding Time:	1352464 ms
+Total Execution Time:	1352844 ms
+Average Latency:	12575 ms
+Max Latency:		30203 ms
+                </code></pre>
             </div>
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（7/8）SVT-AV1 v3.0——HYOUKA</button>
             <div class="coll-content">
+                <p><code>--preset 3 --crf 30 --hierarchical-levels 5 --use-fixed-qindex-offsets 2 --key-frame-qindex-offset -1 --keyint 12s --enable-tf 2 --scd 1</code>：</p>
+                <pre><code class="text-smaller language-powershell">
+SUMMARY --------------------------------- Channel 1  --------------------------------
+Total Frames		Frame Rate		Byte Count		Bitrate
+       36996		23.98 fps		 168658485		874.42 kbps
+
+Channel 1
+Average Speed:		39.458 fps
+Total Encoding Time:	937612 ms
+Total Execution Time:	937984 ms
+Average Latency:	8607 ms
+Max Latency:		22800 ms
+                </code></pre>
                 <p><code>--preset 3 --crf 30 --hierarchical-levels 5 --use-fixed-qindex-offsets 2 --key-frame-qindex-offset -5 --keyint 24s --enable-tf 2 --scd 1</code>：</p>
-                <pre><code class="text-smaller language-powershell"></code></pre>
+                <pre><code class="text-smaller language-powershell">
+SUMMARY --------------------------------- Channel 1  --------------------------------
+Total Frames		Frame Rate		Byte Count		Bitrate
+       36996		23.98 fps		 165180845		856.39 kbps
+
+Channel 1
+Average Speed:		34.534 fps
+Total Encoding Time:	1071294 ms
+Total Execution Time:	1071620 ms
+Average Latency:	9351 ms
+Max Latency:		22497 ms
+                </code></pre>
                 <p><code>--preset 3 --crf 30 --hierarchical-levels 5 --use-fixed-qindex-offsets 2 --key-frame-qindex-offset -9 --keyint 36s --enable-tf 2 --scd 1</code>：</p>
-                <pre><code class="text-smaller language-powershell"></code></pre>
-                <p><code>--preset 3 --crf 30 --hierarchical-levels 5 --use-fixed-qindex-offsets 2 --key-frame-qindex-offset -13 --keyint 48s --enable-tf 2 --scd 1</code>：</p>
-                <pre><code class="text-smaller language-powershell"></code></pre>
+                <pre><code class="text-smaller language-powershell">
+SUMMARY --------------------------------- Channel 1  --------------------------------
+Total Frames		Frame Rate		Byte Count		Bitrate
+       36996		23.98 fps		 165827530		859.74 kbps
+
+Channel 1
+Average Speed:		32.754 fps
+Total Encoding Time:	1129504 ms
+Total Execution Time:	1129826 ms
+Average Latency:	9663 ms
+Max Latency:		27642 ms
+                </code></pre>
             </div>
-            <h4>（8/8）SVT-AV1 GOP 长度上限测试分析</h4>
-            -->
+            <div class="overflow-auto mt-3"><table class="table-center text-smaller two-decimals">
+                <thead>
+                    <tr class="border-lr">
+                        <th colspan="3">GOP 长度测试</th>
+                    </tr>
+                    <tr class="border-lr">
+                        <th class="px-1">编码选项</th>
+                        <th class="px-1">速度 fps</th>
+                        <th class="px-1">码率 kbps</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="text-smaller">
+                        <td class="align-items-center t-light-gray" colspan="3"><b>Netflix Boat</b></td>
+                    </tr>
+                    <tr class="border-bottom">
+                        <td class="px-1">CRF30 PSNR P3 HierLvl5 FixedQoffs2 KQoffs-1 keyint12s</td>
+                        <td class="px-1">3.013</td>
+                        <td class="px-1">31268.99</td>
+                    </tr>
+                    <tr class="border-bottom">
+                        <td class="px-1">CRF30 PSNR P3 HierLvl5 FixedQoffs2 KQoffs-5 keyint24s</td>
+                        <td class="px-1">3.055</td>
+                        <td class="px-1">31453.45</td>
+                    </tr>
+                    <tr class="border-bottom">
+                        <td class="px-1">CRF30 PSNR P3 HierLvl5 FixedQoffs2 KQoffs-9 keyint36s</td>
+                        <td class="px-1">3.008</td>
+                        <td class="px-1">31554.31</td>
+                    </tr>
+                    
+                    <tr class="text-smaller">
+                        <td class="align-items-center t-light-gray" colspan="3"><b>Netflix WindAndNature</b></td>
+                    </tr>
+                    <tr class="border-bottom">
+                        <td class="px-1">CRF30 PSNR P3 HierLvl5 FixedQoffs2 KQoffs-1 keyint12s</td>
+                        <td class="px-1">5.061</td>
+                        <td class="px-1">9622.14</td>
+                    </tr>
+                    <tr class="border-bottom">
+                        <td class="px-1">CRF30 PSNR P3 HierLvl5 FixedQoffs2 KQoffs-5 keyint24s</td>
+                        <td class="px-1">4.917</td>
+                        <td class="px-1">9568.25</td>
+                    </tr>
+                    <tr class="border-bottom">
+                        <td class="px-1">CRF30 PSNR P3 HierLvl5 FixedQoffs2 KQoffs-9 keyint36s</td>
+                        <td class="px-1">5.057</td>
+                        <td class="px-1">9592.89</td>
+                    </tr>
+
+                    <tr class="text-smaller">
+                        <td class="align-items-center t-light-gray" colspan="3"><b>Blender Foundation BigBuckBunny</b></td>
+                    </tr>
+                    <tr class="border-bottom">
+                        <td class="px-1">CRF30 PSNR P3 HierLvl5 FixedQoffs2 KQoffs-1 keyint12s</td>
+                        <td class="px-1">28.897</td>
+                        <td class="px-1">1878.33</td>
+                    </tr>
+                    <tr class="border-bottom">
+                        <td class="px-1">CRF30 PSNR P3 HierLvl5 FixedQoffs2 KQoffs-5 keyint24s</td>
+                        <td class="px-1">24.964</td>
+                        <td class="px-1">1840.84</td>
+                    </tr>
+                    <tr class="border-bottom">
+                        <td class="px-1">CRF30 PSNR P3 HierLvl5 FixedQoffs2 KQoffs-9 keyint36s</td>
+                        <td class="px-1">23.925</td>
+                        <td class="px-1">1828.98</td>
+                    </tr>
+                    <tr class="text-smaller">
+                        <td class="align-items-center t-light-gray" colspan="3"><b>Blender Foundation ElephantsDream</b></td>
+                    </tr>
+                    <tr class="border-bottom">
+                        <td class="px-1">CRF30 PSNR P3 HierLvl5 FixedQoffs2 KQoffs-1 keyint12s</td>
+                        <td class="px-1">27.124</td>
+                        <td class="px-1">2294.45</td>
+                    </tr>
+                    <tr class="border-bottom">
+                        <td class="px-1">CRF30 PSNR P3 HierLvl5 FixedQoffs2 KQoffs-5 keyint24s</td>
+                        <td class="px-1">24.1</td>
+                        <td class="px-1">2262.44</td>
+                    </tr>
+                    <tr class="border-bottom">
+                        <td class="px-1">CRF30 PSNR P3 HierLvl5 FixedQoffs2 KQoffs-9 keyint36s</td>
+                        <td class="px-1">23.102</td>
+                        <td class="px-1">2256.55</td>
+                    </tr>
+                    <tr class="text-smaller">
+                        <td class="align-items-center t-light-gray" colspan="3"><b>Netflix SolLevante</b></td>
+                    </tr>
+                    <tr class="border-bottom">
+                        <td class="px-1">CRF30 PSNR P3 HierLvl5 FixedQoffs2 KQoffs-1 keyint12s</td>
+                        <td class="px-1">4.228</td>
+                        <td class="px-1">21452.66</td>
+                    </tr>
+                    <tr class="border-bottom">
+                        <td class="px-1">CRF30 PSNR P3 HierLvl5 FixedQoffs2 KQoffs-5 keyint24s</td>
+                        <td class="px-1">3.831</td>
+                        <td class="px-1">21377.32</td>
+                    </tr>
+                    <tr class="border-bottom">
+                        <td class="px-1">CRF30 PSNR P3 HierLvl5 FixedQoffs2 KQoffs-9 keyint36s</td>
+                        <td class="px-1">3.851</td>
+                        <td class="px-1">21361.20</td>
+                    </tr>
+                    <tr class="text-smaller">
+                        <td class="align-items-center t-light-gray" colspan="3"><b>ドラゴン会. MAIDRAGON-S</b></td>
+                    </tr>
+                    <tr class="border-bottom">
+                        <td class="px-1">CRF30 PSNR P3 HierLvl5 FixedQoffs2 KQoffs-1 keyint12s</td>
+                        <td class="px-1">32.629</td>
+                        <td class="px-1">1790.25</td>
+                    </tr>
+                    <tr class="border-bottom">
+                        <td class="px-1">CRF30 PSNR P3 HierLvl5 FixedQoffs2 KQoffs-5 keyint24s</td>
+                        <td class="px-1">26.522</td>
+                        <td class="px-1">1759.41</td>
+                    </tr>
+                    <tr class="border-bottom">
+                        <td class="px-1">CRF30 PSNR P3 HierLvl5 FixedQoffs2 KQoffs-9 keyint36s</td>
+                        <td class="px-1">25.198</td>
+                        <td class="px-1">1762.19</td>
+                    </tr>
+                    <tr class="text-smaller">
+                        <td class="align-items-center t-light-gray" colspan="3"><b>OB 会. HYOUKA</b></td>
+                    </tr>
+                    <tr class="border-bottom">
+                        <td class="px-1">CRF30 PSNR P3 HierLvl5 FixedQoffs2 KQoffs-1 keyint12s</td>
+                        <td class="px-1">39.458</td>
+                        <td class="px-1">874.42</td>
+                    </tr>
+                    <tr class="border-bottom">
+                        <td class="px-1">CRF30 PSNR P3 HierLvl5 FixedQoffs2 KQoffs-5 keyint24s</td>
+                        <td class="px-1">34.534</td>
+                        <td class="px-1">856.39</td>
+                    </tr>
+                    <tr class="border-bottom">
+                        <td class="px-1">CRF30 PSNR P3 HierLvl5 FixedQoffs2 KQoffs-9 keyint36s</td>
+                        <td class="px-1">32.754</td>
+                        <td class="px-1">859.74</td>
+                    </tr>
+                </tbody>
+            </table>
+            <h4>（8/8）SVT-AV1 GOP 长度测试分析</h4>
+            <p>尽管 AV1 编码器有强大的帧间参考系统，但在压缩 24 秒、36 秒（2 倍、3 倍）关键帧间隔时没能起到显著或有效的提升。在简单（动漫材质动画，3D 动画）场景的压缩率提升在 2%；复杂片源中则因为关键帧过长出现了码率反增的副作用。因此“大幅提高 GOP 长度、开启最高的分层预测结构层数、并降低关键帧量化强度”被证明无效，也不需要进行画质跑分了。</p>
 
             <h2 id="h2-19">附录：下载</h2>
 
