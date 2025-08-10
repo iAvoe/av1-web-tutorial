@@ -81,11 +81,12 @@
         </div>
         <div class="container-mobile rounded-9 border-main">
             <h3>SVT-AV1 测试总结简述</h3>
-            <p>测试结果及隐藏规律见测试版块。SVT-AV1 在测试中展现出了显著的性能优势：Preset 3，CRF 30 在压缩率与编码速度上均较 x265 veryslow CRF 18 约提升 2 倍；在一般场景有着接近和超越 x265 的播放与暂停画质，并且在高复杂度和分辨率的视频中产生了速度、画质、压缩率完胜的结果。x265 得到的码率均 2 倍于 SVT-AV1，因而产生了纵观上的画质领先。</p>
-            <p>SVT-AV1 的缺点在于导致失真的机制复杂，以目前的结果只能推测是默认使用单值量化，且在编码各阶段实施了多种“类去块机制”而产生观众可能不适应的某种涂抹失真（失真图案相比 x265 更明显、可能类似于平滑块失真致其面积外溢），使得低对比度或帧间连贯性差的场景出现播放可见的涂抹。不过，只要给予合理的 CRF、Tune、自适应量化方差、开启量化矩阵、以及对有噪声素材启用高强度 FGS 分离即可将失真最小化。</p>
-            <p>由于 FGS 只能复现同类噪声，所以尽管强度越高则观感越像，但对画质指标来说区别也越大，因此画质指标均会失效。</p>
-            <p>产品设计有“性能”与“体验”两方可选：高端相机有注重延迟、精度、后期和专注便携、易用、好玩之分；高端外设领域有低延迟轻量化和人体工学优先之分；高端轿车有性能车与豪华车之分。虽然 SVT-AV1 速度更快、压缩率更高、极限场景领先、具备胶片颗粒合成能力，是性能之选；在用户体验层面，x265 用码率换来高画质、失真图案更接近原画、在普通场景仍能够提供不错的压缩率、导致失真的机制和预防更直白，在注重画质稳定性的编码上更加可靠，是体验之选。</p>
-            <p>测试信息来自于 SVT-AV1 v3.0.0、x265 v4.0；SVT-AV1 若有大版本更新，则以上结论可能会部分失效。</p>
+            <p>SVT-AV1 展现出了显著的性能优势：</p>
+            <ul>
+                <li>基准测试中，SVT-AV1 在压缩率与速度上均较 x265 自定义-veryslow CRF 18 约提升 2 倍；在一般场景有着接近和超越 x265 的播放与暂停画质，并且在高复杂度和分辨率的视频中产生了速度、画质、压缩率完胜的结果。x265 由于一开始就使用了较为极限的自定义参数，因此在画质上要好过后者</li>
+                <li>特化参数测试中，SVT-AV1 不再总是于压缩率、速度上占明显优势，但画质几乎一定会超越 x265</li>
+            </ul>
+            <p>x265 之所以难以替代 x264，除了商业专利费用高、专利池多之外，还具有因高计算复杂度而上升的供电、计算与散热成本。SVT-AV1 在 Preset 3 下能够以一半的时间成本追平压缩率，即使画质差点意思，先进性也是不言而喻的。</p>
             
             <h2 id="h2-1">视频的压制</h2>
             <ol>
@@ -4719,6 +4720,7 @@ SvtAv1EncApp.exe -i .\输入.yuv -w 3840 -h 2160 --input-depth 10 --color-format
 
             <h5>（8/12——1/7）QIndex 偏移</h5>
             <p>相比于 AVC、HEVC 偏移 QP，QIndex 的精度比 QP 高 4 倍。同时，使用时应该注意 <code>Dc_Qlookup</code> 与 <code>Ac_Qlookup</code> 表格在不同位深下的替换（强度变更），并注意量化步长曲线走向与 AVC、HEVC 量化步长曲线的区别。</p>
+            <p class="text-gray-side">注：下方测试版块中，使用关键帧 QIndex 偏移（GOP 长度测试，同样使用 keyint 12s）与基准测试各个结果之间的码率相差在 5% 上下。</p>
             <code class="code-bold">--use-fixed-qindex-offsets</code>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~2，默认 0：编码器设定 QIndex&gt;指定量化步长索引 QIndex 的取值方法——1：用户指定 QP 常数值，并使用下列偏移参数调整 QIndex；2：编码器计算 QP，并使用下列偏移参数调整 QIndex</p>
             <code class="code-bold">--key-frame-qindex-offset</code>；<code class="code-bold">--key-frame-chroma-qindex-offset</code>
@@ -4811,14 +4813,14 @@ switch (curve) {
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~100，默认 50&gt;指定 Capped CRF 模式下，判定码率大小为超标的百分比。</p>
 
             <h5>（8/12——6/7）重编码环路级别</h5>
-            <code class="code-bold">&#45;&#45;recode-loop</code>
+            <!--<code class="code-bold">&#45;&#45;recode-loop</code>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~100，默认 0：关&gt;<span class="text-red-emph">猜测：</span>当编码结果与率控制目标差异过大（码率过低、过高、解码用时低于或高于预期）。</p>
             <ul class="list-dotless text-smaller">
                 <li><b>1</b>：仅允许对关键帧重编码，无视码率限制</li>
                 <li><b>2</b>：仅允许对关键帧、支线被参考帧（<code>ALTREF</code>）、金帧（<code>GOLDEN</code>）重新编码，无视码率限制</li>
                 <li><b>3</b>：基于码率限制对所有帧类型重新编码</li>
                 <li><b>4</b>：绑定预设参数 <code>&#45;&#45;preset</code></li>
-            </ul>
+            </ul>-->
 
             <h5>（8/12——7/8）率失真优化</h5>
             <code class="code-bold">--tune</code>
@@ -5110,9 +5112,7 @@ typedef enum SvtAv1FrameUpdateType {
             <code class="code-bold">&#45;&#45;pred-struct</code>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 1~2，默认 2，<span class="text-red-emph">覆盖 <code>--hierarchical-levels</code></span>&gt;指定帧间预测模式——1: 低延迟编解码（限为单层，关闭混合参考模式，并影响一些编码模式的强度，映射到 <code>rtc_tune = true</code>、<code>LOW_DELAY_B</code>），2: 支持随机访问（不限制，开启混合参考模式）。</p>
             <pre><code class="text-smaller language-cpp">
-/* 
- * 指定帧间预测模式，definitions.h 中为 PredStructure
- */
+/* 指定帧间预测模式，definitions.h 中为 PredStructure */
 typedef enum SvtAv1PredStructure {
     SVT_AV1_PRED_LOW_DELAY_P   = 0, // 不再可用
     SVT_AV1_PRED_LOW_DELAY_B   = 1,
@@ -11497,7 +11497,7 @@ SSIMULACRA2_rs: Mean: 43.37989094 Median: 42.86187330 Std Dev: 10.52248577 5th P
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">CRF30 PSNR P3</td>
-                        <td class="px-1 sec">28.734</td>
+                        <td class="px-1 ace">28.734</td>
                         <td class="px-1 ace">1669.85</td>
                         <td class="px-1" style="color:#FFC000">38.1204</td>
                         <td class="px-1" style="color:#C65911">36.5504</td>
@@ -11539,7 +11539,7 @@ SSIMULACRA2_rs: Mean: 43.37989094 Median: 42.86187330 Std Dev: 10.52248577 5th P
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">CRF30 PSNR P3 FG21</td>
-                        <td class="px-1">22.029</td>
+                        <td class="px-1 trd">22.029</td>
                         <td class="px-1">1695.20</td>
                         <td class="px-1" style="color:#C65911">35.5426</td>
                         <td class="px-1" style="color:#C65911">34.1543</td>
@@ -11567,7 +11567,7 @@ SSIMULACRA2_rs: Mean: 43.37989094 Median: 42.86187330 Std Dev: 10.52248577 5th P
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">CRF30 PSNR P3 FG41</td>
-                        <td class="px-1">22.052</td>
+                        <td class="px-1 sec">22.052</td>
                         <td class="px-1">1695.91</td>
                         <td class="px-1" style="color:#C65911">34.3394</td>
                         <td class="px-1" style="color:#C65911">33.2685</td>
@@ -11599,7 +11599,7 @@ SSIMULACRA2_rs: Mean: 43.37989094 Median: 42.86187330 Std Dev: 10.52248577 5th P
                     <tr class="border-bottom">
                         <td class="px-1">CRF30 VQ P3</td>
                         <td class="px-1 ace">28.81</td>
-                        <td class="px-1">2056.28</td>
+                        <td class="px-1 ace">2056.28</td>
                         <td class="px-1" style="color:#FFC000">38.1717</td>
                         <td class="px-1" style="color:#C65911">36.5926</td>
                         <td class="px-1" style="color:#FFC000">41.8143</td>
@@ -11612,8 +11612,8 @@ SSIMULACRA2_rs: Mean: 43.37989094 Median: 42.86187330 Std Dev: 10.52248577 5th P
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">CRF30 VQ P3 FG1</td>
-                        <td class="px-1">22.209</td>
-                        <td class="px-1">2062.79</td>
+                        <td class="px-1 sec">22.209</td>
+                        <td class="px-1 sec">2062.79</td>
                         <td class="px-1" style="color:#FFC000">38.1717</td>
                         <td class="px-1" style="color:#C65911">36.5926</td>
                         <td class="px-1" style="color:#FFC000">41.8143</td>
@@ -11627,7 +11627,7 @@ SSIMULACRA2_rs: Mean: 43.37989094 Median: 42.86187330 Std Dev: 10.52248577 5th P
                     <tr class="border-bottom">
                         <td class="px-1">CRF30 VQ P3 FG11</td>
                         <td class="px-1">22.115</td>
-                        <td class="px-1">2079.51</td>
+                        <td class="px-1 trd">2079.51</td>
                         <td class="px-1" style="color:#C65911">36.5799</td>
                         <td class="px-1" style="color:#C65911">35.3581</td>
                         <td class="px-1" style="color:#FFC000">39.4388</td>
@@ -11682,7 +11682,7 @@ SSIMULACRA2_rs: Mean: 43.37989094 Median: 42.86187330 Std Dev: 10.52248577 5th P
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">CRF30 VQ P3 FG50</td>
-                        <td class="px-1">22.195</td>
+                        <td class="px-1 trd">22.195</td>
                         <td class="px-1">2082.34</td>
                         <td class="px-1" style="color:#C65911">34.1539</td>
                         <td class="px-1" style="color:#C65911">33.1581</td>
@@ -11699,8 +11699,8 @@ SSIMULACRA2_rs: Mean: 43.37989094 Median: 42.86187330 Std Dev: 10.52248577 5th P
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">CRF30 SSIM P3</td>
-                        <td class="px-1 trd">28.113</td>
-                        <td class="px-1">1737.48</td>
+                        <td class="px-1 ace">28.113</td>
+                        <td class="px-1 ace">1737.48</td>
                         <td class="px-1" style="color:#FFC000">38.1953</td>
                         <td class="px-1" style="color:#C65911">36.5190</td>
                         <td class="px-1" style="color:#FFC000">41.8161</td>
@@ -11714,7 +11714,7 @@ SSIMULACRA2_rs: Mean: 43.37989094 Median: 42.86187330 Std Dev: 10.52248577 5th P
                     <tr class="border-bottom">
                         <td class="px-1">CRF30 SSIM P3 FG1</td>
                         <td class="px-1">21.698</td>
-                        <td class="px-1">1744.04</td>
+                        <td class="px-1 sec">1744.04</td>
                         <td class="px-1" style="color:#FFC000">38.1953</td>
                         <td class="px-1" style="color:#C65911">36.5190</td>
                         <td class="px-1" style="color:#FFC000">41.8161</td>
@@ -11728,7 +11728,7 @@ SSIMULACRA2_rs: Mean: 43.37989094 Median: 42.86187330 Std Dev: 10.52248577 5th P
                     <tr class="border-bottom">
                         <td class="px-1">CRF30 SSIM P3 FG11</td>
                         <td class="px-1">21.693</td>
-                        <td class="px-1">1760.74</td>
+                        <td class="px-1 trd">1760.74</td>
                         <td class="px-1" style="color:#C65911">36.5975</td>
                         <td class="px-1" style="color:#C65911">35.3025</td>
                         <td class="px-1" style="color:#FFC000">39.4389</td>
@@ -11755,7 +11755,7 @@ SSIMULACRA2_rs: Mean: 43.37989094 Median: 42.86187330 Std Dev: 10.52248577 5th P
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">CRF30 SSIM P3 FG31</td>
-                        <td class="px-1">21.731</td>
+                        <td class="px-1 sec">21.731</td>
                         <td class="px-1">1763.42</td>
                         <td class="px-1" style="color:#C65911">34.8267</td>
                         <td class="px-1" style="color:#C65911">33.5357</td>
@@ -11783,7 +11783,7 @@ SSIMULACRA2_rs: Mean: 43.37989094 Median: 42.86187330 Std Dev: 10.52248577 5th P
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">CRF30 SSIM P3 FG50</td>
-                        <td class="px-1">21.716</td>
+                        <td class="px-1 trd">21.716</td>
                         <td class="px-1">1763.57</td>
                         <td class="px-1" style="color:#C65911">34.1650</td>
                         <td class="px-1" style="color:#C65911">33.1257</td>
@@ -13470,6 +13470,1052 @@ Max Latency:		27642 ms
             </table>
             <h4>（8/8）SVT-AV1 GOP 长度测试分析</h4>
             <p>尽管 AV1 编码器有强大的帧间参考系统，但在压缩 24 秒、36 秒（2 倍、3 倍）关键帧间隔时没能起到显著或有效的提升。在简单（动漫材质动画，3D 动画）场景的压缩率提升在 2%；复杂片源中则因为关键帧过长出现了码率反增的副作用。因此“大幅提高 GOP 长度、开启最高的分层预测结构层数、并降低关键帧量化强度”被证明无效，也不需要进行画质跑分了。</p>
+
+            <h3>测试——SVT-AV1 全功能 B 帧与片源特化参数测试</h3>
+            <p>使用更慢的 <code>--preset 2</code>，从而解锁楔形蒙版、距离加权、差值加权等混合参考模式；同时让最小细分块缩小到 4x4，从而提高画面精细度（其它 preset 变更见上方预设参数说明）；与此同时，将上述测试中得出的理论优解按照画面类型选出综合材质动画、综合材质录像两类同时优化画质和码率的参数，再进行交叉测试。</p>
+
+            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（1/8）SVT-AV1 v3.0——SolLevante</button>
+            <div class="coll-content">
+                <p><code>--crf 30 --tune 1 --preset 2 --keyint 12s --enable-qm 1 --variance-octile 2 --enable-variance-boost 1 --variance-boost-strength 2 --variance-boost-curve 2 --enable-tf 2 --tf-strength 2 --sharpness 6</code>：</p>
+                <pre><code class="text-smaller language-powershell">
+SUMMARY --------------------------------- Channel 1  --------------------------------
+Total Frames		Frame Rate		Byte Count		Bitrate
+        6314		24.00 fps		1270338329		38629.23 kbps
+
+Channel 1
+Average Speed:		2.042 fps
+Total Encoding Time:	3091880 ms
+Total Execution Time:	3093122 ms
+Average Latency:	175629 ms
+Max Latency:		389803 ms
+
+                </code></pre>
+                <p><code>--crf 30 --tune 1 --preset 2 --keyint 12s--variance-octile 2 --enable-variance-boost 1 --variance-boost-strength 1 --variance-boost-curve 2 --enable-tf 2 --tf-strength 2 --sharpness 4</code>：</p>
+                <pre><code class="text-smaller language-powershell">
+SUMMARY --------------------------------- Channel 1  --------------------------------
+Total Frames		Frame Rate		Byte Count		Bitrate
+        6314		24.00 fps		1090629133		33164.52 kbps
+
+Channel 1
+Average Speed:		2.110 fps
+Total Encoding Time:	2992070 ms
+Total Execution Time:	2993336 ms
+Average Latency:	169499 ms
+Max Latency:		381911 ms
+
+                </code></pre>
+                <p><code>--crf 30 --tune 0 --preset 2 --keyint 12s --enable-qm 1 --variance-octile 2 --enable-variance-boost 1 --variance-boost-strength 1 --variance-boost-curve 2 --enable-tf 2 --tf-strength 2 --sharpness 6</code>：</p>
+                <pre><code class="text-smaller language-powershell">
+SUMMARY --------------------------------- Channel 1  --------------------------------
+Total Frames		Frame Rate		Byte Count		Bitrate
+        6314		24.00 fps		1126302233		34249.29 kbps
+
+Channel 1
+Average Speed:		2.139 fps
+Total Encoding Time:	2951186 ms
+Total Execution Time:	2952388 ms
+Average Latency:	167627 ms
+Max Latency:		369412 ms
+
+                </code></pre>
+                <p><code>--crf 30 --tune 0 --preset 2 --keyint 12s--variance-octile 2 --enable-variance-boost 1 --variance-boost-strength 1 --variance-boost-curve 2 --enable-tf 2 --tf-strength 2 --sharpness 4</code>：</p>
+                <pre><code class="text-smaller language-powershell">
+SUMMARY --------------------------------- Channel 1  --------------------------------
+Total Frames		Frame Rate		Byte Count		Bitrate
+        6314		24.00 fps		1151684638		35021.14 kbps
+
+Channel 1
+Average Speed:		2.211 fps
+Total Encoding Time:	2855928 ms
+Total Execution Time:	2857092 ms
+Average Latency:	162208 ms
+Max Latency:		387376 ms
+
+                </code></pre>
+            </div>
+
+            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（2/8）SVT-AV1 v3.0——Boat</button>
+            <div class="coll-content">
+                <p><code>--crf 30 --tune 1 --preset 2 --keyint 12s --enable-qm 1 --variance-octile 2 --enable-variance-boost 1 --variance-boost-strength 2 --variance-boost-curve 2 --enable-tf 2 --tf-strength 2 --sharpness 6</code>：</p>
+                <pre><code class="text-smaller language-powershell">
+SUMMARY --------------------------------- Channel 1  --------------------------------
+Total Frames		Frame Rate		Byte Count		Bitrate
+         300		60.00 fps		  45809337		73294.94 kbps
+
+Channel 1
+Average Speed:		1.618 fps
+Total Encoding Time:	185456 ms
+Total Execution Time:	186692 ms
+Average Latency:	103712 ms
+Max Latency:		175710 ms
+
+                </code></pre>
+                <p><code>--crf 30 --tune 1 --preset 2 --keyint 12s--variance-octile 2 --enable-variance-boost 1 --variance-boost-strength 1 --variance-boost-curve 2 --enable-tf 2 --tf-strength 2 --sharpness 4</code>：</p>
+                <pre><code class="text-smaller language-powershell">
+SUMMARY --------------------------------- Channel 1  --------------------------------
+Total Frames		Frame Rate		Byte Count		Bitrate
+         300		60.00 fps		  36866570		58986.51 kbps
+
+Channel 1
+Average Speed:		1.711 fps
+Total Encoding Time:	175332 ms
+Total Execution Time:	176580 ms
+Average Latency:	98371 ms
+Max Latency:		165388 ms
+
+                </code></pre>
+                <p><code>--crf 30 --tune 0 --preset 2 --keyint 12s --enable-qm 1 --variance-octile 2 --enable-variance-boost 1 --variance-boost-strength 1 --variance-boost-curve 2 --enable-tf 2 --tf-strength 2 --sharpness 6</code>：</p>
+                <pre><code class="text-smaller language-powershell">
+SUMMARY --------------------------------- Channel 1  --------------------------------
+Total Frames		Frame Rate		Byte Count		Bitrate
+         300		60.00 fps		  38519214		61630.74 kbps
+
+
+Channel 1
+Average Speed:		1.803 fps
+Total Encoding Time:	166406 ms
+Total Execution Time:	167598 ms
+Average Latency:	93834 ms
+Max Latency:		156781 ms
+
+                </code></pre>
+                <p><code>--crf 30 --tune 0 --preset 2 --keyint 12s--variance-octile 2 --enable-variance-boost 1 --variance-boost-strength 1 --variance-boost-curve 2 --enable-tf 2 --tf-strength 2 --sharpness 4</code>：</p>
+                <pre><code class="text-smaller language-powershell">
+SUMMARY --------------------------------- Channel 1  --------------------------------
+Total Frames		Frame Rate		Byte Count		Bitrate
+         300		60.00 fps		  40048523		64077.64 kbps
+
+Channel 1
+Average Speed:		1.908 fps
+Total Encoding Time:	157208 ms
+Total Execution Time:	158414 ms
+Average Latency:	88172 ms
+Max Latency:		146611 ms
+
+                </code></pre>
+            </div>
+            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（3/8）SVT-AV1 v3.0——WindAndNature</button>
+            <div class="coll-content">
+                <p><code>--crf 30 --tune 1 --preset 2 --keyint 12s --enable-qm 1 --variance-octile 2 --enable-variance-boost 1 --variance-boost-strength 2 --variance-boost-curve 2 --enable-tf 2 --tf-strength 2 --sharpness 6</code>：</p>
+                <pre><code class="text-smaller language-powershell">
+SUMMARY --------------------------------- Channel 1  --------------------------------
+Total Frames		Frame Rate		Byte Count		Bitrate
+        1199		60.00 fps		  57462185		23004.04 kbps
+
+Channel 1
+Average Speed:		2.377 fps
+Total Encoding Time:	504378 ms
+Total Execution Time:	505668 ms
+Average Latency:	122254 ms
+Max Latency:		175629 ms
+
+ssimulacra2_rs: Mean: 73.62667649, Median: 75.21192199, Std Dev: 3.80629739, 5th Percentile: 66.62791234, 95th Percentile: 77.56220486
+                </code></pre>
+                <p><code>--crf 30 --tune 1 --preset 2 --keyint 12s--variance-octile 2 --enable-variance-boost 1 --variance-boost-strength 1 --variance-boost-curve 2 --enable-tf 2 --tf-strength 2 --sharpness 4</code>：</p>
+                <pre><code class="text-smaller language-powershell">
+SUMMARY --------------------------------- Channel 1  --------------------------------
+Total Frames		Frame Rate		Byte Count		Bitrate
+        1199		60.00 fps		  47267126		18922.62 kbps
+
+Channel 1
+Average Speed:		2.613 fps
+Total Encoding Time:	458876 ms
+Total Execution Time:	460138 ms
+Average Latency:	110106 ms
+Max Latency:		158950 ms
+
+                </code></pre>
+                <p><code>--crf 30 --tune 0 --preset 2 --keyint 12s --enable-qm 1 --variance-octile 2 --enable-variance-boost 1 --variance-boost-strength 1 --variance-boost-curve 2 --enable-tf 2 --tf-strength 2 --sharpness 6</code>：</p>
+                <pre><code class="text-smaller language-powershell">
+SUMMARY --------------------------------- Channel 1  --------------------------------
+Total Frames		Frame Rate		Byte Count		Bitrate
+        1199		60.00 fps		  54995332		22016.48 kbps
+
+Channel 1
+Average Speed:		2.423 fps
+Total Encoding Time:	494806 ms
+Total Execution Time:	495972 ms
+Average Latency:	118067 ms
+Max Latency:		167464 ms
+
+                </code></pre>
+                <p><code>--crf 30 --tune 0 --preset 2 --keyint 12s--variance-octile 2 --enable-variance-boost 1 --variance-boost-strength 1 --variance-boost-curve 2 --enable-tf 2 --tf-strength 2 --sharpness 4</code>：</p>
+                <pre><code class="text-smaller language-powershell">
+SUMMARY --------------------------------- Channel 1  --------------------------------
+Total Frames		Frame Rate		Byte Count		Bitrate
+        1199		60.00 fps		  56173830		22488.27 kbps
+
+Channel 1
+Average Speed:		2.423 fps
+Total Encoding Time:	494860 ms
+Total Execution Time:	496152 ms
+Average Latency:	117592 ms
+Max Latency:		167458 ms
+
+                </code></pre>
+            </div>
+
+            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（4/8）SVT-AV1 v3.0——Big-Buck-Bunny</button>
+            <div class="coll-content">
+                <p><code>--crf 30 --tune 1 --preset 2 --keyint 12s --enable-qm 1 --variance-octile 2 --enable-variance-boost 1 --variance-boost-strength 2 --variance-boost-curve 2 --enable-tf 2 --tf-strength 2 --sharpness 6</code>：</p>
+                <pre><code class="text-smaller language-powershell">
+SUMMARY --------------------------------- Channel 1  --------------------------------
+Total Frames		Frame Rate		Byte Count		Bitrate
+       14315		24.00 fps		 266380821		3572.83 kbps
+
+Channel 1
+Average Speed:		14.593 fps
+Total Encoding Time:	980972 ms
+Total Execution Time:	981352 ms
+Average Latency:	23718 ms
+Max Latency:		47411 ms
+
+ssimulacra2_rs: Mean: 84.71483166, Median: 84.74165417, Std Dev: 3.24757676, 5th Percentile: 79.93497054, 95th Percentile: 89.26163819
+                </code></pre>
+                <p><code>--crf 30 --tune 1 --preset 2 --keyint 12s--variance-octile 2 --enable-variance-boost 1 --variance-boost-strength 1 --variance-boost-curve 2 --enable-tf 2 --tf-strength 2 --sharpness 4</code>：</p>
+                <pre><code class="text-smaller language-powershell">
+SUMMARY --------------------------------- Channel 1  --------------------------------
+Total Frames		Frame Rate		Byte Count		Bitrate
+       14315		24.00 fps		 240695310		3228.33 kbps
+
+Channel 1
+Average Speed:		15.525 fps
+Total Encoding Time:	922080 ms
+Total Execution Time:	922524 ms
+Average Latency:	22244 ms
+Max Latency:		44795 ms
+
+ssimulacra2_rs: Mean: 84.01140358, Median: 84.00227060, Std Dev: 3.54907502, 5th Percentile: 78.69724645, 95th Percentile: 89.05068407
+                </code></pre>
+                <p><code>--crf 30 --tune 0 --preset 2 --keyint 12s --enable-qm 1 --variance-octile 2 --enable-variance-boost 1 --variance-boost-strength 1 --variance-boost-curve 2 --enable-tf 2 --tf-strength 2 --sharpness 6</code>：</p>
+                <pre><code class="text-smaller language-powershell">
+SUMMARY --------------------------------- Channel 1  --------------------------------
+Total Frames		Frame Rate		Byte Count		Bitrate
+       14315		24.00 fps		 237459561		3184.93 kbps
+
+Channel 1
+Average Speed:		16.007 fps
+Total Encoding Time:	894268 ms
+Total Execution Time:	894720 ms
+Average Latency:	21547 ms
+Max Latency:		44269 ms
+
+ssimulacra2_rs: Mean: 83.86722596, Median: 83.88102295, Std Dev: 3.59379960, 5th Percentile: 78.42735225, 95th Percentile: 88.81709881
+                </code></pre>
+                <p><code>--crf 30 --tune 0 --preset 2 --keyint 12s--variance-octile 2 --enable-variance-boost 1 --variance-boost-strength 1 --variance-boost-curve 2 --enable-tf 2 --tf-strength 2 --sharpness 4</code>：</p>
+                <pre><code class="text-smaller language-powershell">
+SUMMARY --------------------------------- Channel 1  --------------------------------
+Total Frames		Frame Rate		Byte Count		Bitrate
+       14315		24.00 fps		 248662060		3335.18 kbps
+
+Channel 1
+Average Speed:		16.169 fps
+Total Encoding Time:	885348 ms
+Total Execution Time:	885694 ms
+Average Latency:	21329 ms
+Max Latency:		43531 ms
+
+ssimulacra2_rs: Mean: 83.91060703, Median: 83.92889224, Std Dev: 3.65496550, 5th Percentile: 78.32497955, 95th Percentile: 89.00112787
+                </code></pre>
+            </div>
+
+            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（5/8）SVT-AV1 v3.0——ElephantsDream</button>
+            <div class="coll-content">
+                <p><code>--crf 30 --tune 1 --preset 2 --keyint 12s --enable-qm 1 --variance-octile 2 --enable-variance-boost 1 --variance-boost-strength 2 --variance-boost-curve 2 --enable-tf 2 --tf-strength 2 --sharpness 6</code>：</p>
+                <pre><code class="text-smaller language-powershell">
+SUMMARY --------------------------------- Channel 1  --------------------------------
+Total Frames		Frame Rate		Byte Count		Bitrate
+       15691		24.00 fps		 380483316		4655.71 kbps
+
+Channel 1
+Average Speed:		12.265 fps
+Total Encoding Time:	1279336 ms
+Total Execution Time:	1279684 ms
+Average Latency:	28944 ms
+Max Latency:		80949 ms
+
+ssimulacra2_rs: Mean: 85.54040820, Median: 84.93837429, Std Dev: 5.58515767, 5th Percentile: 77.21057249, 95th Percentile: 96.56286346
+                </code></pre>
+                <p><code>--crf 30 --tune 1 --preset 2 --keyint 12s--variance-octile 2 --enable-variance-boost 1 --variance-boost-strength 1 --variance-boost-curve 2 --enable-tf 2 --tf-strength 2 --sharpness 4</code>：</p>
+                <pre><code class="text-smaller language-powershell">
+SUMMARY --------------------------------- Channel 1  --------------------------------
+Total Frames		Frame Rate		Byte Count		Bitrate
+       15691		24.00 fps		 330191262		4040.32 kbps
+
+Channel 1
+Average Speed:		12.958 fps
+Total Encoding Time:	1210938 ms
+Total Execution Time:	1211268 ms
+Average Latency:	27329 ms
+Max Latency:		77919 ms
+
+ssimulacra2_rs: Mean: 84.55608230, Median: 84.05436298, std Dev: 6.17216201, 5th Percentile: 75.10783751, 95th Percentile: 96.43148175
+                </code></pre>
+                <p><code>--crf 30 --tune 0 --preset 2 --keyint 12s --enable-qm 1 --variance-octile 2 --enable-variance-boost 1 --variance-boost-strength 1 --variance-boost-curve 2 --enable-tf 2 --tf-strength 2 --sharpness 6</code>：</p>
+                <pre><code class="text-smaller language-powershell">
+SUMMARY --------------------------------- Channel 1  --------------------------------
+Total Frames		Frame Rate		Byte Count		Bitrate
+       15691		24.00 fps		 336321736		4115.34 kbps
+
+Channel 1
+Average Speed:		13.161 fps
+Total Encoding Time:	1192196 ms
+Total Execution Time:	1192540 ms
+Average Latency:	26909 ms
+Max Latency:		76357 ms
+
+ssimulacra2_rs: Mean: 84.53918838, Median: 84.06319396, Std Dev: 6.13789708, 5th Percentile: 75.15510046, 95th Percentile: 96.39088576
+                </code></pre>
+                <p><code>--crf 30 --tune 0 --preset 2 --keyint 12s--variance-octile 2 --enable-variance-boost 1 --variance-boost-strength 1 --variance-boost-curve 2 --enable-tf 2 --tf-strength 2 --sharpness 4</code>：</p>
+                <pre><code class="text-smaller language-powershell">
+SUMMARY --------------------------------- Channel 1  --------------------------------
+Total Frames		Frame Rate		Byte Count		Bitrate
+       15691		24.00 fps		 345348416		4225.79 kbps
+
+Channel 1
+Average Speed:		13.217 fps
+Total Encoding Time:	1187178 ms
+Total Execution Time:	1187566 ms
+Average Latency:	26799 ms
+Max Latency:		74563 ms
+
+ssimulacra2_rs: Mean: 84.49935105, Median: 84.07127415, Std Dev: 6.22500567, 5th Percentile: 74.97756983, 95th Percentile: 96.41701650
+                </code></pre>
+            </div>
+
+            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（6/8）SVT-AV1 v3.0——MAINDRAGON-S</button>
+            <div class="coll-content">
+                <p><code>--crf 30 --tune 1 --preset 2 --keyint 12s --enable-qm 1 --variance-octile 2 --enable-variance-boost 1 --variance-boost-strength 2 --variance-boost-curve 2 --enable-tf 2 --tf-strength 2 --sharpness 6</code>：</p>
+                <pre><code class="text-smaller language-powershell">
+SUMMARY --------------------------------- Channel 1  --------------------------------
+Total Frames		Frame Rate		Byte Count		Bitrate
+       34080		23.98 fps		 514610361		2896.32 kbps
+
+Channel 1
+Average Speed:		16.451 fps
+Total Encoding Time:	2071644 ms
+Total Execution Time:	2071972 ms
+Average Latency:	21021 ms
+Max Latency:		51907 ms
+
+                </code></pre>
+                <p><code>--crf 30 --tune 1 --preset 2 --keyint 12s--variance-octile 2 --enable-variance-boost 1 --variance-boost-strength 1 --variance-boost-curve 2 --enable-tf 2 --tf-strength 2 --sharpness 4</code>：</p>
+                <pre><code class="text-smaller language-powershell">
+SUMMARY --------------------------------- Channel 1  --------------------------------
+Total Frames		Frame Rate		Byte Count		Bitrate
+       34080		23.98 fps		 484467101		2726.67 kbps
+
+Channel 1
+Average Speed:		17.243 fps
+Total Encoding Time:	1976454 ms
+Total Execution Time:	1976796 ms
+Average Latency:	19991 ms
+Max Latency:		50076 ms
+
+                </code></pre>
+                <p><code>--crf 30 --tune 0 --preset 2 --keyint 12s --enable-qm 1 --variance-octile 2 --enable-variance-boost 1 --variance-boost-strength 1 --variance-boost-curve 2 --enable-tf 2 --tf-strength 2 --sharpness 6</code>：</p>
+                <pre><code class="text-smaller language-powershell">
+SUMMARY --------------------------------- Channel 1  --------------------------------
+Total Frames		Frame Rate		Byte Count		Bitrate
+       34080		23.98 fps		 471729021		2654.97 kbps
+
+Channel 1
+Average Speed:		17.878 fps
+Total Encoding Time:	1906254 ms
+Total Execution Time:	1906606 ms
+Average Latency:	19291 ms
+Max Latency:		47392 ms
+
+                </code></pre>
+                <p><code>--crf 30 --tune 0 --preset 2 --keyint 12s--variance-octile 2 --enable-variance-boost 1 --variance-boost-strength 1 --variance-boost-curve 2 --enable-tf 2 --tf-strength 2 --sharpness 4</code>：</p>
+                <pre><code class="text-smaller language-powershell">
+SUMMARY --------------------------------- Channel 1  --------------------------------
+Total Frames		Frame Rate		Byte Count		Bitrate
+       34080		23.98 fps		 503542323		2834.02 kbps
+
+
+Channel 1
+Average Speed:		17.814 fps
+Total Encoding Time:	1913156 ms
+Total Execution Time:	1913522 ms
+Average Latency:	19351 ms
+Max Latency:		47519 ms
+                </code></pre>
+            </div>
+
+            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（7/8）SVT-AV1 v3.0——HYOUKA</button>
+            <div class="coll-content">
+                <p><code>--crf 30 --tune 1 --preset 2 --keyint 12s --enable-qm 1 --variance-octile 2 --enable-variance-boost 1 --variance-boost-strength 2 --variance-boost-curve 2 --enable-tf 2 --tf-strength 2 --sharpness 6</code>：</p>
+                <pre><code class="text-smaller language-powershell">
+SUMMARY --------------------------------- Channel 1  --------------------------------
+Total Frames		Frame Rate		Byte Count		Bitrate
+       36996		23.98 fps		 277755434		1440.04 kbps
+
+Channel 1
+Average Speed:		19.107 fps
+Total Encoding Time:	1936278 ms
+Total Execution Time:	1936642 ms
+Average Latency:	18012 ms
+Max Latency:		49637 ms
+
+ssimulacra2_rs: Mean: 84.58635881, Median: 84.87470505, Std Dev: 3.30130242, 5th Percentile: 80.17739181, 95th Percentile: 88.26913055
+                </code></pre>
+                <p><code>--crf 30 --tune 1 --preset 2 --keyint 12s--variance-octile 2 --enable-variance-boost 1 --variance-boost-strength 1 --variance-boost-curve 2 --enable-tf 2 --tf-strength 2 --sharpness 4</code>：</p>
+                <pre><code class="text-smaller language-powershell">
+SUMMARY --------------------------------- Channel 1  --------------------------------
+Total Frames		Frame Rate		Byte Count		Bitrate
+       36996		23.98 fps		 265394290		1375.95 kbps
+
+Channel 1
+Average Speed:		20.708 fps
+Total Encoding Time:	1786560 ms
+Total Execution Time:	1786892 ms
+Average Latency:	16573 ms
+Max Latency:		46755 ms
+
+ssimulacra2_rs: Mean: 84.15532276, Median: 84.55457187, Std Dev: 3.53045695, 5th Percentile: 79.11152471, 95th Percentile: 88.06174074
+                </code></pre>
+                <p><code>--crf 30 --tune 0 --preset 2 --keyint 12s --enable-qm 1 --variance-octile 2 --enable-variance-boost 1 --variance-boost-strength 1 --variance-boost-curve 2 --enable-tf 2 --tf-strength 2 --sharpness 6</code>：</p>
+                <pre><code class="text-smaller language-powershell">
+SUMMARY --------------------------------- Channel 1  --------------------------------
+Total Frames		Frame Rate		Byte Count		Bitrate
+       36996		23.98 fps		 249965639		1295.96 kbps
+
+Channel 1
+Average Speed:		20.808 fps
+Total Encoding Time:	1777962 ms
+Total Execution Time:	1778324 ms
+Average Latency:	16515 ms
+Max Latency:		45078 ms
+
+                </code></pre>
+                <p><code>--crf 30 --tune 0 --preset 2 --keyint 12s--variance-octile 2 --enable-variance-boost 1 --variance-boost-strength 1 --variance-boost-curve 2 --enable-tf 2 --tf-strength 2 --sharpness 4</code>：</p>
+                <pre><code class="text-smaller language-powershell">
+SUMMARY --------------------------------- Channel 1  --------------------------------
+Total Frames		Frame Rate		Byte Count		Bitrate
+       36996		23.98 fps		 252621007		1309.73 kbps
+
+Channel 1
+Average Speed:		20.647 fps
+Total Encoding Time:	1791864 ms
+Total Execution Time:	1792228 ms
+Average Latency:	16606 ms
+Max Latency:		46896 ms
+
+ssimulacra2_rs: Mean: 83.68623603, Median: 83.96666350, Std Dev: 3.66503275, 5th Percentile: 78.54152309, 95th Percentile: 87.85772333
+                </code></pre>
+            </div>
+
+            <div class="overflow-auto mt-3"><table class="table-center text-smaller two-decimals">
+                <thead>
+                    <tr class="border-lr">
+                        <th colspan="4">基准测试</th>
+                        <th class="px-1" colspan="3">XPSNR</th>
+                        <th class="px-1" colspan="2">VMAF 0.6.1</th>
+                        <th class="px-1" colspan="4">SSIMULACRA 2.1</th>
+                    </tr>
+                    <tr class="border-lr">
+                        <th class="px-1">编码器</th>
+                        <th class="px-1">编码选项</th>
+                        <th class="px-1">速度 fps</th>
+                        <th class="px-1">码率 kbps</th>
+                        <th class="px-1">Y dB</th>
+                        <th class="px-1">U dB</th>
+                        <th class="px-1">V dB</th>
+                        <th class="px-1">4k</th>
+                        <th class="px-1">1080p</th>
+                        <th class="px-1">均值</th>
+                        <th class="px-1">中位</th>
+                        <th class="px-1">第 5%</th>
+                        <th class="px-1">第 95%</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="text-smaller">
+                        <td class="align-items-center t-light-gray" colspan="13"><b>Netflix Boat</b></td>
+                    </tr>
+                    <tr class="border-bottom">
+                        <td class="px-1">~x265</td>
+                        <td class="px-1">~CRF18 Custom</td>
+                        <td class="px-1">1.54</td>
+                        <td class="px-1" style="color:#FFF;background-color:#FF7C80">60831.26</td>
+                        <td class="px-1" style="color:#92D050">42.0499</td>
+                        <td class="px-1" style="color:#92D050">44.8382</td>
+                        <td class="px-1" style="color:#31D87D">47.8922</td>
+                        <td class="px-1" style="color:#31D87D">99.810258</td>
+                        <td class="px-1" style="color:#31D87D">99.810258</td>
+                        <td class="px-1" style="color:#FFC000">73.25259644</td>
+                        <td class="px-1" style="color:#FFC000">71.55939769</td>
+                        <td class="px-1" style="color:#C65911">69.44349186</td>
+                        <td class="px-1" style="color:#FFCC00">79.86377007</td>
+                    </tr>
+                    <tr class="border-bottom">
+                        <td class="px-1">SVTAV1</td>
+                        <td class="px-1">CRF30 PSNR QM P2 VarOct2 VB-Curve2Strength2 TF2-Strength2 Sharp6</td>
+                        <td class="px-1">1.618</td>
+                        <td class="px-1" style="color:#FFF;background-color:#FF7C80">73294.94</td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                    </tr>
+                    <tr class="border-bottom">
+                        <td class="px-1">SVTAV1</td>
+                        <td class="px-1">CRF30 PSNR P2 VarOct2 VB-Curve2Strength2 TF2-Strength2 Sharp4</td>
+                        <td class="px-1">1.711</td>
+                        <td class="px-1 ace" style="color:#FFF;background-color:#FF7C80">58986.51</td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                    </tr>
+                    <tr class="border-bottom">
+                        <td class="px-1">SVTAV1</td>
+                        <td class="px-1">CRF30 VQ QM P2 VB-Curve2Strength1 TF2-Strength2 Sharp6</td>
+                        <td class="px-1">1.803</td>
+                        <td class="px-1" style="color:#FFF;background-color:#FF7C80">61630.74</td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                    </tr>
+                    <tr class="border-bottom">
+                        <td class="px-1">SVTAV1</td>
+                        <td class="px-1">CRF30 VQ P2 VarOct2 VB-Curve2Strength1 TF2-Strength2 Sharp4</td>
+                        <td class="px-1 ace">1.908</td>
+                        <td class="px-1" style="color:#FFF;background-color:#FF7C80">64077.64</td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                    </tr>
+
+
+
+
+
+                    <tr class="text-smaller">
+                        <td class="align-items-center t-light-gray" colspan="13"><b>Netflix WindAndNature</b></td>
+                    </tr>
+                    <tr class="border-bottom">
+                        <td class="px-1">~x265</td>
+                        <td class="px-1">~CRF18 Custom</td>
+                        <td class="px-1">2.07</td>
+                        <td class="px-1">21360.67</td>
+                        <td class="px-1" style="color:#FFC000">40.9048</td>
+                        <td class="px-1" style="color:#92D050">43.5395</td>
+                        <td class="px-1" style="color:#92D050">43.4034</td>
+                        <td class="px-1" style="color:#31D87D">96.493359</td>
+                        <td class="px-1" style="color:#92D050">93.110238</td>
+                        <td class="px-1" style="color:#C65911">68.23241143</td>
+                        <td class="px-1" style="color:#C65911">68.96018756</td>
+                        <td class="px-1" style="color:#C65911">61.08936644</td>
+                        <td class="px-1" style="color:#FFCC00">76.03682341</td>
+                    </tr>
+                    <tr class="border-bottom">
+                        <td class="px-1">SVTAV1</td>
+                        <td class="px-1">CRF30 PSNR QM P2 VarOct2 VB-Curve2Strength2 TF2-Strength2 Sharp6</td>
+                        <td class="px-1">2.377</td>
+                        <td class="px-1">23004.04</td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#FFC000">73.62667649</td>
+                        <td class="px-1" style="color:#FFC000">75.21192199</td>
+                        <td class="px-1" style="color:#C65911">66.62791234</td>
+                        <td class="px-1" style="color:#FFC000">77.56220486</td>
+                    </tr>
+                    <tr class="border-bottom">
+                        <td class="px-1">SVTAV1</td>
+                        <td class="px-1">CRF30 PSNR P2 VarOct2 VB-Curve2Strength2 TF2-Strength2 Sharp4</td>
+                        <td class="px-1 ace">2.613</td>
+                        <td class="px-1 ace">18922.62</td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#FFC000"></td>
+                        <td class="px-1" style="color:#FFC000"></td>
+                        <td class="px-1" style="color:#C65911"></td>
+                        <td class="px-1" style="color:#FFC000"></td>
+                    </tr>
+                    <tr class="border-bottom">
+                        <td class="px-1">SVTAV1</td>
+                        <td class="px-1">CRF30 VQ QM P2 VB-Curve2Strength1 TF2-Strength2 Sharp6</td>
+                        <td class="px-1">2.423</td>
+                        <td class="px-1">22016.48</td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#FFC000"></td>
+                        <td class="px-1" style="color:#FFC000"></td>
+                        <td class="px-1" style="color:#C65911"></td>
+                        <td class="px-1" style="color:#FFC000"></td>
+                    </tr>
+                    <tr class="border-bottom">
+                        <td class="px-1">SVTAV1</td>
+                        <td class="px-1">CRF30 VQ P2 VarOct2 VB-Curve2Strength1 TF2-Strength2 Sharp4</td>
+                        <td class="px-1">2.423</td>
+                        <td class="px-1">22488.27</td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#FFC000"></td>
+                        <td class="px-1" style="color:#FFC000"></td>
+                        <td class="px-1" style="color:#C65911"></td>
+                        <td class="px-1" style="color:#FFC000"></td>
+                    </tr>
+
+
+
+
+
+
+                    <tr class="text-smaller">
+                        <td class="align-items-center t-light-gray" colspan="13"><b>Blender Fundation BigBuckBunny</b></td>
+                    </tr>
+                    <tr class="border-bottom">
+                        <td class="px-1">~x265</td>
+                        <td class="px-1">~CRF18 Custom</td>
+                        <td class="px-1">6.68</td>
+                        <td class="px-1">4334.79</td>
+                        <td class="px-1" style="color:#92D050">42.1004</td>
+                        <td class="px-1" style="color:#92D050">44.39</td>
+                        <td class="px-1" style="color:#31D87D">45.5117</td>
+                        <td class="px-1" style="color:#31D87D">99.728842</td>
+                        <td class="px-1" style="color:#31D87D">98.184211</td>
+                        <td class="px-1" style="color:#92D050">83.24602058</td>
+                        <td class="px-1" style="color:#92D050">83.40918464</td>
+                        <td class="px-1" style="color:#FFC000">78.01967156</td>
+                        <td class="px-1" style="color:#92D050">87.57657407</td>
+                    </tr>
+                    <tr class="border-bottom">
+                        <td class="px-1">SVTAV1</td>
+                        <td class="px-1">CRF30 PSNR QM P2 VarOct2 VB-Curve2Strength2 TF2-Strength2 Sharp6</td>
+                        <td class="px-1">14.593</td>
+                        <td class="px-1">3572.83</td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1 ace" style="color:#92D050">84.71483166</td>
+                        <td class="px-1 ace" style="color:#92D050">84.74165417</td>
+                        <td class="px-1 ace" style="color:#FFCC00">79.93497054</td>
+                        <td class="px-1 ace" style="color:#92D050">89.26163819</td>
+                    </tr>
+                    <tr class="border-bottom">
+                        <td class="px-1">SVTAV1</td>
+                        <td class="px-1">CRF30 PSNR P2 VarOct2 VB-Curve2Strength2 TF2-Strength2 Sharp4</td>
+                        <td class="px-1">15.525</td>
+                        <td class="px-1">3228.33</td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#92D050">84.01140358</td>
+                        <td class="px-1" style="color:#92D050">84.00227060</td>
+                        <td class="px-1" style="color:#FFCC00">78.69724645</td>
+                        <td class="px-1" style="color:#92D050">89.05068407</td>
+                    </tr>
+                    <tr class="border-bottom">
+                        <td class="px-1">SVTAV1</td>
+                        <td class="px-1">CRF30 VQ QM P2 VB-Curve2Strength1 TF2-Strength2 Sharp6</td>
+                        <td class="px-1">16.007</td>
+                        <td class="px-1 ace">3184.93</td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#92D050">83.86722596</td>
+                        <td class="px-1" style="color:#92D050">83.88102295</td>
+                        <td class="px-1" style="color:#FFCC00">78.42735225</td>
+                        <td class="px-1" style="color:#92D050">88.81709881</td>
+                    </tr>
+                    <tr class="border-bottom">
+                        <td class="px-1">SVTAV1</td>
+                        <td class="px-1">CRF30 VQ P2 VarOct2 VB-Curve2Strength1 TF2-Strength2 Sharp4</td>
+                        <td class="px-1 ace">16.169</td>
+                        <td class="px-1">3335.18</td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#92D050">83.91060703</td>
+                        <td class="px-1" style="color:#92D050">83.92889224</td>
+                        <td class="px-1" style="color:#FFCC00">78.32497955</td>
+                        <td class="px-1" style="color:#92D050">89.00112787</td>
+                    </tr>
+
+
+
+
+                    <tr class="text-smaller">
+                        <td class="align-items-center t-light-gray" colspan="13"><b>Blender Fundation ElephantsDream</b></td>
+                    </tr>
+                    <tr class="border-bottom">
+                        <td class="px-1">~x265</td>
+                        <td class="px-1">~CRF18 Custom</td>
+                        <td class="px-1">6.11</td>
+                        <td class="px-1">5120.43</td>
+                        <td class="px-1" style="color:#92D050">43.6721</td>
+                        <td class="px-1" style="color:#31D87D">47.7466</td>
+                        <td class="px-1" style="color:#31D87D">48.1249</td>
+                        <td class="px-1" style="color:#31D87D">99.658051</td>
+                        <td class="px-1" style="color:#31D87D">98.434386</td>
+                        <td class="px-1" style="color:#92D050">84.12837569</td>
+                        <td class="px-1" style="color:#92D050">83.64339310</td>
+                        <td class="px-1" style="color:#FFC000">74.46127664</td>
+                        <td class="px-1" style="color:#31D87D">96.50134420</td>
+                    </tr>
+                    <tr class="border-bottom">
+                        <td class="px-1">SVTAV1</td>
+                        <td class="px-1">CRF30 PSNR QM P2 VarOct2 VB-Curve2Strength2 TF2-Strength2 Sharp6</td>
+                        <td class="px-1">12.265</td>
+                        <td class="px-1">4655.71</td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1 ace" style="color:#92D050">85.54040820</td>
+                        <td class="px-1 ace" style="color:#92D050">84.93837429</td>
+                        <td class="px-1 ace" style="color:#FFCC00">77.21057249</td>
+                        <td class="px-1 ace" style="color:#31D87D">96.56286346</td>
+                    </tr>
+                    <tr class="border-bottom">
+                        <td class="px-1">SVTAV1</td>
+                        <td class="px-1">CRF30 PSNR P2 VarOct2 VB-Curve2Strength2 TF2-Strength2 Sharp4</td>
+                        <td class="px-1">12.958</td>
+                        <td class="px-1 ace">4040.32</td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#92D050">84.55608230</td>
+                        <td class="px-1" style="color:#92D050">84.05436298</td>
+                        <td class="px-1" style="color:#FFCC00">75.10783751</td>
+                        <td class="px-1" style="color:#31D87D">96.43148175</td>
+                    </tr>
+                    <tr class="border-bottom">
+                        <td class="px-1">SVTAV1</td>
+                        <td class="px-1">CRF30 VQ QM P2 VB-Curve2Strength1 TF2-Strength2 Sharp6</td>
+                        <td class="px-1">13.161</td>
+                        <td class="px-1">4115.34</td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#92D050">84.53918838</td>
+                        <td class="px-1" style="color:#92D050">84.06319396</td>
+                        <td class="px-1" style="color:#FFCC00">75.15510046</td>
+                        <td class="px-1" style="color:#31D87D">96.39088576</td>
+                    </tr>
+                    <tr class="border-bottom">
+                        <td class="px-1">SVTAV1</td>
+                        <td class="px-1">CRF30 VQ P2 VarOct2 VB-Curve2Strength1 TF2-Strength2 Sharp4</td>
+                        <td class="px-1 ace">13.217</td>
+                        <td class="px-1">4225.79</td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#92D050">84.49935105</td>
+                        <td class="px-1" style="color:#92D050">84.07127415</td>
+                        <td class="px-1" style="color:#FFCC00">74.97756983</td>
+                        <td class="px-1" style="color:#31D87D">96.41701650</td>
+                    </tr>
+
+
+
+
+
+                    <tr class="text-smaller">
+                        <td class="align-items-center t-light-gray" colspan="13"><b>Netflix SolLevante</b></td>
+                    </tr>
+                    <tr class="border-bottom">
+                        <td class="px-1">~x265</td>
+                        <td class="px-1">~CRF18 Custom</td>
+                        <td class="px-1 ace">2.39</td>
+                        <td class="px-1 ace">32862.36</td>
+                        <td class="px-1" style="color:#541818">21.0524</td>
+                        <td class="px-1" style="color:#FFC000">38.4039</td>
+                        <td class="px-1" style="color:#C65911">35.275</td>
+                        <td class="px-1 ace" style="color:#31D87D">98.951545</td>
+                        <td class="px-1 ace" style="color:#31D87D">98.200316</td>
+                        <td class="px-1" style="color:#C65911">68.8732738</td>
+                        <td class="px-1 ace" style="color:#C65911">67.24602694</td>
+                        <td class="px-1" style="color:#541818">28.23977369</td>
+                        <td class="px-1 sec" style="color:#31D87D">99.82971151</td>
+                    </tr>
+                    <tr class="border-bottom">
+                        <td class="px-1">SVTAV1</td>
+                        <td class="px-1">CRF30 PSNR QM P2 VarOct2 VB-Curve2Strength2 TF2-Strength2 Sharp6</td>
+                        <td class="px-1">2.042</td>
+                        <td class="px-1">38629.23</td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                    </tr>
+                    <tr class="border-bottom">
+                        <td class="px-1">SVTAV1</td>
+                        <td class="px-1">CRF30 PSNR P2 VarOct2 VB-Curve2Strength2 TF2-Strength2 Sharp4</td>
+                        <td class="px-1">2.11</td>
+                        <td class="px-1">33164.52</td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                    </tr>
+                    <tr class="border-bottom">
+                        <td class="px-1">SVTAV1</td>
+                        <td class="px-1">CRF30 VQ QM P2 VB-Curve2Strength1 TF2-Strength2 Sharp6</td>
+                        <td class="px-1">2.139</td>
+                        <td class="px-1">34249.29</td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                    </tr>
+                    <tr class="border-bottom">
+                        <td class="px-1">SVTAV1</td>
+                        <td class="px-1">CRF30 VQ P2 VarOct2 VB-Curve2Strength1 TF2-Strength2 Sharp4</td>
+                        <td class="px-1">2.211</td>
+                        <td class="px-1">35021.14</td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                    </tr>
+
+
+
+
+
+
+
+                    <tr class="text-smaller">
+                        <td class="align-items-center t-light-gray" colspan="13"><b>ドラゴン会. MAIDRAGON-S</b></td>
+                    </tr>
+                    <tr class="border-bottom">
+                        <td class="px-1">~x265</td>
+                        <td class="px-1">~CRF18 Custom</td>
+                        <td class="px-1 ace">21.06</td>
+                        <td class="px-1">3162.45</td>
+                        <td class="px-1" style="color:#92D050">42.5171</td>
+                        <td class="px-1" style="color:#92D050">44.2124</td>
+                        <td class="px-1" style="color:#92D050">44.547</td>
+                        <td class="px-1" style="color:#31D87D">99.592478</td>
+                        <td class="px-1" style="color:#31D87D">97.058023</td>
+                        <td class="px-1" style="color:#92D050">80.15751958</td>
+                        <td class="px-1" style="color:#92D050">82.75859474</td>
+                        <td class="px-1" style="color:#C65911">62.41689237</td>
+                        <td class="px-1" style="color:#92D050">88.08307654</td>
+                    </tr>
+                    <tr class="border-bottom">
+                        <td class="px-1">SVTAV1</td>
+                        <td class="px-1">CRF30 PSNR QM P2 VarOct2 VB-Curve2Strength2 TF2-Strength2 Sharp6</td>
+                        <td class="px-1">16.451</td>
+                        <td class="px-1">2896.32</td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                    </tr>
+                    <tr class="border-bottom">
+                        <td class="px-1">SVTAV1</td>
+                        <td class="px-1">CRF30 PSNR P2 VarOct2 VB-Curve2Strength2 TF2-Strength2 Sharp4</td>
+                        <td class="px-1">17.243</td>
+                        <td class="px-1">2726.67</td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                    </tr>
+                    <tr class="border-bottom">
+                        <td class="px-1">SVTAV1</td>
+                        <td class="px-1">CRF30 VQ QM P2 VB-Curve2Strength1 TF2-Strength2 Sharp6</td>
+                        <td class="px-1">17.878</td>
+                        <td class="px-1 ace">2654.97</td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                    </tr>
+                    <tr class="border-bottom">
+                        <td class="px-1">SVTAV1</td>
+                        <td class="px-1">CRF30 VQ P2 VarOct2 VB-Curve2Strength1 TF2-Strength2 Sharp4</td>
+                        <td class="px-1">17.814</td>
+                        <td class="px-1">2834.02</td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                    </tr>
+
+
+
+
+
+                    <tr class="text-smaller">
+                        <td class="align-items-center t-light-gray" colspan="13"><b>OB 会. HYOUKA</b></td>
+                    </tr>
+                    <tr class="border-bottom">
+                        <td class="px-1">~x265</td>
+                        <td class="px-1">~CRF18 Custom</td>
+                        <td class="px-1 ace">24.57</td>
+                        <td class="px-1">1381.65</td>
+                        <td class="px-1" style="color:#FFC000">40.4798</td>
+                        <td class="px-1" style="color:#92D050">43.4753</td>
+                        <td class="px-1" style="color:#92D050">43.8205</td>
+                        <td class="px-1" style="color:#31D87D">99.462855</td>
+                        <td class="px-1" style="color:#31D87D">96.529797</td>
+                        <td class="px-1" style="color:#FFC000">79.68937613</td>
+                        <td class="px-1" style="color:#92D050">80.29604784</td>
+                        <td class="px-1" style="color:#FFC000">71.18435582</td>
+                        <td class="px-1" style="color:#92D050">86.6893906</td>
+                    </tr>
+                    <tr class="border-bottom">
+                        <td class="px-1">SVTAV1</td>
+                        <td class="px-1">CRF30 PSNR QM P2 VarOct2 VB-Curve2Strength2 TF2-Strength2 Sharp6</td>
+                        <td class="px-1">19.107</td>
+                        <td class="px-1">1440.04</td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#92D050">84.58635881</td>
+                        <td class="px-1" style="color:#92D050">84.87470505</td>
+                        <td class="px-1" style="color:#92D050">80.17739181</td>
+                        <td class="px-1" style="color:#92D050">88.26913055</td>
+                    </tr>
+                    <tr class="border-bottom">
+                        <td class="px-1">SVTAV1</td>
+                        <td class="px-1">CRF30 PSNR P2 VarOct2 VB-Curve2Strength2 TF2-Strength2 Sharp4</td>
+                        <td class="px-1">20.708</td>
+                        <td class="px-1">1375.95</td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#92D050">84.15532276</td>
+                        <td class="px-1" style="color:#92D050">84.55457187</td>
+                        <td class="px-1" style="color:#FFC000">79.11152471</td>
+                        <td class="px-1" style="color:#92D050">88.06174074</td>
+                    </tr>
+                    <tr class="border-bottom">
+                        <td class="px-1">SVTAV1</td>
+                        <td class="px-1">CRF30 VQ QM P2 VB-Curve2Strength1 TF2-Strength2 Sharp6</td>
+                        <td class="px-1">20.808</td>
+                        <td class="px-1 ace">1295.96</td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#92D050"></td>
+                        <td class="px-1" style="color:#92D050"></td>
+                        <td class="px-1" style="color:#FFC000"></td>
+                        <td class="px-1" style="color:#92D050"></td>
+                    </tr>
+                    <tr class="border-bottom">
+                        <td class="px-1">SVTAV1</td>
+                        <td class="px-1">CRF30 VQ P2 VarOct2 VB-Curve2Strength1 TF2-Strength2 Sharp4</td>
+                        <td class="px-1">20.647</td>
+                        <td class="px-1">1309.73</td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#92D050"></td>
+                        <td class="px-1" style="color:#92D050"></td>
+                        <td class="px-1" style="color:#FFC000"></td>
+                        <td class="px-1" style="color:#92D050"></td>
+                    </tr>
+                </tbody>
+            </table></div>
+            <h4>（8/8）SVT-AV1 全功能 B 帧与片源特化参数测试分析</h4>
+            <ol class="text-smaller">
+                <li>由于开启了更高强度以及优化，这里的 SVT-AV1 表现在画质上明显占优，而速度和码率上变得与 x265 相差不大</li>
+                <li>本次测试推翻了之前对 SVT-AV1 在画质上达不到 x265 程度的</li>
+            </ol>
 
             <h2 id="h2-19">附录：下载</h2>
 
