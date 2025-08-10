@@ -4740,11 +4740,11 @@ SvtAv1EncApp.exe -i .\输入.yuv -w 3840 -h 2160 --input-depth 10 --color-format
             <code class="code-bold">&#45;&#45;enable-variance-boost</code>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;0/1，默认 0：关，<span class="text-red-emph">Superblock 大小改为 64x64</span>&gt;指定<u>帧内</u>方差自适应量化的增强强度微调。Superblock 改动逻辑见 <a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/master/Source/Lib/Globals/enc_handle.c#L3922">enc_handle.c</a>。</p>
             <code class="code-bold">--variance-boost-curve</code>
-            <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~2，默认 0：默认曲线&gt;指定<u>帧内</u>方差自适应量化的增强映射曲线，类似于 x264/5 的 <code>--qcomp</code></p>
+            <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~2，默认 0：默认曲线&gt;指定<u>帧内</u>方差自适应量化的增强映射曲线。TODO：可能无法在 API 中使用，包括 ffmpeg svtav1-params，需确认 CLI ONLY）</p>
             <ul class="list-dotless text-smaller">
                 <li><b>0：</b>通过低底数的指数递减曲线映射方差变化，快速收敛/收紧方差自适应量化的优化范围</li>
                 <li><b>1：</b>通过线性递减线映射方差变化到量化值，中速收敛/收紧方差自适应量化的优化范围，在适度增加码率的情况下增强低~中对比度区域的画质</li>
-                <li><b>2：</b>通过线性递减线映射方差变化到量化值，慢速收敛/收紧方差自适应量化的优化范围，由 SVT-AV1-PSY 开发组基于 Cloudinary CID22 测试集中 SSIMULACRA2 跑分得出
+                <li><b>2：</b>通过线性递减线映射方差变化到量化值，慢速收敛/收紧方差自适应量化的优化范围，由 SVT-AV1-PSY 项目基于 Cloudinary CID22 测试集中 SSIMULACRA2 跑分得出
                     <ul><li>SVT-AV1-PSY Tune 4（静态图像微调）会调用该曲线</li></ul>
                 </li>
             </ul>
@@ -4752,23 +4752,29 @@ SvtAv1EncApp.exe -i .\输入.yuv -w 3840 -h 2160 --input-depth 10 --color-format
 switch (curve) {
     case 1:
         qstep_ratio =
-            0.25 * strength * (-log2((double)variance) + 8) + 1;
+            0.25 * strength * (-log2((double)variance)+8) + 1;
         break;
     case 2:
         qstep_ratio =
-            0.15 * strength * (-log2((double)variance) + 10) + 1;
+            0.15 * strength * (-log2((double)variance)+10) + 1;
         break;
     default:
         qstep_ratio =
             pow(
                 1.018,
-                strengths[strength] * (-10 * log2((double)variance) + 80)
+                strengths[strength] * (-10*log2((double)variance)+80)
             );
         break;
 }
             </code></pre>
             <code class="code-bold">--variance-boost-strength</code>
-            <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 1~4，默认 2：弱&gt;指定<u>帧内</u>方差自适应量化的增强强度——1：微，2：弱，3：中：4：强</p>
+            <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 1~4，默认 2：弱&gt;指定<u>帧内</u>方差自适应量化的增强强度（缩放映射曲线曲率）——1：微，2：弱，3：中：4：强。，类似于 x264/5 的 <code>--qcomp</code>。</p>
+            <ul class="list-dotless text-smaller">
+                <li><b>1：</b>适合极简风格片源</li>
+                <li><b>2：</b>适合大部分中到中低对比度、低饱和度、同类色到邻近色风格、或以简化为目的的灰度单色的片源</li>
+                <li><b>3：</b>对比度关乎画质，例如黑背景与发光前景、互补色到对比色风格的片源</li>
+                <li><b>4：</b>适合高对比度片源，且对比度关乎数据完整性，不适合大多数片源</li>
+            </ul>
             <code class="code-bold">--variance-octile</code>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 1~8，默认 6：高要求&gt;指定<u>帧内（Superblock）</u>方差自适应量化增强（Variance Boost）的方差自适应量化开启条件——但凡特大块中某个分块的面积达到全块的 variance-octile÷8，并且内容为低对比度，则对该 Superblock 启用方差自适应量化增强。这样可以减少其中紧挨着“复杂块”的“简单块”被连带着分配了过高量化强度所致的模糊块失真。</p>
             <p class="text-gray-side">注：在大范围优化测试（见下方测试版块）中，发现指定 2、4、6（默认）时，对所有测试视频都没能产生任何影响，也没有触发参数无效警告。因此可能需要在远超 CRF30 所致的高量化强度、指定极值、或搭配参数使用。</p>
@@ -13489,8 +13495,9 @@ Total Execution Time:	3093122 ms
 Average Latency:	175629 ms
 Max Latency:		389803 ms
 
+ssimulacra2_rs: Mean: 81.94415856, Median: 78.35070014, Std Dev: 11.41209316, 5th Percentile: 65.04975801, 95th Percentile: 99.68170953
                 </code></pre>
-                <p><code>--crf 30 --tune 1 --preset 2 --keyint 12s--variance-octile 2 --enable-variance-boost 1 --variance-boost-strength 1 --variance-boost-curve 2 --enable-tf 2 --tf-strength 2 --sharpness 4</code>：</p>
+                <p><code>--crf 30 --tune 1 --preset 2 --keyint 12s --variance-octile 2 --enable-variance-boost 1 --variance-boost-strength 1 --variance-boost-curve 2 --enable-tf 2 --tf-strength 2 --sharpness 4</code>：</p>
                 <pre><code class="text-smaller language-powershell">
 SUMMARY --------------------------------- Channel 1  --------------------------------
 Total Frames		Frame Rate		Byte Count		Bitrate
@@ -13503,6 +13510,7 @@ Total Execution Time:	2993336 ms
 Average Latency:	169499 ms
 Max Latency:		381911 ms
 
+ssimulacra2_rs: Mean: 80.34126677, Median: 76.51163654, Std Dev: 12.71493243, 5th Percentile: 61.73693983, 95th Percentile: 99.36346381
                 </code></pre>
                 <p><code>--crf 30 --tune 0 --preset 2 --keyint 12s --enable-qm 1 --variance-octile 2 --enable-variance-boost 1 --variance-boost-strength 1 --variance-boost-curve 2 --enable-tf 2 --tf-strength 2 --sharpness 6</code>：</p>
                 <pre><code class="text-smaller language-powershell">
@@ -13517,8 +13525,9 @@ Total Execution Time:	2952388 ms
 Average Latency:	167627 ms
 Max Latency:		369412 ms
 
+ssimulacra2_rs: 
                 </code></pre>
-                <p><code>--crf 30 --tune 0 --preset 2 --keyint 12s--variance-octile 2 --enable-variance-boost 1 --variance-boost-strength 1 --variance-boost-curve 2 --enable-tf 2 --tf-strength 2 --sharpness 4</code>：</p>
+                <p><code>--crf 30 --tune 0 --preset 2 --keyint 12s --variance-octile 2 --enable-variance-boost 1 --variance-boost-strength 1 --variance-boost-curve 2 --enable-tf 2 --tf-strength 2 --sharpness 4</code>：</p>
                 <pre><code class="text-smaller language-powershell">
 SUMMARY --------------------------------- Channel 1  --------------------------------
 Total Frames		Frame Rate		Byte Count		Bitrate
@@ -13531,6 +13540,7 @@ Total Execution Time:	2857092 ms
 Average Latency:	162208 ms
 Max Latency:		387376 ms
 
+ssimulacra2_rs: Mean: 80.09034968, Median: 76.29188966, Std Dev: 13.02681158, 5th Percentile: 60.98289326, 95th Percentile: 99.36087300
                 </code></pre>
             </div>
 
@@ -13551,7 +13561,7 @@ Max Latency:		175710 ms
 
 ssimulacra2_rs: Mean: 78.41704987, Median: 78.44153457, Std Dev: 1.59367179, 5th Percentile: 76.39476204, 95th Percentile: 80.94837641
                 </code></pre>
-                <p><code>--crf 30 --tune 1 --preset 2 --keyint 12s--variance-octile 2 --enable-variance-boost 1 --variance-boost-strength 1 --variance-boost-curve 2 --enable-tf 2 --tf-strength 2 --sharpness 4</code>：</p>
+                <p><code>--crf 30 --tune 1 --preset 2 --keyint 12s --variance-octile 2 --enable-variance-boost 1 --variance-boost-strength 1 --variance-boost-curve 2 --enable-tf 2 --tf-strength 2 --sharpness 4</code>：</p>
                 <pre><code class="text-smaller language-powershell">
 SUMMARY --------------------------------- Channel 1  --------------------------------
 Total Frames		Frame Rate		Byte Count		Bitrate
@@ -13572,7 +13582,6 @@ SUMMARY --------------------------------- Channel 1  ---------------------------
 Total Frames		Frame Rate		Byte Count		Bitrate
          300		60.00 fps		  38519214		61630.74 kbps
 
-
 Channel 1
 Average Speed:		1.803 fps
 Total Encoding Time:	166406 ms
@@ -13582,7 +13591,7 @@ Max Latency:		156781 ms
 
 ssimulacra2_rs: Mean: 76.43178341, Median: 76.40723980, Std Dev: 2.16207516, 5th Percentile: 73.72486035, 95th Percentile: 80.13622101
                 </code></pre>
-                <p><code>--crf 30 --tune 0 --preset 2 --keyint 12s--variance-octile 2 --enable-variance-boost 1 --variance-boost-strength 1 --variance-boost-curve 2 --enable-tf 2 --tf-strength 2 --sharpness 4</code>：</p>
+                <p><code>--crf 30 --tune 0 --preset 2 --keyint 12s --variance-octile 2 --enable-variance-boost 1 --variance-boost-strength 1 --variance-boost-curve 2 --enable-tf 2 --tf-strength 2 --sharpness 4</code>：</p>
                 <pre><code class="text-smaller language-powershell">
 SUMMARY --------------------------------- Channel 1  --------------------------------
 Total Frames		Frame Rate		Byte Count		Bitrate
@@ -13615,7 +13624,7 @@ Max Latency:		175629 ms
 
 ssimulacra2_rs: Mean: 73.62667649, Median: 75.21192199, Std Dev: 3.80629739, 5th Percentile: 66.62791234, 95th Percentile: 77.56220486
                 </code></pre>
-                <p><code>--crf 30 --tune 1 --preset 2 --keyint 12s--variance-octile 2 --enable-variance-boost 1 --variance-boost-strength 1 --variance-boost-curve 2 --enable-tf 2 --tf-strength 2 --sharpness 4</code>：</p>
+                <p><code>--crf 30 --tune 1 --preset 2 --keyint 12s --variance-octile 2 --enable-variance-boost 1 --variance-boost-strength 1 --variance-boost-curve 2 --enable-tf 2 --tf-strength 2 --sharpness 4</code>：</p>
                 <pre><code class="text-smaller language-powershell">
 SUMMARY --------------------------------- Channel 1  --------------------------------
 Total Frames		Frame Rate		Byte Count		Bitrate
@@ -13643,7 +13652,7 @@ Average Latency:	118067 ms
 Max Latency:		167464 ms
 
                 </code></pre>
-                <p><code>--crf 30 --tune 0 --preset 2 --keyint 12s--variance-octile 2 --enable-variance-boost 1 --variance-boost-strength 1 --variance-boost-curve 2 --enable-tf 2 --tf-strength 2 --sharpness 4</code>：</p>
+                <p><code>--crf 30 --tune 0 --preset 2 --keyint 12s --variance-octile 2 --enable-variance-boost 1 --variance-boost-strength 1 --variance-boost-curve 2 --enable-tf 2 --tf-strength 2 --sharpness 4</code>：</p>
                 <pre><code class="text-smaller language-powershell">
 SUMMARY --------------------------------- Channel 1  --------------------------------
 Total Frames		Frame Rate		Byte Count		Bitrate
@@ -13676,7 +13685,7 @@ Max Latency:		47411 ms
 
 ssimulacra2_rs: Mean: 84.71483166, Median: 84.74165417, Std Dev: 3.24757676, 5th Percentile: 79.93497054, 95th Percentile: 89.26163819
                 </code></pre>
-                <p><code>--crf 30 --tune 1 --preset 2 --keyint 12s--variance-octile 2 --enable-variance-boost 1 --variance-boost-strength 1 --variance-boost-curve 2 --enable-tf 2 --tf-strength 2 --sharpness 4</code>：</p>
+                <p><code>--crf 30 --tune 1 --preset 2 --keyint 12s --variance-octile 2 --enable-variance-boost 1 --variance-boost-strength 1 --variance-boost-curve 2 --enable-tf 2 --tf-strength 2 --sharpness 4</code>：</p>
                 <pre><code class="text-smaller language-powershell">
 SUMMARY --------------------------------- Channel 1  --------------------------------
 Total Frames		Frame Rate		Byte Count		Bitrate
@@ -13706,7 +13715,7 @@ Max Latency:		44269 ms
 
 ssimulacra2_rs: Mean: 83.86722596, Median: 83.88102295, Std Dev: 3.59379960, 5th Percentile: 78.42735225, 95th Percentile: 88.81709881
                 </code></pre>
-                <p><code>--crf 30 --tune 0 --preset 2 --keyint 12s--variance-octile 2 --enable-variance-boost 1 --variance-boost-strength 1 --variance-boost-curve 2 --enable-tf 2 --tf-strength 2 --sharpness 4</code>：</p>
+                <p><code>--crf 30 --tune 0 --preset 2 --keyint 12s --variance-octile 2 --enable-variance-boost 1 --variance-boost-strength 1 --variance-boost-curve 2 --enable-tf 2 --tf-strength 2 --sharpness 4</code>：</p>
                 <pre><code class="text-smaller language-powershell">
 SUMMARY --------------------------------- Channel 1  --------------------------------
 Total Frames		Frame Rate		Byte Count		Bitrate
@@ -13740,7 +13749,7 @@ Max Latency:		80949 ms
 
 ssimulacra2_rs: Mean: 85.54040820, Median: 84.93837429, Std Dev: 5.58515767, 5th Percentile: 77.21057249, 95th Percentile: 96.56286346
                 </code></pre>
-                <p><code>--crf 30 --tune 1 --preset 2 --keyint 12s--variance-octile 2 --enable-variance-boost 1 --variance-boost-strength 1 --variance-boost-curve 2 --enable-tf 2 --tf-strength 2 --sharpness 4</code>：</p>
+                <p><code>--crf 30 --tune 1 --preset 2 --keyint 12s --variance-octile 2 --enable-variance-boost 1 --variance-boost-strength 1 --variance-boost-curve 2 --enable-tf 2 --tf-strength 2 --sharpness 4</code>：</p>
                 <pre><code class="text-smaller language-powershell">
 SUMMARY --------------------------------- Channel 1  --------------------------------
 Total Frames		Frame Rate		Byte Count		Bitrate
@@ -13770,7 +13779,7 @@ Max Latency:		76357 ms
 
 ssimulacra2_rs: Mean: 84.53918838, Median: 84.06319396, Std Dev: 6.13789708, 5th Percentile: 75.15510046, 95th Percentile: 96.39088576
                 </code></pre>
-                <p><code>--crf 30 --tune 0 --preset 2 --keyint 12s--variance-octile 2 --enable-variance-boost 1 --variance-boost-strength 1 --variance-boost-curve 2 --enable-tf 2 --tf-strength 2 --sharpness 4</code>：</p>
+                <p><code>--crf 30 --tune 0 --preset 2 --keyint 12s --variance-octile 2 --enable-variance-boost 1 --variance-boost-strength 1 --variance-boost-curve 2 --enable-tf 2 --tf-strength 2 --sharpness 4</code>：</p>
                 <pre><code class="text-smaller language-powershell">
 SUMMARY --------------------------------- Channel 1  --------------------------------
 Total Frames		Frame Rate		Byte Count		Bitrate
@@ -13804,7 +13813,7 @@ Max Latency:		51907 ms
 
 ssimulacra2_rs: Mean: 84.69909136, Median: 86.08820307, Std Dev: 4.65776352, 5th Percentile: 75.27603287, 95th Percentile: 88.89837326
                 </code></pre>
-                <p><code>--crf 30 --tune 1 --preset 2 --keyint 12s--variance-octile 2 --enable-variance-boost 1 --variance-boost-strength 1 --variance-boost-curve 2 --enable-tf 2 --tf-strength 2 --sharpness 4</code>：</p>
+                <p><code>--crf 30 --tune 1 --preset 2 --keyint 12s --variance-octile 2 --enable-variance-boost 1 --variance-boost-strength 1 --variance-boost-curve 2 --enable-tf 2 --tf-strength 2 --sharpness 4</code>：</p>
                 <pre><code class="text-smaller language-powershell">
 SUMMARY --------------------------------- Channel 1  --------------------------------
 Total Frames		Frame Rate		Byte Count		Bitrate
@@ -13834,7 +13843,7 @@ Max Latency:		47392 ms
 
 ssimulacra2_rs: Mean: 84.00612417, Median: 85.51165944, Std Dev: 5.07497935, 5th Percentile: 73.56835171, 95th Percentile: 88.66094789
                 </code></pre>
-                <p><code>--crf 30 --tune 0 --preset 2 --keyint 12s--variance-octile 2 --enable-variance-boost 1 --variance-boost-strength 1 --variance-boost-curve 2 --enable-tf 2 --tf-strength 2 --sharpness 4</code>：</p>
+                <p><code>--crf 30 --tune 0 --preset 2 --keyint 12s --variance-octile 2 --enable-variance-boost 1 --variance-boost-strength 1 --variance-boost-curve 2 --enable-tf 2 --tf-strength 2 --sharpness 4</code>：</p>
                 <pre><code class="text-smaller language-powershell">
 SUMMARY --------------------------------- Channel 1  --------------------------------
 Total Frames		Frame Rate		Byte Count		Bitrate
@@ -13868,7 +13877,7 @@ Max Latency:		49637 ms
 
 ssimulacra2_rs: Mean: 84.58635881, Median: 84.87470505, Std Dev: 3.30130242, 5th Percentile: 80.17739181, 95th Percentile: 88.26913055
                 </code></pre>
-                <p><code>--crf 30 --tune 1 --preset 2 --keyint 12s--variance-octile 2 --enable-variance-boost 1 --variance-boost-strength 1 --variance-boost-curve 2 --enable-tf 2 --tf-strength 2 --sharpness 4</code>：</p>
+                <p><code>--crf 30 --tune 1 --preset 2 --keyint 12s --variance-octile 2 --enable-variance-boost 1 --variance-boost-strength 1 --variance-boost-curve 2 --enable-tf 2 --tf-strength 2 --sharpness 4</code>：</p>
                 <pre><code class="text-smaller language-powershell">
 SUMMARY --------------------------------- Channel 1  --------------------------------
 Total Frames		Frame Rate		Byte Count		Bitrate
@@ -13898,7 +13907,7 @@ Max Latency:		45078 ms
 
 ssimulacra2_rs: Mean: 83.69765034, Median: 83.97990722, Std Dev: 3.63369319, 5th Percentile: 78.64486286, 95th Percentile: 87.68819031
                 </code></pre>
-                <p><code>--crf 30 --tune 0 --preset 2 --keyint 12s--variance-octile 2 --enable-variance-boost 1 --variance-boost-strength 1 --variance-boost-curve 2 --enable-tf 2 --tf-strength 2 --sharpness 4</code>：</p>
+                <p><code>--crf 30 --tune 0 --preset 2 --keyint 12s --variance-octile 2 --enable-variance-boost 1 --variance-boost-strength 1 --variance-boost-curve 2 --enable-tf 2 --tf-strength 2 --sharpness 4</code>：</p>
                 <pre><code class="text-smaller language-powershell">
 SUMMARY --------------------------------- Channel 1  --------------------------------
 Total Frames		Frame Rate		Byte Count		Bitrate
@@ -14300,10 +14309,10 @@ ssimulacra2_rs: Mean: 83.68623603, Median: 83.96666350, Std Dev: 3.66503275, 5th
                         <td class="px-1" style="color:#000"></td>
                         <td class="px-1" style="color:#000"></td>
                         <td class="px-1" style="color:#000"></td>
-                        <td class="px-1" style="color:#000"></td>
-                        <td class="px-1" style="color:#000"></td>
-                        <td class="px-1" style="color:#000"></td>
-                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#92D050">81.94415856</td>
+                        <td class="px-1" style="color:#FFC000">78.35070014</td>
+                        <td class="px-1" style="color:#C65911">65.04975801</td>
+                        <td class="px-1" style="color:#31D87D">99.68170953</td>
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">SVTAV1</td>
@@ -14315,10 +14324,10 @@ ssimulacra2_rs: Mean: 83.68623603, Median: 83.96666350, Std Dev: 3.66503275, 5th
                         <td class="px-1" style="color:#000"></td>
                         <td class="px-1" style="color:#000"></td>
                         <td class="px-1" style="color:#000"></td>
-                        <td class="px-1" style="color:#000"></td>
-                        <td class="px-1" style="color:#000"></td>
-                        <td class="px-1" style="color:#000"></td>
-                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#92D050">80.34126677</td>
+                        <td class="px-1" style="color:#FFC000">76.51163654</td>
+                        <td class="px-1" style="color:#C65911">61.73693983</td>
+                        <td class="px-1" style="color:#31D87D">99.36346381</td>
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">SVTAV1</td>
@@ -14330,10 +14339,10 @@ ssimulacra2_rs: Mean: 83.68623603, Median: 83.96666350, Std Dev: 3.66503275, 5th
                         <td class="px-1" style="color:#000"></td>
                         <td class="px-1" style="color:#000"></td>
                         <td class="px-1" style="color:#000"></td>
-                        <td class="px-1" style="color:#000"></td>
-                        <td class="px-1" style="color:#000"></td>
-                        <td class="px-1" style="color:#000"></td>
-                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#92D050"></td>
+                        <td class="px-1" style="color:#FFC000"></td>
+                        <td class="px-1" style="color:#C65911"></td>
+                        <td class="px-1" style="color:#31D87D"></td>
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">SVTAV1</td>
@@ -14345,14 +14354,11 @@ ssimulacra2_rs: Mean: 83.68623603, Median: 83.96666350, Std Dev: 3.66503275, 5th
                         <td class="px-1" style="color:#000"></td>
                         <td class="px-1" style="color:#000"></td>
                         <td class="px-1" style="color:#000"></td>
-                        <td class="px-1" style="color:#000"></td>
-                        <td class="px-1" style="color:#000"></td>
-                        <td class="px-1" style="color:#000"></td>
-                        <td class="px-1" style="color:#000"></td>
+                        <td class="px-1" style="color:#92D050">80.09034968</td>
+                        <td class="px-1" style="color:#FFC000">76.29188966</td>
+                        <td class="px-1" style="color:#C65911">60.98289326</td>
+                        <td class="px-1" style="color:#31D87D">99.36087300</td>
                     </tr>
-
-
-
 
 
 
