@@ -7389,7 +7389,7 @@ SSIMULACRA2_rs: Mean: 68.23241143 Median: 68.96018756 Std Dev: 4.54572816 5th Pe
             <div class="coll-content">
                 <p><code>--crf 22</code>：</p>
                 <pre><code class="text-smaller language-powershell">
-ffmpeg -y -i .\Big-Buck-Bunny_1920x1080_24fps_8bit_yuv420p.mkv -c:v libx265 -profile:v main10 -x265-params "high-tier=1:ctu=64:tu-intra-depth=4:tu-inter-depth=4:limit-tu=1:rect=1:tskip=1:tskip-fast=1:me=star:subme=3:merange=48:weightb=1:ref=4:max-merge=5:open-gop=0:min-keyint=3:keyint=216:fades=1:bframes=8:b-adapt=2:analyze-src-pics=1:b-intra=1:crf=22:crqpoffs=-3:ipratio=1.2:pbratio=1.5:rdoq-level=2:aq-mode=4:aq-strength=1:qg-size=8:rd=5:limit-refs=0:rskip=0:rc-lookahead=44:psy-rd=1.6:deblock=0,-1:limit-sao=1:sao-non-deblock=1:selective-sao=3" -fps_mode passthrough -c:a copy .\Big-Buck-Bunny_1920x1080_24fps_8bit_yuv420_crf22.mp4
+ffmpeg -y -i .\BigBuckBunny_1920x1080_24fps_8bit_yuv420p.mkv -c:v libx265 -profile:v main10 -x265-params "high-tier=1:ctu=64:tu-intra-depth=4:tu-inter-depth=4:limit-tu=1:rect=1:tskip=1:tskip-fast=1:me=star:subme=3:merange=48:weightb=1:ref=4:max-merge=5:open-gop=0:min-keyint=3:keyint=216:fades=1:bframes=8:b-adapt=2:analyze-src-pics=1:b-intra=1:crf=22:crqpoffs=-3:ipratio=1.2:pbratio=1.5:rdoq-level=2:aq-mode=4:aq-strength=1:qg-size=8:rd=5:limit-refs=0:rskip=0:rc-lookahead=44:psy-rd=1.6:deblock=0,-1:limit-sao=1:sao-non-deblock=1:selective-sao=3" -fps_mode passthrough -c:a copy .\BigBuckBunny_1920x1080_24fps_8bit_yuv420_crf22.mp4
 
 Metadata:
     encoder         : Lavf61.9.107
@@ -7418,7 +7418,7 @@ SSIMULACRA2_rs: Mean: 77.79793375 Median: 78.10156956 Std Dev: 4.87145655 5th Pe
                 </code></pre>
                 <p><code>--crf 18</code>：</p>
                 <pre><code class="text-smaller language-powershell">
-ffmpeg -y -i .\Big-Buck-Bunny_1920x1080_24fps_8bit_yuv420p.mkv -c:v libx265 -profile:v main10 -x265-params "high-tier=1:ctu=64:tu-intra-depth=4:tu-inter-depth=4:limit-tu=1:rect=1:tskip=1:tskip-fast=1:me=star:subme=3:merange=48:weightb=1:ref=4:max-merge=5:open-gop=0:min-keyint=3:keyint=216:fades=1:bframes=8:b-adapt=2:analyze-src-pics=1:b-intra=1:crf=18:crqpoffs=-3:ipratio=1.2:pbratio=1.5:rdoq-level=2:aq-mode=4:aq-strength=1:qg-size=8:rd=5:limit-refs=0:rskip=0:rc-lookahead=44:psy-rd=1.6:deblock=0,-1:limit-sao=1:sao-non-deblock=1:selective-sao=3" -fps_mode passthrough -c:a copy .\Big-Buck-Bunny_1920x1080_24fps_8bit_yuv420_crf18.mp4
+ffmpeg -y -i .\BigBuckBunny_1920x1080_24fps_8bit_yuv420p.mkv -c:v libx265 -profile:v main10 -x265-params "high-tier=1:ctu=64:tu-intra-depth=4:tu-inter-depth=4:limit-tu=1:rect=1:tskip=1:tskip-fast=1:me=star:subme=3:merange=48:weightb=1:ref=4:max-merge=5:open-gop=0:min-keyint=3:keyint=216:fades=1:bframes=8:b-adapt=2:analyze-src-pics=1:b-intra=1:crf=18:crqpoffs=-3:ipratio=1.2:pbratio=1.5:rdoq-level=2:aq-mode=4:aq-strength=1:qg-size=8:rd=5:limit-refs=0:rskip=0:rc-lookahead=44:psy-rd=1.6:deblock=0,-1:limit-sao=1:sao-non-deblock=1:selective-sao=3" -fps_mode passthrough -c:a copy .\BigBuckBunny_1920x1080_24fps_8bit_yuv420_crf18.mp4
 
 Metadata:
 encoder         : Lavf61.9.107
@@ -8229,7 +8229,7 @@ SSIMULACRA2_rs: Mean: 69.94324986 Median: 69.84754035 Std Dev: 1.42894718 5th Pe
             <div class="coll-content">
                 <p><code>--preset 3 --crf 35</code>：</p>
                 <pre><code class="text-smaller language-powershell">
-ffmpeg -i .\Big-Buck-Bunny_1920x1080_24fps_8bit_yuv420p.mkv -f yuv4mpegpipe - | .\SvtAv1EncApp -i - --keyint 12s --crf 35 --preset 3 -b .\Big-Buck-Bunny_1920x1080_24fps_8bit_yuv420_crf35_preset3.ivf
+ffmpeg -i .\BigBuckBunny_1920x1080_24fps_8bit_yuv420p.mkv -f yuv4mpegpipe - | .\SvtAv1EncApp -i - --keyint 12s --crf 35 --preset 3 -b .\BigBuckBunny_1920x1080_24fps_8bit_yuv420_crf35_preset3.ivf
 
 Encoding frame 14315 1346.27 kbps 32.47 fps
 SUMMARY --------------------------------- Channel 1  --------------------------------
@@ -8249,7 +8249,7 @@ SSIMULACRA2_rs: Mean: 75.32415905 Median: 75.39024480 Std Dev: 6.96410086 5th Pe
                 </code></pre>
                 <p><code>--preset 3 --crf 30</code>：</p>
                 <pre><code class="text-smaller language-powershell">
-ffmpeg -i .\Big-Buck-Bunny_1920x1080_24fps_8bit_yuv420p.mkv -f yuv4mpegpipe - | .\SvtAv1EncApp -i - --keyint 12s --crf 30 --preset 3 -b .\Big-Buck-Bunny_1920x1080_24fps_8bit_yuv420_crf30_preset3.ivf
+ffmpeg -i .\BigBuckBunny_1920x1080_24fps_8bit_yuv420p.mkv -f yuv4mpegpipe - | .\SvtAv1EncApp -i - --keyint 12s --crf 30 --preset 3 -b .\BigBuckBunny_1920x1080_24fps_8bit_yuv420_crf30_preset3.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
 Total Frames            Frame Rate              Byte Count              Bitrate
@@ -8267,11 +8267,11 @@ VMAF 4K: 99.407608, VMAF 1080p: 97.671552
 SSIMULACRA2_rs: Mean: 78.85317925 Median: 78.87951009 Std Dev: 5.64017338 5th Percentile: 69.7591437695th Percentile: 87.17429615
                 </code></pre>
             </div>
-            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（11/22）SVT-AV1 v3.0——Big-Buck-Bunny QM</button>
+            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（11/22）SVT-AV1 v3.0——BigBuckBunny QM</button>
             <div class="coll-content">
                 <p><code>--preset 3 --crf 35 --enable-qm 1</code>：</p>
                 <pre><code class="text-smaller language-powershell">
-ffmpeg -i .\Big-Buck-Bunny_1920x1080_24fps_8bit_yuv420p.mkv -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --crf 35 --preset 3 --enable-qm 1 -b .\Big-Buck-Bunny_1920x1080_24fps_8bit_yuv420_crf35_qm_preset3.ivf
+ffmpeg -i .\BigBuckBunny_1920x1080_24fps_8bit_yuv420p.mkv -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --crf 35 --preset 3 --enable-qm 1 -b .\BigBuckBunny_1920x1080_24fps_8bit_yuv420_crf35_qm_preset3.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
 Total Frames            Frame Rate              Byte Count              Bitrate
@@ -8290,7 +8290,7 @@ SSIMULACRA2_rs: Mean: 75.27920286 Median: 75.36589160 Std Dev: 6.91814465 5th Pe
                 </code></pre>
                 <p><code>--preset 3 --crf 30 --enable-qm 1</code>：</p>
                 <pre><code class="text-smaller language-powershell">
-ffmpeg -i .\Big-Buck-Bunny_1920x1080_24fps_8bit_yuv420p.mkv -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --crf 30 --preset 3 --enable-qm 1 -b .\Big-Buck-Bunny_1920x1080_24fps_8bit_yuv420_crf30_qm_preset3.ivf
+ffmpeg -i .\BigBuckBunny_1920x1080_24fps_8bit_yuv420p.mkv -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --crf 30 --preset 3 --enable-qm 1 -b .\BigBuckBunny_1920x1080_24fps_8bit_yuv420_crf30_qm_preset3.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
 Total Frames            Frame Rate              Byte Count              Bitrate
@@ -8309,7 +8309,7 @@ SSIMULACRA2_rs: Mean: 78.79998864 Median: 78.83792127 Std Dev: 5.60273973 5th Pe
                 </code></pre>
                 <p><code>--preset 3 --crf 35 --enable-qm 1 --qm-min 0</code>：</p>
                 <pre><code class="text-smaller language-powershell">
-ffmpeg -i .\Big-Buck-Bunny_1920x1080_24fps_8bit_yuv420p.mkv -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --crf 35 --preset 3 --enable-qm 1 --qm-min 0 -b .\Big-Buck-Bunny_1920x1080_24fps_8bit_yuv420_crf35_qmMin0_preset3.ivf
+ffmpeg -i .\BigBuckBunny_1920x1080_24fps_8bit_yuv420p.mkv -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --crf 35 --preset 3 --enable-qm 1 --qm-min 0 -b .\BigBuckBunny_1920x1080_24fps_8bit_yuv420_crf35_qmMin0_preset3.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
 Total Frames            Frame Rate              Byte Count              Bitrate
@@ -8328,7 +8328,7 @@ SSIMULACRA2_rs: Mean: 74.87515728 Median: 74.97725064 Std Dev: 6.88201854 5th Pe
                 </code></pre>
                 <p><code>--preset 3 --crf 30 --enable-qm 1 --qm-min 0</code>：</p>
                 <pre><code class="text-smaller language-powershell">
-ffmpeg -i .\Big-Buck-Bunny_1920x1080_24fps_8bit_yuv420p.mkv -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --crf 30 --preset 3 --enable-qm 1 --qm-min 0 -b .\Big-Buck-Bunny_1920x1080_24fps_8bit_yuv420_crf30_qmMin0_preset3.ivf
+ffmpeg -i .\BigBuckBunny_1920x1080_24fps_8bit_yuv420p.mkv -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --crf 30 --preset 3 --enable-qm 1 --qm-min 0 -b .\BigBuckBunny_1920x1080_24fps_8bit_yuv420_crf30_qmMin0_preset3.ivf
 
                     SUMMARY --------------------------------- Channel 1  --------------------------------
 Total Frames            Frame Rate              Byte Count              Bitrate
@@ -8346,11 +8346,11 @@ VMAF 4K: 99.333118, VMAF 1080p: 97.598158
 SSIMULACRA2_rs: Mean: 78.30231156 Median: 78.36263621 Std Dev: 5.57336865 5th Percentile: 69.29068078 95th Percentile: 86.43200391
                 </code></pre>
             </div>
-            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（12/22）SVT-AV1 v3.0——Big-Buck-Bunny Tune</button>
+            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（12/22）SVT-AV1 v3.0——BigBuckBunny Tune</button>
             <div class="coll-content">
                 <p><code>--preset 3 --crf 35 --tune 0</code>：</p>
                 <pre><code class="text-smaller language-powershell">
-ffmpeg -i .\Big-Buck-Bunny_1920x1080_24fps_8bit_yuv420p.mkv -f yuv4mpegpipe -strict unofficial - | SvtAv1EncApp -i - --keyint 12s --crf 35 --preset 3 --tune 0 -b .\Big-Buck-Bunny_1920x1080_24fps_8bit_yuv420_crf35_tuneVQ_preset3.ivf
+ffmpeg -i .\BigBuckBunny_1920x1080_24fps_8bit_yuv420p.mkv -f yuv4mpegpipe -strict unofficial - | SvtAv1EncApp -i - --keyint 12s --crf 35 --preset 3 --tune 0 -b .\BigBuckBunny_1920x1080_24fps_8bit_yuv420_crf35_tuneVQ_preset3.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
 Total Frames            Frame Rate              Byte Count              Bitrate
@@ -8369,7 +8369,7 @@ SSIMULACRA2_rs: Mean: 75.77570949 Median: 75.86107014 Std Dev: 6.95487455 5th Pe
                 </code></pre>
                 <p><code>--preset 3 --crf 30 --tune 0</code>：</p>
                 <pre><code class="text-smaller language-powershell">
-ffmpeg -i .\Big-Buck-Bunny_1920x1080_24fps_8bit_yuv420p.mkv -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --crf 30 --preset 3 --tune 0 -b .\Big-Buck-Bunny_1920x1080_24fps_8bit_yuv420_crf30_tuneVQ_preset3.ivf
+ffmpeg -i .\BigBuckBunny_1920x1080_24fps_8bit_yuv420p.mkv -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --crf 30 --preset 3 --tune 0 -b .\BigBuckBunny_1920x1080_24fps_8bit_yuv420_crf30_tuneVQ_preset3.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
 Total Frames            Frame Rate              Byte Count              Bitrate
@@ -8388,7 +8388,7 @@ SSIMULACRA2_rs: Mean: 79.26591280 Median: 79.29272234 Std Dev: 5.60606982 5th Pe
                 </code></pre>
                 <p><code>--preset 3 --crf 35 --tune 2</code>：</p>
                 <pre><code class="text-smaller language-powershell">
-ffmpeg -i .\Big-Buck-Bunny_1920x1080_24fps_8bit_yuv420p.mkv -f yuv4mpegpipe - | .\SvtAv1EncApp -i - --keyint 12s --crf 35 --preset 3 --tune 2 -b .\Big-Buck-Bunny_1920x1080_24fps_8bit_yuv420_crf35_tuneSSIM_preset3.ivf
+ffmpeg -i .\BigBuckBunny_1920x1080_24fps_8bit_yuv420p.mkv -f yuv4mpegpipe - | .\SvtAv1EncApp -i - --keyint 12s --crf 35 --preset 3 --tune 2 -b .\BigBuckBunny_1920x1080_24fps_8bit_yuv420_crf35_tuneSSIM_preset3.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
 Total Frames            Frame Rate              Byte Count              Bitrate
@@ -8407,7 +8407,7 @@ SSIMULACRA2_rs: Mean: 75.14899784 Median: 75.34139171 Std Dev: 6.90857273 5th Pe
                 </code></pre>
                 <p><code>--preset 3 --crf 30 --tune 2</code>：</p>
                 <pre><code class="text-smaller language-powershell">
-ffmpeg -i .\Big-Buck-Bunny_1920x1080_24fps_8bit_yuv420p.mkv -f yuv4mpegpipe -strict unofficial - | SvtAv1EncApp -i - --keyint 12s --crf 30 --preset 3 --tune 2 -b .\Big-Buck-Bunny_1920x1080_24fps_8bit_yuv420_crf30_tuneSSIM_preset3.ivf
+ffmpeg -i .\BigBuckBunny_1920x1080_24fps_8bit_yuv420p.mkv -f yuv4mpegpipe -strict unofficial - | SvtAv1EncApp -i - --keyint 12s --crf 30 --preset 3 --tune 2 -b .\BigBuckBunny_1920x1080_24fps_8bit_yuv420_crf30_tuneSSIM_preset3.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
 Total Frames            Frame Rate              Byte Count              Bitrate
@@ -12055,11 +12055,11 @@ VMAF 4k: 98.418351, VMAF 1080p: 95.550267
 SSIMULACRA2_rs: Mean: 69.68736029, Median: 71.96413622, Std Dev: 4.43996726, 5th Percentile: 61.62786558, 95th Percentile: 74.19731887
                 </code></pre>
             </div>
-            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（4/8）SVT-AV1 v3.0——Big-Buck-Bunny</button>
+            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（4/8）SVT-AV1 v3.0——BigBuckBunny</button>
             <div class="coll-content">
                 <p><code>--preset 3 --crf 30 --sharpness -4</code>：</p>
                 <pre><code class="text-smaller language-powershell">
-ffmpeg .\Big-Buck-Bunny_1920x1080_24fps_8bit_yuv420p.mkv -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --preset 3 --crf 30 --sharpness -4 -b .\Big-Buck-Bunny_1920x1080_24fps_8bit_yuv420_sharpness-4.ivf
+ffmpeg .\BigBuckBunny_1920x1080_24fps_8bit_yuv420p.mkv -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --preset 3 --crf 30 --sharpness -4 -b .\BigBuckBunny_1920x1080_24fps_8bit_yuv420_sharpness-4.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
 Total Frames		Frame Rate		Byte Count		Bitrate
@@ -12078,7 +12078,7 @@ SSIMULACRA2_rs: Mean: 78.87837612, Median: 78.92618400, Std Dev: 5.62310767, 5th
                 </code></pre>
                 <p><code>--preset 3 --crf 30 --sharpness 7</code>：</p>
                 <pre><code class="text-smaller language-powershell">
-ffmpeg .\Big-Buck-Bunny_1920x1080_24fps_8bit_yuv420p.mkv -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --preset 3 --crf 30 --sharpness 7 -b .\Big-Buck-Bunny_1920x1080_24fps_8bit_yuv420_sharpness7.ivf
+ffmpeg .\BigBuckBunny_1920x1080_24fps_8bit_yuv420p.mkv -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --preset 3 --crf 30 --sharpness 7 -b .\BigBuckBunny_1920x1080_24fps_8bit_yuv420_sharpness7.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
 Total Frames		Frame Rate		Byte Count		Bitrate
@@ -12097,7 +12097,7 @@ SSIMULACRA2_rs: Mean: 80.10027427, Median: 80.33368144, Std Dev: 5.28446460, 5th
                 </code></pre>
                 <p><code>--preset 3 --crf 30 --variance-octile 4 --sharpness 4</code>：</p>
                 <pre><code class="text-smaller language-powershell">
-ffmpeg -i .\Big-Buck-Bunny_1920x1080_24fps_8bit_yuv420p.mkv -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --preset 3 --crf 30 --variance-octile 4 --sharpness 4 -b .\Big-Buck-Bunny_1920x1080_24fps_8bit_yuv420_varOct4_sharpness4.ivf
+ffmpeg -i .\BigBuckBunny_1920x1080_24fps_8bit_yuv420p.mkv -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --preset 3 --crf 30 --variance-octile 4 --sharpness 4 -b .\BigBuckBunny_1920x1080_24fps_8bit_yuv420_varOct4_sharpness4.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
 Total Frames		Frame Rate		Byte Count		Bitrate
@@ -12116,7 +12116,7 @@ SSIMULACRA2_rs: Mean: 80.16393211, Median: 80.30066873, Std Dev: 5.16796143, 5th
                 </code></pre>
                 <p><code>--preset 3 --crf 30 --variance-octile 4 --sharpness 6</code>：</p>
                 <pre><code class="text-smaller language-powershell">
-ffmpeg -i .\Big-Buck-Bunny_1920x1080_24fps_8bit_yuv420p.mkv -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --preset 3 --crf 30 --variance-octile 4 --sharpness 6 -b .\Big-Buck-Bunny_1920x1080_24fps_8bit_yuv420_varOct4_sharpness6.ivf
+ffmpeg -i .\BigBuckBunny_1920x1080_24fps_8bit_yuv420p.mkv -f yuv4mpegpipe - | SvtAv1EncApp -i - --keyint 12s --preset 3 --crf 30 --variance-octile 4 --sharpness 6 -b .\BigBuckBunny_1920x1080_24fps_8bit_yuv420_varOct4_sharpness6.ivf
 
 SUMMARY --------------------------------- Channel 1  --------------------------------
 Total Frames		Frame Rate		Byte Count		Bitrate
@@ -13164,7 +13164,7 @@ Average Latency:	55358 ms
 Max Latency:		73008 ms
                 </code></pre>
             </div>
-            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（4/8）SVT-AV1 v3.0——Big-Buck-Bunny</button>
+            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（4/8）SVT-AV1 v3.0——BigBuckBunny</button>
             <div class="coll-content">
                 <p><code>--preset 3 --crf 30 --hierarchical-levels 5 --use-fixed-qindex-offsets 2 --key-frame-qindex-offset -1 --keyint 12s --enable-tf 2 --scd 1</code>：</p>
                 <pre><code class="text-smaller language-powershell">
@@ -13478,7 +13478,7 @@ Max Latency:		27642 ms
             <p>尽管 AV1 编码器有强大的帧间参考系统，但在压缩 24 秒、36 秒（2 倍、3 倍）关键帧间隔时没能起到显著或有效的提升。在简单（动漫材质动画，3D 动画）场景的压缩率提升在 2%；复杂片源中则因为关键帧过长出现了码率反增的副作用。因此“大幅提高 GOP 长度、开启最高的分层预测结构层数、并降低关键帧量化强度”被证明无效，也不需要进行画质跑分了。</p>
 
             <h3>测试——SVT-AV1 全功能 B 帧与片源特化参数测试</h3>
-            <p>使用更慢的 <code>--preset 2</code>，从而解锁楔形蒙版、距离加权、差值加权等混合参考模式；同时让最小细分块缩小到 4x4，从而提高画面精细度（其它 preset 变更见上方预设参数说明）；与此同时，将上述测试中得出的理论优解按照画面类型选出综合材质动画、综合材质录像两类同时优化画质和码率的参数，再进行交叉测试。</p>
+            <p>由于 x265 一开始就使用了高压缩高画质自定义参数，所以只使用一般~快速选项的 SVT-AV1 才显得不足。本次测试会使用更慢的 <code>--preset 2</code> 预设，该预设下 SVT-AV1 会解锁楔形蒙版、距离加权、差值加权等混合参考模式；同时让最小细分块缩小到 4x4，从而提高画面精细度（其它 preset 变更见上方预设参数说明）；与此同时，将上述测试中得出的理论优解按照画面类型选出综合材质动画、综合材质录像两类同时优化画质和码率的参数，再进行交叉测试。</p>
 
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（1/8）SVT-AV1 v3.0——SolLevante</button>
             <div class="coll-content">
@@ -13568,7 +13568,7 @@ Average Latency:	103712 ms
 Max Latency:		175710 ms
 
 XPSNR average, 300 frames  y: 38.1610  u: 42.0504  v: 43.9760 (minimum: 38.1610)
-
+VMAF 4k: 99.769712, VMAF 1080p: 99.915497
 ssimulacra2_rs: Mean: 78.41704987, Median: 78.44153457, Std Dev: 1.59367179, 5th Percentile: 76.39476204, 95th Percentile: 80.94837641
                 </code></pre>
                 <p><code>--crf 30 --tune 1 --preset 2 --keyint 12s --variance-octile 2 --enable-variance-boost 1 --variance-boost-strength 1 --variance-boost-curve 2 --enable-tf 2 --tf-strength 2 --sharpness 4</code>：</p>
@@ -13585,7 +13585,7 @@ Average Latency:	98371 ms
 Max Latency:		165388 ms
 
 XPSNR average, 300 frames  y: 38.0883  u: 42.0073  v: 43.9256 (minimum: 38.0883)
-
+VMAF 4k: 99.550313, VMAF 1080p: 99.759846
 ssimulacra2_rs: Mean: 77.38543226, Median: 77.41340873, Std Dev: 1.63598432, 5th Percentile: 75.30180302, 95th Percentile: 80.09303481
                 </code></pre>
                 <p><code>--crf 30 --tune 0 --preset 2 --keyint 12s --enable-qm 1 --variance-octile 2 --enable-variance-boost 1 --variance-boost-strength 1 --variance-boost-curve 2 --enable-tf 2 --tf-strength 2 --sharpness 6</code>：</p>
@@ -13602,7 +13602,7 @@ Average Latency:	93834 ms
 Max Latency:		156781 ms
 
 XPSNR average, 300 frames  y: 38.1610  u: 42.0504  v: 43.9760 (minimum: 38.1610)
-
+VMAF 4k: 99.769109, VMAF 1080p: 99.610690
 ssimulacra2_rs: Mean: 76.43178341, Median: 76.40723980, Std Dev: 2.16207516, 5th Percentile: 73.72486035, 95th Percentile: 80.13622101
                 </code></pre>
                 <p><code>--crf 30 --tune 0 --preset 2 --keyint 12s --variance-octile 2 --enable-variance-boost 1 --variance-boost-strength 1 --variance-boost-curve 2 --enable-tf 2 --tf-strength 2 --sharpness 4</code>：</p>
@@ -13619,7 +13619,7 @@ Average Latency:	88172 ms
 Max Latency:		146611 ms
 
 XPSNR average, 300 frames  y: 37.9985  u: 41.9331  v: 43.8756 (minimum: 37.9985)
-
+VMAF 4k: 99.550313, VMAF 1080p: 99.759846
 ssimulacra2_rs: Mean: 76.20719143, Median: 76.18750644, Std Dev: 2.19564719, 5th Percentile: 73.47682479, 95th Percentile: 79.92659737
                 </code></pre>
             </div>
@@ -13639,7 +13639,7 @@ Average Latency:	122254 ms
 Max Latency:		175629 ms
 
 XPSNR average, 1199 frames  y: 37.2360  u: 43.6799  v: 41.2154 (minimum: 37.2360)
-
+VMAF 4k: 99.580126, VMAF 1080p: 97.186506
 ssimulacra2_rs: Mean: 73.62667649, Median: 75.21192199, Std Dev: 3.80629739, 5th Percentile: 66.62791234, 95th Percentile: 77.56220486
                 </code></pre>
                 <p><code>--crf 30 --tune 1 --preset 2 --keyint 12s --variance-octile 2 --enable-variance-boost 1 --variance-boost-strength 1 --variance-boost-curve 2 --enable-tf 2 --tf-strength 2 --sharpness 4</code>：</p>
@@ -13656,7 +13656,7 @@ Average Latency:	110106 ms
 Max Latency:		158950 ms
 
 XPSNR average, 1199 frames  y: 37.0657  u: 43.2214  v: 40.9981 (minimum: 37.0657)
-
+VMAF 4k: 99.405229, VMAF 1080p: 96.916983
 ssimulacra2_rs: Mean: 73.29488950, Median: 74.88396035, Std Dev: 3.66491225, 5th Percentile: 66.47711388, 95th Percentile: 76.99637898
                 </code></pre>
                 <p><code>--crf 30 --tune 0 --preset 2 --keyint 12s --enable-qm 1 --variance-octile 2 --enable-variance-boost 1 --variance-boost-strength 1 --variance-boost-curve 2 --enable-tf 2 --tf-strength 2 --sharpness 6</code>：</p>
@@ -13673,7 +13673,7 @@ Average Latency:	118067 ms
 Max Latency:		167464 ms
 
 XPSNR average, 1199 frames  y: 37.0428  u: 43.2185  v: 40.9680 (minimum: 37.0428)
-
+VMAF 4k: 99.100253, VMAF 1080p: 96.533023
 ssimulacra2_rs: Mean: 71.18413606, Median: 73.35269819, Std Dev: 4.69433945, 5th Percentile: 62.48935531, 95th Percentile: 76.21926701
                 </code></pre>
                 <p><code>--crf 30 --tune 0 --preset 2 --keyint 12s --variance-octile 2 --enable-variance-boost 1 --variance-boost-strength 1 --variance-boost-curve 2 --enable-tf 2 --tf-strength 2 --sharpness 4</code>：</p>
@@ -13690,12 +13690,12 @@ Average Latency:	117592 ms
 Max Latency:		167458 ms
 
 XPSNR average, 1199 frames  y: 37.2053  u: 43.6152  v: 41.1972 (minimum: 37.2053)
-
+VMAF 4k: 99.088712, VMAF 1080p: 96.519983
 ssimulacra2_rs: Mean: 71.46833171, Median: 73.48203828, Std Dev: 4.48880529, 5th Percentile: 63.12866894, 95th Percentile: 76.30263429
                 </code></pre>
             </div>
 
-            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（4/8）SVT-AV1 v3.0——Big-Buck-Bunny</button>
+            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（4/8）SVT-AV1 v3.0——BigBuckBunny</button>
             <div class="coll-content">
                 <p><code>--crf 30 --tune 1 --preset 2 --keyint 12s --enable-qm 1 --variance-octile 2 --enable-variance-boost 1 --variance-boost-strength 2 --variance-boost-curve 2 --enable-tf 2 --tf-strength 2 --sharpness 6</code>：</p>
                 <pre><code class="text-smaller language-powershell">
@@ -13711,7 +13711,7 @@ Average Latency:	23718 ms
 Max Latency:		47411 ms
 
 XPSNR average, 14315 frames  y: 43.1474  u: 45.4069  v: 46.0011 (minimum: 43.1474)
-
+VMAF 4k: 99.876871, VMAF 1080p: 98.408586
 ssimulacra2_rs: Mean: 84.71483166, Median: 84.74165417, Std Dev: 3.24757676, 5th Percentile: 79.93497054, 95th Percentile: 89.26163819
                 </code></pre>
                 <p><code>--crf 30 --tune 1 --preset 2 --keyint 12s --variance-octile 2 --enable-variance-boost 1 --variance-boost-strength 1 --variance-boost-curve 2 --enable-tf 2 --tf-strength 2 --sharpness 4</code>：</p>
@@ -13745,7 +13745,7 @@ Average Latency:	21547 ms
 Max Latency:		44269 ms
 
 XPSNR average, 14315 frames  y: 42.6791  u: 45.1547  v: 45.5928 (minimum: 42.6791)
-
+VMAF 4k: 99.820000, VMAF 1080p: 98.302252
 ssimulacra2_rs: Mean: 83.86722596, Median: 83.88102295, Std Dev: 3.59379960, 5th Percentile: 78.42735225, 95th Percentile: 88.81709881
                 </code></pre>
                 <p><code>--crf 30 --tune 0 --preset 2 --keyint 12s --variance-octile 2 --enable-variance-boost 1 --variance-boost-strength 1 --variance-boost-curve 2 --enable-tf 2 --tf-strength 2 --sharpness 4</code>：</p>
@@ -13762,7 +13762,7 @@ Average Latency:	21329 ms
 Max Latency:		43531 ms
 
 XPSNR average, 14315 frames  y: 42.7803  u: 45.4353  v: 45.8159 (minimum: 42.7803)
-
+VMAF 4k: 99.815689, VMAF 1080p: 98.279552
 ssimulacra2_rs: Mean: 83.91060703, Median: 83.92889224, Std Dev: 3.65496550, 5th Percentile: 78.32497955, 95th Percentile: 89.00112787
                 </code></pre>
             </div>
@@ -13783,7 +13783,7 @@ Average Latency:	28944 ms
 Max Latency:		80949 ms
 
 XPSNR average, 15691 frames  y: 44.8509  u: 48.9337  v: 48.7012 (minimum: 44.8509)
-
+VMAF 4k: 99.850292, VMAF 1080p: 98.708173
 ssimulacra2_rs: Mean: 85.54040820, Median: 84.93837429, Std Dev: 5.58515767, 5th Percentile: 77.21057249, 95th Percentile: 96.56286346
                 </code></pre>
                 <p><code>--crf 30 --tune 1 --preset 2 --keyint 12s --variance-octile 2 --enable-variance-boost 1 --variance-boost-strength 1 --variance-boost-curve 2 --enable-tf 2 --tf-strength 2 --sharpness 4</code>：</p>
@@ -13800,7 +13800,7 @@ Average Latency:	27329 ms
 Max Latency:		77919 ms
 
 XPSNR average, 15691 frames  y: 44.4219  u: 48.7095  v: 48.4688 (minimum: 44.4219)
-
+VMAF 4k: 99.795807, VMAF 1080p: 98.602858
 ssimulacra2_rs: Mean: 84.55608230, Median: 84.05436298, std Dev: 6.17216201, 5th Percentile: 75.10783751, 95th Percentile: 96.43148175
                 </code></pre>
                 <p><code>--crf 30 --tune 0 --preset 2 --keyint 12s --enable-qm 1 --variance-octile 2 --enable-variance-boost 1 --variance-boost-strength 1 --variance-boost-curve 2 --enable-tf 2 --tf-strength 2 --sharpness 6</code>：</p>
@@ -13817,7 +13817,7 @@ Average Latency:	26909 ms
 Max Latency:		76357 ms
 
 XPSNR average, 15691 frames  y: 44.3290  u: 48.6604  v: 48.3893 (minimum: 44.3290)
-
+VMAF 4k: 99.782559, VMAF 1080p: 98.586392
 ssimulacra2_rs: Mean: 84.53918838, Median: 84.06319396, Std Dev: 6.13789708, 5th Percentile: 75.15510046, 95th Percentile: 96.39088576
                 </code></pre>
 
@@ -13835,7 +13835,7 @@ Average Latency:	26799 ms
 Max Latency:		74563 ms
 
 XPSNR average, 15691 frames  y: 44.4219  u: 48.7095  v: 48.4688 (minimum: 44.4219)
-
+VMAF 4k: 99.785175, VMAF 1080p: 98.586476
 ssimulacra2_rs: Mean: 84.49935105, Median: 84.07127415, Std Dev: 6.22500567, 5th Percentile: 74.97756983, 95th Percentile: 96.41701650
                 </code></pre>
             </div>
@@ -13856,7 +13856,7 @@ Average Latency:	21021 ms
 Max Latency:		51907 ms
 
 XPSNR average, 34080 frames  y: 44.4140  u: 45.0542  v: 45.1925 (minimum: 44.4140)
-
+VMAF 4k: 99.850919, VMAF 1080p: 97.450574
 ssimulacra2_rs: Mean: 84.69909136, Median: 86.08820307, Std Dev: 4.65776352, 5th Percentile: 75.27603287, 95th Percentile: 88.89837326
                 </code></pre>
                 <p><code>--crf 30 --tune 1 --preset 2 --keyint 12s --variance-octile 2 --enable-variance-boost 1 --variance-boost-strength 1 --variance-boost-curve 2 --enable-tf 2 --tf-strength 2 --sharpness 4</code>：</p>
@@ -13873,7 +13873,7 @@ Average Latency:	19991 ms
 Max Latency:		50076 ms
 
 XPSNR average, 34080 frames  y: 44.3266  u: 45.1768  v: 45.2976 (minimum: 44.3266)
-
+VMAF 4k: 99.823248, VMAF 1080p: 97.390787
 ssimulacra2_rs: Mean: 84.46760531, Median: 85.94800889, Std Dev: 5.10527347, 5th Percentile: 73.58000479, 95th Percentile: 89.43086977
                 </code></pre>
                 <p><code>--crf 30 --tune 0 --preset 2 --keyint 12s --enable-qm 1 --variance-octile 2 --enable-variance-boost 1 --variance-boost-strength 1 --variance-boost-curve 2 --enable-tf 2 --tf-strength 2 --sharpness 6</code>：</p>
@@ -13890,7 +13890,7 @@ Average Latency:	19291 ms
 Max Latency:		47392 ms
 
 XPSNR average, 34080 frames  y: 43.9856  u: 44.7820  v: 44.9221 (minimum: 43.9856)
-
+VMAF 4k: 99.763332, VMAF 1080p: 97.294217
 ssimulacra2_rs: Mean: 84.00612417, Median: 85.51165944, Std Dev: 5.07497935, 5th Percentile: 73.56835171, 95th Percentile: 88.66094789
                 </code></pre>
                 <p><code>--crf 30 --tune 0 --preset 2 --keyint 12s --variance-octile 2 --enable-variance-boost 1 --variance-boost-strength 1 --variance-boost-curve 2 --enable-tf 2 --tf-strength 2 --sharpness 4</code>：</p>
@@ -13907,7 +13907,7 @@ Average Latency:	19351 ms
 Max Latency:		47519 ms
 
 XPSNR average, 34080 frames  y: 44.0845  u: 45.0191  v: 45.1397 (minimum: 44.0845)
-
+VMAF 4k: 99.765554, VMAF 1080p: 97.293676
 ssimulacra2_rs: Mean: 84.27566056, Median: 85.78078346, Std Dev: 5.22510914, 5th Percentile: 73.44385061, 95th Percentile: 89.31973903
                 </code></pre>
             </div>
@@ -13928,7 +13928,7 @@ Average Latency:	18012 ms
 Max Latency:		49637 ms
 
 XPSNR average, 36996 frames  y: 41.9403  u: 44.4669  v: 44.5570 (minimum: 41.9403)
-
+VMAF 4k: 99.739238, VMAF 1080p: 96.944121
 ssimulacra2_rs: Mean: 84.58635881, Median: 84.87470505, Std Dev: 3.30130242, 5th Percentile: 80.17739181, 95th Percentile: 88.26913055
                 </code></pre>
                 <p><code>--crf 30 --tune 1 --preset 2 --keyint 12s --variance-octile 2 --enable-variance-boost 1 --variance-boost-strength 1 --variance-boost-curve 2 --enable-tf 2 --tf-strength 2 --sharpness 4</code>：</p>
@@ -13945,7 +13945,7 @@ Average Latency:	16573 ms
 Max Latency:		46755 ms
 
 XPSNR average, 36996 frames  y: 41.8179  u: 44.4381  v: 44.5306 (minimum: 41.8179)
-
+VMAF 4k: 99.706182, VMAF 1080p: 96.879159
 ssimulacra2_rs: Mean: 84.15532276, Median: 84.55457187, Std Dev: 3.53045695, 5th Percentile: 79.11152471, 95th Percentile: 88.06174074
                 </code></pre>
                 <p><code>--crf 30 --tune 0 --preset 2 --keyint 12s --enable-qm 1 --variance-octile 2 --enable-variance-boost 1 --variance-boost-strength 1 --variance-boost-curve 2 --enable-tf 2 --tf-strength 2 --sharpness 6</code>：</p>
@@ -13962,7 +13962,7 @@ Average Latency:	16515 ms
 Max Latency:		45078 ms
 
 XPSNR average, 36996 frames  y: 41.5676  u: 44.1395  v: 44.2521  (minimum: 41.5676)
-
+VMAF 4k: 99.612705, VMAF 1080p: 96.739005
 ssimulacra2_rs: Mean: 83.69765034, Median: 83.97990722, Std Dev: 3.63369319, 5th Percentile: 78.64486286, 95th Percentile: 87.68819031
                 </code></pre>
                 <p><code>--crf 30 --tune 0 --preset 2 --keyint 12s --variance-octile 2 --enable-variance-boost 1 --variance-boost-strength 1 --variance-boost-curve 2 --enable-tf 2 --tf-strength 2 --sharpness 4</code>：</p>
@@ -13979,7 +13979,7 @@ Average Latency:	16606 ms
 Max Latency:		46896 ms
 
 XPSNR average, 36996 frames  y: 41.5917  u: 44.2183  v: 44.3209 (minimum: 41.5917)
-
+VMAF 4k: 99.618899, VMAF 1080p: 96.744106
 ssimulacra2_rs: Mean: 83.68623603, Median: 83.96666350, Std Dev: 3.66503275, 5th Percentile: 78.54152309, 95th Percentile: 87.85772333
                 </code></pre>
             </div>
@@ -14035,8 +14035,8 @@ ssimulacra2_rs: Mean: 83.68623603, Median: 83.96666350, Std Dev: 3.66503275, 5th
                         <td class="px-1" style="color:#FFCC00">38.1610</td>
                         <td class="px-1" style="color:#92D050">42.0504</td>
                         <td class="px-1" style="color:#92D050">43.9760</td>
-                        <td class="px-1" style="color:#31D87D"></td>
-                        <td class="px-1" style="color:#31D87D"></td>
+                        <td class="px-1" style="color:#31D87D">99.769712</td>
+                        <td class="px-1" style="color:#31D87D">99.915497</td>
                         <td class="px-1 ace" style="color:#FFCC00">78.41704987</td>
                         <td class="px-1 ace" style="color:#FFCC00">78.44153457</td>
                         <td class="px-1 ace" style="color:#FFCC00">76.39476204</td>
@@ -14050,8 +14050,8 @@ ssimulacra2_rs: Mean: 83.68623603, Median: 83.96666350, Std Dev: 3.66503275, 5th
                         <td class="px-1" style="color:#FFCC00">38.0883</td>
                         <td class="px-1" style="color:#92D050">42.0073</td>
                         <td class="px-1" style="color:#92D050">43.9256</td>
-                        <td class="px-1" style="color:#31D87D">98.931158</td>
-                        <td class="px-1" style="color:#31D87D">97.849347</td>
+                        <td class="px-1 ace" style="color:#31D87D">99.550313</td>
+                        <td class="px-1 ace" style="color:#31D87D">99.759846</td>
                         <td class="px-1" style="color:#FFCC00">77.38543226</td>
                         <td class="px-1" style="color:#FFCC00">77.41340873</td>
                         <td class="px-1" style="color:#FFCC00">75.30180302</td>
@@ -14065,8 +14065,8 @@ ssimulacra2_rs: Mean: 83.68623603, Median: 83.96666350, Std Dev: 3.66503275, 5th
                         <td class="px-1" style="color:#FFCC00">38.1610</td>
                         <td class="px-1" style="color:#92D050">42.0504</td>
                         <td class="px-1" style="color:#92D050">43.9760</td>
-                        <td class="px-1" style="color:#31D87D"></td>
-                        <td class="px-1" style="color:#31D87D"></td>
+                        <td class="px-1" style="color:#31D87D">99.769109</td>
+                        <td class="px-1" style="color:#31D87D">99.61069</td>
                         <td class="px-1" style="color:#FFCC00">76.43178341</td>
                         <td class="px-1" style="color:#FFCC00">76.40723980</td>
                         <td class="px-1" style="color:#FFCC00">73.72486035</td>
@@ -14080,8 +14080,8 @@ ssimulacra2_rs: Mean: 83.68623603, Median: 83.96666350, Std Dev: 3.66503275, 5th
                         <td class="px-1" style="color:#C65911">37.9985</td>
                         <td class="px-1" style="color:#FFCC00">41.9331</td>
                         <td class="px-1" style="color:#92D050">43.8756</td>
-                        <td class="px-1" style="color:#31D87D"></td>
-                        <td class="px-1" style="color:#31D87D"></td>
+                        <td class="px-1" style="color:#31D87D">99.550313</td>
+                        <td class="px-1" style="color:#31D87D">99.759846</td>
                         <td class="px-1" style="color:#FFCC00">76.20719143</td>
                         <td class="px-1" style="color:#FFCC00">76.18750644</td>
                         <td class="px-1" style="color:#FFCC00">73.47682479</td>
@@ -14118,8 +14118,8 @@ ssimulacra2_rs: Mean: 83.68623603, Median: 83.96666350, Std Dev: 3.66503275, 5th
                         <td class="px-1" style="color:#C65911">37.2360</td>
                         <td class="px-1 ace" style="color:#92D050">43.6799</td>
                         <td class="px-1" style="color:#FFC000">41.2154</td>
-                        <td class="px-1" style="color:#31D87D"></td>
-                        <td class="px-1" style="color:#31D87D"></td>
+                        <td class="px-1 ace" style="color:#31D87D">99.580126</td>
+                        <td class="px-1 ace" style="color:#31D87D">97.186506</td>
                         <td class="px-1 ace" style="color:#FFC000">73.62667649</td>
                         <td class="px-1 ace" style="color:#FFC000">75.21192199</td>
                         <td class="px-1 ace" style="color:#C65911">66.62791234</td>
@@ -14133,8 +14133,8 @@ ssimulacra2_rs: Mean: 83.68623603, Median: 83.96666350, Std Dev: 3.66503275, 5th
                         <td class="px-1" style="color:#C65911">37.0657</td>
                         <td class="px-1" style="color:#92D050">43.2214</td>
                         <td class="px-1" style="color:#FFC000">40.9981</td>
-                        <td class="px-1" style="color:#31D87D"></td>
-                        <td class="px-1" style="color:#31D87D"></td>
+                        <td class="px-1" style="color:#31D87D">99.405229</td>
+                        <td class="px-1" style="color:#31D87D">96.916983</td>
                         <td class="px-1" style="color:#FFC000">73.29488950</td>
                         <td class="px-1" style="color:#FFC000">74.88396035</td>
                         <td class="px-1" style="color:#C65911">66.47711388</td>
@@ -14148,8 +14148,8 @@ ssimulacra2_rs: Mean: 83.68623603, Median: 83.96666350, Std Dev: 3.66503275, 5th
                         <td class="px-1" style="color:#C65911">37.0428</td>
                         <td class="px-1" style="color:#92D050">43.2185</td>
                         <td class="px-1" style="color:#FFC000">40.9680</td>
-                        <td class="px-1" style="color:#31D87D"></td>
-                        <td class="px-1" style="color:#31D87D"></td>
+                        <td class="px-1" style="color:#31D87D">99.100253</td>
+                        <td class="px-1" style="color:#31D87D">96.533023</td>
                         <td class="px-1" style="color:#FFC000">71.18413606</td>
                         <td class="px-1" style="color:#FFC000">73.35269819</td>
                         <td class="px-1" style="color:#C65911">62.48935531</td>
@@ -14163,8 +14163,8 @@ ssimulacra2_rs: Mean: 83.68623603, Median: 83.96666350, Std Dev: 3.66503275, 5th
                         <td class="px-1" style="color:#C65911">37.2053</td>
                         <td class="px-1" style="color:#92D050">43.6152</td>
                         <td class="px-1" style="color:#FFC000">41.1972</td>
-                        <td class="px-1" style="color:#31D87D"></td>
-                        <td class="px-1" style="color:#31D87D"></td>
+                        <td class="px-1" style="color:#31D87D">99.088712</td>
+                        <td class="px-1" style="color:#31D87D">96.519983</td>
                         <td class="px-1" style="color:#FFC000">71.46833171</td>
                         <td class="px-1" style="color:#FFC000">73.48203828</td>
                         <td class="px-1" style="color:#C65911">63.12866894</td>
@@ -14202,8 +14202,8 @@ ssimulacra2_rs: Mean: 83.68623603, Median: 83.96666350, Std Dev: 3.66503275, 5th
                         <td class="px-1" style="color:#92D050">43.1474</td>
                         <td class="px-1" style="color:#31D87D">45.4069</td>
                         <td class="px-1" style="color:#31D87D">46.0011</td>
-                        <td class="px-1" style="color:#31D87D"></td>
-                        <td class="px-1" style="color:#31D87D"></td>
+                        <td class="px-1 ace" style="color:#31D87D">99.876871</td>
+                        <td class="px-1 ace" style="color:#31D87D">98.408586</td>
                         <td class="px-1 ace" style="color:#92D050">84.71483166</td>
                         <td class="px-1 ace" style="color:#92D050">84.74165417</td>
                         <td class="px-1 ace" style="color:#FFCC00">79.93497054</td>
@@ -14232,8 +14232,8 @@ ssimulacra2_rs: Mean: 83.68623603, Median: 83.96666350, Std Dev: 3.66503275, 5th
                         <td class="px-1" style="color:#92D050">42.6791</td>
                         <td class="px-1" style="color:#31D87D">45.1547</td>
                         <td class="px-1" style="color:#31D87D">45.5928</td>
-                        <td class="px-1" style="color:#31D87D"></td>
-                        <td class="px-1" style="color:#31D87D"></td>
+                        <td class="px-1" style="color:#31D87D">99.82</td>
+                        <td class="px-1" style="color:#31D87D">98.302252</td>
                         <td class="px-1" style="color:#92D050">83.86722596</td>
                         <td class="px-1" style="color:#92D050">83.88102295</td>
                         <td class="px-1" style="color:#FFCC00">78.42735225</td>
@@ -14247,8 +14247,8 @@ ssimulacra2_rs: Mean: 83.68623603, Median: 83.96666350, Std Dev: 3.66503275, 5th
                         <td class="px-1" style="color:#92D050">42.7803</td>
                         <td class="px-1" style="color:#31D87D">45.4353</td>
                         <td class="px-1" style="color:#31D87D">45.8159</td>
-                        <td class="px-1" style="color:#31D87D"></td>
-                        <td class="px-1" style="color:#31D87D"></td>
+                        <td class="px-1" style="color:#31D87D">99.815689</td>
+                        <td class="px-1" style="color:#31D87D">98.279552</td>
                         <td class="px-1" style="color:#92D050">83.91060703</td>
                         <td class="px-1" style="color:#92D050">83.92889224</td>
                         <td class="px-1" style="color:#FFCC00">78.32497955</td>
@@ -14269,8 +14269,8 @@ ssimulacra2_rs: Mean: 83.68623603, Median: 83.96666350, Std Dev: 3.66503275, 5th
                         <td class="px-1" style="color:#92D050">43.6721</td>
                         <td class="px-1" style="color:#31D87D">47.7466</td>
                         <td class="px-1" style="color:#31D87D">48.1249</td>
-                        <td class="px-1" style="color:#31D87D">99.658051</td>
-                        <td class="px-1" style="color:#31D87D">98.434386</td>
+                        <td class="px-1" style="color:#31D87D">99.850292</td>
+                        <td class="px-1" style="color:#31D87D">98.708173</td>
                         <td class="px-1" style="color:#92D050">84.12837569</td>
                         <td class="px-1" style="color:#92D050">83.64339310</td>
                         <td class="px-1" style="color:#FFC000">74.46127664</td>
@@ -14284,8 +14284,8 @@ ssimulacra2_rs: Mean: 83.68623603, Median: 83.96666350, Std Dev: 3.66503275, 5th
                         <td class="px-1 ace" style="color:#92D050">44.8509</td>
                         <td class="px-1 ace" style="color:#31D87D">48.9337</td>
                         <td class="px-1 ace" style="color:#31D87D">48.7012</td>
-                        <td class="px-1" style="color:#31D87D"></td>
-                        <td class="px-1" style="color:#31D87D"></td>
+                        <td class="px-1" style="color:#31D87D">99.795807</td>
+                        <td class="px-1" style="color:#31D87D">98.602858</td>
                         <td class="px-1 ace" style="color:#92D050">85.54040820</td>
                         <td class="px-1 ace" style="color:#92D050">84.93837429</td>
                         <td class="px-1 ace" style="color:#FFCC00">77.21057249</td>
@@ -14299,8 +14299,8 @@ ssimulacra2_rs: Mean: 83.68623603, Median: 83.96666350, Std Dev: 3.66503275, 5th
                         <td class="px-1" style="color:#92D050">44.4219</td>
                         <td class="px-1" style="color:#31D87D">48.7095</td>
                         <td class="px-1" style="color:#31D87D">48.4688</td>
-                        <td class="px-1" style="color:#31D87D"></td>
-                        <td class="px-1" style="color:#31D87D"></td>
+                        <td class="px-1" style="color:#31D87D">99.795807</td>
+                        <td class="px-1" style="color:#31D87D">98.602858</td>
                         <td class="px-1" style="color:#92D050">84.55608230</td>
                         <td class="px-1" style="color:#92D050">84.05436298</td>
                         <td class="px-1" style="color:#FFCC00">75.10783751</td>
@@ -14314,8 +14314,8 @@ ssimulacra2_rs: Mean: 83.68623603, Median: 83.96666350, Std Dev: 3.66503275, 5th
                         <td class="px-1" style="color:#92D050">44.329</td>
                         <td class="px-1" style="color:#31D87D">48.6604</td>
                         <td class="px-1" style="color:#31D87D">48.3893</td>
-                        <td class="px-1" style="color:#31D87D"></td>
-                        <td class="px-1" style="color:#31D87D"></td>
+                        <td class="px-1" style="color:#31D87D">99.782559</td>
+                        <td class="px-1" style="color:#31D87D">98.586392</td>
                         <td class="px-1" style="color:#92D050">84.53918838</td>
                         <td class="px-1" style="color:#92D050">84.06319396</td>
                         <td class="px-1" style="color:#FFCC00">75.15510046</td>
@@ -14329,8 +14329,8 @@ ssimulacra2_rs: Mean: 83.68623603, Median: 83.96666350, Std Dev: 3.66503275, 5th
                         <td class="px-1" style="color:#92D050">44.4219</td>
                         <td class="px-1" style="color:#31D87D">48.7095</td>
                         <td class="px-1" style="color:#31D87D">48.4688</td>
-                        <td class="px-1" style="color:#31D87D"></td>
-                        <td class="px-1" style="color:#31D87D"></td>
+                        <td class="px-1" style="color:#31D87D">99.785175</td>
+                        <td class="px-1" style="color:#31D87D">98.586476</td>
                         <td class="px-1" style="color:#92D050">84.49935105</td>
                         <td class="px-1" style="color:#92D050">84.07127415</td>
                         <td class="px-1" style="color:#FFCC00">74.97756983</td>
@@ -14449,8 +14449,8 @@ ssimulacra2_rs: Mean: 83.68623603, Median: 83.96666350, Std Dev: 3.66503275, 5th
                         <td class="px-1 ace" style="color:#92D050">44.4140 </td>
                         <td class="px-1" style="color:#31D87D">45.0542</td>
                         <td class="px-1" style="color:#31D87D">45.1925</td>
-                        <td class="px-1" style="color:#31D87D"></td>
-                        <td class="px-1" style="color:#31D87D"></td>
+                        <td class="px-1 ace" style="color:#31D87D">99.850919</td>
+                        <td class="px-1 ace" style="color:#31D87D">97.450574</td>
                         <td class="px-1 ace" style="color:#92D050">84.69909136</td>
                         <td class="px-1 ace" style="color:#92D050">86.08820307</td>
                         <td class="px-1 ace" style="color:#FFC000">75.27603287</td>
@@ -14464,8 +14464,8 @@ ssimulacra2_rs: Mean: 83.68623603, Median: 83.96666350, Std Dev: 3.66503275, 5th
                         <td class="px-1" style="color:#92D050">44.3266</td>
                         <td class="px-1 ace" style="color:#31D87D">45.1768</td>
                         <td class="px-1 ace" style="color:#31D87D">45.2976</td>
-                        <td class="px-1" style="color:#31D87D"></td>
-                        <td class="px-1" style="color:#31D87D"></td>
+                        <td class="px-1" style="color:#31D87D">99.823248</td>
+                        <td class="px-1" style="color:#31D87D">97.390787</td>
                         <td class="px-1" style="color:#92D050">84.46760531</td>
                         <td class="px-1" style="color:#92D050">85.94800889</td>
                         <td class="px-1" style="color:#FFC000">73.58000479</td>
@@ -14477,10 +14477,10 @@ ssimulacra2_rs: Mean: 83.68623603, Median: 83.96666350, Std Dev: 3.66503275, 5th
                         <td class="px-1">17.878</td>
                         <td class="px-1 ace">2654.97</td>
                         <td class="px-1" style="color:#92D050">43.9856</td>
-                        <td class="px-1" style="color:#31D87D">44.7820</td>
-                        <td class="px-1" style="color:#31D87D">44.9221</td>
-                        <td class="px-1" style="color:#31D87D"></td>
-                        <td class="px-1" style="color:#31D87D"></td>
+                        <td class="px-1" style="color:#92D050">44.782</td>
+                        <td class="px-1" style="color:#92D050">44.9221</td>
+                        <td class="px-1" style="color:#31D87D">99.763332</td>
+                        <td class="px-1" style="color:#31D87D">97.294217</td>
                         <td class="px-1" style="color:#92D050">84.00612417</td>
                         <td class="px-1" style="color:#92D050">85.51165944</td>
                         <td class="px-1" style="color:#FFC000">73.56835171</td>
@@ -14494,8 +14494,8 @@ ssimulacra2_rs: Mean: 83.68623603, Median: 83.96666350, Std Dev: 3.66503275, 5th
                         <td class="px-1" style="color:#92D050">44.0845</td>
                         <td class="px-1" style="color:#31D87D">45.0191</td>
                         <td class="px-1" style="color:#31D87D">45.1397</td>
-                        <td class="px-1" style="color:#31D87D"></td>
-                        <td class="px-1" style="color:#31D87D"></td>
+                        <td class="px-1" style="color:#31D87D">99.765554</td>
+                        <td class="px-1" style="color:#31D87D">97.293676</td>
                         <td class="px-1" style="color:#92D050">84.27566056</td>
                         <td class="px-1" style="color:#92D050">85.78078346</td>
                         <td class="px-1" style="color:#FFC000">73.44385061</td>
@@ -14532,8 +14532,8 @@ ssimulacra2_rs: Mean: 83.68623603, Median: 83.96666350, Std Dev: 3.66503275, 5th
                         <td class="px-1 ace" style="color:#FFC000">41.9403</td>
                         <td class="px-1 ace" style="color:#92D050">44.4669</td>
                         <td class="px-1 ace" style="color:#92D050">44.5570</td>
-                        <td class="px-1" style="color:#31D87D"></td>
-                        <td class="px-1" style="color:#31D87D"></td>
+                        <td class="px-1 ace" style="color:#31D87D">99.739238</td>
+                        <td class="px-1 ace" style="color:#31D87D">96.944121</td>
                         <td class="px-1 ace" style="color:#92D050">84.58635881</td>
                         <td class="px-1 ace" style="color:#92D050">84.87470505</td>
                         <td class="px-1 ace" style="color:#92D050">80.17739181</td>
@@ -14547,8 +14547,8 @@ ssimulacra2_rs: Mean: 83.68623603, Median: 83.96666350, Std Dev: 3.66503275, 5th
                         <td class="px-1" style="color:#FFC000">41.8179</td>
                         <td class="px-1" style="color:#92D050">44.4381</td>
                         <td class="px-1" style="color:#92D050">44.5306</td>
-                        <td class="px-1" style="color:#31D87D"></td>
-                        <td class="px-1" style="color:#31D87D"></td>
+                        <td class="px-1" style="color:#31D87D">99.706182</td>
+                        <td class="px-1" style="color:#31D87D">96.879159</td>
                         <td class="px-1" style="color:#92D050">84.15532276</td>
                         <td class="px-1" style="color:#92D050">84.55457187</td>
                         <td class="px-1" style="color:#FFC000">79.11152471</td>
@@ -14562,8 +14562,8 @@ ssimulacra2_rs: Mean: 83.68623603, Median: 83.96666350, Std Dev: 3.66503275, 5th
                         <td class="px-1" style="color:#FFC000">41.5676</td>
                         <td class="px-1" style="color:#92D050">44.1395</td>
                         <td class="px-1" style="color:#92D050">44.2521</td>
-                        <td class="px-1" style="color:#31D87D"></td>
-                        <td class="px-1" style="color:#31D87D"></td>
+                        <td class="px-1" style="color:#31D87D">99.612705</td>
+                        <td class="px-1" style="color:#31D87D">96.739005</td>
                         <td class="px-1" style="color:#92D050">83.69765034</td>
                         <td class="px-1" style="color:#92D050">83.97990722</td>
                         <td class="px-1" style="color:#FFC000">78.64486286</td>
@@ -14577,8 +14577,8 @@ ssimulacra2_rs: Mean: 83.68623603, Median: 83.96666350, Std Dev: 3.66503275, 5th
                         <td class="px-1" style="color:#FFC000">41.5917</td>
                         <td class="px-1" style="color:#92D050">44.2183</td>
                         <td class="px-1" style="color:#92D050">44.3209</td>
-                        <td class="px-1" style="color:#31D87D"></td>
-                        <td class="px-1" style="color:#31D87D"></td>
+                        <td class="px-1" style="color:#31D87D">99.618899</td>
+                        <td class="px-1" style="color:#31D87D">96.744106</td>
                         <td class="px-1" style="color:#92D050">83.68623603</td>
                         <td class="px-1" style="color:#92D050">83.96666350</td>
                         <td class="px-1" style="color:#FFC000">78.54152309</td>
@@ -14588,8 +14588,11 @@ ssimulacra2_rs: Mean: 83.68623603, Median: 83.96666350, Std Dev: 3.66503275, 5th
             </table></div>
             <h4>（8/8）SVT-AV1 全功能 B 帧与片源特化参数测试分析</h4>
             <ol class="text-smaller">
+                <li>SVT-AV1 在综合动画场景中可以在所有指标优于 x265 的情况下选择优化速度、码率或画质，从而更贴合不同用户的需求
+                    <ul><li>当然  Preset 2 本身就意味着编码速度会下降不少，在漫画材质动画片源中反而 x265 略快一点</li></ul>
+                </li>
                 <li>由于开启了更高强度以及优化，这里的 SVT-AV1 表现在画质上占优，暂停画质大优，而速度和码率上变得与 x265 相差不大</li>
-                <li>本次测试推翻了之前对 SVT-AV1 在画质上达不到 x265 程度的</li>
+                <li>Netflix Boat 片源难度似乎超纲了</li>
             </ol>
 
             <h2 id="h2-19">附录：下载</h2>
