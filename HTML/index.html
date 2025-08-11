@@ -14089,11 +14089,6 @@ ssimulacra2_rs: Mean: 83.68623603, Median: 83.96666350, Std Dev: 3.66503275, 5th
                         <td class="px-1" style="color:#FFCC00">73.47682479</td>
                         <td class="px-1" style="color:#FFCC00">79.92659737</td>
                     </tr>
-
-
-
-
-
                     <tr class="text-smaller">
                         <td class="align-items-center t-light-gray" colspan="13"><b>Netflix WindAndNature</b></td>
                     </tr>
@@ -14172,12 +14167,6 @@ ssimulacra2_rs: Mean: 83.68623603, Median: 83.96666350, Std Dev: 3.66503275, 5th
                         <td class="px-1" style="color:#C65911">63.12866894</td>
                         <td class="px-1" style="color:#FFC000">76.30263429</td>
                     </tr>
-
-
-
-
-
-
                     <tr class="text-smaller">
                         <td class="align-items-center t-light-gray" colspan="13"><b>Blender Fundation BigBuckBunny</b></td>
                     </tr>
@@ -14334,11 +14323,6 @@ ssimulacra2_rs: Mean: 83.68623603, Median: 83.96666350, Std Dev: 3.66503275, 5th
                         <td class="px-1" style="color:#FFCC00">74.97756983</td>
                         <td class="px-1" style="color:#31D87D">96.41701650</td>
                     </tr>
-
-
-
-
-
                     <tr class="text-smaller">
                         <td class="align-items-center t-light-gray" colspan="13"><b>Netflix SolLevante</b></td>
                     </tr>
@@ -14417,10 +14401,6 @@ ssimulacra2_rs: Mean: 83.68623603, Median: 83.96666350, Std Dev: 3.66503275, 5th
                         <td class="px-1" style="color:#C65911">60.98289326</td>
                         <td class="px-1" style="color:#31D87D">99.36087300</td>
                     </tr>
-
-
-
-
                     <tr class="text-smaller">
                         <td class="align-items-center t-light-gray" colspan="13"><b>ドラゴン会. MAIDRAGON-S</b></td>
                     </tr>
@@ -14499,11 +14479,6 @@ ssimulacra2_rs: Mean: 83.68623603, Median: 83.96666350, Std Dev: 3.66503275, 5th
                         <td class="px-1" style="color:#FFC000">73.44385061</td>
                         <td class="px-1" style="color:#92D050">89.31973903</td>
                     </tr>
-
-
-
-
-
                     <tr class="text-smaller">
                         <td class="align-items-center t-light-gray" colspan="13"><b>OB 会. HYOUKA</b></td>
                     </tr>
@@ -14593,11 +14568,183 @@ ssimulacra2_rs: Mean: 83.68623603, Median: 83.96666350, Std Dev: 3.66503275, 5th
                 <li>Netflix Boat 片源难度似乎超纲了</li>
             </ol>
 
+            <h3>测试——SVT-AV1 3.1.0 对比测试</h3>
+            <p>本次测试将会使用与全功能 B 帧与片源特化参数测试一致的参数，只测试部分片源来观察画质指标得分变化</p>
+            <div class="overflow-auto mt-3"><table class="table-center text-smaller two-decimals">
+                <thead>
+                    <tr class="border-lr">
+                        <th colspan="4">SVT-AV1 3.1 对比 3.0</th>
+                        <th class="px-1" colspan="3">XPSNR</th>
+                        <th class="px-1" colspan="2">VMAF 0.6.1</th>
+                        <th class="px-1" colspan="4">SSIMULACRA 2.1</th>
+                    </tr>
+                    <tr class="border-lr">
+                        <th class="px-1">编码器</th>
+                        <th class="px-1">编码选项</th>
+                        <th class="px-1">速度 fps</th>
+                        <th class="px-1">码率 kbps</th>
+                        <th class="px-1">Y dB</th>
+                        <th class="px-1">U dB</th>
+                        <th class="px-1">V dB</th>
+                        <th class="px-1">4k</th>
+                        <th class="px-1">1080p</th>
+                        <th class="px-1">均值</th>
+                        <th class="px-1">中位</th>
+                        <th class="px-1">第 5%</th>
+                        <th class="px-1">第 95%</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="text-smaller">
+                        <td class="align-items-center t-light-gray" colspan="13"><b>Netflix Boat</b></td>
+                    </tr>
+                    <tr class="border-bottom">
+                        <td class="px-1">x265 4.0</td>
+                        <td class="px-1">~CRF18 Custom</td>
+                        <td class="px-1">1.54</td>
+                        <td class="px-1" style="color:#FFF;background-color:#FF7C80">60831.26</td>
+                        <td class="px-1 ace" style="color:#92D050">42.0499</td>
+                        <td class="px-1 ace" style="color:#92D050">44.8382</td>
+                        <td class="px-1 ace" style="color:#31D87D">47.8922</td>
+                        <td class="px-1" style="color:#31D87D">99.810258</td>
+                        <td class="px-1" style="color:#31D87D">99.810258</td>
+                        <td class="px-1" style="color:#FFC000">73.25259644</td>
+                        <td class="px-1" style="color:#FFC000">71.55939769</td>
+                        <td class="px-1" style="color:#C65911">69.44349186</td>
+                        <td class="px-1" style="color:#FFCC00">79.86377007</td>
+                    </tr>
+                    <tr class="border-bottom">
+                        <td class="px-1">SVTAV1 3.0</td>
+                        <td class="px-1 text-smaller">CRF30 PSNR QM P2 VarOct2 VB-Curve2Strength2 TF2-Strength2 Sharp6</td>
+                        <td class="px-1">1.618</td>
+                        <td class="px-1" style="color:#FFF;background-color:#FF7C80">73294.94</td>
+                        <td class="px-1" style="color:#FFCC00">38.1610</td>
+                        <td class="px-1" style="color:#92D050">42.0504</td>
+                        <td class="px-1" style="color:#92D050">43.9760</td>
+                        <td class="px-1" style="color:#31D87D">99.769712</td>
+                        <td class="px-1" style="color:#31D87D">99.915497</td>
+                        <td class="px-1" style="color:#FFCC00">78.41704987</td>
+                        <td class="px-1" style="color:#FFCC00">78.44153457</td>
+                        <td class="px-1" style="color:#FFCC00">76.39476204</td>
+                        <td class="px-1" style="color:#92D050">80.94837641</td>
+                    </tr>
+                    <tr class="border-bottom">
+                        <td class="px-1">SVTAV1 3.1</td>
+                        <td class="px-1 text-smaller">CRF30 PSNR QM P2 VarOct2 VB-Curve2Strength2 TF2-Strength2 Sharp6</td>
+                        <td class="px-1">2.698</td>
+                        <td class="px-1" style="color:#FFF;background-color:#FF7C80">79992.58</td>
+                        <td class="px-1" style="color:#FFCC00">38.1885</td>
+                        <td class="px-1" style="color:#92D050">42.0764</td>
+                        <td class="px-1" style="color:#92D050">43.9398</td>
+                        <td class="px-1 ace" style="color:#31D87D">99.841975</td>
+                        <td class="px-1 ace" style="color:#31D87D">99.953442</td>
+                        <td class="px-1 ace" style="color:#FFCC00">78.90486047</td>
+                        <td class="px-1 ace" style="color:#FFCC00">78.83160722</td>
+                        <td class="px-1 ace" style="color:#FFCC00">77.25901065</td>
+                        <td class="px-1" style="color:#92D050">80.85198947</td>
+                    </tr>
+                    <tr class="border-bottom">
+                        <td class="px-1">SVTAV1 3.0</td>
+                        <td class="px-1 text-smaller">CRF30 PSNR P2 VarOct2 VB-Curve2Strength2 TF2-Strength2 Sharp4</td>
+                        <td class="px-1">1.711</td>
+                        <td class="px-1 ace" style="color:#FFF;background-color:#FF7C80">58986.51</td>
+                        <td class="px-1" style="color:#FFCC00">38.0883</td>
+                        <td class="px-1" style="color:#92D050">42.0073</td>
+                        <td class="px-1" style="color:#92D050">43.9256</td>
+                        <td class="px-1" style="color:#31D87D">99.550313</td>
+                        <td class="px-1" style="color:#31D87D">99.759846</td>
+                        <td class="px-1" style="color:#FFCC00">77.38543226</td>
+                        <td class="px-1" style="color:#FFCC00">77.41340873</td>
+                        <td class="px-1" style="color:#FFCC00">75.30180302</td>
+                        <td class="px-1" style="color:#92D050">80.09303481</td>
+                    </tr>
+                    <tr class="border-bottom">
+                        <td class="px-1">SVTAV1 3.1</td>
+                        <td class="px-1 text-smaller">CRF30 PSNR P2 VarOct2 VB-Curve2Strength2 TF2-Strength2 Sharp4</td>
+                        <td class="px-1">2.874</td>
+                        <td class="px-1" style="color:#FFF;background-color:#FF7C80">64660.05</td>
+                        <td class="px-1" style="color:#FFCC00">38.1072</td>
+                        <td class="px-1" style="color:#92D050">42.0237</td>
+                        <td class="px-1" style="color:#92D050">43.9060</td>
+                        <td class="px-1" style="color:#31D87D">99.631347</td>
+                        <td class="px-1" style="color:#31D87D">99.813494</td>
+                        <td class="px-1" style="color:#FFCC00">77.72784591</td>
+                        <td class="px-1" style="color:#FFCC00">77.81242541</td>
+                        <td class="px-1" style="color:#FFCC00">75.68929430</td>
+                        <td class="px-1" style="color:#FFCC00">79.94027519</td>
+                    </tr>
+
+                    <tr class="border-bottom">
+                        <td class="px-1">SVTAV1 3.0</td>
+                        <td class="px-1 text-smaller">CRF30 VQ QM P2 VB-Curve2Strength1 TF2-Strength2 Sharp6</td>
+                        <td class="px-1">1.803</td>
+                        <td class="px-1" style="color:#FFF;background-color:#FF7C80">61630.74</td>
+                        <td class="px-1" style="color:#FFCC00">38.1610</td>
+                        <td class="px-1" style="color:#92D050">42.0504</td>
+                        <td class="px-1" style="color:#92D050">43.9760</td>
+                        <td class="px-1" style="color:#31D87D">99.769109</td>
+                        <td class="px-1" style="color:#31D87D">99.61069</td>
+                        <td class="px-1" style="color:#FFCC00">76.43178341</td>
+                        <td class="px-1" style="color:#FFCC00">76.40723980</td>
+                        <td class="px-1" style="color:#FFCC00">73.72486035</td>
+                        <td class="px-1" style="color:#92D050">80.13622101</td>
+                    </tr>
+                    <tr class="border-bottom">
+                        <td class="px-1">SVTAV1 3.1</td>
+                        <td class="px-1 text-smaller">CRF30 VQ QM P2 VB-Curve2Strength1 TF2-Strength2 Sharp6</td>
+                        <td class="px-1">3.034</td>
+                        <td class="px-1" style="color:#FFF;background-color:#FF7C80">68161.06</td>
+                        <td class="px-1" style="color:#FFCC00">38.0178</td>
+                        <td class="px-1" style="color:#FFCC00">41.9242</td>
+                        <td class="px-1" style="color:#92D050">43.8542</td>
+                        <td class="px-1" style="color:#31D87D">99.685014</td>
+                        <td class="px-1" style="color:#31D87D">99.827010</td>
+                        <td class="px-1" style="color:#FFCC00">76.93017904</td>
+                        <td class="px-1" style="color:#FFCC00">77.15999209</td>
+                        <td class="px-1" style="color:#FFCC00">74.29553909</td>
+                        <td class="px-1" style="color:#FFCC00">79.84936319</td>
+                    </tr>
+                    <tr class="border-bottom">
+                        <td class="px-1">SVTAV1 3.0</td>
+                        <td class="px-1 text-smaller">CRF30 VQ P2 VarOct2 VB-Curve2Strength1 TF2-Strength2 Sharp4</td>
+                        <td class="px-1">1.908</td>
+                        <td class="px-1" style="color:#FFF;background-color:#FF7C80">64077.64</td>
+                        <td class="px-1" style="color:#C65911">37.9985</td>
+                        <td class="px-1" style="color:#FFCC00">41.9331</td>
+                        <td class="px-1" style="color:#92D050">43.8756</td>
+                        <td class="px-1" style="color:#31D87D">99.550313</td>
+                        <td class="px-1" style="color:#31D87D">99.759846</td>
+                        <td class="px-1" style="color:#FFCC00">76.20719143</td>
+                        <td class="px-1" style="color:#FFCC00">76.18750644</td>
+                        <td class="px-1" style="color:#FFCC00">73.47682479</td>
+                        <td class="px-1" style="color:#FFCC00">79.92659737</td>
+                    </tr>
+                    <tr class="border-bottom">
+                        <td class="px-1">SVTAV1 3.1</td>
+                        <td class="px-1 text-smaller">CRF30 VQ P2 VarOct2 VB-Curve2Strength1 TF2-Strength2 Sharp4</td>
+                        <td class="px-1 ace">3.105</td>
+                        <td class="px-1" style="color:#FFF;background-color:#FF7C80">70559.88</td>
+                        <td class="px-1" style="color:#C65911">38.0208</td>
+                        <td class="px-1" style="color:#FFCC00">41.9561</td>
+                        <td class="px-1" style="color:#92D050">43.8559</td>
+                        <td class="px-1" style="color:#31D87D">99.656474</td>
+                        <td class="px-1" style="color:#31D87D">99.799003</td>
+                        <td class="px-1" style="color:#FFCC00">76.71219951</td>
+                        <td class="px-1" style="color:#FFCC00">77.00135828</td>
+                        <td class="px-1" style="color:#FFCC00">73.97556848</td>
+                        <td class="px-1" style="color:#FFCC00">79.74976244</td>
+                    </tr>
+                </tbody>
+            </table></div>
+            <h4>（1/1）SVT-AV1 3.1 对比 3.0 测试分析</h4>
+            <ol class="text-smaller">
+                <li>更新后的速度和画质有一定提升，但码率也提升了</li>
+            </ol>
+
             <h2 id="h2-19">附录：下载</h2>
 
             <h3>下载——SVT-AV1 编码器</h3>
             <p>可以选择直接使用最新版 ffmpeg 内置的 libsvtav1，或下载本教程中测试所编译的 SVT-AV1 v3.0，或自行下载 Github 仓库以及 Visual Studio 等工具编译。</p>
-
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：下载——CI/CD 版 SVT-AV1</button>
             <div class="coll-content">
                 <h4>（1/2）下载 CI/CD 版</h4>
@@ -14609,9 +14756,9 @@ ssimulacra2_rs: Mean: 83.68623603, Median: 83.96666350, Std Dev: 3.66503275, 5th
             <div class="coll-content">
                 <h4>（2/2）手动编译</h4>
                 <ol>
-                    <li>安装 Visual Studio <a href="https://www.visualstudio.com/vs/older-downloads/">2017</a>、<a href="https://visualstudio.microsoft.com/downloads/">2019 或新版本</a></li>
+                    <li>安装 Visual Studio <a href="https://www.visualstudio.com/vs/older-downloads/">2017</a>、或 <a href="https://visualstudio.microsoft.com/downloads/">2019，或新版本</a></li>
                     <li>打开 Visual Studio 后，选择使用 C++ 桌面应用开发组件
-                        <ul><li>若窗口不见，则从主窗口顶部栏的工具（Tools）——获取工具和功能（Get tools and features）中打开</li></ul>
+                        <ul><li>若窗口不见，则在启动界面选择 Continue Without Code，再从主窗口顶部栏的工具（Tools）——获取工具和功能（Get tools and features）中打开</li></ul>
                     </li>
                     <li>下载 <a href="https://github.com/Kitware/CMake/releases/download/v3.24.2/cmake-3.24.2-windows-x86_64.msi">CMake</a> 并安装在默认路径（<code>C:\Program Files\CMake</code>）</li>
                     <li>下载 <a href="https://www.nasm.us/pub/nasm/releasebuilds/2.16.03/win64/nasm-2.16.03-win64.zip">NASM</a> 压缩包并将其中的 nasm.exe 移动到系统环境变量（PATH）录入的位置（如 <code>C:\Windows\System32</code> 中）</li>
@@ -14624,46 +14771,98 @@ ssimulacra2_rs: Mean: 83.68623603, Median: 83.96666350, Std Dev: 3.66503275, 5th
 
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：下载——Windows+LLVM 手动编译 SVT-AV1-PSY、SVT-AV1 编码器</button>
             <div class="coll-content">
-                <p class="text-gray-side">警告：本内容未经验证，建议直接阅读原文：<a href="https://discord.com/channels/992019264959676448/1253334764920766505">discord/AV1 weeb edition/scripts-tools-and-guides</a>。</p>
+                <p class="text-gray-side">修改自原文：<a href="https://discord.com/channels/992019264959676448/1253334764920766505">discord/AV1 weeb edition/scripts-tools-and-guides</a>。</p>
                 <h4>（1/4）下载并安装编译工具</h4>
                 <ol>
-                    <li><b>LLVM</b>：<a href="https://github.com/llvm/llvm-project/releases/latest">github.com/llvm/llvm-project/releases/latest</a></li>
+                    <li><b>LLVM（clang 支持）</b>：<a href="https://github.com/llvm/llvm-project/releases/latest">github.com/llvm/llvm-project/releases/latest</a>，Windows 64bit 操作系统选 LLVM-***-win64.exe，安装时选择 Add LLVM to the system PATH for all/current users</li>
                     <li><b>Microsoft C++ Build Tools</b>：<a href="https://visualstudio.microsoft.com/visual-cpp-build-tools">visualstudio.microsoft.com/visual-cpp-build-tools</a>
                         <ul>
+                            <li>如果如“Windows 手动编译 SVT-AV1 编码器”中一样用 Visual Studio 直接下载了 C++ 桌面应用开发组件，则可以跳过该步骤</li>
                             <li>下载并运行安装程序，选择“Desktop development with C++”</li>
                             <li>打开一个记事本，将实际安装位置路径拷贝进去</li>
                             <li>仅安装 MSVC 和最新的 Windows 10 / Windows 11 SDK</li>
                         </ul>
                     </li>
-                    <li><b>nasm</b>：<a href="https://www.nasm.us/pub/nasm/releasebuilds/?C=M;O=D">nasm.us/pub/nasm/releasebuilds/?C=M;O=D</a></li>
+                    <li><b>nasm</b>：<a href="https://www.nasm.us/pub/nasm/releasebuilds/?C=M;O=D">nasm.us/pub/nasm/releasebuilds/?C=M;O=D</a>，Windows 64bit 选择“最新版/win64/nasm-***-installer-x64.exe”，安装时可以去勾选 Manual 和 VS8 Integration</li>
                     <li><b>CMake</b>；<a href="https://github.com/Kitware/CMake/releases">github.com/Kitware/CMake/releases</a></li>
                     <li><b>Git</b>（可选）：<a href="https://git-scm.com/download/win">git-scm.com/download/win</a></li>
                 </ol>
 
-                <h4>（2/4）获取源码</h4>
-                <p>若照上面安装了 Git，则打开 Git Bash，并使用下方命令下载，否则在 Github/gianno-rosato 下载 ZIP，并带着 svt-av1-psy 目录解压到下载路径。</p>
+                <h4>（2/4）获取 SVT-AV1 源码</h4>
+                <h5>浏览器下载：</h5>
+                <ul>
+                    <li>SVT-AV1-PSY：将 Github/gianno-rosato/SVT-AV1-PSY 项目 <a href="Github/ https://github.com/psy-ex/svt-av1-psy/archive/refs/heads/master.zip">打包下载</a> 并解压</li>
+                    <li>SVT-AV1：将 GitLab/AOMediaCodec/SVT-AV1 项目 <a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/archive/master/SVT-AV1-master.zip">打包下载</a> 并解压</li>
+                </ul>
+                <h5>Git 直接下载：</h5>
+                <p>若照上面安装了 Git，则打开 Git Bash，并使用下方命令下载（若在安装时选择了其它编辑器，则命令行格式可能会有所差异）：</p>
                 <pre><code class="text-smaller language-powershell hljs">
+# Windows 下的 Git Bash 路径格写作 /盘符/文件夹/文件夹/\
+# 例如 cd /g/Folder/ 即 cd G:\Folder\
+
+# 使用 CMD 时，通过 cd 命令到不同逻辑磁盘需要添加 /D 选项才能成功（cd /D）
+# 例如打开 CMD 时路径为 C:\Users\用户名\，通过 cd /D D:\ 才能移动到 D 盘目录下
 cd &lt;下载路径&gt;
+
+# 下载 SVT-AV1-PSY
 git clone --depth 50 https://github.com/gianni-rosato/svt-av1-psy.git
 cd svt-av1-psy
+
+# 或者 SVT-AV1
+git clone --depth 50 https://gitlab.com/AOMediaCodec/SVT-AV1.git
+cd svt-av1
                 </code></pre>
-                <p class="text-red-emph">注意：后续所有命令须在 Windows CMD 中运行，<b>不要</b>使用 PowerShell。</p>
+                <p class="text-red-emph">注意：Windows 系统下，后续所有命令须在 Windows CMD 或 Git Bash（后者暂未验证）中运行，<b>不要用 PowerShell</b>。</p>
 
                 <h4>（3/4）编译步骤</h4>
-                <p>启用 UTF-8 CMD 窗口：</p>
+                <p>0. 在 CMD 中确认 LLVM、CMake、NASM 已正确安装并准备好运行（输入命令后按回车，得到程序输出信息）：</p>
+                <pre><code class="text-smaller language-powershell hljs">
+"C:\Program Files\LLVM\bin\clang.exe" --version
+:: clang version ***
+:: Target: x86_64-pc-windows-msvc
+:: Thread model: posix
+:: InstalledDir: C:\Program Files\LLVM\bin
+
+where clang-cl
+:: C:\Program Files\LLVM\bin\clang-cl.exe
+
+nasm --v
+:: NASM version *** compiled on *** *** ***
+
+cmake --version
+:: cmake version ***
+:: CMake suite maintained and supported by Kitware (kitware.com/cmake).
+                </code></pre>
+                <p class="text-red-emph">注意：只有全部正常才能继续。</p>
+                <p>1. 切换文本编码到 UTF-8：</p>
                 <pre><code class="text-smaller language-powershell hljs">
 chcp 65001
                 </code></pre>
-                <p>在先前下载的 VS Build Tools 路径中运行 vcvars64.bat 环境配置脚本（根据实际安装位置调整）：</p>
+                <p>2. 在先前下载的 VS Build Tools 路径中运行 vcvars64.bat 环境配置脚本（根据实际安装位置调整）：</p>
                 <pre><code class="text-smaller language-powershell hljs">
+:: 如果是和“Windows 手动编译 SVT-AV1 编码器”中一样用 Visual Studio 下载了 C++ 桌面应用开发组件，且 Visual Studio 是 64bit，则路径可能是 C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars64.bat
 call "C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Auxiliary\Build\vcvars64.bat"
                 </code></pre>
-                <p>在同一 CMD 窗口中，指定两个变量以定义使用 Clang-CL 编译器：</p>
+
+                <p>3. 运行 vcvars64.bat 后会进入一个新的 CMD 界面，在此指定两个变量以定义使用 Clang-CL 编译器：</p>
                 <pre><code class="text-smaller language-powershell hljs">
 set "CC=clang-cl"
 set "CXX=clang-cl"
                 </code></pre>
                 <p>用 CMake 生成 Ninja 项目并配置编译选项（根据压制电脑的 CPU 架构进行调整）：</p>
+                <pre><code class="text-smaller language-powershell hljs">
+:: 如果当前目录不在 SVT-AV1 或 SVT-AV1-PSY 目录下，则照上例使用 cd 命令移动过去
+
+:: 换行符取决于，如 CMD 使用 ^，Bash 使用 \，如果不知道，可以直接删除换行符
+:: 如果要编译 Debug 版而非发布版，则去掉 -DCMAKE_BUILD_TYPE=Release 整行
+cmake --fresh -B svt_build -G Ninja ^
+-DCMAKE_BUILD_TYPE=Release ^
+-DBUILD_SHARED_LIBS=OFF ^
+-DENABLE_AVX512=OFF ^
+-DSVT_AV1_LTO=OFF ^
+-DCMAKE_CXX_FLAGS_RELEASE="-flto /DNDEBUG /clang:-O2 -march=native" ^
+-DCMAKE_C_FLAGS_RELEASE="-flto /DNDEBUG /clang:-O2 -march=native"
+                </code></pre>
                 <ul>
                     <li><code class="code-bold">-flto</code>：启用全程序链接时优化（Link‑Time Optimization）</li>
                     <li><code class="code-bold">-DCMAKE_BUILD_TYPE=Release</code>、<code class="code-bold">/DNDEBUG</code>：编译发布（Release）而非调试（Debug）版本</li>
@@ -14674,17 +14873,12 @@ set "CXX=clang-cl"
                         <ul><li>有测试表明 <code class="code-bold">-march=znver2</code> 在 ZEN3 架构的 CPU 上比 <code class="code-bold">-march=znver3</code> 快，但这可能是边界条件</li></ul>
                     </li>
                 </ul>
-                <pre><code class="text-smaller language-powershell hljs">
-cmake --fresh -B svt_build -G Ninja \
-  -DBUILD_SHARED_LIBS=OFF \
-  -DENABLE_AVX512=OFF \
-  -DSVT_AV1_LTO=OFF \
-  -DCMAKE_CXX_FLAGS_RELEASE="-flto /DNDEBUG /clang:-O2 -march=native" \
-  -DCMAKE_C_FLAGS_RELEASE="-flto /DNDEBUG /clang:-O2 -march=native"
-                </code></pre>
                 <p>最后使用 Ninja 编译：</p>
                 <pre><code class="text-smaller language-powershell hljs">
 ninja -C svt_build
+
+:: *** warnings generated.
+:: D[242/242] Linking C executable 盘:\文件夹\SVT-AV1-master\Bin\Debug（或 Release）\SvtAv1EncApp.exe
                 </code></pre>
                 <h4>（4/4）完整编译命令</h4>
                 <p>CMD 命令整体（使用 CMD 原生的 ^ 换行）：</p>
