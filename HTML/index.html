@@ -3388,8 +3388,8 @@ Default_Partition_W64_Cdf[ PARTITION_CONTEXTS ][ 11 ] = {
     { 870, 1212, 1487, 31198, 31394, 31574, 31743, 31881, 32332, 32768, 0 }
 }
                 </code></pre>
-                <!--冠军行的“起跳高度”分别为 +0.043，+0.047，+0.198，+0.008，+0.013，+0.008，+0.011，+0.026，+0.032，-1-->
-                <p>可以看到上下文长 3 时，<code class="code-bold">PARTITION_NONE</code>、<code class="code-bold">PARTITION_HORZ</code>、<code class="code-bold">PARTITION_VERT</code> 的出字概率变得很小，也就是说在编码了 3 个 64x64 块后，接下来的块有了足够多的信息，所以选择这些模式的概率也会变小。熵编码出字概率 0~1 区间的范围越小，用于表示这段区间的小数数位越长，因此降低不常用模式的出字概率（占据位宽），就可以提高其他模式可用的宽度，以减少小数数位，而提高压缩率。</p>
+                <!--首选行的“起跳高度”分别为 +0.043，+0.047，+0.198，+0.008，+0.013，+0.008，+0.011，+0.026，+0.032，-1-->
+                <p>可以看到上下文长 3 时，<code class="code-bold">PARTITION_NONE</code>、<code class="code-bold">PARTITION_HORZ</code>、<code class="code-bold">PARTITION_VERT</code> 的出字概率变得很小，也就是编码 3 个 64x64 块后，接下来的块大概率会用类似的模式，所以选择这些模式的概率也会变小。熵编码出字概率 0~1 区间的范围越小，用于表示这段区间的小数数位越长，因此降低不常用模式的出字概率（占据位宽），就可以提高其他模式可用的宽度，以减少小数数位，而提高压缩率。</p>
                 <p>假设编码某帧中的冠军个 64x64 SB。其左侧和顶部区域不存在（ctx 为 0，对应上述冠军行）。假设其分块模式决定使用 <code class="code-bold">PARTITION_NONE</code>，则选择冠军行，冠军列的 20137（0.615）区间，并更新一遍 CTX。下一个分块会使用亚军行的出字概率</p>
                 <p>预设 0~1 区间（0~32768）的 0.615 倍为，20137，这个数小于 32768，因此需要循环归一化/基本单位化（乘以 2），放大到 40274。</p>
                 <div class="align-items-center">
@@ -3693,7 +3693,7 @@ int av1_compute_rd_mult_based_on_qindex(const AV1_COMP *cpi, int qindex) {
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（1/1）SV1-AV1 精确到细分块的 Lambda 调制</button>
             <div class="coll-content">
                 <h4>（1/1）SV1-AV1 精确到细分块的 Lambda 调制</h4>
-                <p>调制算法基于时域依赖性模型 TPL，斜度 Lambda 被重命名为率失真缩放值（RD-Multiplier，rdmult），核心思想为根据 TPL 信息（依赖大小）缩放每个块的相对权重，辅以新旧两个率失真斜度的差距的阻尼：</p>
+                <p>调制算法基于时域依赖性模型 TPL，斜度 Lambda 被重命名为率失真缩放值（RD-Multiplier，rdmult），核心思想为根据 TPL 信息（依赖大小）缩放每个块的相对权重，辅以新旧两个率失真斜度的差距的阻尼/缓冲抑制：</p>
                 <span class="text-blue-math">\[ \text{TPL}_{\text{Superblock_rdmult_scale_factors}} = 
                     \frac{\text{rdmult}_\text{new}}{\text{rdmult}_{\text{old}}} \cdot \frac{\text{TPL}_{\text{rdmult_scale_factors}}}{\text{Geometric_Mean}_{\text{TPL_rdmult_scale_factors}}}
                 \]</span>
@@ -3884,7 +3884,7 @@ int av1_compute_rd_mult_based_on_qindex(const AV1_COMP *cpi, int qindex) {
                 <span class="text-blue-math">\[ \mathbb{E}\left( \hat{s}_k^2 \right) = \mathbb{E}\left( s_k^2 \right) + \mathbb{E}\left(\left( n_k-\hat{n}_k \right)^2\right) + 2\mathbb{E}\left( s_k \left( n_k-\hat{n}_k \right)\right) \]</span>
                 <p>取期望——由于预测的信号 <span class="text-blue-math">\( \hat{s}_k^2 \)</span> 与噪声并无相关性（correlation），所以噪声交叉项等于零。剩下残余噪声交叉项：</p>
                 <span class="text-blue-math">\[ \mathbb{E}\left( \hat{s}_k^2 \right) = \mathbb{E}\left( s_k^2 \right) + \mathbb{E}\left(\left( n_k-\hat{n}_k \right)^2\right) \]</span>
-                <p>重新排列后，得到的关系如下，即“预测信号的能量越小，则噪声残差强度越小，则信噪比越高”：</p>
+                <p>重新排列后，得到“预测信号的能量越小，则噪声残差强度越小，则信噪比越高”的关系：</p>
                 <span class="text-blue-math">\[ \mathbb{E}\left( s_k^2 \right) = \mathbb{E}\left( \hat{s}_k^2 \right) - \mathbb{E}\left(\left( n_k-\hat{n}_k \right)^2\right) \]</span>
 
                 <h5>（1/7-3/3）现实意义</h5>
@@ -4687,6 +4687,7 @@ SvtAv1EncApp.exe -i .\输入.yuv -w 3840 -h 2160 --input-depth 10 --color-format
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~2，默认 0：关，<span class="text-red-emph">被<code>--hierarchical-levels</code>覆盖</span>&gt;指定低延迟模式（减少解码复杂度），适合直播的转码分发机制，以及算力不足的平台——1：普通限制，2：强限制。影响 SuperBlock 大小等多个机制。</p>
             <code class="code-bold">--asm</code>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~11/字符串 c~max，默认 max：全部&gt;指定弃用较新的 CPU 指令集以兼容旧式计算机平台。按照从旧到新排序为——c, mmx, sse, sse2, sse3, ssse3, sse4_1, sse4_2, avx, avx2, avx512, avx512icl, max。</p>
+            <p class="text-gray-side">注：未验证该参数是否支持大写，一般来说指令集名称都用大写（C, MMX, SSE, SSE2, SSE3, SSSE3, SSE4_1, SSE4_2, AVX, AVX2, AVX512, AVX512ICL），当然，这不重要。</p>
             <code class="code-bold">&#45;&#45;forced-maximum-frame-width</code>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 4~16384，&gt;将输入帧宽度值设为强制。<span class="text-red-emph">猜测：</span>限制参考缩放环路与超分辨率环路。</p>
             <code class="code-bold">&#45;&#45;forced-maximum-frame-height</code>
@@ -6203,7 +6204,7 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
             <h3>某编码器 报错与警告——参数值</h3>
             <p>TODO</p>-->
 
-            <h2 id="h2-17">画质指标</h2>
+            <h2 id="h2-17">附录——画质指标</h2>
             <p>对于测试画质这种说不准的伪客观多变量虚拟单位，即曾仕强教授所言“只能对到一定程度、深度，再往深究就错了”。测量画质的方法论即 Image/Video Quality Assessment。IQA、VQA 分为主观、客观，绝对评价、相对评价，全参考、部分参考和无参考。见 <a href="https://baike.baidu.com/item/IQA/19453034">百度百科</a>。</p>
             <p>主观画质测量指标受到视觉系统差异和认知理解差异拖累，因此需要大量参与者以及耗费大量时间测量和整理数据——需要协调群体完成。相比之下，由于主观评价最能贴近人眼视觉，这类指标成为客观指标的参考依据。客观测试具有结果高度可重复、高效率、无人值守、低成本的优点。当报告图像质量测量结果时，通常使用平均意见分数 Mean opinion score（MOS），或差异 Difference MOS（DMOS）平均意见分数表——以类似星级评价的测量方法（完全看不清~完美），见 <a href="https://videoclarity.com/PDF/Advancing-To-Multi-Scale-SSIM-Final.pdf">videoclarity</a>。VQA 与 IQA 使用了相同的评价体系分类，区别是视频要求观看距离和屏幕尺寸在测试中不变，且不暂停播放。</p>
             <div class="align-items-center">
@@ -6827,7 +6828,7 @@ for ($i=1; $i -le $frames; $i++) {
                 <li>缺少对比其他算法的测试数据支持</li>
             </ul>
 
-            <h2 id="h2-18">测试</h2>
+            <h2 id="h2-18">附录——测试</h2>
             <p>如上所述，SSIMULACRA 2.1、VMAF、XPSNR 三项指标能够可靠的反应画质。两者的优势包括客观全参考、SROCC 与 PLCC 等级相关系数大于等于 0.9、算法思路清晰、拥有测试数据支持、支持 10bit 位深、代码开源、结果易复现等。</p>
 
             <h3>测试——SVT-AV1 编码器基准</h3>
@@ -14616,7 +14617,7 @@ ssimulacra2_rs: Mean: 83.68623603, Median: 83.96666350, Std Dev: 3.66503275, 5th
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">SVTAV1 3.0</td>
-                        <td class="px-1 text-smaller">CRF30 PSNR QM P2 VarOct2 VB-Curve2Strength2 TF2-Strength2 Sharp6</td>
+                        <td class="px-1 text-smaller">~CRF30 PSNR QM P2 VarOct2 VB-Curve2Strength2 TF2-Strength2 Sharp6</td>
                         <td class="px-1">1.618</td>
                         <td class="px-1" style="color:#FFF;background-color:#FF7C80">73294.94</td>
                         <td class="px-1" style="color:#F0B500">38.1610</td>
@@ -14646,7 +14647,7 @@ ssimulacra2_rs: Mean: 83.68623603, Median: 83.96666350, Std Dev: 3.66503275, 5th
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">SVTAV1 3.0</td>
-                        <td class="px-1 text-smaller">CRF30 PSNR P2 VarOct2 VB-Curve2Strength2 TF2-Strength2 Sharp4</td>
+                        <td class="px-1 text-smaller">~CRF30 PSNR P2 VarOct2 VB-Curve2Strength2 TF2-Strength2 Sharp4</td>
                         <td class="px-1">1.711</td>
                         <td class="px-1 ace" style="color:#FFF;background-color:#FF7C80">58986.51</td>
                         <td class="px-1" style="color:#F0B500">38.0883</td>
@@ -14677,7 +14678,7 @@ ssimulacra2_rs: Mean: 83.68623603, Median: 83.96666350, Std Dev: 3.66503275, 5th
 
                     <tr class="border-bottom">
                         <td class="px-1">SVTAV1 3.0</td>
-                        <td class="px-1 text-smaller">CRF30 VQ QM P2 VB-Curve2Strength1 TF2-Strength2 Sharp6</td>
+                        <td class="px-1 text-smaller">~CRF30 VQ QM P2 VB-Curve2Strength1 TF2-Strength2 Sharp6</td>
                         <td class="px-1">1.803</td>
                         <td class="px-1" style="color:#FFF;background-color:#FF7C80">61630.74</td>
                         <td class="px-1" style="color:#F0B500">38.1610</td>
@@ -14707,7 +14708,7 @@ ssimulacra2_rs: Mean: 83.68623603, Median: 83.96666350, Std Dev: 3.66503275, 5th
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">SVTAV1 3.0</td>
-                        <td class="px-1 text-smaller">CRF30 VQ P2 VarOct2 VB-Curve2Strength1 TF2-Strength2 Sharp4</td>
+                        <td class="px-1 text-smaller">~CRF30 VQ P2 VarOct2 VB-Curve2Strength1 TF2-Strength2 Sharp4</td>
                         <td class="px-1">1.908</td>
                         <td class="px-1" style="color:#FFF;background-color:#FF7C80">64077.64</td>
                         <td class="px-1" style="color:#C65911">37.9985</td>
@@ -14756,7 +14757,7 @@ ssimulacra2_rs: Mean: 83.68623603, Median: 83.96666350, Std Dev: 3.66503275, 5th
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">SVTAV1 3.0</td>
-                        <td class="px-1 text-smaller">CRF30 PSNR QM P2 VarOct2 VB-Curve2Strength2 TF2-Strength2 Sharp6</td>
+                        <td class="px-1 text-smaller">~CRF30 PSNR QM P2 VarOct2 VB-Curve2Strength2 TF2-Strength2 Sharp6</td>
                         <td class="px-1">2.377</td>
                         <td class="px-1">23004.04</td>
                         <td class="px-1 ace" style="color:#C65911">37.2360</td>
@@ -14804,7 +14805,7 @@ ssimulacra2_rs: Mean: 83.68623603, Median: 83.96666350, Std Dev: 3.66503275, 5th
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">SVTAV1 3.0</td>
-                        <td class="px-1 text-smaller">CRF30 PSNR QM P2 VarOct2 VB-Curve2Strength2 TF2-Strength2 Sharp6</td>
+                        <td class="px-1 text-smaller">~CRF30 PSNR QM P2 VarOct2 VB-Curve2Strength2 TF2-Strength2 Sharp6</td>
                         <td class="px-1">14.593</td>
                         <td class="px-1">3572.83</td>
                         <td class="px-1 ace" style="color:#92D050">43.1474</td>
@@ -14852,7 +14853,7 @@ ssimulacra2_rs: Mean: 83.68623603, Median: 83.96666350, Std Dev: 3.66503275, 5th
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">SVTAV1 3.0</td>
-                        <td class="px-1 text-smaller">CRF30 PSNR QM P2 VarOct2 VB-Curve2Strength2 TF2-Strength2 Sharp6</td>
+                        <td class="px-1 text-smaller">~CRF30 PSNR QM P2 VarOct2 VB-Curve2Strength2 TF2-Strength2 Sharp6</td>
                         <td class="px-1">12.265</td>
                         <td class="px-1 ace">4655.71</td>
                         <td class="px-1 ace" style="color:#92D050">44.8509</td>
@@ -14900,7 +14901,7 @@ ssimulacra2_rs: Mean: 83.68623603, Median: 83.96666350, Std Dev: 3.66503275, 5th
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">SVTAV1 3.0</td>
-                        <td class="px-1 text-smaller">CRF30 PSNR QM P2 VarOct2 VB-Curve2Strength2 TF2-Strength2 Sharp6</td>
+                        <td class="px-1 text-smaller">~CRF30 PSNR QM P2 VarOct2 VB-Curve2Strength2 TF2-Strength2 Sharp6</td>
                         <td class="px-1">2.042</td>
                         <td class="px-1">38629.23</td>
                         <td class="px-1 ace" style="color:#F0B500">38.3983</td>
@@ -14948,7 +14949,7 @@ ssimulacra2_rs: Mean: 83.68623603, Median: 83.96666350, Std Dev: 3.66503275, 5th
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">SVTAV1 3.0</td>
-                        <td class="px-1 text-smaller">CRF30 PSNR QM P2 VarOct2 VB-Curve2Strength2 TF2-Strength2 Sharp6</td>
+                        <td class="px-1 text-smaller">~CRF30 PSNR QM P2 VarOct2 VB-Curve2Strength2 TF2-Strength2 Sharp6</td>
                         <td class="px-1">16.451</td>
                         <td class="px-1 ace">2896.32</td>
                         <td class="px-1 ace" style="color:#92D050">44.4140</td>
@@ -14996,7 +14997,7 @@ ssimulacra2_rs: Mean: 83.68623603, Median: 83.96666350, Std Dev: 3.66503275, 5th
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">SVTAV1 3.0</td>
-                        <td class="px-1 text-smaller">CRF30 PSNR QM P2 VarOct2 VB-Curve2Strength2 TF2-Strength2 Sharp6</td>
+                        <td class="px-1 text-smaller">~CRF30 PSNR QM P2 VarOct2 VB-Curve2Strength2 TF2-Strength2 Sharp6</td>
                         <td class="px-1">19.107</td>
                         <td class="px-1">1440.04</td>
                         <td class="px-1 ace" style="color:#F0B500">41.9403</td>
@@ -15032,7 +15033,7 @@ ssimulacra2_rs: Mean: 83.68623603, Median: 83.96666350, Std Dev: 3.66503275, 5th
                 <li>困难场景画质全面上升，简单场景画面有下降，但仔细看可以发现变化不大，相比于速度的增加完全可以接受</li>
             </ol>
 
-            <h2 id="h2-19">附录：下载</h2>
+            <h2 id="h2-19">附录——下载</h2>
 
             <h3>下载——SVT-AV1 编码器</h3>
             <p>可以选择直接使用最新版 ffmpeg 内置的 libsvtav1，或下载本教程中测试所编译的 SVT-AV1 v3.0，或自行下载 Github 仓库以及 Visual Studio 等工具编译。</p>
@@ -15362,8 +15363,8 @@ FFVship.exe -s .\源视频 -e .\压缩后 --list-gpu
 FFVship.exe -s .\源视频 -e .\压缩后 -m SSIMULACRA2 --gpu-id &lt;显卡编号&gt; -t 2 -g 3
             </code></pre>
             
-            <h2 id="h2-20">参考文献</h2>
-            <h3>参考——AV1 编码标准</h3>
+            <h2 id="h2-20">附录——参考文献</h2>
+            <h3>AV1 编码标准参考</h3>
             <table class="table-center mb-3">
                 <thead>
                     <tr class="border-bottom">
@@ -15423,8 +15424,11 @@ FFVship.exe -s .\源视频 -e .\压缩后 -m SSIMULACRA2 --gpu-id &lt;显卡编�
                 </tbody>
             </table>
 
-            <h3>参考——SVT-AV1 编码器</h3>
-            <p>见官方文档：<a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/tree/master/Docs">GitLab</a>。编码步骤详解在在 <code>tree/master/Docs</code> 目录有独立的 Markdown 文档（包括关联细节的详解），如果没有则是在 svt-av1-user-guide、svt-av1-encoder-design 文档中。可以通过 VSCode 的文件夹搜索功能来快速查找；如果还是找不到，则该内容可能位于源代码的注释中，同样可以用 VSCode 的文件夹搜索功能来快速查找。</p>
+            <h3>SVT-AV1 编码器参考</h3>
+            <p>官方文档位于 <a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/tree/master/Docs">GitLab/AOMediaCodec</a>。编码步骤详解在在 <code>tree/master/Docs</code> 目录有独立的 Markdown 文档（包括关联细节的详解），如果没有则是在 svt-av1-user-guide、svt-av1-encoder-design 文档中。可以通过 VSCode 的文件夹搜索功能来快速查找；如果还是找不到，则该内容可能位于源代码的注释中，同样可以用 VSCode 的文件夹搜索功能来快速查找。</p>
+
+            <h3>SVT-AV1 编译方法参考</h3>
+            <p>原教程位于 <a href="https://discord.com/channels/992019264959676448/1253334764920766505">Discord/AV1 weeb edition/scripts-tools-and-guides</a>，本教程做了本地化（如修改 set 命令、添加 chcp 命令），额外说明（如 Visual Studio 已经安装的 vcvars），额外引导（下载具体版本），以及额外的检查（LLVM、NASM、CMAKE 是否正确安装）等改进。</p>
         </div>
 
         <!-- Footer -->
