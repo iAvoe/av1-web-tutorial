@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang='zh-hans'>
+<html lang="zh-hans">
 	<head>
         <meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1">
         <!-- favicon -->
@@ -20,7 +20,7 @@
 	<body class="text-gray-main">
         <div class="container-title">
             <h1>AV1 编码教程 <span class="text-blue-emph">HTML 版</span></h1>
-            <p>欢迎阅读！若有任何问题，请加入 QQ 群<a href='https://jq.qq.com/?_wv=1027&k=5YJFXyf'>691892901</a>。本教程虽然相对于 x264、x265 教程严谨，并提供了测试数据提高严谨性，但仍仅具备业余参考价值。本文省略了 x264、x265 教程中出现过的内容，查阅本文要求读者已经明晰视频编码器的基本原理和一定细节。</p>
+            <p>欢迎阅读！若有任何问题，请加入 QQ 群<a href="https://jq.qq.com/?_wv=1027&k=5YJFXyf">691892901</a>。本教程虽然相对于 x264、x265 教程严谨，并提供了测试数据提高严谨性，但仍仅具备业余参考价值。本文省略了 x264、x265 教程中出现过的内容，查阅本文要求读者已经明晰视频编码器的基本原理和一定细节。</p>
             <!-- x264 教程副本，更改需手动同步 ! 未同步 ! 未同步 ! 未同步 { -->
             <h2 class="my-3">地图</h2>
             <ol class="font-monospace">
@@ -1321,7 +1321,7 @@
                         \cos\left(  i \pi \frac{ 2j+1 }{2N} \right) \text{,} \hspace{2mm}
                         \omega_0 = \begin{cases} 
                             i = 0 \text{,} \hspace{2mm} \sqrt{\frac{2}{N}} \\
-                            i > 0 \text{,} \hspace{2mm} 1 \\
+                            i &gt; 0 \text{,} \hspace{2mm} 1 \\
                         \end{cases}
                     \]</span>
                     DST-4：
@@ -2653,7 +2653,7 @@ quantization_params( ) {
     DeltaQYDc = read_delta_q( ) // 获取 QIndex 偏移
 
     // 获取色度平面的 DC、AC，Y、Cb、Cr QIndex 偏移
-    if (NumPlanes > 1) {
+    if (NumPlanes &gt; 1) {
         if (separate_uv_delta_q) { diff_uv_delta }
         else { diff_uv_delta = 0 }
 
@@ -2721,11 +2721,11 @@ qm_val_t *aom_qmatrix(struct AV1Common *cm, int qindex, int comp, TX_SIZE tx_siz
 #if CONFIG_AOM_QM
 qm_val_t *aom_iqmatrix(AV1_COMMON *cm, int qmlevel, int is_chroma, TX_SIZE tx_size, int is_intra) {
     // 根据量化强度、平面类型区分、帧内帧间区分给出逆量化矩阵
-    return &cm->giqmatrix[qmlevel][!!is_chroma][!!is_intra][tx_size][0];
+    return &cm-&gt;giqmatrix[qmlevel][!!is_chroma][!!is_intra][tx_size][0];
 }
 qm_val_t *aom_qmatrix(AV1_COMMON *cm, int qmlevel, int is_chroma, TX_SIZE tx_size, int is_intra) {
     // 根据量化强度、平面类型区分、帧内帧间区分给出量化矩阵
-    return &cm->gqmatrix[qmlevel][!!is_chroma][!!is_intra][tx_size][0];
+    return &cm-&gt;gqmatrix[qmlevel][!!is_chroma][!!is_intra][tx_size][0];
 }
 
 // ... 省略不相关内容 ...
@@ -3075,7 +3075,7 @@ static const int qp_to_qindex[] = { // 索引号
 int av1_get_qindex(const struct segmentation *seg, int segment_id, int base_qindex) {
     if (segfeature_active(seg, segment_id, SEG_LVL_ALT_Q)) { // 分瓣模式开
         const int data = get_segdata(seg, segment_id, SEG_LVL_ALT_Q); // 分瓣中的量化值偏移设定
-        const int seg_qindex = seg->abs_delta == SEGMENT_ABSDATA ? data : base_qindex + data; // 直接使用绝对值或计算偏移结果
+        const int seg_qindex = seg-&gt;abs_delta == SEGMENT_ABSDATA ? data : base_qindex + data; // 直接使用绝对值或计算偏移结果
         return clamp(seg_qindex, 0, MAXQ); // 限制偏移强度到合理范围并返回
     }
     else { return base_qindex; } // 无偏移 
@@ -3311,7 +3311,7 @@ int av1_get_qindex(const struct segmentation *seg, int segment_id, int base_qind
                     <span class="text-blue-math">\[ c_k\left(n\right) = \sum_{i=1}^k p_{i}\left(n\right) \]</span>
                 </p>
 
-                <p>计算 CDF 时还可能会遇到“仅取一部分 PMF 函数”的甲方要求，此时需要在坐标系中标定 k 或 X，代表选取样本空间中的某个离散随机变量，然后从这里求上述的“点 X 左侧阴影面积”。
+                <p>计算 CDF 时还可能会遇到“仅取一部分 PMF 函数”的甲方要求，此时需要在坐标系中标定 k 或 X，代表选取样本空间中的某个离散随机变量，然后从这里求上述的“点 X 左侧阴影面积”。</p>
                 <div class="align-items-center">
                     <img loading="lazy" src="files/entropy-coding/cdf-uniform-pmf.png" alt="imageR" class="img-medium">
                     <p class="text-gray-side mt-0">图：对等大小（Uniform）PMF <span class="text-blue-math">\(F\left(x\right)\)</span> 下取 CDF <span class="text-blue-math">\(P\left( X \leq x \right)\)</span> 见：<a href="https://www.youtube.com/watch?v=4QeL1ma_XJ0">MIT 公开课</a>图中计算与本文关系不大，可以忽略</p>
@@ -3668,12 +3668,12 @@ Default_Tx_64x64_Cdf[ TX_SIZE_CONTEXTS ][ MAX_TX_DEPTH + 2 ] = {
                 <pre class="text-smaller"><code>
 int av1_compute_rd_mult_based_on_qindex(const AV1_COMP *cpi, int qindex) {
     // 获取当前量化步长索引
-    const int q = av1_dc_quant_QTX(qindex, 0, cpi->common.seq_params.bit_depth);
+    const int q = av1_dc_quant_QTX(qindex, 0, cpi-&gt;common.seq_params.bit_depth);
     // 算出率失真斜度
     int rdmult = (int)(((int64_t) 88 * q * q) / 24);
   
     // 根据位深缩放率失真斜度
-    switch (cpi->common.seq_params.bit_depth) {
+    switch (cpi-&gt;common.seq_params.bit_depth) {
         case AOM_BITS_8:
             break;
         case AOM_BITS_10:
@@ -3685,7 +3685,7 @@ int av1_compute_rd_mult_based_on_qindex(const AV1_COMP *cpi, int qindex) {
             return -1;
     }
     // 限制最小率失真斜度并返回
-    return rdmult > 0 ? rdmult : 1;
+    return rdmult &gt; 0 ? rdmult : 1;
 }
                 </code></pre>
             </div>
@@ -3865,7 +3865,7 @@ int av1_compute_rd_mult_based_on_qindex(const AV1_COMP *cpi, int qindex) {
             <div class="coll-content">
                 <h4>（1/7）最小均方值 Least mean square（LMS）</h4>
                 <p>在先前讨论的最小二乘法中，“最小化”这个概念来自于“解”的不存在或不成立。既知无解，数据分析的目标就会变为“尽可能合理”，即最小化。</p>
-                <p>LMS / <span class="text-blue-math">\( \text{min}\left(\sigma^2\right) \)</span> 是一种快速的贪心算法。其原理由通过迭代概率模型中的参数，从而逐步减小预测误差的均方值。效率高，而且易于实现，因此在实际应用中得到了广泛的应用。
+                <p>LMS / <span class="text-blue-math">\( \text{min}\left(\sigma^2\right) \)</span> 是一种快速的贪心算法。其原理由通过迭代概率模型中的参数，从而逐步减小预测误差的均方值。效率高且易于实现而被广泛应用。</p>
 
                 <h5>（1/7-1/3）概率构成</h5>
                 <p>一套自适应算法由 <span class="text-blue-math">\( x_k \)</span>，<span class="text-blue-math">\( y_k \)</span> 两种输入信号构成：</p>
@@ -4836,21 +4836,21 @@ switch (curve) {
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~2，默认 1：PSNR（客观）&gt;调整率失真优化对失真（rdmult）的定义方法，以及更改一些内部参数（VQ 涉及更改去块滤镜判断锐度级别、SSIM 涉及到更改 MiRow、MiCol（Marcoblock Index）大小）——0：心理视觉优化 Visual quality（主观），2：SSIM。</p>
             <code>coding_loop.c</code>
             <pre><code class="text-smaller language-cpp">
-if (pcs->ppcs->blk_lambda_tuning) {
+if (pcs-&gt;ppcs-&gt;blk_lambda_tuning) {
     // 复制当前块几何信息与位置到模式决策
-    md_ctx->blk_geom  = ed_ctx->blk_geom;
-    md_ctx->blk_org_x = ed_ctx->blk_org_x;
-    md_ctx->blk_org_y = ed_ctx->blk_org_y;
+    md_ctx-&gt;blk_geom  = ed_ctx-&gt;blk_geom;
+    md_ctx-&gt;blk_org_x = ed_ctx-&gt;blk_org_x;
+    md_ctx-&gt;blk_org_y = ed_ctx-&gt;blk_org_y;
     // 动态调整当前块的 Lambda 值
     svt_aom_set_tuned_blk_lambda(md_ctx, pcs);
 }
-else if (pcs->ppcs->scs->static_config.tune == 2) { // tune 2
+else if (pcs-&gt;ppcs-&gt;scs-&gt;static_config.tune == 2) { // tune 2
     // 复制当前块几何信息与位置到模式决策
-    md_ctx->blk_geom  = ed_ctx->blk_geom;
-    md_ctx->blk_org_x = ed_ctx->blk_org_x;
-    md_ctx->blk_org_y = ed_ctx->blk_org_y;
-    int mi_row        = ed_ctx->blk_org_y / 4;
-    int mi_col        = ed_ctx->blk_org_x / 4;
+    md_ctx-&gt;blk_geom  = ed_ctx-&gt;blk_geom;
+    md_ctx-&gt;blk_org_x = ed_ctx-&gt;blk_org_x;
+    md_ctx-&gt;blk_org_y = ed_ctx-&gt;blk_org_y;
+    int mi_row        = ed_ctx-&gt;blk_org_y / 4;
+    int mi_col        = ed_ctx-&gt;blk_org_x / 4;
     // 据当前块的空间位置使用 SSIM 统计 rdmult
     aom_av1_set_ssim_rdmult(md_ctx, pcs, mi_row, mi_col);
 }
@@ -4858,68 +4858,68 @@ else if (pcs->ppcs->scs->static_config.tune == 2) { // tune 2
             <code>enc_handle.c</code>
             <pre><code class="text-smaller language-cpp">
 static void derive_vq_params(SequenceControlSet* scs) {
-    VqCtrls* vq_ctrl = &scs->vq_ctrls;
+    VqCtrls* vq_ctrl = &scs-&gt;vq_ctrls;
 
-    if (scs->static_config.tune == 0) { // tune 0
+    if (scs-&gt;static_config.tune == 0) { // tune 0
         // 启用锐度相关控制
-        vq_ctrl->sharpness_ctrls.scene_transition = 1;
-        vq_ctrl->sharpness_ctrls.tf               = 1;
-        vq_ctrl->sharpness_ctrls.unipred_bias     = 1;
-        vq_ctrl->sharpness_ctrls.ifs              = 1;
-        vq_ctrl->sharpness_ctrls.cdef             = 1;
-        vq_ctrl->sharpness_ctrls.restoration      = 1;
-        vq_ctrl->sharpness_ctrls.rdoq             = 1;
+        vq_ctrl-&gt;sharpness_ctrls.scene_transition = 1;
+        vq_ctrl-&gt;sharpness_ctrls.tf               = 1;
+        vq_ctrl-&gt;sharpness_ctrls.unipred_bias     = 1;
+        vq_ctrl-&gt;sharpness_ctrls.ifs              = 1;
+        vq_ctrl-&gt;sharpness_ctrls.cdef             = 1;
+        vq_ctrl-&gt;sharpness_ctrls.restoration      = 1;
+        vq_ctrl-&gt;sharpness_ctrls.rdoq             = 1;
         // 启用模式决策块间差异稳态化控制（perform_pred_depth_refinement()）
-        vq_ctrl->stability_ctrls.depth_refinement = 1;
+        vq_ctrl-&gt;stability_ctrls.depth_refinement = 1;
     }
     else {  // tune 1, tune 2
-        vq_ctrl->sharpness_ctrls.scene_transition = 1;
-        vq_ctrl->sharpness_ctrls.tf               = 0;
-        vq_ctrl->sharpness_ctrls.unipred_bias     = 0;
-        vq_ctrl->sharpness_ctrls.ifs              = 0;
-        vq_ctrl->sharpness_ctrls.cdef             = 0;
-        vq_ctrl->sharpness_ctrls.restoration      = 0;
-        vq_ctrl->sharpness_ctrls.rdoq             = 0;
-        vq_ctrl->stability_ctrls.depth_refinement = 0;
+        vq_ctrl-&gt;sharpness_ctrls.scene_transition = 1;
+        vq_ctrl-&gt;sharpness_ctrls.tf               = 0;
+        vq_ctrl-&gt;sharpness_ctrls.unipred_bias     = 0;
+        vq_ctrl-&gt;sharpness_ctrls.ifs              = 0;
+        vq_ctrl-&gt;sharpness_ctrls.cdef             = 0;
+        vq_ctrl-&gt;sharpness_ctrls.restoration      = 0;
+        vq_ctrl-&gt;sharpness_ctrls.rdoq             = 0;
+        vq_ctrl-&gt;stability_ctrls.depth_refinement = 0;
     }
     // 低延迟模式、2-pass 非最后一遍时关闭转场优化
-    if (scs->static_config.pred_structure != SVT_AV1_PRED_RANDOM_ACCESS || scs->static_config.pass == ENC_FIRST_PASS)
-        vq_ctrl->sharpness_ctrls.scene_transition = 0;
+    if (scs-&gt;static_config.pred_structure != SVT_AV1_PRED_RANDOM_ACCESS || scs-&gt;static_config.pass == ENC_FIRST_PASS)
+        vq_ctrl-&gt;sharpness_ctrls.scene_transition = 0;
 }
             </code></pre>
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：模式决策块间差异稳态化控制</button>
             <div class="coll-content"><code>enc_dec_process.c</code>
                 <pre><code class="text-smaller language-cpp">
 static void perform_pred_depth_refinement(SequenceControlSet *scs, PictureControlSet *pcs, ModeDecisionContext *ctx, uint32_t sb_index) {
-    MdcSbData *results_ptr = &ctx->mdc_sb_array;
+    MdcSbData *results_ptr = &ctx-&gt;mdc_sb_array;
     uint32_t   blk_index   = 0; // 当前块序号
     // 是否启用基于成本带的深度调制（Cost band modulation）：未启用分块深度细化、或当前帧非帧内编码且动态搜索成本方差低于阈值时启用
-    uint8_t    use_cost_band_based_modulation = (!scs->vq_ctrls.stability_ctrls.depth_refinement || (pcs->slice_type != I_SLICE && pcs->ppcs->me_8x8_cost_variance[ctx->sb_index] &lt; VQ_STABILITY_ME_VAR_TH));
+    uint8_t    use_cost_band_based_modulation = (!scs-&gt;vq_ctrls.stability_ctrls.depth_refinement || (pcs-&gt;slice_type != I_SLICE && pcs-&gt;ppcs-&gt;me_8x8_cost_variance[ctx-&gt;sb_index] &lt; VQ_STABILITY_ME_VAR_TH));
     // 非正方形细分块关
-    if (!ctx->nsq_geom_ctrls.enabled) {
+    if (!ctx-&gt;nsq_geom_ctrls.enabled) {
         // 禁用 4x4 细分块
-        if (ctx->disallow_4x4) {
-            memset(results_ptr->consider_block, 0, sizeof(uint8_t) * scs->max_block_cnt);
-            memset(results_ptr->refined_split_flag, 1, sizeof(uint8_t) * scs->max_block_cnt);
+        if (ctx-&gt;disallow_4x4) {
+            memset(results_ptr-&gt;consider_block, 0, sizeof(uint8_t) * scs-&gt;max_block_cnt);
+            memset(results_ptr-&gt;refined_split_flag, 1, sizeof(uint8_t) * scs-&gt;max_block_cnt);
         }
         else {
             // 遍历分块并标记大于 4x4 的块
-            while (blk_index &lt; scs->max_block_cnt) {
+            while (blk_index &lt; scs-&gt;max_block_cnt) {
                 const BlockGeom *blk_geom = get_blk_geom_mds(blk_index);
 
-                bool split_flag                            = blk_geom->sq_size > 4 ? true : false;
-                results_ptr->consider_block[blk_index]     = 0;
-                results_ptr->refined_split_flag[blk_index] = blk_geom->sq_size > 4 ? true : false;
-                blk_index += split_flag ? blk_geom->d1_depth_offset : blk_geom->ns_depth_offset;
+                bool split_flag                            = blk_geom-&gt;sq_size &gt; 4 ? true : false;
+                results_ptr-&gt;consider_block[blk_index]     = 0;
+                results_ptr-&gt;refined_split_flag[blk_index] = blk_geom-&gt;sq_size &gt; 4 ? true : false;
+                blk_index += split_flag ? blk_geom-&gt;d1_depth_offset : blk_geom-&gt;ns_depth_offset;
             }
         }
     }
     else {
         // 启用 4x4 细分块——重设所有块的分块标记为默认，后续根据模式决策与预测块序列细分（md_blk_arr_nsq）
-        while (blk_index &lt; scs->max_block_cnt) { // 遍历并加载默认值
+        while (blk_index &lt; scs-&gt;max_block_cnt) { // 遍历并加载默认值
             const BlockGeom *blk_geom                  = get_blk_geom_mds(blk_index);
-            results_ptr->consider_block[blk_index]     = 0;
-            results_ptr->refined_split_flag[blk_index] = blk_geom->sq_size > 4 ? true : false;
+            results_ptr-&gt;consider_block[blk_index]     = 0;
+            results_ptr-&gt;refined_split_flag[blk_index] = blk_geom-&gt;sq_size &gt; 4 ? true : false;
             blk_index++;
         }
     }
@@ -4927,42 +4927,42 @@ static void perform_pred_depth_refinement(SequenceControlSet *scs, PictureContro
     // 获取选中分块深度 0 的最大/最小块大小（Get max/min PD0 selected block sizes）
     uint16_t max_pd0_size = 0;
     uint16_t min_pd0_size = 255;
-    if (ctx->depth_ctrls.limit_max_min_to_pd0)
+    if (ctx-&gt;depth_ctrls.limit_max_min_to_pd0)
         get_max_min_pd0_depths(scs, pcs, ctx, &max_pd0_size, &min_pd0_size);
-    results_ptr->leaf_count = 0;
+    results_ptr-&gt;leaf_count = 0;
     blk_index               = 0;
     bool pred_depth_only    = 1;
 
     // 遍历分块
-    while (blk_index &lt; scs->max_block_cnt) {
+    while (blk_index &lt; scs-&gt;max_block_cnt) {
         const BlockGeom *blk_geom = get_blk_geom_mds(blk_index);
-        ctx->blk_ptr              = &ctx->md_blk_arr_nsq[blk_index];
+        ctx-&gt;blk_ptr              = &ctx-&gt;md_blk_arr_nsq[blk_index];
         // 帧类型非 I 帧、或块大小小于 128x128 时允许检查分块（inject）
-        uint8_t is_blk_allowed = pcs->slice_type != I_SLICE ? 1 : (blk_geom->sq_size &lt; 128) ? 1 : 0;
+        uint8_t is_blk_allowed = pcs-&gt;slice_type != I_SLICE ? 1 : (blk_geom-&gt;sq_size &lt; 128) ? 1 : 0;
         // 加载当前非正方形分块数据
-        bool split_flag = ctx->md_blk_arr_nsq[blk_index].split_flag;
+        bool split_flag = ctx-&gt;md_blk_arr_nsq[blk_index].split_flag;
 
         if (is_blk_allowed) {
-            if (blk_geom->shape == PART_N) {
-                if (ctx->md_blk_arr_nsq[blk_index].split_flag == false) {
+            if (blk_geom-&gt;shape == PART_N) {
+                if (ctx-&gt;md_blk_arr_nsq[blk_index].split_flag == false) {
                     // 添加当前预测深度的分块
-                    results_ptr->consider_block[blk_index]     = 1;
-                    results_ptr->refined_split_flag[blk_index] = false;
+                    results_ptr-&gt;consider_block[blk_index]     = 1;
+                    results_ptr-&gt;refined_split_flag[blk_index] = false;
                     // 起始与结束深度（父子结构）
-                    int8_t s_depth = ctx->depth_ctrls.s_depth;
-                    int8_t e_depth = ctx->depth_ctrls.e_depth;
+                    int8_t s_depth = ctx-&gt;depth_ctrls.s_depth;
+                    int8_t e_depth = ctx-&gt;depth_ctrls.e_depth;
 
                     // 选定的深度应该可用，除非数据无效（如超出序列范围）。因此需要移除父子结构。
-                    if (!ctx->cost_avail[blk_geom->sqi_mds]) {
+                    if (!ctx-&gt;cost_avail[blk_geom-&gt;sqi_mds]) {
                         s_depth = e_depth = 0;
                     }
                     else {
-                        if (ctx->avail_blk_flag[blk_geom->sqi_mds]) {
+                        if (ctx-&gt;avail_blk_flag[blk_geom-&gt;sqi_mds]) {
                             // 当前块可用旗标。依赖已测试区块信息的决策应在此处进行（?）
                             // 非方形分块的分块成本可能来自 H/V，而方形块没有分块成本信息（?）
-                            if (ctx->depth_ctrls.use_pred_mode) {
+                            if (ctx-&gt;depth_ctrls.use_pred_mode) {
                                 // 帧间块限制起始与结束深度到 (-1,+1)
-                                if (ctx->intra_ctrls.enable_intra && (ctx->blk_ptr->prediction_mode_flag == INTER_MODE)) {
+                                if (ctx-&gt;intra_ctrls.enable_intra && (ctx-&gt;blk_ptr-&gt;prediction_mode_flag == INTER_MODE)) {
                                     s_depth = MAX(s_depth, -1);
                                     e_depth = MIN(e_depth, 1);
                                 }
@@ -4973,73 +4973,73 @@ static void perform_pred_depth_refinement(SequenceControlSet *scs, PictureContro
                     // 选取多种分块深度则启用细化（refinement）
                     if (s_depth != 0 || e_depth != 0) {
                         // 4x4 blocks have no children
-                        if (blk_geom->sq_size == 4)
+                        if (blk_geom-&gt;sq_size == 4)
                             e_depth = 0;
                         // 检查开始和结束深度是否在允许范围内
-                        if (ctx->disallow_4x4) {
-                            e_depth = (blk_geom->sq_size == 8) ? 0
-                                : (blk_geom->sq_size == 16)    ? MIN(1, e_depth)
-                                : (blk_geom->sq_size == 32)    ? MIN(2, e_depth)
+                        if (ctx-&gt;disallow_4x4) {
+                            e_depth = (blk_geom-&gt;sq_size == 8) ? 0
+                                : (blk_geom-&gt;sq_size == 16)    ? MIN(1, e_depth)
+                                : (blk_geom-&gt;sq_size == 32)    ? MIN(2, e_depth)
                                                                : e_depth;
                         }
-                        if (ctx->depth_removal_ctrls.enabled) {
-                            if (ctx->depth_removal_ctrls.disallow_below_64x64) {
-                                e_depth = (blk_geom->sq_size &lt;= 64) ? 0
-                                    : (blk_geom->sq_size == 128)    ? MIN(1, e_depth)
+                        if (ctx-&gt;depth_removal_ctrls.enabled) {
+                            if (ctx-&gt;depth_removal_ctrls.disallow_below_64x64) {
+                                e_depth = (blk_geom-&gt;sq_size &lt;= 64) ? 0
+                                    : (blk_geom-&gt;sq_size == 128)    ? MIN(1, e_depth)
                                                                     : e_depth;
                             }
-                            else if (ctx->depth_removal_ctrls.disallow_below_32x32) {
-                                e_depth = (blk_geom->sq_size &lt;= 32) ? 0
-                                    : (blk_geom->sq_size == 64)     ? MIN(1, e_depth)
-                                    : (blk_geom->sq_size == 128)    ? MIN(2, e_depth)
+                            else if (ctx-&gt;depth_removal_ctrls.disallow_below_32x32) {
+                                e_depth = (blk_geom-&gt;sq_size &lt;= 32) ? 0
+                                    : (blk_geom-&gt;sq_size == 64)     ? MIN(1, e_depth)
+                                    : (blk_geom-&gt;sq_size == 128)    ? MIN(2, e_depth)
                                                                     : e_depth;
                             }
-                            else if (ctx->depth_removal_ctrls.disallow_below_16x16) {
-                                e_depth = (blk_geom->sq_size &lt;= 16) ? 0
-                                    : (blk_geom->sq_size == 32)     ? MIN(1, e_depth)
-                                    : (blk_geom->sq_size == 64)     ? MIN(2, e_depth)
-                                    : (blk_geom->sq_size == 128)    ? MIN(3, e_depth)
+                            else if (ctx-&gt;depth_removal_ctrls.disallow_below_16x16) {
+                                e_depth = (blk_geom-&gt;sq_size &lt;= 16) ? 0
+                                    : (blk_geom-&gt;sq_size == 32)     ? MIN(1, e_depth)
+                                    : (blk_geom-&gt;sq_size == 64)     ? MIN(2, e_depth)
+                                    : (blk_geom-&gt;sq_size == 128)    ? MIN(3, e_depth)
                                                                     : e_depth;
                             }
                         }
-                        if (ctx->depth_ctrls.limit_max_min_to_pd0 && max_pd0_size != min_pd0_size) {
+                        if (ctx-&gt;depth_ctrls.limit_max_min_to_pd0 && max_pd0_size != min_pd0_size) {
                             // 如果深度 0 选择了深度，则忽略选择范围之外的深度
-                            if (blk_geom->sq_size == max_pd0_size)
+                            if (blk_geom-&gt;sq_size == max_pd0_size)
                                 s_depth = 0;
-                            if (blk_geom->sq_size == min_pd0_size)
+                            if (blk_geom-&gt;sq_size == min_pd0_size)
                                 e_depth = 0;
                         }
 
-                        uint8_t sq_size_idx = 7 - (uint8_t)svt_log2f((uint8_t)blk_geom->sq_size);
+                        uint8_t sq_size_idx = 7 - (uint8_t)svt_log2f((uint8_t)blk_geom-&gt;sq_size);
                         int64_t th_offset   = 0;
 
-                        if (ctx->depth_refinement_ctrls.enabled && ctx->depth_refinement_ctrls.cost_band_based_modulation && use_cost_band_based_modulation && (s_depth != 0 || e_depth != 0)) {
+                        if (ctx-&gt;depth_refinement_ctrls.enabled && ctx-&gt;depth_refinement_ctrls.cost_band_based_modulation && use_cost_band_based_modulation && (s_depth != 0 || e_depth != 0)) {
                             update_pred_th_offset(ctx, blk_geom, &s_depth, &e_depth, &th_offset);
                         }
 
                         // 添加父级深度的块索引
                         // 基于成本的块深度细化仅适用于 [s_depth=-1, e_depth=1]
                         uint8_t add_parent_depth         = 1;
-                        ctx->parent_to_current_deviation = MIN_SIGNED_VALUE;
-                        if (ctx->depth_refinement_ctrls.enabled && s_depth == -1 && ctx->avail_blk_flag[blk_index] &&
-                            blk_geom->sq_size &lt; ((scs->seq_header.sb_size == BLOCK_128X128) ? 128 : 64)) { // 检查当前块可用旗标，只有可用的块支持更新 default_cost
+                        ctx-&gt;parent_to_current_deviation = MIN_SIGNED_VALUE;
+                        if (ctx-&gt;depth_refinement_ctrls.enabled && s_depth == -1 && ctx-&gt;avail_blk_flag[blk_index] &&
+                            blk_geom-&gt;sq_size &lt; ((scs-&gt;seq_header.sb_size == BLOCK_128X128) ? 128 : 64)) { // 检查当前块可用旗标，只有可用的块支持更新 default_cost
                             add_parent_depth = is_parent_to_current_deviation_small(pcs, ctx, blk_geom, th_offset);
                         }
 
                         // 添加子级深度的块索引
                         // 基于成本的块深度细化仅适用于 [s_depth=-1, e_depth=1]
                         uint8_t add_sub_depth           = 1;
-                        ctx->child_to_current_deviation = MIN_SIGNED_VALUE;
-                        if (ctx->depth_refinement_ctrls.enabled && e_depth == 1 && ctx->avail_blk_flag[blk_index] && blk_geom->sq_size > 4) { // 检查当前块可用旗标，只有可用的块支持更新 default_cost
+                        ctx-&gt;child_to_current_deviation = MIN_SIGNED_VALUE;
+                        if (ctx-&gt;depth_refinement_ctrls.enabled && e_depth == 1 && ctx-&gt;avail_blk_flag[blk_index] && blk_geom-&gt;sq_size &gt; 4) { // 检查当前块可用旗标，只有可用的块支持更新 default_cost
                             add_sub_depth = is_child_to_current_deviation_small(pcs, ctx, blk_geom, blk_index, th_offset);
                         }
 
                         // 每个块设最大深度为 2（PRED+父、或 PRED+子）
-                        if (ctx->depth_refinement_ctrls.enabled && ctx->depth_refinement_ctrls.up_to_2_depth) {
+                        if (ctx-&gt;depth_refinement_ctrls.enabled && ctx-&gt;depth_refinement_ctrls.up_to_2_depth) {
                             if ((s_depth == -1) && add_parent_depth && (e_depth == 1) && add_sub_depth) {
-                                if (ctx->parent_to_current_deviation != MIN_SIGNED_VALUE &&
-                                    ctx->child_to_current_deviation != MIN_SIGNED_VALUE) {
-                                    if (ctx->parent_to_current_deviation &lt;= ctx->child_to_current_deviation) {
+                                if (ctx-&gt;parent_to_current_deviation != MIN_SIGNED_VALUE &&
+                                    ctx-&gt;child_to_current_deviation != MIN_SIGNED_VALUE) {
+                                    if (ctx-&gt;parent_to_current_deviation &lt;= ctx-&gt;child_to_current_deviation) {
                                         add_sub_depth = 0;
                                     } else {
                                         add_parent_depth = 0;
@@ -5052,21 +5052,21 @@ static void perform_pred_depth_refinement(SequenceControlSet *scs, PictureContro
                             pred_depth_only = 0;
 
                         if (s_depth != 0 && add_parent_depth) // 标记需处理的父块
-                            set_parent_to_be_considered(ctx, results_ptr, blk_index, scs->seq_header.sb_size, (int8_t) blk_geom->depth, sq_size_idx, s_depth, !ctx->nsq_geom_ctrls.enabled);
+                            set_parent_to_be_considered(ctx, results_ptr, blk_index, scs-&gt;seq_header.sb_size, (int8_t) blk_geom-&gt;depth, sq_size_idx, s_depth, !ctx-&gt;nsq_geom_ctrls.enabled);
 
                         if (e_depth != 0 && add_sub_depth) // 标记需处理的子块
-                            set_child_to_be_considered(pcs, ctx, results_ptr, blk_index, sb_index, scs->seq_header.sb_size, (int8_t)blk_geom->depth, sq_size_idx, e_depth, !ctx->nsq_geom_ctrls.enabled);
+                            set_child_to_be_considered(pcs, ctx, results_ptr, blk_index, sb_index, scs-&gt;seq_header.sb_size, (int8_t)blk_geom-&gt;depth, sq_size_idx, e_depth, !ctx-&gt;nsq_geom_ctrls.enabled);
                     }
                 }
             }
         }
         // 遍历过程中跳过不用检测的块
-        blk_index += split_flag ? blk_geom->d1_depth_offset : blk_geom->ns_depth_offset;
+        blk_index += split_flag ? blk_geom-&gt;d1_depth_offset : blk_geom-&gt;ns_depth_offset;
     }
 
     // 当前块仅保留预测深度，不做调整
     if (pred_depth_only)
-        ctx->pred_depth_only = 1;
+        ctx-&gt;pred_depth_only = 1;
 }
                 </code></pre></div>
 
@@ -5187,21 +5187,21 @@ typedef enum SvtAv1PredStructure {
                 <pre><code class="text-smaller language-cpp">
 EbErrorType svt_av1_pick_filter_level(EbPictureBufferDesc *srcBuffer, PictureControlSet *pcs, LpfPickMethod method) {
     // ...省略...
-    SequenceControlSet *scs = pcs->scs;
+    SequenceControlSet *scs = pcs-&gt;scs;
     // 导入帧标识头、源缓冲
-    FrameHeader *frm_hdr = &pcs->ppcs->frm_hdr;
+    FrameHeader *frm_hdr = &pcs-&gt;ppcs-&gt;frm_hdr;
     (void)srcBuffer;
-    struct LoopFilter *const lf = &frm_hdr->loop_filter_params;
+    struct LoopFilter *const lf = &frm_hdr-&gt;loop_filter_params;
 
     // 将参数 sharpness 缩限到 0~7 范围，赋值到 sharpness_val
-    const int32_t sharpness_val = CLIP3(0, 7, pcs->scs->static_config.sharpness);
+    const int32_t sharpness_val = CLIP3(0, 7, pcs-&gt;scs-&gt;static_config.sharpness);
 
     // 将 sharpness_val 赋值到环路滤镜的 sharpness_level 变量
-    lf->sharpness_level = sharpness_val;
+    lf-&gt;sharpness_level = sharpness_val;
 
     // 当前帧为关键帧，且设定 Tune VQ 时，提高 sharpness_level
-    if (frm_hdr->frame_type == KEY_FRAME && pcs->scs->static_config.tune == 0)
-        lf->sharpness_level = MIN(7, sharpness_val + 2);
+    if (frm_hdr-&gt;frame_type == KEY_FRAME && pcs-&gt;scs-&gt;static_config.tune == 0)
+        lf-&gt;sharpness_level = MIN(7, sharpness_val + 2);
 
     // ...省略...
 }
@@ -5223,8 +5223,8 @@ void svt_aom_update_sharpness(LoopFilterInfoN *lfi, int32_t sharpness_lvl) {
             lvl &gt;&gt; ((sharpness_lvl &gt; 0) + (sharpness_lvl &gt; 4));
 
         // 上限、下限限位
-        if (sharpness_lvl > 0) {
-            if (block_inside_limit > (9 - sharpness_lvl))
+        if (sharpness_lvl &gt; 0) {
+            if (block_inside_limit &gt; (9 - sharpness_lvl))
                 block_inside_limit = (9 - sharpness_lvl);
         }
         if (block_inside_limit &lt; 1) {
@@ -5233,9 +5233,9 @@ void svt_aom_update_sharpness(LoopFilterInfoN *lfi, int32_t sharpness_lvl) {
 
         // 根据 block_inside_limit 限制环路滤镜的各个强度阈值（LoopFilterThresh）
         // lim: 特大块内的去块最大强度
-        memset(lfi->lfthr[lvl].lim, block_inside_limit, SIMD_WIDTH);
+        memset(lfi-&gt;lfthr[lvl].lim, block_inside_limit, SIMD_WIDTH);
         // mblim: 特大块（Macroblock）间缝隙的去块最大强度
-        memset(lfi->lfthr[lvl].mblim, (2 * (lvl + 2) + block_inside_limit), SIMD_WIDTH);
+        memset(lfi-&gt;lfthr[lvl].mblim, (2 * (lvl + 2) + block_inside_limit), SIMD_WIDTH);
     }
 }
                 </code></pre>
@@ -5248,10 +5248,10 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
         int32_t qzbin_factor = svt_aom_get_qzbin_factor(q, bit_depth);
         // 非零值舍入范围在 lossless 下设为 64（?）
         int32_t qrounding_factor = q == 0 ? 64 : 48;
-        const int32_t sharpness_val = pcs->scs->static_config.sharpness;
+        const int32_t sharpness_val = pcs-&gt;scs-&gt;static_config.sharpness;
         // 当前量化值与帧标识头 Q-index 的强度差异大小
         // q 小得负，q 大得正
-        int diff = q - pcs->frm_hdr.quantization_params.base_q_idx;
+        int diff = q - pcs-&gt;frm_hdr.quantization_params.base_q_idx;
 
         // sharpness 与 diff 正负相反时：
         if ((sharpness_val &gt; 0 && diff &lt; 0) ||
@@ -5357,7 +5357,8 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                 <li><code>transition_present</code>：设定的帧间范围含有转场</li>
                 <li><code>coeff_lvl</code>：块内系子数量高低：<code>{VLOW_LV=0, LOW_LVL=1, NORMAL_LVL=2, HIGH_LVL=3, INVALID_LVL=~0}</code></li>
             </ul>
-            <div class="overflow-auto mt-3"><table class="table-center text-smaller">
+
+            <div id="presetParamTable1" class="overflow-auto mt-3"><table class="table-center text-smaller">
                 <thead>
                     <tr class="border-lr border-bottom">
                         <th>功能\预设值</th>
@@ -5938,7 +5939,7 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
             </table></div>
 
             <h5>（12/12——1/2）<a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/master/Source/Lib/Codec/enc_mode_config.c#L1302">DLF level</a>：</h5>
-            <div class="overflow-auto mt-3"><table class="table-center text-smaller">
+            <div id="presetParamTable2" class="overflow-auto mt-3"><table class="table-center text-smaller">
                 <thead>
                     <tr class="border-lr border-top">
                         <th>预设</th>
@@ -6008,7 +6009,7 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
             <!--<h5>（12/12——2/3）HBD 模式</h4><p>即高位深模式，当视频源大于 8bit 时自动启用，并更改一些模式决策的逻辑。</p>-->
             <h5>（12/12——2/2）分辨率常量</h5>
             <p>SVT-AV1 会根据视频分辨率的积，在 <code>&#45;&#45;preset</code> 参数之上进一步确立参数强度。</p>
-            <table class="table-center">
+            <table id="svtav1ResConsts" class="table-center">
                 <thead>
                     <tr class="t-invert-dark">
                         <th class="px-1">值</th>
@@ -7067,14 +7068,14 @@ title VMAF 跑分
 ffmpeg -i .\源视频.mkv -i .\压缩后.ivf -lavfi libvmaf="model=version=vmaf_v0.6.1\\:name=vmaf_1080p|version=vmaf_4k_v0.6.1\\:name=vmaf_4k" -f null -
 
 title VMAF 跑分并自动存入 D 盘文件夹（注意保存方法不再是滤镜内设置，而是 stdout）
-ffmpeg -i .\源视频.mkv -i .\压缩后.ivf -lavfi libvmaf="model=version=vmaf_v0.6.1\\:name=vmaf_1080p|version=vmaf_4k_v0.6.1\\:name=vmaf_4k" -f null - > D:\文件夹\vmaf-跑分.txt 2>&1
+ffmpeg -i .\源视频.mkv -i .\压缩后.ivf -lavfi libvmaf="model=version=vmaf_v0.6.1\\:name=vmaf_1080p|version=vmaf_4k_v0.6.1\\:name=vmaf_4k" -f null - &gt; D:\文件夹\vmaf-跑分.txt 2&gt;&1
 
 title 同上
 set "source=.\源视频.m2ts"
 set "lossy=.\压缩后.ivf"
 set "outputFile=D:\文件夹\vmaf-跑分.txt"
 set "vmafCmd=libvmaf=model=version=vmaf_v0.6.1\\:name=vmaf_1080p|version=vmaf_4k_v0.6.1\\:name=vmaf_4k"
-ffmpeg -i %source% -i %lossy% -lavfi "%vmafCmd%" -f null - > %outputFile% 2>&1
+ffmpeg -i %source% -i %lossy% -lavfi "%vmafCmd%" -f null - &gt; %outputFile% 2&gt;&1
             </code></pre>
             <p>否则，在运行 XPSNR、VMAF 命令时，ffmpeg 会显示警告：</p>
             <pre><code class="text-smaller language-powershell">
@@ -7209,25 +7210,25 @@ set "outputFile=X:\导出测试结果路径\vmaf-视频1跑分-两万四千之�
 ffmpeg -hide_banner -an ^
 -i "%sourcePath%源视频1.mkv" ^
 -i "%lossyPath%压缩视频1.ivf" ^
--lavfi "%setptsCmdA%%vmafCmd%" -f null - > %outputFile% 2>&1
+-lavfi "%setptsCmdA%%vmafCmd%" -f null - &gt; %outputFile% 2&gt;&1
 
 set "outputFile=X:\导出测试结果路径\vmaf-视频2跑分-六千分之一.txt"
 ffmpeg -hide_banner -an ^
 -i "%sourcePath%源视频2.mov" ^
 -i "%lossyPath%压缩视频2.ivf" ^
--lavfi "%setptsCmdB%%vmafCmd%" -f null - > %outputFile% 2>&1
+-lavfi "%setptsCmdB%%vmafCmd%" -f null - &gt; %outputFile% 2&gt;&1
 
 set "outputFile=X:\导出测试结果路径\vmaf-视频3跑分-三十六万分之一.txt"
 ffmpeg -hide_banner -an ^
 -i "%sourcePath%源视频3.m2ts" ^
 -i "%lossyPath%压缩视频3.ivf" ^
--lavfi "%setptsCmdC%%vmafCmd%" -f null - > %outputFile% 2>&1
+-lavfi "%setptsCmdC%%vmafCmd%" -f null - &gt; %outputFile% 2&gt;&1
 
 set "outputFile=X:\导出测试结果路径\vmaf-视频4跑分-无对齐.txt"
 ffmpeg -hide_banner -an ^
 -i "%sourcePath%源视频4.m2ts" ^
 -i "%lossyPath%压缩视频4.ivf" ^
--lavfi "%vmafCmd%" -f null - > %outputFile% 2>&1
+-lavfi "%vmafCmd%" -f null - &gt; %outputFile% 2&gt;&1
 
 pause
             </code></pre>
@@ -13979,7 +13980,7 @@ ssimulacra2_rs: Mean: 83.68623603, Median: 83.96666350, Std Dev: 3.66503275, 5th
                 </code></pre>
             </div>
 
-            <div class="overflow-auto mt-3"><table class="table-center text-smaller two-decimals">
+            <div id="p2TestData" class="overflow-auto mt-3"><table class="table-center text-smaller two-decimals">
                 <thead>
                     <tr class="border-lr">
                         <th colspan="4">全功能 B 帧与片源特化参数测试</th>
@@ -14552,6 +14553,7 @@ ssimulacra2_rs: Mean: 83.68623603, Median: 83.96666350, Std Dev: 3.66503275, 5th
                     </tr>
                 </tbody>
             </table></div>
+
             <h4>（8/8）SVT-AV1 全功能 B 帧与片源特化参数测试分析</h4>
             <ol class="text-smaller">
                 <li>SVT-AV1 在综合动画场景中可以在所有指标优于 x265 的情况下选择优化速度、码率或画质，从而更贴合不同用户的需求
@@ -14564,7 +14566,7 @@ ssimulacra2_rs: Mean: 83.68623603, Median: 83.96666350, Std Dev: 3.66503275, 5th
 
             <h3>测试——SVT-AV1 3.1.0 对比测试</h3>
             <p>本次测试将会使用与全功能 B 帧与片源特化参数测试一致的参数，只测试部分片源来观察画质指标得分变化</p>
-            <div class="overflow-auto mt-3"><table class="table-center text-smaller two-decimals">
+            <div id="svtav1VerCompTestData" class="overflow-auto mt-3"><table class="table-center text-smaller two-decimals">
                 <thead>
                     <tr class="border-lr">
                         <th colspan="4">SVT-AV1 3.1 对比 3.0</th>
@@ -15189,7 +15191,7 @@ ssimulacra2_rs: Mean: 83.68623603, Median: 83.96666350, Std Dev: 3.66503275, 5th
                         <td class="px-1">1447.61</td>
                         <td class="px-1" style="color:#EEB500">41.9004</td>
                         <td class="px-1" style="color:#92D050">44.4105</td>
-                        <td class="px-1" style="color:#92D050">44.5066/td>
+                        <td class="px-1" style="color:#92D050">44.5066</td>
                         <td class="px-1 ace" style="color:#31D87D">99.747296</td>
                         <td class="px-1 ace" style="color:#31D87D">96.958565</td>
                         <td class="px-1" style="color:#92D050">84.49213253</td>
@@ -15604,13 +15606,14 @@ FFVship.exe -s .\源视频 -e .\压缩后 -m SSIMULACRA2 --gpu-id &lt;显卡编�
             <h3>SVT-AV1 编译方法参考</h3>
             <p>原教程位于 <a href="https://discord.com/channels/992019264959676448/1253334764920766505">Discord/AV1 weeb edition/scripts-tools-and-guides</a>，本教程做了本地化（如修改 set 命令、添加 chcp 命令），额外说明（如 Visual Studio 已经安装的 vcvars），额外引导（下载具体版本），以及额外的检查（LLVM、NASM、CMAKE 是否正确安装）等改进。</p>
         </div>
+        </div>
 
         <!-- Footer -->
         <footer class="py-3 my-4 align-items-center border-top">
             <p>联系：
-                <a href='https://github.com/iAvoe/'>Github</a>，
-                <a href='https://github.com/iAvoe/av1-web-tutorial/issues'>Github Issues</a>，
-                <a href='https://jq.qq.com/?_wv=1027&k=5YJFXyf'>QQ 群：691892901</a>
+                <a href="https://github.com/iAvoe/">Github</a>，
+                <a href="https://github.com/iAvoe/av1-web-tutorial/issues">Github Issues</a>，
+                <a href="https://jq.qq.com/?_wv=1027&k=5YJFXyf">QQ 群：691892901</a>
             </p>
             &#x24B8; iAvoe，2025
         </footer>
