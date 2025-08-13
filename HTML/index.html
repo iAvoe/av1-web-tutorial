@@ -15210,9 +15210,10 @@ ssimulacra2_rs: Mean: 83.68623603, Median: 83.96666350, Std Dev: 3.66503275, 5th
 
             <h3>下载——SVT-AV1 编码器</h3>
             <p>可以选择直接使用最新版 ffmpeg 内置的 libsvtav1，或下载本教程中测试所编译的 SVT-AV1 v3.0，或自行下载 Github 仓库以及 Visual Studio 等工具编译。</p>
-            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：下载——CI/CD 版 SVT-AV1</button>
+            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：下载——CI/CD 版 SVT-AV1（可能已失效）</button>
             <div class="coll-content">
                 <h4>（1/2）下载 CI/CD 版</h4>
+                <p class="text-red-emph">注：该途径可能已失效</p>
                 <p>CI/CD 指持续整合与开发，此处代表 GitHub Actions、Pipelines 代码整合辅助以及自动编译。由于 SVT-AV1 没有发布正式版下载途径，所以 CI/CD 版就是最新；CI/CD 版的主要用途是检查代码能不能正常编译为程序，且相比于常规意义上（经过人工检验后发布）的正式版有一定“Beta 测试”性质（未完全测试的新功能、新缺陷、未注明的变更、参数值调整、内部版本号、runtime 错误），其可靠性需要用户自行适应。</p>
                 <p>在 <a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/pipelines?page=1&scope=all&ref=master&username=hassount&source=schedule&status=success">Gitlab pipelines</a> 列表中，找最新（顶部）显示为已通过的 Daily Run 计划，其右侧的“操作”分栏点击展开，填写“Release”过滤，然后根据当前操作系统下载编译好的压缩包，x86-64 系统下为压缩包中的 <code>SvtAv1Enc.dll</code>、<code>SvtAv1EncApp.exe</code>。</p>
             </div>
