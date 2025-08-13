@@ -5358,658 +5358,653 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                 <li><code>coeff_lvl</code>：块内系子数量高低：<code>{VLOW_LV=0, LOW_LVL=1, NORMAL_LVL=2, HIGH_LVL=3, INVALID_LVL=~0}</code></li>
             </ul>
             <div class="overflow-auto mt-3"><table class="table-center text-smaller">
-                    <thead>
-                        <tr class="border-lr border-bottom">
-                            <th>功能\预设值</th>
-                            <th class="t-light-gray">10</th>
-                            <th class="t-light-gray px-1">9</th>
-                            <th class="t-light-gray px-1">8</th>
-                            <th class="t-light-gray">7</th>
-                            <th class="t-invert-light">6</th>
-                            <th class="t-invert-light">5</th>
-                            <th class="t-invert-light">4</th>
-                            <th class="t-invert-dark">3</th>
-                            <th class="t-invert-dark">2</th>
-                            <th class="t-invert-dark">1</th>
-                            <th style="background-color: black; color: white">0</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr class="border-lr border-bottom">
-                            <td class="px-1"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Globals/EbEncHandle.c">TF level</a><br>
-                                <span class="text-smaller">
-                                    （需 <code>&#45;&#45;enable-tf</code>、<code>--hierarchical-levels &gt;1</code>、<code>--lossless 0</code>，否则关）
-                                </span>
-                            </td>
-                            <td class="px-1 text-smaller" colspan="3">
-                                <code>&#45;&#45;pred-struct 1</code> 且分辨率大于等于 720p：2，小于 720p：0；否则 9
-                            </td>
-                            <!--<td>2</td>-->
-                            <!--<td>3</td>-->
-                            <td class="px-1 t-light-gray text-smaller">
-                                <code>&#45;&#45;pred-struct 1</code> 且分辨率大于等于 720p：1，小于 720p：0；否则 8
-                            </td>
-                            <td class="px-1 t-invert-light" colspan="3">5</td>
-                            <!--<td>6</td>-->
-                            <!--<td>7</td>-->
-                            <td class="px-1 t-invert-dark">3</td>
-                            <td class="px-1 t-invert-dark" colspan="2">2</td>
-                            <!--<td>10</td>-->
-                            <td class="px-1" style="background-color: black; color: white">1</td>
-                        </tr>
-                        <tr class="border-lr border-bottom">
-                            <td class="px-1"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Codec/EbCodingUnit.c">NSQ level</a></td>
-                            <td class="px-1" colspan="5">关</td>
-                            <!--<td>2</td>-->
-                            <!--<td>3</td>-->
-                            <!--<td>4</td>-->
-                            <!--<td>5</td>-->
-                            <td class="px-1 t-invert-light text-smaller"><code>LOW_LVL, is_base</code>：15，否则 0；<code>HIGHT_LVL, is_base</code>：17，否则 0；<code>regular, is_base</code>：16，否则 0</td>
-                            <td class="px-1 t-invert-light text-smaller"><code>LOW_LVL, is_base</code>：9，否则 12；<code>HIGH_LVL, is_base</code>：11，否则 14；<code>regular, is_base</code>：10，否则 13</td>
-                            <td class="px-1 t-invert-dark text-smaller" colspan="2"><code>is_base</code>：7，否则 8</td>
-                            <!--<td>9</td>-->
-                            <td class="px-1 t-invert-dark text-smaller"><code>is_base</code>：5，否则 6</td>
-                            <td class="px-1 text-smaller" style="background-color: black; color: white"><code>is_ref</code>：2，否则 4</td>
-                        </tr>
-                        <tr class="border-lr border-bottom">
-                            <td class="px-1"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Codec/EbMotionEstimationProcess.c">HME SA</a>
-                            </td>
-                            <td class="px-1 t-light-gray text-smaller" colspan="6">搜索面积最小 240x240，最大 480x480</td>
-                            <!--<td>2</td>-->
-                            <!--<td>3</td>-->
-                            <!--<td>4</td>-->
-                            <!--<td>5</td>-->
-                            <td class="px-1 t-invert-light text-smaller" colspan="2">
-                                源分辨率大于等于 4k 时最小 32x32，最大 192x192；<br>
-                                否则与更快的预设一致
-                            </td>
-                            <!--<td>7</td>-->
-                            <td class="px-1 t-invert-dark text-smaller" colspan="3">
-                                源分辨率小于等于 1080p 且场景复杂度高时：最小 16x16，最大 192x192；<br>
-                                否则与更快的预设一致
-                            </td>
-                            <!--<td>9</td>-->
-                            <!--<td>10</td>-->
-                        </tr>
-                        <tr class="border-lr border-bottom">
-                            <td class="px-1"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Codec/EbMotionEstimationProcess.c">HME Refine</a></td>
-                            <td class="px-1 t-light-gray text-smaller" colspan="9">1、2 级分叉皆细化 16x16</td>
-                            <!--<td>2</td>-->
-                            <!--<td>3</td>-->
-                            <!--<td>4</td>-->
-                            <!--<td>5</td>-->
-                            <!--<td>7</td>-->
-                            <td class="px-1 t-invert-dark text-smaller" colspan="2">1、2 级分叉皆细化 8x3</td>
-                            <!--<td>9</td>-->
-                            <!--<td>10</td>-->
-                        </tr>
-                        <tr class="border-lr border-bottom">
-                            <td class="px-1"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Codec/EbModeDecisionConfigurationProcess.c">TXT level</a></td>
-                            <td class="px-1 text-smaller" colspan="4">
-                                <code>LOW_LVL, is_base</code>：4，否则 5；<br>
-                                <code>HIGH_LVL, is_base</code>：8，否则 10；<br>
-                                <code>NORMAL_LVL</code>：7
-                            </td>
-                            <!--<td>2</td>-->
-                            <!--<td>3</td>-->
-                            <!--<td>4</td>-->
-                            <td class="px-1 t-invert-light text-smaller" colspan="5">
-                                <code>LOW_LVL</code>：4；<code>HIGH_LVL</code>：7；<br>
-                                <code>NORMAL_LVL, is_base</code>：4，否则 5
-                            </td>
-                            <!--<td>6</td>-->
-                            <!--<td>7</td>-->
-                            <!--<td>8</td>-->
-                            <!--<td>9</td>-->
-                            <td class="px-1 t-invert-dark">3</td>
-                            <td class="px-1" style="background-color: black; color: white">2</td>
-                        </tr>
-                        <tr class="border-lr border-bottom">
-                            <td class="px-1"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Codec/EbModeDecisionConfigurationProcess.c">TXS level</a></td>
-                            <td class="px-1 text-smaller"><code>is_islice</code>：4，否则 0</td>
-                            <td class="px-1 t-light-gray text-smaller" colspan="3"><code>is_base</code>：4，否则 0</td>
-                            <!--<td>3</td>-->
-                            <!--<td>4</td>-->
-                            <td class="px-1 t-invert-light text-smaller" colspan="3"><code>is_base</code>：3，否则 0</td>
-                            <!--<td>6</td>-->
-                            <!--<td>7</td>-->
-                            <td class="px-1 t-invert-dark " colspan="2">3</td>
-                            <!--<td>9</td>-->
-                            <td class="px-1 t-invert-dark" colspan="2">2</td>
-                            <!--<td>11</td>-->
-                        </tr>
-                        <tr class="border-lr border-bottom">
-                            <td class="px-1"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Codec/EbModeDecisionConfigurationProcess.c">OBMC level</a></td>
-                            <td class="px-1">0</td>
-                            <td class="px-1 t-light-gray text-smaller" colspan="3"><code>is_base</code>：4，否则 0</td>
-                            <!--<td>2</td>-->
-                            <!--<td>3</td>-->
-                            <!--<td>4</td>-->
-                            <td class="px-1 t-invert-light" colspan="4">4</td>
-                            <!--<td>5</td>-->
-                            <!--<td>6</td>-->
-                            <!--<td>7</td>-->
-                            <td class="px-1 t-invert-dark" colspan="2">3</td>
-                            <!--<td>10</td>-->
-                            <td class="px-1" style="background-color: black; color: white">1</td>
-                        </tr>
-                        <tr class="border-lr border-bottom">
-                            <td class="px-1"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Codec/EbModeDecisionConfigurationProcess.c">Filter Intra level</a></td>
-                            <td class="px-1" colspan="4">0</td>
-                            <!--<td>2</td>-->
-                            <!--<td>3</td>-->
-                            <!--<td>4</td>-->
-                            <td class="px-1 t-invert-light" colspan="3">2</td>
-                            <!--<td>6</td>-->
-                            <!--<td>7</td>-->
-                            <td class="px-1 t-invert-dark" colspan="4">1</td>
-                            <!--<td>9</td>-->
-                            <!--<td>10</td>-->
-                            <!--<td>11</td>-->
-                        </tr>
-                        <tr class="border-lr border-bottom">
-                            <td class="px-1"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Codec/EbModeDecisionConfigurationProcess.c">InterIntra level</a></td>
-                            <td class="px-1">0</td>
-                            <td class="px-1 t-light-gray text-smaller" colspan="7"><code>transition_present</code>：2，否则 0</td>
-                            <!--<td>3</td>-->
-                            <!--<td>4</td>-->
-                            <!--<td>5</td>-->
-                            <!--<td>6</td>-->
-                            <!--<td>7</td>-->
-                            <!--<td>8</td>-->
-                            <td class="px-1 t-invert-dark text-smaller" colspan="2"><code>is_base</code>/<code>transition_present</code>：2，否则 0</td>
-                            <!--<td>10</td>-->
-                            <td class="px-1" style="background-color: black; color: white">2</td>
-                        </tr>
-                        <tr class="border-lr border-bottom">
-                            <td class="px-1"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Codec/EbModeDecisionConfigurationProcess.c">COMP level</a></td>
-                            <td class="px-1" colspan="8">0</td>
-                            <!--<td>2</td>-->
-                            <!--<td>3</td>-->
-                            <!--<td>4</td>-->
-                            <!--<td>5</td>-->
-                            <!--<td>6</td>-->
-                            <!--<td>7</td>-->
-                            <!--<td>8</td>-->
-                            <td class="px-1 t-invert-dark" colspan="2">4</td>
-                            <!--<td>10</td>-->
-                            <td class="px-1" style="background-color: black; color: white">3</td>
-                        </tr>
-                        <tr class="border-lr border-bottom">
-                            <td class="px-1"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Codec/EbModeDecisionConfigurationProcess.c">Chroma level</a></td>
-                            <td class="px-1 t-light-gray" colspan="3">5</td>
-                            <!--<td>2</td>-->
-                            <!--<td>3</td>-->
-                            <td class="px-1 t-light-gray" colspan="7">4</td>
-                            <!--<td>5</td>-->
-                            <!--<td>6</td>-->
-                            <!--<td>7</td>-->
-                            <!--<td>8</td>-->
-                            <!--<td>9</td>-->
-                            <!--<td>10</td>-->
-                            <td class="px-1" style="background-color: black; color: white">1</td>
-                        </tr>
-                        <tr class="border-lr border-bottom">
-                            <td class="px-1"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Codec/EbModeDecisionConfigurationProcess.c">Update CDF level</a></td>
-                            <td class="px-1">0</td>
-                            <td class="px-1 t-light-gray" colspan="5"><code>is_base</code>：1，否则 0</td>
-                            <!--<td>3</td>-->
-                            <!--<td>4</td>-->
-                            <!--<td>5</td>-->
-                            <!--<td>6</td>-->
-                            <td class="px-1 t-invert-light text-smaller"><code>is_base</code>：1，否则 3</td>
-                            <td class="px-1 t-invert-dark" colspan="3"><code>is_base</code>：1，否则 2</td>
-                            <!--<td>9</td>-->
-                            <!--<td>10</td>-->
-                            <td class="px-1" style="background-color: black; color: white">1</td>
-                        </tr>
-                        <tr class="border-lr border-bottom">
-                            <td class="px-1"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Globals/EbEncHandle.c">MRP level</a></td>
-                            <td class="px-1 t-light-gray">11</td>
-                            <td class="px-1 t-light-gray" colspan="2">7</td>
-                            <!--<td>2</td>-->
-                            <td class="px-1 t-light-gray text-smaller">
-                                <code>&#45;&#45;pred-struct 1 --hierarchical-levels &lt;= 3</code>：6；<br>
-                                <code>&#45;&#45;pred-struct 1 --hierarchical-levels &gt; 3</code>：5；<br>
-                                <code>&#45;&#45;pred-struct 2</code>：7
-                            </td>
-                            <td class="px-1 t-invert-light">5</td>
-                            <td class="px-1 t-invert-light">4</td>
-                            <td class="px-1 t-invert-light" colspan="3">3</td>
-                            <!--<td>7</td>-->
-                            <!--<td>8</td>-->
-                            <td class="px-1 t-invert-dark">2</td>
-                            <td class="px-1" style="background-color: black; color: white">1</td>
-                        </tr>
-                        <!--<tr class="border-lr border-bottom">
-                            <td class="px-1"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Globals/EbEncHandle.c">参考帧搜索范围级别 MRP</a>：<br>（<code>&#45;&#45;pred-struct 1</code>）</td>
-                            <td class="px-1">11</td>
-                            <td class="px-1 t-light-gray" colspan="10">10</td>
-                        </tr>
-                        <tr class="border-lr border-bottom">
-                            <td class="px-1">参考帧搜索范围级别 MRP：<br>（<code>&#45;&#45;pred-struct 2</code>）</td>
-                            <td class="px-1"><code>&#45;&#45;rc 0/&#45;&#45;rc 2</code>：0，否则 12</td>
-                            <td class="px-1 text-smaller" colspan="2"><code>&#45;&#45;rc 0/&#45;&#45;rc 2</code>：<br>10，否则 0</td>
-                            <td class="px-1 text-smaller" colspan="3"><code>&#45;&#45;rc 0/&#45;&#45;rc 2</code>：<br>9，否则 0</td>
-                            <td class="px-1 t-light-gray" colspan="2">源 &gt; 640x360 或 <code>&#45;&#45;fast-decode 2<code>：9，否则 5</td>
-                            <td class="px-1 t-light-gray" colspan="3">源 &gt; 640x360 或 <code>&#45;&#45;fast-decode 2<code>：9，否则 2</td>
-                        </tr>-->
-                        <tr class="border-lr border-bottom">
-                            <td class="px-1"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Globals/EbEncHandle.c">TPL level</a><br><span class="text-smaller">（关缩放/超分辨率环路、<code>pred-struct 2</code>、<code>aq-mode &gt; 0</code>、<code>pass &gt; 1</code>）</span></td>
-                            <td class="px-1 t-light-gray">6</td>
-                            <td class="px-1 t-light-gray">5</td>
-                            <td class="px-1 t-light-gray" colspan="2">4</td>
-                            <!--<td>4</td>-->
-                            <td class="px-1 t-invert-light" colspan="2">2</td>
-                            <!--<td>6</td>-->
-                            <td class="px-1 t-invert-light" colspan="5">1</td>
-                            <!--<td>8</td>-->
-                            <!--<td>9</td>-->
-                            <!--<td>10</td>-->
-                            <!--<td>11</td>-->
-                        </tr>
-                        <tr class="border-lr border-bottom">
-                            <td class="px-1"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Codec/EbPictureDecisionProcess.c">GM level</a><span class="text-smaller">（关缩放/超分辨率环路）</span></td>
-                            <td class="px-1 t-light-gray text-smaller" colspan="5"><code>is_ref</code>：关，否则 6</td>
-                            <!--<td>2</td>-->
-                            <!--<td>3</td>-->
-                            <!--<td>4</td>-->
-                            <!--<td>5</td>-->
-                            <!--<td>6</td>-->
-                            <td class="px-1 t-invert-light" colspan="2">5</td>
-                            <!--<td>8</td>-->
-                            <td class="px-1 t-invert-dark" colspan="2">4</td>
-                            <!--<td>9</td>-->
-                            <td class="px-1 t-invert-dark">3</td>
-                            <td class="px-1" style="background-color: black; color: white">2</td>
-                        </tr>
-                        <tr class="border-lr border-bottom">
-                            <td class="px-1"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Codec/EbModeDecisionProcess.c">Max CAN</a></td>
-                            <td class="px-1 t-light-gray" colspan="4">190</td>
-                            <!--<td>2</td>-->
-                            <!--<td>3</td>-->
-                            <!--<td>4</td>-->
-                            <td class="px-1 t-invert-light">236</td>
-                            <td class="px-1 t-invert-light">295</td>
-                            <td class="px-1 t-invert-light">369</td>
-                            <td class="px-1 t-invert-dark">576</td>
-                            <td class="px-1 t-invert-dark">720</td>
-                            <td class="px-1 t-invert-dark">1000</td>
-                            <td class="px-1" style="background-color: black; color: white">1225</td>
-                        </tr>
-                        <tr class="border-lr border-bottom">
-                            <td class="px-1"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Codec/EbPictureDecisionProcess.c">CDEF level</a><span class="text-smaller">（关 IBC）</span></td>
-                            <td class="px-1 t-light-gray text-smaller" colspan="3"><code>is_base</code>：8，否则针对 <code>is_ref</code>：9，否则 10</td>
-                            <!--<td>2</td>-->
-                            <!--<td>3</td>-->
-                            <td class="px-1 t-light-gray text-smaller" colspan="2"><code>is_ref</code>：8，否则 10</td>
-                            <!--<td>5</td>-->
-                            <td class="px-1 t-invert-light">4</td>
-                            <td class="px-1 t-invert-light" colspan="4">2</td>
-                            <!--<td>8</td>-->
-                            <!--<td>9</td>-->
-                            <!--<td>10</td>-->
-                            <td class="px-1" style="background-color: black; color: white">1</td>
-                        </tr>
-                        <tr class="border-lr border-bottom">
-                            <td class="px-1"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/master/Source/Lib/Globals/enc_handle.c#L4360"><code>--hierarchical-levels</code></a></td>
-                            <td class="px-1 t-light-gray text-smaller" colspan="2">
-                                <code>&#45;&#45;pred-struct 1</code>：2，否则 4
-                            </td>
-                            <!--<td>2</td>-->
-                            <td class="px-1 t-light-gray text-smaller">
-                                <code>&#45;&#45;pred-struct 1</code>：2，否则若 <code>&#45;&#45;fast-decode</code> 开，或 <code>&#45;&#45;rc</code> VBR/CBR，或分辨率大于等于 1080p：4，否则 5
-                            </td>
-                            <td class="px-1 t-light-gray text-smaller" colspan="8">
-                                <code>&#45;&#45;pred-struct 1</code>：2，否则若 <code>&#45;&#45;fast-decode</code> 开，或 <code>&#45;&#45;rc</code> VBR/CBR，或分辨率大于等于 8k：4，否则 5
-                            </td>
-                            <!--<td>5</td>-->
-                            <!--<td>6</td>-->
-                            <!--<td>7</td>-->
-                            <!--<td>8</td>-->
-                            <!--<td>9</td>-->
-                            <!--<td>10</td>-->
-                            <!--<td>11</td>-->
-                        </tr>
-                        <tr class="border-lr border-bottom">
-                            <td class="px-1"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/master/Source/Lib/Codec/enc_mode_config.c#L1264">SG filter level</a></td>
-                            <td class="px-1" colspan="7">关</td>
-                            <!--<td>2</td>-->
-                            <!--<td>3</td>-->
-                            <!--<td>4</td>-->
-                            <!--<td>5</td>-->
-                            <!--<td>6</td>-->
-                            <!--<td>7</td>-->
-                            <td class="px-1 t-invert-dark text-smaller">分辨率大于等于 8k，或分辨率大于等于 360p、且 <code>&#45;&#45;fast-decode</code> 开时关，否则 3</td>
-                            <td class="px-1 t-invert-dark" colspan="3">1（最大）</td>
-                            <!--<td>10</td>-->
-                            <!--<td>11</td>-->
-                        </tr>
-                        <tr class="border-lr border-bottom">
-                            <td class="px-1"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/master/Source/Lib/Codec/enc_mode_config.c#L1246">WN filter level</a></td>
-                            <td class="px-1" colspan="2">关</td>
-                            <!--<td>2</td>-->
-                            <td class="px-1 t-light-gray text-smaller"><code>is_base</code>：5，否则关</td>
-                            <td class="px-1 t-invert-light" colspan="8"><code>is_not_last_layer</code>：5，否则关</td>
-                            <!--<td>5</td>-->
-                            <!--<td>6</td>-->
-                            <!--<td>7</td>-->
-                            <!--<td>8</td>-->
-                            <!--<td>9</td>-->
-                            <!--<td>10</td>-->
-                            <!--<td>11</td>-->
-                        </tr>
-                        <tr class="border-lr border-bottom">
-                            <td class="px-1">DRL 参考帧数量</td>
-                            <td class="px-1 t-light-gray">2</td>
-                            <td class="px-1 t-light-gray" colspan="5">5</td>
-                            <!--<td>4</td>-->
-                            <!--<td>5</td>-->
-                            <!--<td>6</td>-->
-                            <!--<td>7</td>-->
-                            <td class="px-1 t-invert-light" colspan="5">7（最大）</td>
-                            <!--<td>9</td>-->
-                            <!--<td>10</td>-->
-                            <!--<td>11</td>-->
-                            <!--<td>12</td>-->
-                        </tr>
-                        <tr class="border-lr border-bottom">
-                            <td class="px-1">整数像素动态搜索 ME</td>
-                            <td class="px-1 t-light-gray" colspan="11">开</td>
-                            <!--<td>2</td>-->
-                            <!--<td>3</td>-->
-                            <!--<td>4</td>-->
-                            <!--<td>5</td>-->
-                            <!--<td>6</td>-->
-                            <!--<td>7</td>-->
-                            <!--<td>8</td>-->
-                            <!--<td>9</td>-->
-                            <!--<td>10</td>-->
-                            <!--<td>11</td>-->
-                        </tr>
-                        <tr class="border-lr border-bottom">
-                            <td class="px-1">子像素动态补偿</td>
-                            <td class="px-1 t-light-gray" colspan="11">开</td>
-                            <!--<td>2</td>-->
-                            <!--<td>3</td>-->
-                            <!--<td>4</td>-->
-                            <!--<td>5</td>-->
-                            <!--<td>6</td>-->
-                            <!--<td>7</td>-->
-                            <!--<td>8</td>-->
-                            <!--<td>9</td>-->
-                            <!--<td>10</td>-->
-                            <!--<td>11</td>-->
-                        </tr>
-                        <tr class="border-lr border-bottom">
-                            <td class="px-1"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/master/Source/Lib/Globals/enc_handle.c">Superblock 大小</a></td>
-                            <td class="px-1 t-light-gray" colspan="4">64</td>
-                            <!--<td>2</td>-->
-                            <!--<td>3</td>-->
-                            <!--<td>4</td>-->
-                            <td class="px-1 t-invert-light text-smaller" colspan="3">（由率控制模式指定的）GOP QP 小于等于 57：64，否则 128</td>
-                            <!--<td>6</td>-->
-                            <!--<td>7</td>-->
-                            <td class="px-1 t-invert-dark text-smaller">GOP QP 小于等于 56：64，否则 128</td>
-                            <td class="px-1 t-invert-dark text-smaller">源分辨率小于等于 480p：GOP QP 小于等于 56：64，否则 128；源分辨率大于 480p：GOP QP 小于等于 50：64，否则 128</td>
-                            <td class="px-1 t-invert-dark" colspan="2">128</td>
-                            <!--<td>11</td>-->
-                        </tr>
-                        <tr class="border-lr border-bottom">
-                            <td class="px-1">最小细分块大小</td>
-                            <td class="px-1 t-light-gray" colspan="8">8</td>
-                            <!--<td>2</td>-->
-                            <!--<td>3</td>-->
-                            <!--<td>4</td>-->
-                            <!--<td>5</td>-->
-                            <!--<td>6</td>-->
-                            <!--<td>7</td>-->
-                            <!--<td>8</td>-->
-                            <td class="px-1 t-invert-dark" colspan="3">4</td>
-                            <!--<td>10</td>-->
-                            <!--<td>11</td>-->
-                        </tr>
-                        <tr class="border-lr border-bottom">
-                            <td class="px-1 text-smaller">帧内编码 DC、SMOOTH/_H/_V、夹角、Paeth、CFL</td>
-                            <td class="px-1 t-light-gray" colspan="11">开</td>
-                            <!--<td>2</td>-->
-                            <!--<td>3</td>-->
-                            <!--<td>4</td>-->
-                            <!--<td>5</td>-->
-                            <!--<td>6</td>-->
-                            <!--<td>7</td>-->
-                            <!--<td>8</td>-->
-                            <!--<td>9</td>-->
-                            <!--<td>10</td>-->
-                            <!--<td>11</td>-->
-                        </tr>
-                        <tr class="border-lr border-bottom">
-                            <td class="px-1"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Codec/EbPictureDecisionProcess.c">IBC level</a><span class="text-smaller"></span></td>
-                            <td class="px-1 t-light-gray">6</td>
-                            <td class="px-1 t-light-gray" colspan="2">5</td>
-                            <!--<td>4</td>-->
-                            <td class="px-1 t-light-gray" colspan="2">4</td>
-                            <!--<td>6</td>-->
-                            <td class="px-1 t-invert-light" colspan="6">1</td>
-                            <!--<td>7</td>-->
-                            <!--<td>8</td>-->
-                            <!--<td>9</td>-->
-                            <!--<td>10</td>-->
-                            <!--<td>11</td>-->
-                        </tr>
-                        <tr class="border-lr border-bottom">
-                            <td class="px-1"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Codec/EbPictureDecisionProcess.c">Palette level</a><span class="text-smaller"></span></td>
-                            <td class="px-1 t-light-gray" colspan="11"><code>is_base</code>：2，否则 0</td>
-                            <!--<td>2</td>-->
-                            <!--<td>3</td>-->
-                            <!--<td>4</td>-->
-                            <!--<td>5</td>-->
-                            <!--<td>6</td>-->
-                            <!--<td>7</td>-->
-                            <!--<td>8</td>-->
-                            <!--<td>9</td>-->
-                            <!--<td>10</td>-->
-                            <!--<td>11</td>-->
-                        </tr>
-                        <tr class="border-lr border-bottom">
-                            <td class="px-1">帧内编码递归插值模式</td>
-                            <td class="px-1" colspan="4">关</td>
-                            <!--<td>2</td>-->
-                            <!--<td>3</td>-->
-                            <!--<td>4</td>-->
-                            <td class="px-1 t-invert-light" colspan="7">开</td>
-                            <!--<td>6</td>-->
-                            <!--<td>7</td>-->
-                            <!--<td>8</td>-->
-                            <!--<td>9</td>-->
-                            <!--<td>10</td>-->
-                            <!--<td>11</td>-->
-                        </tr>
-                        <tr class="border-lr border-bottom">
-                            <td class="px-1">单帧参考帧、混合参考帧</td>
-                            <td class="px-1 t-light-gray" colspan="11">开</td>
-                            <!--<td>2</td>-->
-                            <!--<td>3</td>-->
-                            <!--<td>4</td>-->
-                            <!--<td>5</td>-->
-                            <!--<td>6</td>-->
-                            <!--<td>7</td>-->
-                            <!--<td>8</td>-->
-                            <!--<td>9</td>-->
-                            <!--<td>10</td>-->
-                            <!--<td>11</td>-->
-                        </tr>
-                        <tr class="border-lr border-bottom">
-                            <td class="px-1">亮度 1/8 像素插值</td>
-                            <td class="px-1 t-light-gray" colspan="11">开</td>
-                            <!--<td>2</td>-->
-                            <!--<td>3</td>-->
-                            <!--<td>4</td>-->
-                            <!--<td>5</td>-->
-                            <!--<td>6</td>-->
-                            <!--<td>7</td>-->
-                            <!--<td>8</td>-->
-                            <!--<td>9</td>-->
-                            <!--<td>10</td>-->
-                            <!--<td>11</td>-->
-                        </tr>
-                        <tr class="border-lr border-bottom">
-                            <td class="px-1">子像素插值搜索</td>
-                            <td class="px-1 t-light-gray" colspan="11">开</td>
-                            <!--<td>2</td>-->
-                            <!--<td>3</td>-->
-                            <!--<td>4</td>-->
-                            <!--<td>5</td>-->
-                            <!--<td>6</td>-->
-                            <!--<td>7</td>-->
-                            <!--<td>8</td>-->
-                            <!--<td>9</td>-->
-                            <!--<td>10</td>-->
-                            <!--<td>11</td>-->
-                        </tr>
-                        <tr class="border-lr border-bottom">
-                            <td class="px-1">仿射变换动态补偿</td>
-                            <td class="px-1 t-light-gray" colspan="11">开</td>
-                            <!--<td>2</td>-->
-                            <!--<td>3</td>-->
-                            <!--<td>4</td>-->
-                            <!--<td>5</td>-->
-                            <!--<td>6</td>-->
-                            <!--<td>7</td>-->
-                            <!--<td>8</td>-->
-                            <!--<td>9</td>-->
-                            <!--<td>10</td>-->
-                            <!--<td>11</td>-->
-                        </tr>
-                        <tr class="border-lr border-bottom">
-                            <td class="px-1"><code>&#45;&#45;enable-mfmv</code></td>
-                            <td class="px-1 t-light-gray" colspan="11">1</td>
-                            <!--<td>2</td>-->
-                            <!--<td>3</td>-->
-                            <!--<td>4</td>-->
-                            <!--<td>5</td>-->
-                            <!--<td>6</td>-->
-                            <!--<td>7</td>-->
-                            <!--<td>8</td>-->
-                            <!--<td>9</td>-->
-                            <!--<td>10</td>-->
-                            <!--<td>11</td>-->
-                        </tr>
-                        <tr class="border-lr border-bottom">
-                            <td class="px-1">楔形蒙版预测分权</td>
-                            <td class="px-1" colspan="8">关</td>
-                            <!--<td>3</td>-->
-                            <!--<td>4</td>-->
-                            <!--<td>5</td>-->
-                            <!--<td>6</td>-->
-                            <!--<td>7</td>-->
-                            <!--<td>8</td>-->
-                            <!--<td>9</td>-->
-                            <td class="px-1 t-invert-dark" colspan="3">开</td>
-                            <!--<td>11</td>-->
-                        </tr>
-                        <tr class="border-lr border-bottom">
-                            <td class="px-1">帧间距离加权分权</td>
-                            <td class="px-1" colspan="8">关</td>
-                            <!--<td>3</td>-->
-                            <!--<td>4</td>-->
-                            <!--<td>5</td>-->
-                            <!--<td>6</td>-->
-                            <!--<td>7</td>-->
-                            <!--<td>8</td>-->
-                            <!--<td>9</td>-->
-                            <td class="px-1 t-invert-dark" colspan="3">开</td>
-                            <!--<td>11</td>-->
-                        </tr>
-                        <tr class="border-lr border-bottom">
-                            <td class="px-1">差值加权模式分权</td>
-                            <td class="px-1" colspan="8">关</td>
-                            <!--<td>3</td>-->
-                            <!--<td>4</td>-->
-                            <!--<td>5</td>-->
-                            <!--<td>6</td>-->
-                            <!--<td>7</td>-->
-                            <!--<td>8</td>-->
-                            <!--<td>9</td>-->
-                            <td class="px-1 t-invert-dark" colspan="3">开</td>
-                            <!--<td>11</td>-->
-                        </tr>
-                    </tbody>
-                </table></div>
+                <thead>
+                    <tr class="border-lr border-bottom">
+                        <th>功能\预设值</th>
+                        <th class="t-light-gray">10</th>
+                        <th class="t-light-gray px-1">9</th>
+                        <th class="t-light-gray px-1">8</th>
+                        <th class="t-light-gray">7</th>
+                        <th class="t-invert-light">6</th>
+                        <th class="t-invert-light">5</th>
+                        <th class="t-invert-light">4</th>
+                        <th class="t-invert-dark">3</th>
+                        <th class="t-invert-dark">2</th>
+                        <th class="t-invert-dark">1</th>
+                        <th style="background-color: black; color: white">0</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="border-lr border-bottom">
+                        <td class="px-1"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Globals/EbEncHandle.c">TF level</a><br>
+                            <span class="text-smaller">
+                                （需 <code>&#45;&#45;enable-tf</code>、<code>--hierarchical-levels &gt;1</code>、<code>--lossless 0</code>，否则关）
+                            </span>
+                        </td>
+                        <td class="px-1 text-smaller" colspan="3">
+                            <code>&#45;&#45;pred-struct 1</code> 且分辨率大于等于 720p：2，小于 720p：0；否则 9
+                        </td>
+                        <!--<td>2</td>-->
+                        <!--<td>3</td>-->
+                        <td class="px-1 t-light-gray text-smaller">
+                            <code>&#45;&#45;pred-struct 1</code> 且分辨率大于等于 720p：1，小于 720p：0；否则 8
+                        </td>
+                        <td class="px-1 t-invert-light" colspan="3">5</td>
+                        <!--<td>6</td>-->
+                        <!--<td>7</td>-->
+                        <td class="px-1 t-invert-dark">3</td>
+                        <td class="px-1 t-invert-dark" colspan="2">2</td>
+                        <!--<td>10</td>-->
+                        <td class="px-1" style="background-color: black; color: white">1</td>
+                    </tr>
+                    <tr class="border-lr border-bottom">
+                        <td class="px-1"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Codec/EbCodingUnit.c">NSQ level</a></td>
+                        <td class="px-1" colspan="5">关</td>
+                        <!--<td>2</td>-->
+                        <!--<td>3</td>-->
+                        <!--<td>4</td>-->
+                        <!--<td>5</td>-->
+                        <td class="px-1 t-invert-light text-smaller"><code>LOW_LVL, is_base</code>：15，否则 0；<code>HIGHT_LVL, is_base</code>：17，否则 0；<code>regular, is_base</code>：16，否则 0</td>
+                        <td class="px-1 t-invert-light text-smaller"><code>LOW_LVL, is_base</code>：9，否则 12；<code>HIGH_LVL, is_base</code>：11，否则 14；<code>regular, is_base</code>：10，否则 13</td>
+                        <td class="px-1 t-invert-dark text-smaller" colspan="2"><code>is_base</code>：7，否则 8</td>
+                        <!--<td>9</td>-->
+                        <td class="px-1 t-invert-dark text-smaller"><code>is_base</code>：5，否则 6</td>
+                        <td class="px-1 text-smaller" style="background-color: black; color: white"><code>is_ref</code>：2，否则 4</td>
+                    </tr>
+                    <tr class="border-lr border-bottom">
+                        <td class="px-1"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Codec/EbMotionEstimationProcess.c">HME SA</a>
+                        </td>
+                        <td class="px-1 t-light-gray text-smaller" colspan="6">搜索面积最小 240x240，最大 480x480</td>
+                        <!--<td>2</td>-->
+                        <!--<td>3</td>-->
+                        <!--<td>4</td>-->
+                        <!--<td>5</td>-->
+                        <td class="px-1 t-invert-light text-smaller" colspan="2">
+                            源分辨率大于等于 4k 时最小 32x32，最大 192x192；<br>
+                            否则与更快的预设一致
+                        </td>
+                        <!--<td>7</td>-->
+                        <td class="px-1 t-invert-dark text-smaller" colspan="3">
+                            源分辨率小于等于 1080p 且场景复杂度高时：最小 16x16，最大 192x192；<br>
+                            否则与更快的预设一致
+                        </td>
+                        <!--<td>9</td>-->
+                        <!--<td>10</td>-->
+                    </tr>
+                    <tr class="border-lr border-bottom">
+                        <td class="px-1"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Codec/EbMotionEstimationProcess.c">HME Refine</a></td>
+                        <td class="px-1 t-light-gray text-smaller" colspan="9">1、2 级分叉皆细化 16x16</td>
+                        <!--<td>2</td>-->
+                        <!--<td>3</td>-->
+                        <!--<td>4</td>-->
+                        <!--<td>5</td>-->
+                        <!--<td>7</td>-->
+                        <td class="px-1 t-invert-dark text-smaller" colspan="2">1、2 级分叉皆细化 8x3</td>
+                        <!--<td>9</td>-->
+                        <!--<td>10</td>-->
+                    </tr>
+                    <tr class="border-lr border-bottom">
+                        <td class="px-1"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Codec/EbModeDecisionConfigurationProcess.c">TXT level</a></td>
+                        <td class="px-1 text-smaller" colspan="4">
+                            <code>LOW_LVL, is_base</code>：4，否则 5；<br>
+                            <code>HIGH_LVL, is_base</code>：8，否则 10；<br>
+                            <code>NORMAL_LVL</code>：7
+                        </td>
+                        <!--<td>2</td>-->
+                        <!--<td>3</td>-->
+                        <!--<td>4</td>-->
+                        <td class="px-1 t-invert-light text-smaller" colspan="5">
+                            <code>LOW_LVL</code>：4；<code>HIGH_LVL</code>：7；<br>
+                            <code>NORMAL_LVL, is_base</code>：4，否则 5
+                        </td>
+                        <!--<td>6</td>-->
+                        <!--<td>7</td>-->
+                        <!--<td>8</td>-->
+                        <!--<td>9</td>-->
+                        <td class="px-1 t-invert-dark">3</td>
+                        <td class="px-1" style="background-color: black; color: white">2</td>
+                    </tr>
+                    <tr class="border-lr border-bottom">
+                        <td class="px-1"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Codec/EbModeDecisionConfigurationProcess.c">TXS level</a></td>
+                        <td class="px-1 text-smaller"><code>is_islice</code>：4，否则 0</td>
+                        <td class="px-1 t-light-gray text-smaller" colspan="3"><code>is_base</code>：4，否则 0</td>
+                        <!--<td>3</td>-->
+                        <!--<td>4</td>-->
+                        <td class="px-1 t-invert-light text-smaller" colspan="3"><code>is_base</code>：3，否则 0</td>
+                        <!--<td>6</td>-->
+                        <!--<td>7</td>-->
+                        <td class="px-1 t-invert-dark " colspan="2">3</td>
+                        <!--<td>9</td>-->
+                        <td class="px-1 t-invert-dark" colspan="2">2</td>
+                        <!--<td>11</td>-->
+                    </tr>
+                    <tr class="border-lr border-bottom">
+                        <td class="px-1"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Codec/EbModeDecisionConfigurationProcess.c">OBMC level</a></td>
+                        <td class="px-1">0</td>
+                        <td class="px-1 t-light-gray text-smaller" colspan="3"><code>is_base</code>：4，否则 0</td>
+                        <!--<td>2</td>-->
+                        <!--<td>3</td>-->
+                        <!--<td>4</td>-->
+                        <td class="px-1 t-invert-light" colspan="4">4</td>
+                        <!--<td>5</td>-->
+                        <!--<td>6</td>-->
+                        <!--<td>7</td>-->
+                        <td class="px-1 t-invert-dark" colspan="2">3</td>
+                        <!--<td>10</td>-->
+                        <td class="px-1" style="background-color: black; color: white">1</td>
+                    </tr>
+                    <tr class="border-lr border-bottom">
+                        <td class="px-1"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Codec/EbModeDecisionConfigurationProcess.c">Filter Intra level</a></td>
+                        <td class="px-1" colspan="4">0</td>
+                        <!--<td>2</td>-->
+                        <!--<td>3</td>-->
+                        <!--<td>4</td>-->
+                        <td class="px-1 t-invert-light" colspan="3">2</td>
+                        <!--<td>6</td>-->
+                        <!--<td>7</td>-->
+                        <td class="px-1 t-invert-dark" colspan="4">1</td>
+                        <!--<td>9</td>-->
+                        <!--<td>10</td>-->
+                        <!--<td>11</td>-->
+                    </tr>
+                    <tr class="border-lr border-bottom">
+                        <td class="px-1"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Codec/EbModeDecisionConfigurationProcess.c">InterIntra level</a></td>
+                        <td class="px-1">0</td>
+                        <td class="px-1 t-light-gray text-smaller" colspan="7"><code>transition_present</code>：2，否则 0</td>
+                        <!--<td>3</td>-->
+                        <!--<td>4</td>-->
+                        <!--<td>5</td>-->
+                        <!--<td>6</td>-->
+                        <!--<td>7</td>-->
+                        <!--<td>8</td>-->
+                        <td class="px-1 t-invert-dark text-smaller" colspan="2"><code>is_base</code>/<code>transition_present</code>：2，否则 0</td>
+                        <!--<td>10</td>-->
+                        <td class="px-1" style="background-color: black; color: white">2</td>
+                    </tr>
+                    <tr class="border-lr border-bottom">
+                        <td class="px-1"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Codec/EbModeDecisionConfigurationProcess.c">COMP level</a></td>
+                        <td class="px-1" colspan="8">0</td>
+                        <!--<td>2</td>-->
+                        <!--<td>3</td>-->
+                        <!--<td>4</td>-->
+                        <!--<td>5</td>-->
+                        <!--<td>6</td>-->
+                        <!--<td>7</td>-->
+                        <!--<td>8</td>-->
+                        <td class="px-1 t-invert-dark" colspan="2">4</td>
+                        <!--<td>10</td>-->
+                        <td class="px-1" style="background-color: black; color: white">3</td>
+                    </tr>
+                    <tr class="border-lr border-bottom">
+                        <td class="px-1"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Codec/EbModeDecisionConfigurationProcess.c">Chroma level</a></td>
+                        <td class="px-1 t-light-gray" colspan="3">5</td>
+                        <!--<td>2</td>-->
+                        <!--<td>3</td>-->
+                        <td class="px-1 t-light-gray" colspan="7">4</td>
+                        <!--<td>5</td>-->
+                        <!--<td>6</td>-->
+                        <!--<td>7</td>-->
+                        <!--<td>8</td>-->
+                        <!--<td>9</td>-->
+                        <!--<td>10</td>-->
+                        <td class="px-1" style="background-color: black; color: white">1</td>
+                    </tr>
+                    <tr class="border-lr border-bottom">
+                        <td class="px-1"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Codec/EbModeDecisionConfigurationProcess.c">Update CDF level</a></td>
+                        <td class="px-1">0</td>
+                        <td class="px-1 t-light-gray" colspan="5"><code>is_base</code>：1，否则 0</td>
+                        <!--<td>3</td>-->
+                        <!--<td>4</td>-->
+                        <!--<td>5</td>-->
+                        <!--<td>6</td>-->
+                        <td class="px-1 t-invert-light text-smaller"><code>is_base</code>：1，否则 3</td>
+                        <td class="px-1 t-invert-dark" colspan="3"><code>is_base</code>：1，否则 2</td>
+                        <!--<td>9</td>-->
+                        <!--<td>10</td>-->
+                        <td class="px-1" style="background-color: black; color: white">1</td>
+                    </tr>
+                    <tr class="border-lr border-bottom">
+                        <td class="px-1"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Globals/EbEncHandle.c">MRP level</a></td>
+                        <td class="px-1 t-light-gray">11</td>
+                        <td class="px-1 t-light-gray" colspan="2">7</td>
+                        <!--<td>2</td>-->
+                        <td class="px-1 t-light-gray text-smaller">
+                            <code>&#45;&#45;pred-struct 1 --hierarchical-levels &lt;= 3</code>：6；<br>
+                            <code>&#45;&#45;pred-struct 1 --hierarchical-levels &gt; 3</code>：5；<br>
+                            <code>&#45;&#45;pred-struct 2</code>：7
+                        </td>
+                        <td class="px-1 t-invert-light">5</td>
+                        <td class="px-1 t-invert-light">4</td>
+                        <td class="px-1 t-invert-light" colspan="3">3</td>
+                        <!--<td>7</td>-->
+                        <!--<td>8</td>-->
+                        <td class="px-1 t-invert-dark">2</td>
+                        <td class="px-1" style="background-color: black; color: white">1</td>
+                    </tr>
+                    <!--<tr class="border-lr border-bottom">
+                        <td class="px-1"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Globals/EbEncHandle.c">参考帧搜索范围级别 MRP</a>：<br>（<code>&#45;&#45;pred-struct 1</code>）</td>
+                        <td class="px-1">11</td>
+                        <td class="px-1 t-light-gray" colspan="10">10</td>
+                    </tr>
+                    <tr class="border-lr border-bottom">
+                        <td class="px-1">参考帧搜索范围级别 MRP：<br>（<code>&#45;&#45;pred-struct 2</code>）</td>
+                        <td class="px-1"><code>&#45;&#45;rc 0/&#45;&#45;rc 2</code>：0，否则 12</td>
+                        <td class="px-1 text-smaller" colspan="2"><code>&#45;&#45;rc 0/&#45;&#45;rc 2</code>：<br>10，否则 0</td>
+                        <td class="px-1 text-smaller" colspan="3"><code>&#45;&#45;rc 0/&#45;&#45;rc 2</code>：<br>9，否则 0</td>
+                        <td class="px-1 t-light-gray" colspan="2">源 &gt; 640x360 或 <code>&#45;&#45;fast-decode 2<code>：9，否则 5</td>
+                        <td class="px-1 t-light-gray" colspan="3">源 &gt; 640x360 或 <code>&#45;&#45;fast-decode 2<code>：9，否则 2</td>
+                    </tr>-->
+                    <tr class="border-lr border-bottom">
+                        <td class="px-1"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Globals/EbEncHandle.c">TPL level</a><br><span class="text-smaller">（关缩放/超分辨率环路、<code>pred-struct 2</code><code>aq-mode &gt; 0</code>、<code>pass &gt; 1</code>）</span></td>
+                        <td class="px-1 t-light-gray">6</td>
+                        <td class="px-1 t-light-gray">5</td>
+                        <td class="px-1 t-light-gray" colspan="2">4</td>
+                        <!--<td>4</td>-->
+                        <td class="px-1 t-invert-light" colspan="2">2</td>
+                        <!--<td>6</td>-->
+                        <td class="px-1 t-invert-light" colspan="5">1</td>
+                        <!--<td>8</td>-->
+                        <!--<td>9</td>-->
+                        <!--<td>10</td>-->
+                        <!--<td>11</td>-->
+                    </tr>
+                    <tr class="border-lr border-bottom">
+                        <td class="px-1"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Codec/EbPictureDecisionProcess.c">GM level</a><span class="text-smaller">（关缩放/超分辨率环路）</span></td>
+                        <td class="px-1 t-light-gray text-smaller" colspan="5"><code>is_ref</code>：关，否则 6</td>
+                        <!--<td>2</td>-->
+                        <!--<td>3</td>-->
+                        <!--<td>4</td>-->
+                        <!--<td>5</td>-->
+                        <!--<td>6</td>-->
+                        <td class="px-1 t-invert-light" colspan="2">5</td>
+                        <!--<td>8</td>-->
+                        <td class="px-1 t-invert-dark" colspan="2">4</td>
+                        <!--<td>9</td>-->
+                        <td class="px-1 t-invert-dark">3</td>
+                        <td class="px-1" style="background-color: black; color: white">2</td>
+                    </tr>
+                    <tr class="border-lr border-bottom">
+                        <td class="px-1"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Codec/EbModeDecisionProcess.c">Max CAN</a></td>
+                        <td class="px-1 t-light-gray" colspan="4">190</td>
+                        <!--<td>2</td>-->
+                        <!--<td>3</td>-->
+                        <!--<td>4</td>-->
+                        <td class="px-1 t-invert-light">236</td>
+                        <td class="px-1 t-invert-light">295</td>
+                        <td class="px-1 t-invert-light">369</td>
+                        <td class="px-1 t-invert-dark">576</td>
+                        <td class="px-1 t-invert-dark">720</td>
+                        <td class="px-1 t-invert-dark">1000</td>
+                        <td class="px-1" style="background-color: black; color: white">1225</td>
+                    </tr>
+                    <tr class="border-lr border-bottom">
+                        <td class="px-1"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Codec/EbPictureDecisionProcess.c">CDEF level</a><span class="text-smaller">（关 IBC）</span></td>
+                        <td class="px-1 t-light-gray text-smaller" colspan="3"><code>is_base</code>：8，否则针对 <code>is_ref</code>：9，否则 10</td>
+                        <!--<td>2</td>-->
+                        <!--<td>3</td>-->
+                        <td class="px-1 t-light-gray text-smaller" colspan="2"><code>is_ref</code>：8，否则 10</td>
+                        <!--<td>5</td>-->
+                        <td class="px-1 t-invert-light">4</td>
+                        <td class="px-1 t-invert-light" colspan="4">2</td>
+                        <!--<td>8</td>-->
+                        <!--<td>9</td>-->
+                        <!--<td>10</td>-->
+                        <td class="px-1" style="background-color: black; color: white">1</td>
+                    </tr>
+                    <tr class="border-lr border-bottom">
+                        <td class="px-1"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/master/Source/Lib/Globals/enc_handle.c#L4360"><code>--hierarchical-levels</code></a></td>
+                        <td class="px-1 t-light-gray text-smaller" colspan="2">
+                            <code>&#45;&#45;pred-struct 1</code>：2，否则 4
+                        </td>
+                        <!--<td>2</td>-->
+                        <td class="px-1 t-light-gray text-smaller">
+                            <code>&#45;&#45;pred-struct 1</code>：2，否则若 <code>&#45;&#45;fast-decode</code> 开，或 <code>&#45;&#45;rc</code> VBR/CBR，或分辨率大于等于 1080p：4，否则 5
+                        </td>
+                        <td class="px-1 t-light-gray text-smaller" colspan="8">
+                            <code>&#45;&#45;pred-struct 1</code>：2，否则若 <code>&#45;&#45;fast-decode</code> 开，或 <code>&#45;&#45;rc</code> VBR/CBR，或分辨率大于等于 8k：4，否则 5
+                        </td>
+                        <!--<td>5</td>-->
+                        <!--<td>6</td>-->
+                        <!--<td>7</td>-->
+                        <!--<td>8</td>-->
+                        <!--<td>9</td>-->
+                        <!--<td>10</td>-->
+                        <!--<td>11</td>-->
+                    </tr>
+                    <tr class="border-lr border-bottom">
+                        <td class="px-1"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/master/Source/Lib/Codec/enc_mode_config.c#L1264">SG filter level</a></td>
+                        <td class="px-1" colspan="7">关</td>
+                        <!--<td>2</td>-->
+                        <!--<td>3</td>-->
+                        <!--<td>4</td>-->
+                        <!--<td>5</td>-->
+                        <!--<td>6</td>-->
+                        <!--<td>7</td>-->
+                        <td class="px-1 t-invert-dark text-smaller">分辨率大于等于 8k，或分辨率大于等于 360p、且 <code>&#45;&#45;fast-decode</code> 开时关，否则 3</td>
+                        <td class="px-1 t-invert-dark" colspan="3">1（最大）</td>
+                        <!--<td>10</td>-->
+                        <!--<td>11</td>-->
+                    </tr>
+                    <tr class="border-lr border-bottom">
+                        <td class="px-1"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/master/Source/Lib/Codec/enc_mode_config.c#L1246">WN filter level</a></td>
+                        <td class="px-1" colspan="2">关</td>
+                        <!--<td>2</td>-->
+                        <td class="px-1 t-light-gray text-smaller"><code>is_base</code>：5，否则关</td>
+                        <td class="px-1 t-invert-light" colspan="8"><code>is_not_last_layer</code>：5，否则关</td>
+                        <!--<td>5</td>-->
+                        <!--<td>6</td>-->
+                        <!--<td>7</td>-->
+                        <!--<td>8</td>-->
+                        <!--<td>9</td>-->
+                        <!--<td>10</td>-->
+                        <!--<td>11</td>-->
+                    </tr>
+                    <tr class="border-lr border-bottom">
+                        <td class="px-1">DRL 参考帧数量</td>
+                        <td class="px-1 t-light-gray">2</td>
+                        <td class="px-1 t-light-gray" colspan="5">5</td>
+                        <!--<td>4</td>-->
+                        <!--<td>5</td>-->
+                        <!--<td>6</td>-->
+                        <!--<td>7</td>-->
+                        <td class="px-1 t-invert-light" colspan="5">7（最大）</td>
+                        <!--<td>9</td>-->
+                        <!--<td>10</td>-->
+                        <!--<td>11</td>-->
+                        <!--<td>12</td>-->
+                    </tr>
+                    <tr class="border-lr border-bottom">
+                        <td class="px-1">整数像素动态搜索 ME</td>
+                        <td class="px-1 t-light-gray" colspan="11">开</td>
+                        <!--<td>2</td>-->
+                        <!--<td>3</td>-->
+                        <!--<td>4</td>-->
+                        <!--<td>5</td>-->
+                        <!--<td>6</td>-->
+                        <!--<td>7</td>-->
+                        <!--<td>8</td>-->
+                        <!--<td>9</td>-->
+                        <!--<td>10</td>-->
+                        <!--<td>11</td>-->
+                    </tr>
+                    <tr class="border-lr border-bottom">
+                        <td class="px-1">子像素动态补偿</td>
+                        <td class="px-1 t-light-gray" colspan="11">开</td>
+                        <!--<td>2</td>-->
+                        <!--<td>3</td>-->
+                        <!--<td>4</td>-->
+                        <!--<td>5</td>-->
+                        <!--<td>6</td>-->
+                        <!--<td>7</td>-->
+                        <!--<td>8</td>-->
+                        <!--<td>9</td>-->
+                        <!--<td>10</td>-->
+                        <!--<td>11</td>-->
+                    </tr>
+                    <tr class="border-lr border-bottom">
+                        <td class="px-1"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/master/Source/Lib/Globals/enc_handle.c">Superblock 大小</a></td>
+                        <td class="px-1 t-light-gray" colspan="4">64</td>
+                        <!--<td>2</td>-->
+                        <!--<td>3</td>-->
+                        <!--<td>4</td>-->
+                        <td class="px-1 t-invert-light text-smaller" colspan="3">（由率控制模式指定的）GOP QP 小于等于 57：64，否则 128</td>
+                        <!--<td>6</td>-->
+                        <!--<td>7</td>-->
+                        <td class="px-1 t-invert-dark text-smaller">GOP QP 小于等于 56：64，否则 128</td>
+                        <td class="px-1 t-invert-dark text-smaller">源分辨率小于等于 480p：GOP QP 小于等于 56：64，否则 128；源分辨率大于 480p：GOP QP 小于等于 50：64，否则 128</td>
+                        <td class="px-1 t-invert-dark" colspan="2">128</td>
+                        <!--<td>11</td>-->
+                    </tr>
+                    <tr class="border-lr border-bottom">
+                        <td class="px-1">最小细分块大小</td>
+                        <td class="px-1 t-light-gray" colspan="8">8</td>
+                        <!--<td>2</td>-->
+                        <!--<td>3</td>-->
+                        <!--<td>4</td>-->
+                        <!--<td>5</td>-->
+                        <!--<td>6</td>-->
+                        <!--<td>7</td>-->
+                        <!--<td>8</td>-->
+                        <td class="px-1 t-invert-dark" colspan="3">4</td>
+                        <!--<td>10</td>-->
+                        <!--<td>11</td>-->
+                    </tr>
+                    <tr class="border-lr border-bottom">
+                        <td class="px-1 text-smaller">帧内编码 DC、SMOOTH/_H/_V、夹角、Paeth、CFL</td>
+                        <td class="px-1 t-light-gray" colspan="11">开</td>
+                        <!--<td>2</td>-->
+                        <!--<td>3</td>-->
+                        <!--<td>4</td>-->
+                        <!--<td>5</td>-->
+                        <!--<td>6</td>-->
+                        <!--<td>7</td>-->
+                        <!--<td>8</td>-->
+                        <!--<td>9</td>-->
+                        <!--<td>10</td>-->
+                        <!--<td>11</td>-->
+                    </tr>
+                    <tr class="border-lr border-bottom">
+                        <td class="px-1"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Codec/EbPictureDecisionProcess.c">IBC level</a><span class="text-smaller"></span></td>
+                        <td class="px-1 t-light-gray">6</td>
+                        <td class="px-1 t-light-gray" colspan="2">5</td>
+                        <!--<td>4</td>-->
+                        <td class="px-1 t-light-gray" colspan="2">4</td>
+                        <!--<td>6</td>-->
+                        <td class="px-1 t-invert-light" colspan="6">1</td>
+                        <!--<td>7</td>-->
+                        <!--<td>8</td>-->
+                        <!--<td>9</td>-->
+                        <!--<td>10</td>-->
+                        <!--<td>11</td>-->
+                    </tr>
+                    <tr class="border-lr border-bottom">
+                        <td class="px-1"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Codec/EbPictureDecisionProcess.c">Palette level</a><span class="text-smaller"></span></td>
+                        <td class="px-1 t-light-gray" colspan="11"><code>is_base</code>：2，否则 0</td>
+                        <!--<td>2</td>-->
+                        <!--<td>3</td>-->
+                        <!--<td>4</td>-->
+                        <!--<td>5</td>-->
+                        <!--<td>6</td>-->
+                        <!--<td>7</td>-->
+                        <!--<td>8</td>-->
+                        <!--<td>9</td>-->
+                        <!--<td>10</td>-->
+                        <!--<td>11</td>-->
+                    </tr>
+                    <tr class="border-lr border-bottom">
+                        <td class="px-1">帧内编码递归插值模式</td>
+                        <td class="px-1" colspan="4">关</td>
+                        <!--<td>2</td>-->
+                        <!--<td>3</td>-->
+                        <!--<td>4</td>-->
+                        <td class="px-1 t-invert-light" colspan="7">开</td>
+                        <!--<td>6</td>-->
+                        <!--<td>7</td>-->
+                        <!--<td>8</td>-->
+                        <!--<td>9</td>-->
+                        <!--<td>10</td>-->
+                        <!--<td>11</td>-->
+                    </tr>
+                    <tr class="border-lr border-bottom">
+                        <td class="px-1">单帧参考帧、混合参考帧</td>
+                        <td class="px-1 t-light-gray" colspan="11">开</td>
+                        <!--<td>2</td>-->
+                        <!--<td>3</td>-->
+                        <!--<td>4</td>-->
+                        <!--<td>5</td>-->
+                        <!--<td>6</td>-->
+                        <!--<td>7</td>-->
+                        <!--<td>8</td>-->
+                        <!--<td>9</td>-->
+                        <!--<td>10</td>-->
+                        <!--<td>11</td>-->
+                    </tr>
+                    <tr class="border-lr border-bottom">
+                        <td class="px-1">亮度 1/8 像素插值</td>
+                        <td class="px-1 t-light-gray" colspan="11">开</td>
+                        <!--<td>2</td>-->
+                        <!--<td>3</td>-->
+                        <!--<td>4</td>-->
+                        <!--<td>5</td>-->
+                        <!--<td>6</td>-->
+                        <!--<td>7</td>-->
+                        <!--<td>8</td>-->
+                        <!--<td>9</td>-->
+                        <!--<td>10</td>-->
+                        <!--<td>11</td>-->
+                    </tr>
+                    <tr class="border-lr border-bottom">
+                        <td class="px-1">子像素插值搜索</td>
+                        <td class="px-1 t-light-gray" colspan="11">开</td>
+                        <!--<td>2</td>-->
+                        <!--<td>3</td>-->
+                        <!--<td>4</td>-->
+                        <!--<td>5</td>-->
+                        <!--<td>6</td>-->
+                        <!--<td>7</td>-->
+                        <!--<td>8</td>-->
+                        <!--<td>9</td>-->
+                        <!--<td>10</td>-->
+                        <!--<td>11</td>-->
+                    </tr>
+                    <tr class="border-lr border-bottom">
+                        <td class="px-1">仿射变换动态补偿</td>
+                        <td class="px-1 t-light-gray" colspan="11">开</td>
+                        <!--<td>2</td>-->
+                        <!--<td>3</td>-->
+                        <!--<td>4</td>-->
+                        <!--<td>5</td>-->
+                        <!--<td>6</td>-->
+                        <!--<td>7</td>-->
+                        <!--<td>8</td>-->
+                        <!--<td>9</td>-->
+                        <!--<td>10</td>-->
+                        <!--<td>11</td>-->
+                    </tr>
+                    <tr class="border-lr border-bottom">
+                        <td class="px-1"><code>&#45;&#45;enable-mfmv</code></td>
+                        <td class="px-1 t-light-gray" colspan="11">1</td>
+                        <!--<td>2</td>-->
+                        <!--<td>3</td>-->
+                        <!--<td>4</td>-->
+                        <!--<td>5</td>-->
+                        <!--<td>6</td>-->
+                        <!--<td>7</td>-->
+                        <!--<td>8</td>-->
+                        <!--<td>9</td>-->
+                        <!--<td>10</td>-->
+                        <!--<td>11</td>-->
+                    </tr>
+                    <tr class="border-lr border-bottom">
+                        <td class="px-1">楔形蒙版预测分权</td>
+                        <td class="px-1" colspan="8">关</td>
+                        <!--<td>3</td>-->
+                        <!--<td>4</td>-->
+                        <!--<td>5</td>-->
+                        <!--<td>6</td>-->
+                        <!--<td>7</td>-->
+                        <!--<td>8</td>-->
+                        <!--<td>9</td>-->
+                        <td class="px-1 t-invert-dark" colspan="3">开</td>
+                        <!--<td>11</td>-->
+                    </tr>
+                    <tr class="border-lr border-bottom">
+                        <td class="px-1">帧间距离加权分权</td>
+                        <td class="px-1" colspan="8">关</td>
+                        <!--<td>3</td>-->
+                        <!--<td>4</td>-->
+                        <!--<td>5</td>-->
+                        <!--<td>6</td>-->
+                        <!--<td>7</td>-->
+                        <!--<td>8</td>-->
+                        <!--<td>9</td>-->
+                        <td class="px-1 t-invert-dark" colspan="3">开</td>
+                        <!--<td>11</td>-->
+                    </tr>
+                    <tr class="border-lr border-bottom">
+                        <td class="px-1">差值加权模式分权</td>
+                        <td class="px-1" colspan="8">关</td>
+                        <!--<td>3</td>-->
+                        <!--<td>4</td>-->
+                        <!--<td>5</td>-->
+                        <!--<td>6</td>-->
+                        <!--<td>7</td>-->
+                        <!--<td>8</td>-->
+                        <!--<td>9</td>-->
+                        <td class="px-1 t-invert-dark" colspan="3">开</td>
+                        <!--<td>11</td>-->
+                    </tr>
+                </tbody>
+            </table></div>
 
-                <h5>（12/12——1/2）<a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/master/Source/Lib/Codec/enc_mode_config.c#L1302">DLF level</a>：</h5>
-                <div class="overflow-auto mt-3"><table class="table-center text-smaller">
-                    <thead>
-                        <tr class="border-lr border-top">
-                            <th>预设</th>
-                            <th>实时模式：rtc_tune</th>
-                            <th>一般模式：fast_decode 关<br>低分辨率模式：源小于等于 360p</th>
-                            <th>快速模式：fast_decode 开且源大于 360p<br>高分辨率（节约内存）模式：分辨率大于等于 8k</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr class="border-lr border-bottom t-light-gray align-items-center text-smaller">
-                            <td class="px-1"><b>10+</b></td>
-                            <td class="px-1"><code>is_not_last_layer</code>：7，否则：0</td>
-                            <td colspan="2">
-                                <code>coeff_lvl</code> 高：<code>is_base</code>：6，否则：0<br>
-                                <code>coeff_lvl</code> 中~低：<code>is_base</code>：5，否则 <code>is_not_last_layer</code>：7，否则：0
-                            </td>
-                        </tr>
-                        <tr class="border-lr border-bottom t-light-gray text-smaller">
-                            <td class="px-1"><b>9</b></td>
-                            <td class="px-1"><code>is_base</code>：5，否则 <code>is_not_last_layer</code>：6，否则：0</td>
-                            <td class="px-1">
-                                分辨率小于等于 360p：<code>is_base</code>：5，否则 <code>is_not_last_layer</code>：6，否则：0<br>
-                                分辨率大于 360p：同 10+ 一般模式
-                            </td>
-                            <td class="px-1">同 10+ 快速模式</td>
-                        </tr>
-                        <tr class="border-lr border-bottom t-light-gray text-smaller">
-                            <td class="px-1"><b>8</b></td>
-                            <td class="px-1"><code>is_base</code>：5，否则 <code>is_not_last_layer</code>：6，否则：0</td>
-                            <td class="px-1">
-                                分辨率小于等于 360p：5<br>
-                                分辨率大于 360p：<code>is_base</code>：5，否则 <code>is_not_last_layer</code>：6，否则：0
-                            </td>
-                            <td class="px-1">
-                                <code>fast_decode 1</code>：<code>is_base</code>：5，否则 <code>is_not_last_layer</code>：6，否则：0<br>
-                                <code>fast_decode 2</code>：同 10+ 快速模式
-                            </td>
-                        </tr>
-                        <tr class="border-lr border-bottom t-light-gray text-smaller">
-                            <td class="px-1"><b>7</b></td>
-                            <td class="px-1"><code>is_base</code>：5，否则：6</td>
-                            <td class="px-1"><code>is_not_last_layer</code>：3，否则：6</td>
-                            <td class="px-1"><code>is_not_last_layer</code>：4，否则：6</td>
-                        </tr>
-                        <tr class="border-lr border-bottom t-invert-light text-smaller">
-                            <td class="px-1"><b>5~6</b></td>
-                            <td class="px-1"><code>is_base</code>：5，否则：6</td>
-                            <td class="px-1">3</td>
-                            <td class="px-1">4</td>
-                        </tr>
-                        <tr class="border-lr t-invert-light text-smaller">
-                            <td class="px-1"><b>4</b></td>
-                            <td class="px-1"><code>is_base</code>：5，否则：6</td>
-                            <td class="px-1">2</td>
-                            <td class="px-1">4</td>
-                        </tr>
-                        <tr class="border-lr t-invert-dark text-smaller">
-                            <td class="px-1"><b>0~3</b></td>
-                            <td class="px-1"><code>is_base</code>：5，否则：6</td>
-                            <td class="px-1">1</td>
-                            <td class="px-1">
-                                <code>fast_decode 1</code>：1，<code>fast_decode 2</code>：4
-                            </td>
-                        </tr>
-                    </tbody>
-                </table></div>
-            <p>使用 R9 9900X（具体测试系统配置见测试版块）编码 3840x2160 帧大小的速度参考如下：</p>
-            <ul class="list-dotless text-smaller font-monospace">
-                <li><code class="code-bold">&#45;&#45;preset 1</code>：0.10 fps</li>
-                <li><code class="code-bold">&#45;&#45;preset 3</code>：4.11 fps</li>
-            </ul>
+            <h5>（12/12——1/2）<a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/master/Source/Lib/Codec/enc_mode_config.c#L1302">DLF level</a>：</h5>
+            <div class="overflow-auto mt-3"><table class="table-center text-smaller">
+                <thead>
+                    <tr class="border-lr border-top">
+                        <th>预设</th>
+                        <th>实时模式：rtc_tune</th>
+                        <th>一般模式：fast_decode 关<br>低分辨率模式：源小于等于 360p</th>
+                        <th>快速模式：fast_decode 开且源大于 360p<br>高分辨率（节约内存）模式：分辨率大于等于 8k</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="border-lr border-bottom t-light-gray align-items-center text-smaller">
+                        <td class="px-1"><b>10+</b></td>
+                        <td class="px-1"><code>is_not_last_layer</code>：7，否则：0</td>
+                        <td colspan="2">
+                            <code>coeff_lvl</code> 高：<code>is_base</code>：6，否则：0<br>
+                            <code>coeff_lvl</code> 中~低：<code>is_base</code>：5，否则 <code>is_not_last_layer</code>：7，否则：0
+                        </td>
+                    </tr>
+                    <tr class="border-lr border-bottom t-light-gray text-smaller">
+                        <td class="px-1"><b>9</b></td>
+                        <td class="px-1"><code>is_base</code>：5，否则 <code>is_not_last_layer</code>：6，否则：0</td>
+                        <td class="px-1">
+                            分辨率小于等于 360p：<code>is_base</code>：5，否则 <code>is_not_last_layer</code>：6，否则：0<br>
+                            分辨率大于 360p：同 10+ 一般模式
+                        </td>
+                        <td class="px-1">同 10+ 快速模式</td>
+                    </tr>
+                    <tr class="border-lr border-bottom t-light-gray text-smaller">
+                        <td class="px-1"><b>8</b></td>
+                        <td class="px-1"><code>is_base</code>：5，否则 <code>is_not_last_layer</code>：6，否则：0</td>
+                        <td class="px-1">
+                            分辨率小于等于 360p：5<br>
+                            分辨率大于 360p：<code>is_base</code>：5，否则 <code>is_not_last_layer</code>：6，否则：0
+                        </td>
+                        <td class="px-1">
+                            <code>fast_decode 1</code>：<code>is_base</code>：5，否则 <code>is_not_last_layer</code>：6，否则：0<br>
+                            <code>fast_decode 2</code>：同 10+ 快速模式
+                        </td>
+                    </tr>
+                    <tr class="border-lr border-bottom t-light-gray text-smaller">
+                        <td class="px-1"><b>7</b></td>
+                        <td class="px-1"><code>is_base</code>：5，否则：6</td>
+                        <td class="px-1"><code>is_not_last_layer</code>：3，否则：6</td>
+                        <td class="px-1"><code>is_not_last_layer</code>：4，否则：6</td>
+                    </tr>
+                    <tr class="border-lr border-bottom t-invert-light text-smaller">
+                        <td class="px-1"><b>5~6</b></td>
+                        <td class="px-1"><code>is_base</code>：5，否则：6</td>
+                        <td class="px-1">3</td>
+                        <td class="px-1">4</td>
+                    </tr>
+                    <tr class="border-lr t-invert-light text-smaller">
+                        <td class="px-1"><b>4</b></td>
+                        <td class="px-1"><code>is_base</code>：5，否则：6</td>
+                        <td class="px-1">2</td>
+                        <td class="px-1">4</td>
+                    </tr>
+                    <tr class="border-lr t-invert-dark text-smaller">
+                        <td class="px-1"><b>0~3</b></td>
+                        <td class="px-1"><code>is_base</code>：5，否则：6</td>
+                        <td class="px-1">1</td>
+                        <td class="px-1">
+                            <code>fast_decode 1</code>：1，<code>fast_decode 2</code>：4
+                        </td>
+                    </tr>
+                </tbody>
+            </table></div>
             <!--<h5>（12/12——2/3）HBD 模式</h4><p>即高位深模式，当视频源大于 8bit 时自动启用，并更改一些模式决策的逻辑。</p>-->
             <h5>（12/12——2/2）分辨率常量</h5>
             <p>SVT-AV1 会根据视频分辨率的积，在 <code>&#45;&#45;preset</code> 参数之上进一步确立参数强度。</p>
