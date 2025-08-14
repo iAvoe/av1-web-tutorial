@@ -2,7 +2,6 @@
 <html lang="zh-hans">
 	<head>
         <meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1">
-        <!-- favicon -->
         <link rel="icon" href="./files/favicon.svg" type="image/svg+xml">
         <!-- JS Codes -->
         <script src="./files/tutorial.js" defer></script>
@@ -4701,9 +4700,10 @@ SvtAv1EncApp.exe -i .\输入.yuv -w 3840 -h 2160 --input-depth 10 --color-format
             <code class="code-bold">--lp</code>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~6，默认 0：全部&gt;指定当前压制任务的线程数量。</p>
             <code class="code-bold">&#45;&#45;pin</code>
-            <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~n，默认 0：关&gt;指定仅占用前 n 个 CPU 核心</p>
+            <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~n，默认 0：关&gt;指定仅占用前 n 个 CPU 核心，应搭配 <code>--lp</code> 使用</p>
+            <p class="text-gray-side">注：一并使用 <code>--lp 4</code> 与 <code>--pin 4</code> 将限制编码器运行到核心 0~3，并将资源分配设置为与 <code>--lp 4</code> 关联的线程/内存数量。将 <code>--pin 0</code> 与 <code>--lp 4</code> 一起使用将导致相同的线程/内存分配，但编码器无需只在 0~3 核心上运行（根据编码任务自动使用超过 4 个核心）；相比核心数量限制，<code>--pin 0</code> 的线程控制相当于只限制内存，这样相比限制核心反而能允许更多 <code>--lp 4</code> 的编码在同一台电脑上运行。见：<a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/master/Docs/Parameters.md#1-thread-management-parameters">Gitlab/AOMediaCodec</a>。</p>
             <code class="code-bold">--ss</code>
-            <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 -1~n&gt;指定使用多节点系统中的特定节点编码。-1 表示自动选择。</p>
+            <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 -1~n&gt;指定使用多节点系统中的特定节点编码。-1：自动。</p>
 
             <h4>（8/12）率控制模式</h4>
             <code class="code-bold">&#45;&#45;enable-qm</code>
@@ -4803,6 +4803,8 @@ switch (curve) {
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~100，默认 CBR：25，VBR：50&gt;指定判定 VBR，CBR 模式下码率大小为超标的百分比。</p>
             <code class="code-bold">--undershoot-pct</code>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~100，默认取决于率控制模式&gt;指定判定 VBR，CBR 模式下码率大小为落标的百分比。</p>
+            <code class="code-bold">--maxsection-pct</code>
+            <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~10000，默认 200：2x 目标码率为限&gt;目标码率为基准的百分比尖峰上限，设置更高以解除一些码率限制条件</p>
             <code class="code-bold">--gop-constraint-rc</code>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;0/1，默认 0：关，<span class="text-red-emph">需 VBR</span>&gt;将 VBR 模式的码率限制改为逐 GOP 应用，<span class="text-red-emph">猜测：</span>能够使每个 GOP 开始时有更充足的码率，但可能会消耗额外带宽。</p>
 
@@ -5095,7 +5097,7 @@ typedef enum SvtAv1FrameUpdateType {
 
             <h4>（9/12）GOP、mini-GOP 设定</h4>
             <code class="code-bold">--keyint</code>
-            <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数/整数带后缀 -2~2147483647 帧，支持后缀 s（秒）&gt;设定 GOP 长度，替代旧版的 <code>&#45;&#45;intra-period</code>，映射到 <code>intra_period_length</code>。<a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/master/Docs/svt-av1_encoder_user_guide.md">SVT-AV1 官方推荐</a>设置为 mini-GOP 长度（<span class="text-blue-math">\( 2^{\text{hierarchical-levels}} \)</span>）的倍数之上再加 1，以避免将关键帧插入在 mini-GOP 之内，导致压缩率的降低。</p>
+            <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数/整数带后缀 -2~2147483647 帧，支持后缀 s（秒）&gt;设定 GOP 长度，替代旧版的 <code>&#45;&#45;intra-period</code>，映射到 <code>intra_period_length</code>。<a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/master/Docs/svt-av1_encoder_user_guide.md">SVT-AV1 官方推荐</a>设置为 mini-GOP 长度（<span class="text-blue-math">\( 2^{\text{hierarchical-levels}} \)</span>）的倍数之上再加 1，以避免将关键帧插入在 mini-GOP 之内，导致压缩率的降低。硬件解码兼容推荐小于 300 的值。</p>
             <ul class="list-dotless text-smaller">
                 <li><b>-2</b>：每 5 秒设立一个关键帧</li>
                 <li><b>-1</b>~<b>0</b>：仅在开头设立关键帧</li>
@@ -5112,8 +5114,13 @@ typedef enum SvtAv1FrameUpdateType {
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;1/2，默认 2：Closed GOP&gt;指定关键帧类型，1：允许前向参考型（Open GOP），2：普通关键帧</p>
             <code class="code-bold">--scd</code><!--调用 perform_sc_detection() 函数？-->
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;0/1，默认 0：关&gt;开启转场检测。SVT-AV1 检测到转场后只会减少帧间参考，而不会插入关键帧，因此开启后仅会略微提高码率分配精度（见 <a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/master/Docs/CommonQuestions.md#scene-change-detection">SVT-AV1 common questions</a>）映射到 <code>transition_present</code>。另外，如果需要这种提高画质的 keyint GOP 拆分机制，SVT-AV1 还有前瞻进程中 mini-GOP 的实现可用。</p>
+            <p class="text-gray-side">注：<a href="https://github.com/nekotrix/SVT-AV1-Essential">SVT-AV1-Essential</a>（fork）将此参数的行为改成了添加关键帧。</p>
             <code class="code-bold">--scm</code>
-            <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~2，默认 2：自适应&gt;开启录屏特化功能模式（匹配使用 IBC、调色板帧内编码）开关控制所需的内容类型检测。</p>
+            <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~2，默认 2：自适应&gt;开启录屏内容检测与编码级别。</p>
+            <ul class="list-dotless text-smaller">
+                <li><code class="code-bold">1</code>：开启 IBC 和调色板预测</li>
+                <li><code class="code-bold">2</code>：自适应开启 IBC 和调色板预测</li>
+            </ul>
             <code class="code-bold">--lookahead</code>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 -1~120，默认 -1：自动&gt;指定前瞻进程搜索距离</p>
             <code class="code-bold">--hierarchical-levels</code>
@@ -5152,6 +5159,9 @@ typedef enum SvtAv1PredStructure {
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;0/1，默认 1：开，需 CRF/CQP 率控制模式&gt;开启前瞻时域依赖性建模，决定率控制的自动化。</p>
             <code class="code-bold">&#45;&#45;enable-tf</code>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~2，默认 1：开&gt;时域降噪过滤，也代表启用 <code>ALTREF</code> 帧类型，同时涉及 <code>OVERLAY</code> 帧类型的建立——0：关、1：开、2：根据帧类型（关键帧、参考帧、亮度、色度）、以及偏移值 <code>--tf-strength</code> 决定强度衰减系数、最后由强度在视频中的变化决定。</p>
+            <ul class="font-monospace pl-5 text-smaller list-dotless">
+                <li><b>2: </b><a href="https://discord.com/channels/587033243702788123/1202895560617500684/1373348432730915036">在超低 CRF（小于 11）中会产生额外的随机失真</a></li>
+            </ul>
             <code class="code-bold">--tf-strength</code>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~4，默认 3：较强&gt;指定时域降噪过滤中，滤镜强度衰减的偏移值。</p>
             <code class="code-bold">&#45;&#45;enable-overlays</code>
@@ -5162,6 +5172,7 @@ typedef enum SvtAv1PredStructure {
             <h4>（11/12）环路滤镜</h4>
             <code class="code-bold">&#45;&#45;enable-dlf</code>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;0/1，默认 1：开&gt;开启环路去块滤镜。</p>
+            <p class="text-gray-side">注：<a href="https://github.com/nekotrix/SVT-AV1-Essential">SVT-AV1-Essential</a>（fork）在此之上添加的强度 2、3 可以进一步避免块失真，但速度也更慢。总的来说对低码率优先、高 CRF 或快速预设来说是有用的改进。</p>
             <code class="code-bold">&#45;&#45;enable-cdef</code>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;0/1，默认 1：开&gt;开启环路定向边缘强化滤镜。</p>
             <code class="code-bold">&#45;&#45;enable-restoration</code>
@@ -5179,8 +5190,8 @@ typedef enum SvtAv1PredStructure {
                 <li><code>6~7</code> 在动态信息复杂的 3D 动画、漫画材质动画（富含锐利纹理场景）中画质提升显著（SSIMULACRA2.1 +5 分），除此之外提升不大（SSIMULACRA2.1 +1~3 分），但码率的增加又与画质的提升不相关（更类似于线性增加 5~10%）</li>
                 <li><code>7</code> 相比 6 出现了副作用，码率照旧增加，但画质反而降低了（一定会复现，结合 -4 强度的现象，推测是遇到了码率分配受限的问题）</li>
             </ul>
+            <p class="text-blue-side">注：片源模糊或使用低锐度美术风格时，高 sharpness 反而会增加失真、负值还会在这种片源上减少失真。</p>
             <p class="text-blue-side">注：该参数对压制结果体积或码率的影响较大（5%~10%），但对画质的影响较小，因此不适合除画质绝对优先情况下使用。详见下方测试版块的大范围优化测试。</p>
-            <p class="text-blue-side">注：尽管 &gt; 0 也会增加量化舍入进位宽限，但其影响在画面简单，容易压缩的视频源上有限。</p>
 
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：sharpness 相关源码分析</button>
             <div class="coll-content"><code>deblocking_filter.c</code>：设定环路滤镜强度
@@ -14564,12 +14575,12 @@ ssimulacra2_rs: Mean: 83.68623603, Median: 83.96666350, Std Dev: 3.66503275, 5th
                 <li>SVT-AV1 的最差画质（SSIMULACRA 第 5%）远好于 x265</li>
             </ol>
 
-            <h3>测试——SVT-AV1 3.1.0 对比测试</h3>
+            <h3>测试——SVT-AV1 3.1 与 3.0 对比测试</h3>
             <p>本次测试将会使用与全功能 B 帧与片源特化参数测试一致的参数，只测试部分片源来观察画质指标得分变化</p>
             <div id="svtav1VerCompTestData" class="overflow-auto mt-3"><table class="table-center text-smaller two-decimals">
                 <thead>
                     <tr class="border-lr">
-                        <th colspan="4">SVT-AV1 3.1 对比 3.0</th>
+                        <th colspan="4">SVT-AV1 3.1 Clang（LLVM 编译）对比 3.0 MSVC（Visual Studio 编译）</th>
                         <th class="px-1" colspan="3">XPSNR</th>
                         <th class="px-1" colspan="2">VMAF 0.6.1</th>
                         <th class="px-1" colspan="4">SSIMULACRA 2.1</th>
@@ -15240,7 +15251,7 @@ ssimulacra2_rs: Mean: 83.68623603, Median: 83.96666350, Std Dev: 3.66503275, 5th
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：下载——Windows+LLVM 手动编译 SVT-AV1-PSY、SVT-AV1 编码器</button>
             <div class="coll-content">
                 <p class="text-gray-side">修改自原文：<a href="https://discord.com/channels/992019264959676448/1253334764920766505">discord/AV1 weeb edition/scripts-tools-and-guides</a>。</p>
-                <h4>（1/4）下载并安装编译工具</h4>
+                <h4>（1/3）下载并安装编译工具</h4>
                 <ol>
                     <li><b>LLVM（clang 支持）</b>：<a href="https://github.com/llvm/llvm-project/releases/latest">github.com/llvm/llvm-project/releases/latest</a>，Windows 64bit 操作系统选 LLVM-***-win64.exe，安装时选择 Add LLVM to the system PATH for all/current users</li>
                     <li><b>Microsoft C++ Build Tools</b>：<a href="https://visualstudio.microsoft.com/visual-cpp-build-tools">visualstudio.microsoft.com/visual-cpp-build-tools</a>
@@ -15256,7 +15267,7 @@ ssimulacra2_rs: Mean: 83.68623603, Median: 83.96666350, Std Dev: 3.66503275, 5th
                     <li><b>Git</b>（可选）：<a href="https://git-scm.com/download/win">git-scm.com/download/win</a></li>
                 </ol>
 
-                <h4>（2/4）获取 SVT-AV1 源码</h4>
+                <h4>（2/3）获取 SVT-AV1 源码</h4>
                 <h5>浏览器下载：</h5>
                 <ul>
                     <li>SVT-AV1-PSY：将 Github/gianno-rosato/SVT-AV1-PSY 项目 <a href="https://github.com/psy-ex/svt-av1-psy/archive/refs/heads/master.zip">打包下载</a> 并解压</li>
@@ -15282,7 +15293,7 @@ cd svt-av1
                 </code></pre>
                 <p class="text-red-emph">注意：Windows 系统下，后续所有命令须在 Windows CMD 或 Git Bash（后者暂未验证）中运行，<b>不要用 PowerShell</b>。</p>
 
-                <h4>（3/4）编译步骤</h4>
+                <h4>（3/3）编译步骤</h4>
                 <p>0. 在 CMD 中确认 LLVM、CMake、NASM 已正确安装并准备好运行（输入命令后按回车，得到程序输出信息）：</p>
                 <pre><code class="text-smaller language-powershell hljs">
 "C:\Program Files\LLVM\bin\clang.exe" --version
@@ -15348,30 +15359,9 @@ ninja -C svt_build
 :: *** warnings generated.
 :: D[242/242] Linking C executable 盘:\文件夹\SVT-AV1-master\Bin\Debug（或 Release）\SvtAv1EncApp.exe
                 </code></pre>
-                <h4>（4/4）完整编译命令</h4>
-                <p>CMD 命令整体（使用 CMD 原生的 ^ 换行）：</p>
-                <pre><code class="text-smaller language-powershell hljs">
-chcp 65001
-
-set "CC=clang-cl"
-set "CXX=clang-cl"
-set "SvtAv1PsyGitPath=指定 SVT-AV1 项目源码路径（目录下有 CMakeLists.txt）"
-set "vcvars64Path=指定 VS Build Tools 路径，如 C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Auxiliary\Build"
-
-cd "%SvtAv1PsyGitPath%"
-call "%vcvars64Path%\vcvars64.bat"
-
-cmake --fresh -B svt_build -G Ninja ^
--DCMAKE_BUILD_TYPE=Release ^
--DBUILD_SHARED_LIBS=OFF ^
--DENABLE_AVX512=ON ^
--DSVT_AV1_LTO=OFF ^
--DCMAKE_CXX_FLAGS_RELEASE="-flto /DNDEBUG /clang:-O2 -march=native" ^
--DCMAKE_C_FLAGS_RELEASE="-flto /DNDEBUG /clang:-O2 -march=native"
-
-ninja -C svt_build
-                </code></pre>
             </div>
+            
+            <h3><a href="https://github.com/nekotrix/SVT-AV1-Essential/releases/tag/v3.1.0-Essential">下载——SVT-AV1-Essential 编码器</a>（fork）</h3>
 
             <!--失败：<h4>（2/2）Windows Docker Desktop 编译</h4>-->
             <h3>下载——基本工具</h3>
