@@ -3,12 +3,13 @@
 /*eslint no-extend-native: ["error", { "exceptions": ["Object"] }]*/
 var document; // Rectifying 'document not defined'
 var window; // Rectifying 'window not defined'
-var mainPara;
+var mainParagraph;
 if (document !== "undefined") {
     // Code that relies on the document object
     document.cookie = 'CookieName=NULL; SameSite=Strict';
 }
 let widthOffset = 18;
+const imgs = document.querySelectorAll('img');
 
 /**
  * LaTex formula conversion support
@@ -17,6 +18,34 @@ window.MathJax = {
     tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
     svg: { fontCache: 'global' }
 };
+
+// Scroll position maintainer variables
+let scrollPosition = { x: 0, y: 0 };
+let isResizing = false;
+
+/**
+ * Store current scroll position
+ */
+function storeScrollPosition() {
+    scrollPosition.x =
+        window.pageXOffset || document.documentElement.scrollLeft;
+    scrollPosition.y =
+        window.pageYOffset || document.documentElement.scrollTop;
+}
+
+/**
+ * Restore scroll position with optional offset adjustment
+ * @param {number} [offsetY=0] Additional Y offset in pixels
+ * @param {number} [offsetX=0] Additional X offset in pixels
+ */
+function restoreScrollPosition(offsetY=0, offsetX=0) {
+    // Using requestAnimationFrame to wait for scroll completion
+    requestAnimationFrame(() => {
+        window.scrollTo(
+            scrollPosition.x+offsetX, scrollPosition.y+offsetY
+        );
+    });
+}
 
 /**
  * Detection of mobile platform
@@ -32,6 +61,12 @@ function switchPlatform(widthOffset) {
     if (isNaN(widthOffset)) {
         console.error("function switchPlatform(): width offset parameter is not a number")
     }
+    
+    // Store scroll position before making changes
+    if (isResizing) {
+        storeScrollPosition();
+    }
+    
     if (window.innerWidth+widthOffset <= window.innerHeight) { // Mobile / Vertical Layout
         // Set class for the main container div for Mobile only
         let rootDivs = document.querySelectorAll('div.container-desktop.rounded-9.border-main');
@@ -57,9 +92,9 @@ function switchPlatform(widthOffset) {
             rootDivs[i].setAttribute("class", "container-desktop rounded-9 border-main");
         }
         // Increase line height for Desktop
-        mainPara = document.querySelectorAll('p:not([class])');
-        for (let i=0; i<mainPara.length; i++) {
-            mainPara[i].style.lineHeight = "2.5rem";
+        mainParagraph = document.querySelectorAll('p:not([class])');
+        for (let i=0; i<mainParagraph.length; i++) {
+            mainParagraph[i].style.lineHeight = "2.5rem";
         }
         // Increase PPM table's font size for Desktop, because it's massive size
         if (document.getElementsByClassName("table-fit-container align-items-center text-xs").length > 0) {
@@ -70,21 +105,63 @@ function switchPlatform(widthOffset) {
             document.getElementsByClassName("table-fit-container text-xs")[0].setAttribute("class", "table-fit-container text-smaller");
         }
     }
+    
+    // Restore scroll position after making changes
+    if (isResizing) {
+        restoreScrollPosition();
+    }
 }
 
-window.addEventListener(
-    'resize', ()=>{switchPlatform(widthOffset)}, false
-);
+let resizeTimeout; // Debouncing value
+window.addEventListener('resize', () => {
+    isResizing = true;
+    
+    // Clear existing timeout
+    if (resizeTimeout) {
+        clearTimeout(resizeTimeout);
+    }
+    
+    // Store scroll position immediately
+    storeScrollPosition();
+    
+    // Debounce
+    resizeTimeout = setTimeout(() => {
+        switchPlatform(widthOffset);
+        isResizing = false;
+    }, 100);
+}, false);
+
+// Store initial scroll position on load
+window.addEventListener('load', () => {
+    storeScrollPosition();
+}, false);
+
+// Update scroll position on scroll (when user scrolls between resize events)
+let scrollTimeout; // Debouncing value
+window.addEventListener('scroll', () => {
+    if (scrollTimeout) {
+        clearTimeout(scrollTimeout);
+    }
+    
+    scrollTimeout = setTimeout(() => {
+        if (!isResizing) {
+            storeScrollPosition();
+        }
+    }, 50); // 50ms delay for scroll updates
+}, { passive: true });
+
 window.switchPlatform(widthOffset); // Call this function during load as well
 
 /**
  * Click image to enlarge && copy 'alt' attribute to 'title' so I don't have to manual write everything painstakingly
  * The 'Click image to enlarge' has many edge cases as left-right to top-down layout changes with edge cases are considered because all image should support it
  */
-const imgs = document.querySelectorAll('img');
 for (let i=0; i<imgs.length; i++) {
     let LR_UD_ID = 0;
     imgs[i].addEventListener('click', ()=>{ 
+        // Store scroll position before image size change
+        storeScrollPosition();
+        
         switch(imgs[i].getAttribute('class')) {
             case 'img-medium':
                 imgs[i].setAttribute("class", "");
@@ -175,11 +252,15 @@ for (let i=0; i<imgs.length; i++) {
                 console.log("Click image event switch failed: calculated id "+LR_UD_ID);
                 break;
         }
+        // Restore scroll position after image size change
+        setTimeout(() => {
+            restoreScrollPosition();
+        }, 10);
     }, false);
+
     // Set title attribute with alt attribute
     imgs[i].setAttribute('title', imgs[i].getAttribute('alt'));
 }
-
 /**
  * Change all anchor behavior to open external page
  * Modified to used class name detection, so it is more html compliant
@@ -200,10 +281,19 @@ var collapseBtns = document.getElementsByClassName('collapsible');
 /* Register collapse event to all buttons */
 for (let i = 0; i < collapseBtns.length; i++) {
     collapseBtns[i].addEventListener("click", function() {
+        // Store scroll position before collapse/expand
+        storeScrollPosition();
+        
         this.classList.toggle("active"); // Change button text from "-" to "+"
         var collContent = this.nextElementSibling;
-        if (collContent.style.display === "block") { collContent.style.display = "none"; }
-        else { collContent.style.display = "block"; }
+        collContent.style.display === "block"
+            ? collContent.style.display = "none"
+            : collContent.style.display = "block";
+        
+        // Restore scroll position after collapse/expand
+        setTimeout(() => {
+            restoreScrollPosition();
+        }, 10);
     });
 }
 
@@ -213,6 +303,10 @@ for (let i = 0; i < collapseBtns.length; i++) {
  */
 function toggleCollapseAll() {
     "use strict";
+
+    // Store scroll position before toggling
+    storeScrollPosition();
+
     collapseBtns[0].click();
     // Syncronize, in case some collapsed content are expanded and some aren't
     if (collapseBtns[0].classList.contains("active")) {
@@ -231,13 +325,21 @@ function toggleCollapseAll() {
             }
         }
     }
+    // Restore scroll position after all toggles
+    setTimeout(() => {
+        restoreScrollPosition();
+    }, 50);
 }
 
 const printT =
     document.querySelector('div.container-title');
 const printC =
-    document.querySelector('div.container-desktop.rounded-9.border-main')
-    || document.querySelector('div.container-mobile.rounded-9.border-main');
+    document.querySelector(
+        'div.container-desktop.rounded-9.border-main'
+    )
+    || document.querySelector(
+        'div.container-mobile.rounded-9.border-main'
+    );
 
 /**
  * Printing support 3 - Remove main div class and background
@@ -248,9 +350,17 @@ function printMode() {
         console.log("printMode(): Already in printing mode");
         return;
     }
+    // Store scroll position before entering print mode
+    storeScrollPosition();
+    
     printT.setAttribute("class", "");
     printC.setAttribute("class", "");
     loadAllImages();
+    
+    // Restore scroll position after entering print mode
+    setTimeout(() => {
+        restoreScrollPosition();
+    }, 100);
 }
 
 /**
@@ -263,13 +373,22 @@ function printModeOff() {
         console.log("printModeOff(): Already exited printing mode");
         return;
     }
+    // Store scroll position before entering print mode
+    storeScrollPosition();
+
     printT.setAttribute("class", "container-title");
-    if (window.innerWidth+widthOffset <= window.innerHeight) { // Mobile / Vertical Layout
-        printC.setAttribute("class", "container-mobile rounded-9 border-main");
-    }
-    else {
-        printC.setAttribute("class", "container-desktop rounded-9 border-main");
-    }
+    window.innerWidth+widthOffset <= window.innerHeight // Mobile / Vertical Layout
+        ? printC.setAttribute(
+            "class", "container-mobile rounded-9 border-main"
+        )
+        : printC.setAttribute(
+            "class", "container-desktop rounded-9 border-main"
+        );
+
+    // Restore scroll position after entering print mode
+    setTimeout(() => {
+        restoreScrollPosition();
+    }, 100);
 }
 
 /**
@@ -290,10 +409,12 @@ function loadAllImages() {
  * @param {number} [decimalPlaces=2] Change decimal places
  */
 function roundDecimals(className, decimalPlaces=2) {
-    const tables = document.querySelectorAll(`table.${className}`);
+    const tables =
+        document.querySelectorAll(`table.${className}`);
 
     tables.forEach(table => {
-        const cells = table.getElementsByTagName("td");
+        const cells =
+            table.getElementsByTagName("td");
 
         for (let cell of cells) {
             const text = cell.textContent.trim();
@@ -302,14 +423,14 @@ function roundDecimals(className, decimalPlaces=2) {
                 cell.title = text;
 
                 if (isDecimalOverTwo(num)) {
-                    cell.textContent = num.toFixed(decimalPlaces);
+                    cell.textContent =
+                        num.toFixed(decimalPlaces);
                 }
             }
         }
     });
 }
 roundDecimals("two-decimals");
-
 /*
  * Low precision fast decimal precision getter
  * @credit https://stackoverflow.com/questions/9553354
@@ -325,8 +446,7 @@ function getDecimalPlaces(float) {
         places++;
     }
     return places;
-}
-*/
+}*/
 
 /**
  * Check if decimal places is over 2
@@ -335,4 +455,24 @@ function getDecimalPlaces(float) {
  */
 function isDecimalOverTwo(float) {
     return Math.round(float * 100) / 100 !== float;
+}
+
+// Utility functions for manual scroll position management (optional)
+
+/**
+ * Manually store current scroll position (useful for custom scenarios)
+ * @returns {Object} Current scroll position {x, y}
+ */
+function manualStoreScrollPosition() {
+    storeScrollPosition();
+    return { ...scrollPosition };
+}
+
+/**
+ * Manually restore scroll position (useful for custom scenarios)
+ * @param {number} [offsetY=0] Additional Y offset
+ * @param {number} [offsetX=0] Additional X offset
+ */
+function manualRestoreScrollPosition(offsetY = 0, offsetX = 0) {
+    restoreScrollPosition(offsetY, offsetX);
 }
