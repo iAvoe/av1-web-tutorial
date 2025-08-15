@@ -9,6 +9,7 @@ if (document !== "undefined") {
     document.cookie = 'CookieName=NULL; SameSite=Strict';
 }
 let widthOffset = 18;
+let resizeTimeout; // Debouncing value
 const imgs = document.querySelectorAll('img');
 
 /**
@@ -150,7 +151,6 @@ function switchPlatform(widthOffset=0) {
     }
 }
 
-let resizeTimeout; // Debouncing value
 window.addEventListener('resize', () => {
     isResizing = true;
     
@@ -192,7 +192,7 @@ window.switchPlatform(widthOffset); // Call this function during load as well
 
 /**
  * Click image to enlarge && copy 'alt' attribute to 'title' so I don't have to manual write everything painstakingly
- * The 'Click image to enlarge' has many edge cases as left-right to top-down layout changes with edge cases are considered because all image should support it
+ * The 'Click image to enlarge' has edge cases considered, making it complicated
  */
 for (let i=0; i<imgs.length; i++) {
     let LR_UD_ID = 0;
