@@ -960,7 +960,7 @@
 
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：DRL 内帧的更迭，解码的顺序</button>
             <div class="coll-content">
-                <p>此外，被参考帧列表中还为帧内编码帧 <code class="code-bold">INTRA_FRAME</code> 留了一个位子，所以共长 8 帧。编码时，VP9 与 AV1 会选择这 8 帧中的任意帧。如 AV1 的帧内帧间混合模式（Interintra）中，这个分块的参考帧列表可能会是 <code class="code-bold">RefFrame[0] = LAST_FRAME; RefFrame[1] = INTRA_FRAME;</code>。</p>
+                <p>此外，被参考帧列表中还为帧内编码帧 <code class="code-bold">INTRA_FRAME</code> 留了一个位子，所以共长 8 帧。编码时，VP9 与 AV1 会选择这 8 帧中的任意帧。如 AV1 的帧内帧间蒙版混合模式（Compound Interintra）中，这个分块的参考帧列表可能会是 <code class="code-bold">RefFrame[0] = LAST_FRAME; RefFrame[1] = INTRA_FRAME;</code>。</p>
                 <p>在当前编码帧选择并完成了帧间预测后，其帧间预测的结果可以选择替换掉被参考帧列表中的任意帧，包括刷新清空该列表；跳过、替换、刷新操作与播放视频的过程一致。解码顺序<i>大致为</i>：</p>
                 <ol>
                     <li><code class="code-bold">GOLDEN</code></li>
@@ -1527,10 +1527,10 @@ typedef enum { // 一般模式
                 </li>
                 <li>拼合混合参考块所用的 2 项参考源或 2 种动态补偿：
                     <ul class="text-smaller">
-                        <li>帧间距离加权/平均预测分权 Distance、Average</li>
-                        <li>差值加权/差值调制预测分权 Difference / modulated</li>
-                        <li>帧内帧间模式分权 Compound InterIntra</li>
-                        <li>楔形蒙版预测分权 Wedge mask</li>
+                        <li>帧间间距加权分权（含平均权重/等重情况）Distance weighted predictor（with avg. case）</li>
+                        <li>画面差距调制分权 Difference predictor（aka. Modulated predictor）</li>
+                        <li>帧内帧间蒙版混合分权 Compound InterIntra mask predictor</li>
+                        <li>楔形蒙版预测分权 Wedge mask predictor</li>
                     </ul>
                 </li>
             </ol>
@@ -1584,7 +1584,7 @@ typedef enum { // 一般模式
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（1/2）单帧参考帧筛选</button>
             <div class="coll-content">
                 <h4>（1/2）单帧参考帧筛选</h4>
-                <p>动态搜索以及 MVRS 得到的预测量中，按照动态向量的长度，由（帧间距离）进到远排序（?）：</p>
+                <p>动态搜索以及 MVRS 得到的预测量中，按照动态向量的长度，由（帧间间距）进到远排序（?）：</p>
                 <ul>
                     <li><code class="code-bold">NEARESTMV</code>：第 1 种动态向量</li>
                     <li><code class="code-bold">NEWMV</code>：第 1~3 种动态向量中筛选，附有预测向量与实际向量的差距（MV difference，MVD）</li>
@@ -1930,28 +1930,26 @@ static const int mode_2_counter[] = { // 帧内 + 帧间预测模式表
                     <li><code class="code-bold">IDENTITY</code>：IDTX 变换</li>
                     <li><code class="code-bold">TRANSLATION</code>：平移变换</li>
                     <li><code class="code-bold">ROTZOOM</code>：平移，旋转和对称放大变换</li>
-                    <li><code class="code-bold">AFFINE</code>：本格仿射变换</li>
+                    <li><code class="code-bold">AFFINE</code>：正仿射变换</li>
                 </ul>
             </div>
 
             <h3>帧间预测——混合参考帧运动补偿</h3>
+            <p>加权预测（Weighted prediction）的原理很直白：对于一个双向预测分块来说，前帧块用 60% 的像素值、后帧用 40% 的像素值，两两相加所得的预测块可能会比前后各 50% 的相加结果更接近原画，达到增冗余加画质的目的。这两瓣权重值可以从参考帧的顺序距离、画面差距等简单现象推导，但精确度——画质还有提升的空间。AV1 标准对加权权重的测算与可用的模式相比更早的编码标准都有着体系化的改进。</p>
 
-            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（1/6）权重分配</button>
-            <div class="coll-content">
-                <h4>（1/6）权重分配</h4>
-                <p>单帧参考帧下，一格预测像素可以表示为 <span class="text-blue-math">\( P\left(x,y\right) = m\left(x,y\right) \cdot R\left(x,y\right)\)</span>，代表“预测值为缩放值与初始值的积”。混合参考帧结合了两帧被参考帧，因此在“重叠的预测像素”上也需要分配权重，如某个预测像素的值为：<span class="text-blue-math">\[ P\left(x,y\right) = m\left(x,y\right) ∗ R_{1}\left(x,y\right) + (64 - m\left(x,y\right)) ∗ R_{2}\left(x,y\right) \]</span></p>
-                <p>这里的权重/缩放值 <span class="text-blue-math">\( m\left(x,y\right) \)</span> 最大（100%）被放大了 64 倍，从而优化为整数计算并提高精度。</p>
-            </div>
+            <h4>（1/5）加权权重分配（分权）</h4>
+            <p>单帧参考帧（P 帧）下，一格预测像素可以用式子表示：<span class="text-blue-math">\( P\left(x,y\right) = m\left(x,y\right) \cdot R\left(x,y\right)\)</span>，代表“预测值为缩放值与初始值的积”。混合参考帧结合了两帧被参考帧，因此在“重叠的预测像素”上也需要分配权重，如某个预测像素的值为：<span class="text-blue-math">\[ P\left(x,y\right) = m\left(x,y\right) ∗ R_{1}\left(x,y\right) + (64 - m\left(x,y\right)) ∗ R_{2}\left(x,y\right) \]</span></p>
+            <p>这里的权重/缩放值 <span class="text-blue-math">\( m\left(x,y\right) \)</span> 最大（100%）被放大了 64 倍，原因是要避免浮点计算。</p>
 
-            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（2~3/6）帧间距离加权、平均加权模式分权 Distance & average weighted predictor</button>
+            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（2/5）帧间间距加权分权 Distance weighted predictor（with average case）</button>
             <div class="coll-content">
-                <h4>（2~3/6）帧间距离加权、平均加权模式分权 Distance & average weighted predictor</h4>
+                <h4>（2/5）帧间间距加权分权 Distance weighted predictor（with average case）</h4>
                 <p>将 <span class="text-blue-math">\( d_1, d_2 \)</span> 作为混合被参考帧距离当前预测块的距离，根据 <span class="text-blue-math">\(d_2\)</span> 小于 <span class="text-blue-math">\(d_1\)</span> 的多少倍来确定权重。特殊情况为“平均加权模式分权 Average weighted predictor”，即距离加权分配中出现距离相等的情况。注：分为帧间以及帧内两种加权权重。</p>
             </div>
 
-            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（4/6）差值加权模式分权 Difference weighted / modulated predictor</button>
+            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（3/5）画面差距调制分权 Difference predictor（aka. Modulated predictor）</button>
             <div class="coll-content">
-                <h4>（4/6）差值加权模式分权 Difference weighted / modulated predictor</h4>
+                <h4>（3/5）画面差距调制分权 Difference predictor（aka. Modulated predictor）</h4>
                 <p>直接从两个被参考帧中的同位像素做差，权重设定为：</p>
                 <span class="text-blue-math">\[m\left(x,y\right) = \begin{cases} 
                     38 + \frac{\left| P_{1}\left(x,y\right) - P_{2}\left(x,y\right) \right|}{16}
@@ -1961,19 +1959,22 @@ static const int mode_2_counter[] = { // 帧内 + 帧间预测模式表
                 \end{cases}\]</span>
             </div>
 
-            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（5/6）帧内帧间混合模式分权 Compound InterIntra Predictor</button>
+            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（4/5）帧内帧间蒙版混合分权 Compound InterIntra mask predictor</button>
             <div class="coll-content">
-                <h4>（5/6）帧内帧间混合模式分权 Compound InterIntra Predictor</h4>
-                <p>重叠块运动补偿 OBMC 见下方的运动补偿版块中，结合 DC、垂直/水平夹角或平滑/SMOOTH 的帧内编码块，以及仿射预测的帧间编码块。结合的方法包括了楔形蒙版预测的横向和纵向模式，但主要为随坐标变化过渡权重的两种预测结果混合，实现合成。</p>
+                <h4>（4/5）帧内帧间蒙版混合分权 Compound InterIntra mask predictor</h4>
+                <p>从正统的双向帧间预测（Bidirectional Prediction）中扩展出的新思路——“一侧预测”指向同一帧/帧内的参考源（参考源当然也会使用帧内编码，所以可以理解为 I 块），再通过指定使用特定的蒙版，使得平面（DC）、斜面/横斜/纵斜（SMOOTH/_H/_V）、垂直/水平夹角的<i>帧内编码块</i>与仿射预测的<i>帧间编码块</i>为素材/参考源，这些限定条件是为了保证预测结果的可用性。</p>
+                <p>结合则使用楔形蒙版预测的横向和纵向模式，但主要还是随坐标过渡权重（渐变蒙版）的两种预测结果混合，实现预测。</p>
+                <p class="text-gray-side">注：之所以叫“InterIntra”，是因为其它的分权方法都基于“InterInter”，即左右两侧皆指向其它帧，构成帧间预测。</p>
+                <p class="text-gray-side">注：重叠块运动补偿 OBMC 见下方的运动补偿版块中</p>
                 <div class="align-items-center">
                     <img loading="lazy" src="files/inter-prediction/compound-interintra-prediction.png" alt="imageR" class="img-medium">
                     <p class="text-gray-side mt-0">图：重叠合成的可行样式与渐变结构</p>
                 </div>
             </div>
 
-            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（6/6）楔形蒙版模式分权 Wedge mask predictor</button>
+            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（5/5）楔形蒙版预测分权 Wedge mask predictor</button>
             <div class="coll-content">
-            <h4>（6/6）楔形蒙版模式分权 Wedge mask predictor</h4>
+            <h4>（5/5）楔形蒙版预测分权 Wedge mask predictor</h4>
             通过长 16 的序列作为指定分割被参考块的蒙版/掩码参数，使两个被参考帧的同位参考块得以叠加，预测出当前块。由于楔形蒙版预测实际是两帧参考帧分别合成，因此预测像素的权重只在重合界处为各自一半（32:32），其余为 64:0 以及 0:64
             <ul>
                 <li><a href="https://aomediacodec.github.io/av1-spec/#wedge-mask-process">AV1 Spec 中</a> 则是从 64x1 的蒙版/掩码（<code>Wedge_Master_Oblique_Odd/Even</code>，<code>Wedge_Master_Vertical</code>）中生成：</li>
@@ -1981,7 +1982,7 @@ static const int mode_2_counter[] = { // 帧内 + 帧间预测模式表
             </div>
 
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：64x1 楔形蒙版初始值</button>
-            <div class="coll-content"><pre><code class="language-cpp">
+            <div class="coll-content"><pre><code class="language-cpp text-smaller">
 Wedge_Master_Oblique_Odd[MASK_MASTER_SIZE] =
 { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 6, 18, 37, 53, 60, 63, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64 }
 
@@ -4868,7 +4869,8 @@ switch (curve) {
             </ul>
 
             <code class="code-bold">--aq-mode</code>
-            <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~2，默认 2：分瓣 VAQ + QP 偏移预测&gt;指定帧间方差自适应量化模式——0：关，1：分瓣 VAQ 调整；2：并且使用 QP 偏移预测</p>
+            <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~2，默认 2：分瓣 VAQ + QP 偏移预测&gt;指定帧间方差自适应量化模式——0：关，1：分瓣 VAQ 调整；2：并且使用 QP 偏移预测。</p>
+            <p class="text-gray-side">注：与 x264、x265 不同，该参数不再调整强度，而是和字面意思一样只调整模式。强度相关设置</p>
 
             <h5>（8/12——3/7）VBR、CBR 模式细节</h5>
             <code class="code-bold">--tbr</code>
@@ -5433,15 +5435,13 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                 <li><b>TXS level</b>：变换块大小搜索级别，见 <a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/master/Docs/Appendix-TX-Search.md">SVT-AV1 Docs</a></li>
                 <li><b>OBMC level</b>：重叠块运动补偿搜索级别，见 <a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/master/Docs/Appendix-Overlapped-Block-Motion-Compensation.md">SVT-AV1 Docs</a></li>
                 <li><b>Filter Intra level</b>：递归插值模式搜索级别</li>
-                <li><b>InterIntra level</b>：混合参考帧的帧内帧间模式搜索级别</li>
-                <li><b>COMP level</b>：混合参考帧的帧间模式（InterInter、Inter-Inter）搜索级别</li>
+                <li><b>COMP level</b>：混合参考帧的帧间模式搜索级别</li>
                 <li><b>TPL level</b>：前瞻时域依赖性建模（Lookahead）级别</li>
                 <li><b>GM level</b>：全局仿射变换动态补偿</li>
                 <li><b>Update CDF level</b>：累积分布函数更新搜索级别</li>
                 <li><b>MRP level</b>：多参考帧搜索范围 Multi reference picture</li>
                 <li><b>Max CAN</b>：模式决策最大候选量 Maximum candidates</li>
                 <li><b>Chroma level</b>：色度平面编码级别（模式决策搜索级别与候选数量）</li>
-                <li><b>DLF level</b>：去块滤镜级别（亮度、色度强度判断搜索、是否检查参考帧所用强度等数据）</li>
                 <li><b>SG filter level</b>：子空间投影回归制导滤镜（SGR）级别</li>
                 <li><b>WN filter level</b>：可拆分对称维纳滤镜（SSW）级别</li>
                 <li><code>rtc_tune</code>：实时编解码（Real-time coding）开关，<code>&#45;&#45;pred-struct 1</code> 时启用</li>
@@ -5474,7 +5474,7 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                     <tr class="border-lr border-bottom">
                         <td class="px-1"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Globals/EbEncHandle.c">TF level</a><br>
                             <span class="text-smaller">
-                                （需 <code>&#45;&#45;enable-tf</code>、<code>--hierarchical-levels &gt;1</code>、<code>--lossless 0</code>，否则关）
+                                <code>&#45;&#45;enable-tf</code>、<code>--hierarchical-levels &gt;1</code>、<code>--lossless 0</code> 时成立
                             </span>
                         </td>
                         <td class="px-1 text-smaller" colspan="3">
@@ -5603,20 +5603,6 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                         <!--<td>11</td>-->
                     </tr>
                     <tr class="border-lr border-bottom">
-                        <td class="px-1"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Codec/EbModeDecisionConfigurationProcess.c">InterIntra level</a></td>
-                        <td class="px-1">0</td>
-                        <td class="px-1 t-light-gray text-smaller" colspan="7"><code>transition_present</code>：2，否则 0</td>
-                        <!--<td>3</td>-->
-                        <!--<td>4</td>-->
-                        <!--<td>5</td>-->
-                        <!--<td>6</td>-->
-                        <!--<td>7</td>-->
-                        <!--<td>8</td>-->
-                        <td class="px-1 t-invert-dark text-smaller" colspan="2"><code>is_base</code>/<code>transition_present</code>：2，否则 0</td>
-                        <!--<td>10</td>-->
-                        <td class="px-1" style="background-color: black; color: white">2</td>
-                    </tr>
-                    <tr class="border-lr border-bottom">
                         <td class="px-1"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Codec/EbModeDecisionConfigurationProcess.c">COMP level</a></td>
                         <td class="px-1" colspan="8">0</td>
                         <!--<td>2</td>-->
@@ -5690,7 +5676,9 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                         <td class="px-1 t-light-gray" colspan="3">源 &gt; 640x360 或 <code>&#45;&#45;fast-decode 2<code>：9，否则 2</td>
                     </tr>-->
                     <tr class="border-lr border-bottom">
-                        <td class="px-1"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Globals/EbEncHandle.c">TPL level</a><br><span class="text-smaller">（关缩放/超分辨率环路、<code>pred-struct 2</code><code>aq-mode &gt; 0</code>、<code>pass &gt; 1</code>）</span></td>
+                        <td class="px-1"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Globals/EbEncHandle.c">TPL level</a><br>
+                            <span class="text-smaller"><code>--pred-struct 2</code>、<code>--aq-mode &gt; 0</code>、关缩放/超分辨率环路时成立；N-Pass 模式下唯第二或再而次成立</span>
+                        </td>
                         <td class="px-1 t-light-gray">6</td>
                         <td class="px-1 t-light-gray">5</td>
                         <td class="px-1 t-light-gray" colspan="2">4</td>
@@ -5704,7 +5692,7 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                         <!--<td>11</td>-->
                     </tr>
                     <tr class="border-lr border-bottom">
-                        <td class="px-1"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Codec/EbPictureDecisionProcess.c">GM level</a><span class="text-smaller">（关缩放/超分辨率环路）</span></td>
+                        <td class="px-1"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Codec/EbPictureDecisionProcess.c">GM level</a><br><span class="text-smaller">关缩放/超分辨率环路时成立</span></td>
                         <td class="px-1 t-light-gray text-smaller" colspan="5"><code>is_ref</code>：关，否则 6</td>
                         <!--<td>2</td>-->
                         <!--<td>3</td>-->
@@ -5733,7 +5721,7 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                         <td class="px-1" style="background-color: black; color: white">1225</td>
                     </tr>
                     <tr class="border-lr border-bottom">
-                        <td class="px-1"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Codec/EbPictureDecisionProcess.c">CDEF level</a><span class="text-smaller">（关 IBC）</span></td>
+                        <td class="px-1"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Codec/EbPictureDecisionProcess.c">CDEF level</a>，<span class="text-smaller">关帧内块拷贝模式（IBC）时成立</span></td>
                         <td class="px-1 t-light-gray text-smaller" colspan="3"><code>is_base</code>：8，否则针对 <code>is_ref</code>：9，否则 10</td>
                         <!--<td>2</td>-->
                         <!--<td>3</td>-->
@@ -5842,7 +5830,7 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                         <!--<td>2</td>-->
                         <!--<td>3</td>-->
                         <!--<td>4</td>-->
-                        <td class="px-1 t-invert-light text-smaller" colspan="3">（由率控制模式指定的）GOP QP 小于等于 57：64，否则 128</td>
+                        <td class="px-1 t-invert-light text-smaller" colspan="3">率控制模式指定的 GOP QP 小于等于 57：64，否则 128</td>
                         <!--<td>6</td>-->
                         <!--<td>7</td>-->
                         <td class="px-1 t-invert-dark text-smaller">GOP QP 小于等于 56：64，否则 128</td>
@@ -5865,12 +5853,16 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                         <!--<td>11</td>-->
                     </tr>
                     <tr class="border-lr border-bottom">
-                        <td class="px-1 text-smaller">帧内编码 DC、SMOOTH/_H/_V、夹角、Paeth、CFL</td>
-                        <td class="px-1 t-light-gray" colspan="11">开</td>
+                        <td class="px-1">帧内编码</td>
+                        <td class="px-1" colspan="4">
+                            <span class="text-smaller">平面（DC）模式、斜面（SMOOTH/_H/_V）模式、夹角模式、Paeth（PNG）模式、亮度拷色度/色度填亮度（CFL）模式</span>
+                        </td>
                         <!--<td>2</td>-->
                         <!--<td>3</td>-->
                         <!--<td>4</td>-->
-                        <!--<td>5</td>-->
+                        <td class="px-1 t-invert-light" colspan="7">
+                            <span class="text-smaller">平面（DC）模式、斜面/横斜/纵斜（SMOOTH/_H/_V）模式、夹角模式、Paeth（PNG）模式、亮度拷色度/色度填亮度（CFL）模式、递归插值（Recursive）模式</span>
+                        </td>
                         <!--<td>6</td>-->
                         <!--<td>7</td>-->
                         <!--<td>8</td>-->
@@ -5879,7 +5871,7 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                         <!--<td>11</td>-->
                     </tr>
                     <tr class="border-lr border-bottom">
-                        <td class="px-1"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Codec/EbPictureDecisionProcess.c">IBC level</a><span class="text-smaller"></span></td>
+                        <td class="px-1"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Codec/EbPictureDecisionProcess.c">IBC level</a></td>
                         <td class="px-1 t-light-gray">6</td>
                         <td class="px-1 t-light-gray" colspan="2">5</td>
                         <!--<td>4</td>-->
@@ -5899,20 +5891,6 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                         <!--<td>3</td>-->
                         <!--<td>4</td>-->
                         <!--<td>5</td>-->
-                        <!--<td>6</td>-->
-                        <!--<td>7</td>-->
-                        <!--<td>8</td>-->
-                        <!--<td>9</td>-->
-                        <!--<td>10</td>-->
-                        <!--<td>11</td>-->
-                    </tr>
-                    <tr class="border-lr border-bottom">
-                        <td class="px-1">帧内编码递归插值模式</td>
-                        <td class="px-1" colspan="4">关</td>
-                        <!--<td>2</td>-->
-                        <!--<td>3</td>-->
-                        <!--<td>4</td>-->
-                        <td class="px-1 t-invert-light" colspan="7">开</td>
                         <!--<td>6</td>-->
                         <!--<td>7</td>-->
                         <!--<td>8</td>-->
@@ -5963,7 +5941,7 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                         <!--<td>11</td>-->
                     </tr>
                     <tr class="border-lr border-bottom">
-                        <td class="px-1">仿射变换动态补偿</td>
+                        <td class="px-1">仿射变换动态补偿</td><!-- TODO: 其它动态补偿呢？ -->
                         <td class="px-1 t-light-gray" colspan="11">开</td>
                         <!--<td>2</td>-->
                         <!--<td>3</td>-->
@@ -5990,49 +5968,10 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                         <!--<td>10</td>-->
                         <!--<td>11</td>-->
                     </tr>
-                    <tr class="border-lr border-bottom">
-                        <td class="px-1">楔形蒙版预测分权</td>
-                        <td class="px-1" colspan="8">关</td>
-                        <!--<td>3</td>-->
-                        <!--<td>4</td>-->
-                        <!--<td>5</td>-->
-                        <!--<td>6</td>-->
-                        <!--<td>7</td>-->
-                        <!--<td>8</td>-->
-                        <!--<td>9</td>-->
-                        <td class="px-1 t-invert-dark" colspan="3">开</td>
-                        <!--<td>11</td>-->
-                    </tr>
-                    <tr class="border-lr border-bottom">
-                        <td class="px-1">帧间距离加权分权</td>
-                        <td class="px-1" colspan="8">关</td>
-                        <!--<td>3</td>-->
-                        <!--<td>4</td>-->
-                        <!--<td>5</td>-->
-                        <!--<td>6</td>-->
-                        <!--<td>7</td>-->
-                        <!--<td>8</td>-->
-                        <!--<td>9</td>-->
-                        <td class="px-1 t-invert-dark" colspan="3">开</td>
-                        <!--<td>11</td>-->
-                    </tr>
-                    <tr class="border-lr border-bottom">
-                        <td class="px-1">差值加权模式分权</td>
-                        <td class="px-1" colspan="8">关</td>
-                        <!--<td>3</td>-->
-                        <!--<td>4</td>-->
-                        <!--<td>5</td>-->
-                        <!--<td>6</td>-->
-                        <!--<td>7</td>-->
-                        <!--<td>8</td>-->
-                        <!--<td>9</td>-->
-                        <td class="px-1 t-invert-dark" colspan="3">开</td>
-                        <!--<td>11</td>-->
-                    </tr>
                 </tbody>
             </table></div>
-
-            <h5>（12/12——1/2）<a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/master/Source/Lib/Codec/enc_mode_config.c#L1302">DLF level</a>：</h5>
+            <h5>（12/12——1/3）去块滤镜级别 <a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/master/Source/Lib/Codec/enc_mode_config.c#L1302">DLF level</a>：</h5>
+            <p>涉及亮度、色度强度判断搜索、是否检查参考帧所用强度等开关。</p>
             <div id="presetParamTable2" class="overflow-auto mt-3"><table class="table-center text-smaller">
                 <thead>
                     <tr class="border-lr border-top">
@@ -6044,7 +5983,7 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                 </thead>
                 <tbody>
                     <tr class="border-lr border-bottom t-light-gray align-items-center text-smaller">
-                        <td class="px-1"><b>10+</b></td>
+                        <td class="px-1"><b>10~+</b></td>
                         <td class="px-1"><code>is_not_last_layer</code>：7，否则：0</td>
                         <td colspan="2">
                             <code>coeff_lvl</code> 高：<code>is_base</code>：6，否则：0<br>
@@ -6100,8 +6039,51 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                     </tr>
                 </tbody>
             </table></div>
-            <!--<h5>（12/12——2/3）HBD 模式</h4><p>即高位深模式，当视频源大于 8bit 时自动启用，并更改一些模式决策的逻辑。</p>-->
-            <h5>（12/12——2/2）分辨率常量</h5>
+            <h5>（12/12——2/3）混合参考帧分权强度级别 Compond Reference Frame Weighting Level</h5>
+            <p>混合参考帧/双向参考帧/B 帧的高级加权操作。InterIntra 代表一侧指向同帧 I 块的 B 帧，InterInter 则代表传统 B 帧。</p>
+            <div id="presetParamTable3" class="overflow-auto mt-3"><table class="table-center text-smaller">
+                <thead>
+                    <tr class="border-lr border-top">
+                        <th class="px-1">预设</th>
+                        <th class="px-1">InterIntra 分权 
+                            <a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Codec/EbModeDecisionConfigurationProcess.c">
+                                InterIntra level
+                            </a>
+                        </th>
+                        <th class="px-1">InterInter 分权（楔形蒙版、帧间间距、画面差距）</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- p10 -->
+                    <tr class="border-lr border-bottom t-light-gray text-smaller">
+                        <td class="px-1"><b>10~+</b></td>
+                        <td class="px-3">0</td>
+                        <td class="px-3" rowspan="2">关</td>
+                    </tr>
+        
+                    <!-- p9~4 -->
+                    <tr class="border-lr border-bottom t-light-gray text-smaller">
+                        <td class="px-1"><b>9–4</b></td>
+                        <td class="px-3"><code>transition_present</code>：2，否则 0</td>
+                        <!--<td class="px-3">关</td>-->
+                    </tr>
+                    <!-- p3~1 -->
+                    <tr class="border-lr border-bottom t-invert-dark text-smaller">
+                        <td class="px-1"><b>3–1</b></td>
+                        <td class="px-3"><code>is_base</code>/<code>transition_present</code>：2，否则 0</td>
+                        <td class="px-3" rowspan="2">开</td>
+                    </tr>
+                    <!-- p0 -->
+                    <tr class="border-lr text-smaller" style="background-color: black; color: white">
+                        <td class="px-1"><b>0</b></td>
+                        <td class="px-3">2</td>
+                        <!--<td class="px-3">开</td>-->
+                    </tr>
+                </tbody>
+            </table></div>
+
+            <!--<h5>（12/12——4/4）HBD 模式</h4><p>即高位深模式，当视频源大于 8bit 时自动启用，并更改一些模式决策的逻辑。</p>-->
+            <h5>（12/12——3/3）分辨率常量</h5>
             <p>SVT-AV1 会根据视频分辨率的积，在 <code>&#45;&#45;preset</code> 参数之上进一步确立参数强度。</p>
             <table id="svtav1ResConsts" class="table-center">
                 <thead>
@@ -13568,7 +13550,7 @@ Max Latency:		27642 ms
             <p>尽管 AV1 编码器有强大的帧间参考系统，但在压缩 24 秒、36 秒（2 倍、3 倍）关键帧间隔时没能起到显著或有效的提升。在简单（动漫材质动画，3D 动画）场景的压缩率提升在 2%；复杂片源中则因为关键帧过长出现了码率反增的副作用。因此“大幅提高 GOP 长度、开启最高的分层预测结构层数、并降低关键帧量化强度”被证明无效，也不需要进行画质跑分了。</p>
 
             <h3>测试——SVT-AV1 全功能 B 帧与片源特化参数测试</h3>
-            <p>由于 x265 一开始就使用了高压缩高画质自定义参数，所以只使用一般~快速选项的 SVT-AV1 才显得不足。本次测试会使用更慢的 <code>&#45;&#45;preset 2</code> 预设，该预设下 SVT-AV1 会解锁楔形蒙版、距离加权、差值加权等混合参考模式；同时让最小细分块缩小到 4x4，从而提高画面精细度（其它 preset 变更见上方预设参数说明）；与此同时，将上述测试中得出的理论优解按照画面类型选出综合材质动画、综合材质录像两类同时优化画质和码率的参数，再进行交叉测试。</p>
+            <p>由于 x265 一开始就使用了高压缩高画质自定义参数，所以只使用一般~快速选项的 SVT-AV1 才显得不足。本次测试会使用更慢的 <code>&#45;&#45;preset 2</code> 预设，该预设下 SVT-AV1 会解锁楔形蒙版、距离、画面差距等混合参考分权算法；同时让最小细分块缩小到 4x4，从而提高画面精细度（其它 preset 变更见上方预设参数说明）；与此同时，将上述测试中得出的理论优解按照画面类型选出综合材质动画、综合材质录像两类同时优化画质和码率的参数，再进行交叉测试。</p>
 
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（1/8）SVT-AV1 v3.0——SolLevante</button>
             <div class="coll-content">
