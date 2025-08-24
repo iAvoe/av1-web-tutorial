@@ -5982,7 +5982,7 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                     </tr>
                 </thead>
                 <tbody>
-                    <tr class="border-lr border-bottom t-light-gray align-items-center text-smaller">
+                    <tr class="border-lr border-bottom t-light-gray align-items-center">
                         <td class="px-1"><b>10~+</b></td>
                         <td class="px-1"><code>is_not_last_layer</code>：7，否则：0</td>
                         <td colspan="2">
@@ -5990,7 +5990,7 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                             <code>coeff_lvl</code> 中~低：<code>is_base</code>：5，否则 <code>is_not_last_layer</code>：7，否则：0
                         </td>
                     </tr>
-                    <tr class="border-lr border-bottom t-light-gray text-smaller">
+                    <tr class="border-lr border-bottom t-light-gray">
                         <td class="px-1"><b>9</b></td>
                         <td class="px-1"><code>is_base</code>：5，否则 <code>is_not_last_layer</code>：6，否则：0</td>
                         <td class="px-1">
@@ -5999,7 +5999,7 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                         </td>
                         <td class="px-1">同 10+ 快速模式</td>
                     </tr>
-                    <tr class="border-lr border-bottom t-light-gray text-smaller">
+                    <tr class="border-lr border-bottom t-light-gray">
                         <td class="px-1"><b>8</b></td>
                         <td class="px-1"><code>is_base</code>：5，否则 <code>is_not_last_layer</code>：6，否则：0</td>
                         <td class="px-1">
@@ -6011,25 +6011,25 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                             <code>fast_decode 2</code>：同 10+ 快速模式
                         </td>
                     </tr>
-                    <tr class="border-lr border-bottom t-light-gray text-smaller">
+                    <tr class="border-lr border-bottom t-light-gray">
                         <td class="px-1"><b>7</b></td>
                         <td class="px-1"><code>is_base</code>：5，否则：6</td>
                         <td class="px-1"><code>is_not_last_layer</code>：3，否则：6</td>
                         <td class="px-1"><code>is_not_last_layer</code>：4，否则：6</td>
                     </tr>
-                    <tr class="border-lr border-bottom t-invert-light text-smaller">
+                    <tr class="border-lr border-bottom t-invert-light">
                         <td class="px-1"><b>5~6</b></td>
                         <td class="px-1"><code>is_base</code>：5，否则：6</td>
                         <td class="px-1">3</td>
                         <td class="px-1">4</td>
                     </tr>
-                    <tr class="border-lr t-invert-light text-smaller">
+                    <tr class="border-lr t-invert-light">
                         <td class="px-1"><b>4</b></td>
                         <td class="px-1"><code>is_base</code>：5，否则：6</td>
                         <td class="px-1">2</td>
                         <td class="px-1">4</td>
                     </tr>
-                    <tr class="border-lr t-invert-dark text-smaller">
+                    <tr class="border-lr t-invert-dark">
                         <td class="px-1"><b>0~3</b></td>
                         <td class="px-1"><code>is_base</code>：5，否则：6</td>
                         <td class="px-1">1</td>
@@ -6055,26 +6055,26 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                 </thead>
                 <tbody>
                     <!-- p10 -->
-                    <tr class="border-lr border-bottom t-light-gray text-smaller">
+                    <tr class="border-lr border-bottom t-light-gray">
                         <td class="px-1"><b>10~+</b></td>
                         <td class="px-3">0</td>
                         <td class="px-3" rowspan="2">关</td>
                     </tr>
         
                     <!-- p9~4 -->
-                    <tr class="border-lr border-bottom t-light-gray text-smaller">
+                    <tr class="border-lr border-bottom t-light-gray">
                         <td class="px-1"><b>9–4</b></td>
                         <td class="px-3"><code>transition_present</code>：2，否则 0</td>
                         <!--<td class="px-3">关</td>-->
                     </tr>
                     <!-- p3~1 -->
-                    <tr class="border-lr border-bottom t-invert-dark text-smaller">
+                    <tr class="border-lr border-bottom t-invert-dark">
                         <td class="px-1"><b>3–1</b></td>
                         <td class="px-3"><code>is_base</code>/<code>transition_present</code>：2，否则 0</td>
                         <td class="px-3" rowspan="2">开</td>
                     </tr>
                     <!-- p0 -->
-                    <tr class="border-lr text-smaller" style="background-color: black; color: white">
+                    <tr class="border-lr" style="background-color: black; color: white">
                         <td class="px-1"><b>0</b></td>
                         <td class="px-3">2</td>
                         <!--<td class="px-3">开</td>-->
