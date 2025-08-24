@@ -5534,7 +5534,8 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                         <td class="px-1 t-invert-dark text-smaller" colspan="3">
                             源分辨率小于等于 1080p <br>
                             且场景复杂度高时：<br>
-                            最小 16x16，最大 192x192，<br>
+                            最小 16x16，<br>
+                            最大 192x192，<br>
                             否则同更快预设
                         </td>
                         <!--<td>9</td>-->
@@ -5542,13 +5543,19 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                     </tr>
                     <tr class="border-lr border-bottom">
                         <td class="px-1 text-smaller"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Codec/EbMotionEstimationProcess.c">HME Refine</a></td>
-                        <td class="px-1 t-light-gray text-smaller" colspan="9">1、2 级分叉皆细化 16x16</td>
+                        <td class="px-1 t-light-gray text-smaller" colspan="9">
+                            1、2 级 HME 分枝<br>
+                            皆细化 16x16
+                        </td>
                         <!--<td>2</td>-->
                         <!--<td>3</td>-->
                         <!--<td>4</td>-->
                         <!--<td>5</td>-->
                         <!--<td>7</td>-->
-                        <td class="px-1 t-invert-dark text-smaller" colspan="2">1、2 级分叉皆细化 8x3</td>
+                        <td class="px-1 t-invert-dark text-smaller" colspan="2">
+                            1、2 级 HME 分枝<br>
+                            皆细化 8x3
+                        </td>
                         <!--<td>9</td>-->
                         <!--<td>10</td>-->
                     </tr>
@@ -5754,7 +5761,7 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                     </tr>
                     <tr class="border-lr border-bottom">
                         <td class="px-1 text-smaller"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Codec/EbModeDecisionProcess.c">Max CAN</a></td>
-                        <td class="px-1 t-light-gray" colspan="4">190</td>
+                        <td class="px-1 t-light-gray text-smaller" colspan="4">190</td>
                         <!--<td>2</td>-->
                         <!--<td>3</td>-->
                         <!--<td>4</td>-->
@@ -5894,10 +5901,16 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                         <!--<td>2</td>-->
                         <!--<td>3</td>-->
                         <!--<td>4</td>-->
-                        <td class="px-1 t-invert-light text-smaller" colspan="3">率控制模式指定的 GOP QP 小于等于 57：64，否则 128</td>
+                        <td class="px-1 t-invert-light text-smaller" colspan="3">
+                            GOP QP 小于等于 57：64，<br>
+                            否则 128
+                        </td>
                         <!--<td>6</td>-->
                         <!--<td>7</td>-->
-                        <td class="px-1 t-invert-dark text-smaller">GOP QP 小于等于 56：64，否则 128</td>
+                        <td class="px-1 t-invert-dark text-smaller">
+                            GOP QP 小于等于 56：64，<br>
+                            否则 128
+                        </td>
                         <td class="px-1 t-invert-dark text-smaller">
                             源分辨率小于等于 480p<br>
                             且 GOP QP 小于等于 56：64，<br>
@@ -6064,17 +6077,29 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                 <tbody>
                     <tr class="border-lr border-bottom t-light-gray align-items-center">
                         <td class="px-1"><b>10~+</b></td>
-                        <td class="px-1"><code>is_not_last_layer</code>：7，否则：0</td>
+                        <td class="px-1">
+                            <code>is_not_last_layer</code>：7，<br>
+                            否则：0
+                        </td>
                         <td colspan="2">
-                            <code>coeff_lvl</code> 高：<code>is_base</code>：6，否则：0<br>
-                            <code>coeff_lvl</code> 中~低：<code>is_base</code>：5，否则 <code>is_not_last_layer</code>：7，否则：0
+                            <code>coeff_lvl</code> 高：<code>is_base</code>：6，<br>
+                            否则：0<br>
+                            <code>coeff_lvl</code> 中~低：<code>is_base</code>：5，<br>
+                            否则 <code>is_not_last_layer</code>：7，<br>
+                            否则：0
                         </td>
                     </tr>
                     <tr class="border-lr border-bottom t-light-gray">
                         <td class="px-1"><b>9</b></td>
-                        <td class="px-1" rowspan="2"><code>is_base</code>：5，否则 <code>is_not_last_layer</code>：6，否则：0</td>
+                        <td class="px-1" rowspan="2">
+                            <code>is_base</code>：5，<br>
+                            否则 <code>is_not_last_layer</code>：6，<br>
+                            否则：0
+                        </td>
                         <td class="px-1">
-                            分辨率小于等于 360p：<code>is_base</code>：5，否则 <code>is_not_last_layer</code>：6，否则：0<br>
+                            分辨率小于等于 360p：<code>is_base</code>：5，<br>
+                            否则 <code>is_not_last_layer</code>：6，<br>
+                            否则：0<br>
                             分辨率大于 360p：同 10+ 一般模式
                         </td>
                         <td class="px-1">同 10+ 快速模式</td>
@@ -6084,18 +6109,31 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                         <!--<td class="px-1"><code>is_base</code>：5，否则 <code>is_not_last_layer</code>：6，否则：0</td>-->
                         <td class="px-1">
                             分辨率小于等于 360p：5<br>
-                            分辨率大于 360p：<code>is_base</code>：5，否则 <code>is_not_last_layer</code>：6，否则：0
+                            分辨率大于 360p：<code>is_base</code>：5，<br>
+                            否则 <code>is_not_last_layer</code>：6，<br>
+                            否则：0
                         </td>
                         <td class="px-1">
-                            <code>&#45;&#45;fast-decode 1</code>：<code>is_base</code>：5，否则 <code>is_not_last_layer</code>：6，否则：0<br>
+                            <code>&#45;&#45;fast-decode 1</code>：<code>is_base</code>：5，<br>
+                            否则 <code>is_not_last_layer</code>：6，<br>
+                            否则：0<br>
                             <code>&#45;&#45;fast-decode 2</code>：同 10+ 快速模式
                         </td>
                     </tr>
                     <tr class="border-lr border-bottom t-light-gray">
                         <td class="px-1"><b>7</b></td>
-                        <td class="px-1" rowspan="4"><code>is_base</code>：5，否则：6</td>
-                        <td class="px-1"><code>is_not_last_layer</code>：3，否则：6</td>
-                        <td class="px-1"><code>is_not_last_layer</code>：4，否则：6</td>
+                        <td class="px-1" rowspan="4">
+                            <code>is_base</code>：5，<br>
+                            否则：6
+                        </td>
+                        <td class="px-1">
+                            <code>is_not_last_layer</code>：3，<br>
+                            否则：6
+                        </td>
+                        <td class="px-1">
+                            <code>is_not_last_layer</code>：4，<br>
+                            否则：6
+                        </td>
                     </tr>
                     <tr class="border-lr border-bottom t-invert-light">
                         <td class="px-1"><b>5~6</b></td>
@@ -6114,7 +6152,8 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                         <!--<td class="px-1"><code>is_base</code>：5，否则：6</td>-->
                         <td class="px-1">1</td>
                         <td class="px-1">
-                            <code>&#45;&#45;fast-decode 1</code>：1，<code>&#45;&#45;fast-decode 2</code>：4
+                            <code>&#45;&#45;fast-decode 1</code>：1，<br>
+                            <code>&#45;&#45;fast-decode 2</code>：4
                         </td>
                     </tr>
                 </tbody>
@@ -6135,7 +6174,7 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                 </thead>
                 <tbody>
                     <!-- p10 -->
-                    <tr class="border-lr border-bottom t-light-gray">
+                    <tr class="border-lr border-bottom">
                         <td class="px-1"><b>10~+</b></td>
                         <td class="px-3">0</td>
                         <td class="px-3" rowspan="2">关</td>
