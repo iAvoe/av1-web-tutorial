@@ -5224,7 +5224,7 @@ typedef enum SvtAv1PredStructure {
             <code class="code-bold">--startup-mg-size</code>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 2~4 或 0，默认 0：关，<span class="text-red-emph">需小于 <code>--hierarchical-levels</code></span>&gt;指定每个关键帧之后首个 mini-GOP 专用的分层预测结构层数。类似于设定连续 B 帧长度——2: 共 3 层，3: 共 4 层，4: 共 5 层。<span class="text-red-emph">猜测：</span>该功能可以在 GOP 本身较长的情况下，缓解 CBR 解码延迟的增长速率，从而使码率分配更合理。</p>
 
-            <h5>设定 Superblock 大小到 64x64 的条件</h5>
+            <h5>设定特大块 Superblock 大小到 64x64 的条件</h5>
             <ul>
                 <li><code>--enable-variance-boost 1</code></li>
                 <li><code>&#45;&#45;preset</code> 大于等于 7，更慢的预设需要高 GOP QP 设置为 64x64</li>
@@ -5525,14 +5525,14 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                         <!--<td>4</td>-->
                         <!--<td>5</td>-->
                         <td class="px-1 t-invert-light text-smaller" colspan="2">
-                            源分辨率大于等于 4k 时<br>
+                            分辨率大于等于 4k 时<br>
                             最小 32x32，<br>
                             最大 192x192；<br>
                             否则同更快预设
                         </td>
                         <!--<td>7</td>-->
                         <td class="px-1 t-invert-dark text-smaller" colspan="3">
-                            源分辨率小于等于 1080p <br>
+                            分辨率小于等于 1080p <br>
                             且场景复杂度高时：<br>
                             最小 16x16，<br>
                             最大 192x192，<br>
@@ -5912,7 +5912,7 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                             否则 128
                         </td>
                         <td class="px-1 t-invert-dark text-smaller">
-                            源分辨率小于等于 480p<br>
+                            分辨率小于等于 480p<br>
                             且 GOP QP 小于等于 56：64，<br>
                             否则 128；<br>
                             源分辨率大于 480p：<br>
@@ -5921,6 +5921,11 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                         </td>
                         <td class="px-1 t-invert-dark" colspan="2">128</td>
                         <!--<td>11</td>-->
+                    </tr>
+                    <tr>
+                        <td class="px-1 text-gray-note text-smaller" colspan="12">
+                            Superblock 预设生效条件：<code>--enable-variance-boost 0</code>（关）、<code>&#45;&#45;fast-decode 0</code>（关）、<code>&#45;&#45;resize-mode 0</code>（关）、<code>--pred-struct 2</code>
+                        </td>
                     </tr>
                     <tr class="border-lr border-bottom">
                         <td class="px-1 text-smaller">最小细分块大小</td>
@@ -5943,7 +5948,7 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                             斜面（SMOOTH/_H/_V）、<br>
                             夹角、<br>
                             Paeth（PNG）、<br>
-                            色度填亮度（CFL）
+                            色度填亮度（CFL）<br><span class="text-gray-note">TODO：待进一步证实</span>
                         </td>
                         <!--<td>2</td>-->
                         <!--<td>3</td>-->
