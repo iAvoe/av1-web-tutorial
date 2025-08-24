@@ -5475,11 +5475,7 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                 </thead>
                 <tbody>
                     <tr class="border-lr border-bottom">
-                        <td class="px-1"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Globals/EbEncHandle.c">TF level</a><br>
-                            <span class="text-smaller">
-                                <code>&#45;&#45;enable-tf</code>、<code>--hierarchical-levels</code> 大于 1、<code>--lossless 0</code> 时成立
-                            </span>
-                        </td>
+                        <td class="px-1 text-smaller"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Globals/EbEncHandle.c">TF level</a></td>
                         <td class="px-1 text-smaller" colspan="3">
                             <code>&#45;&#45;pred-struct 1</code> 且分辨率大于等于 720p：2，<br>
                             小于 720p：0，<br>
@@ -5500,8 +5496,11 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                         <!--<td>10</td>-->
                         <td class="px-1" style="background-color: black; color: white">1</td>
                     </tr>
+                    <tr>
+                        <td class="px-1 text-gray-note text-smaller" colspan="12">TF level 预设生效条件：<code>&#45;&#45;enable-tf</code>、<code>--hierarchical-levels</code> 大于 1、--lossless 0</code></td>
+                    </tr>
                     <tr class="border-lr border-bottom">
-                        <td class="px-1"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Codec/EbCodingUnit.c">NSQ level</a></td>
+                        <td class="px-1 text-smaller"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Codec/EbCodingUnit.c">NSQ level</a></td>
                         <td class="px-1" colspan="5">关</td>
                         <!--<td>2</td>-->
                         <!--<td>3</td>-->
@@ -5515,7 +5514,7 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                         <td class="px-1 text-smaller" style="background-color: black; color: white"><code>is_ref</code>：2，否则 4</td>
                     </tr>
                     <tr class="border-lr border-bottom">
-                        <td class="px-1"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Codec/EbMotionEstimationProcess.c">HME SA</a>
+                        <td class="px-1 text-smaller"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Codec/EbMotionEstimationProcess.c">HME SA</a>
                         </td>
                         <td class="px-1 t-light-gray text-smaller" colspan="6">
                             搜索面积最小 240x240，<br>
@@ -5526,13 +5525,15 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                         <!--<td>4</td>-->
                         <!--<td>5</td>-->
                         <td class="px-1 t-invert-light text-smaller" colspan="2">
-                            源分辨率大于等于 4k 时最小 32x32，<br>
+                            源分辨率大于等于 4k 时<br>
+                            最小 32x32，<br>
                             最大 192x192；<br>
                             否则同更快预设
                         </td>
                         <!--<td>7</td>-->
                         <td class="px-1 t-invert-dark text-smaller" colspan="3">
-                            源分辨率小于等于 1080p 且场景复杂度高时：<br>
+                            源分辨率小于等于 1080p <br>
+                            且场景复杂度高时：<br>
                             最小 16x16，最大 192x192，<br>
                             否则同更快预设
                         </td>
@@ -5540,7 +5541,7 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                         <!--<td>10</td>-->
                     </tr>
                     <tr class="border-lr border-bottom">
-                        <td class="px-1"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Codec/EbMotionEstimationProcess.c">HME Refine</a></td>
+                        <td class="px-1 text-smaller"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Codec/EbMotionEstimationProcess.c">HME Refine</a></td>
                         <td class="px-1 t-light-gray text-smaller" colspan="9">1、2 级分叉皆细化 16x16</td>
                         <!--<td>2</td>-->
                         <!--<td>3</td>-->
@@ -5552,18 +5553,22 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                         <!--<td>10</td>-->
                     </tr>
                     <tr class="border-lr border-bottom">
-                        <td class="px-1"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Codec/EbModeDecisionConfigurationProcess.c">TXT level</a></td>
+                        <td class="px-1 text-smaller"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Codec/EbModeDecisionConfigurationProcess.c">TXT level</a></td>
                         <td class="px-1 text-smaller" colspan="4">
-                            <code>LOW_LVL, is_base</code>：4，否则 5；<br>
-                            <code>HIGH_LVL, is_base</code>：8，否则 10；<br>
+                            <code>LOW_LVL, is_base</code>：4，<br>
+                            否则 5；<br>
+                            <code>HIGH_LVL, is_base</code>：8，<br>
+                            否则 10；<br>
                             <code>NORMAL_LVL</code>：7
                         </td>
                         <!--<td>2</td>-->
                         <!--<td>3</td>-->
                         <!--<td>4</td>-->
                         <td class="px-1 t-invert-light text-smaller" colspan="5">
-                            <code>LOW_LVL</code>：4；<code>HIGH_LVL</code>：7；<br>
-                            <code>NORMAL_LVL, is_base</code>：4，否则 5
+                            <code>LOW_LVL</code>：4，<br>
+                            <code>HIGH_LVL</code>：7，<br>
+                            <code>NORMAL_LVL, is_base</code>：4，<br>
+                            否则 5
                         </td>
                         <!--<td>6</td>-->
                         <!--<td>7</td>-->
@@ -5573,12 +5578,19 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                         <td class="px-1" style="background-color: black; color: white">2</td>
                     </tr>
                     <tr class="border-lr border-bottom">
-                        <td class="px-1"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Codec/EbModeDecisionConfigurationProcess.c">TXS level</a></td>
-                        <td class="px-1 text-smaller"><code>is_islice</code>：4，否则 0</td>
-                        <td class="px-1 t-light-gray text-smaller" colspan="3"><code>is_base</code>：4，否则 0</td>
+                        <td class="px-1 text-smaller"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Codec/EbModeDecisionConfigurationProcess.c">TXS level</a></td>
+                        <td class="px-1 text-smaller">
+                            <code>is_islice</code>：4，<br>
+                            否则 0
+                        </td>
+                        <td class="px-1 t-light-gray text-smaller" colspan="3">
+                            <code>is_base</code>：4，<br>
+                            否则 0</td>
                         <!--<td>3</td>-->
                         <!--<td>4</td>-->
-                        <td class="px-1 t-invert-light text-smaller" colspan="3"><code>is_base</code>：3，否则 0</td>
+                        <td class="px-1 t-invert-light text-smaller" colspan="3">
+                            <code>is_base</code>：3，<br>
+                            否则 0</td>
                         <!--<td>6</td>-->
                         <!--<td>7</td>-->
                         <td class="px-1 t-invert-dark " colspan="2">3</td>
@@ -5587,9 +5599,12 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                         <!--<td>11</td>-->
                     </tr>
                     <tr class="border-lr border-bottom">
-                        <td class="px-1"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Codec/EbModeDecisionConfigurationProcess.c">OBMC level</a></td>
+                        <td class="px-1 text-smaller"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Codec/EbModeDecisionConfigurationProcess.c">OBMC level</a></td>
                         <td class="px-1">0</td>
-                        <td class="px-1 t-light-gray text-smaller" colspan="3"><code>is_base</code>：4，否则 0</td>
+                        <td class="px-1 t-light-gray text-smaller" colspan="3">
+                            <code>is_base</code>：4，<br>
+                            否则 0
+                        </td>
                         <!--<td>2</td>-->
                         <!--<td>3</td>-->
                         <!--<td>4</td>-->
@@ -5602,7 +5617,7 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                         <td class="px-1" style="background-color: black; color: white">1</td>
                     </tr>
                     <tr class="border-lr border-bottom">
-                        <td class="px-1"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Codec/EbModeDecisionConfigurationProcess.c">Filter Intra level</a></td>
+                        <td class="px-1 text-smaller"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Codec/EbModeDecisionConfigurationProcess.c">Filter Intra level</a></td>
                         <td class="px-1" colspan="4">0</td>
                         <!--<td>2</td>-->
                         <!--<td>3</td>-->
@@ -5616,7 +5631,7 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                         <!--<td>11</td>-->
                     </tr>
                     <tr class="border-lr border-bottom">
-                        <td class="px-1"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Codec/EbModeDecisionConfigurationProcess.c">COMP level</a></td>
+                        <td class="px-1 text-smaller"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Codec/EbModeDecisionConfigurationProcess.c">COMP level</a></td>
                         <td class="px-1" colspan="8">0</td>
                         <!--<td>2</td>-->
                         <!--<td>3</td>-->
@@ -5630,7 +5645,7 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                         <td class="px-1" style="background-color: black; color: white">3</td>
                     </tr>
                     <tr class="border-lr border-bottom">
-                        <td class="px-1"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Codec/EbModeDecisionConfigurationProcess.c">Chroma level</a></td>
+                        <td class="px-1 text-smaller"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Codec/EbModeDecisionConfigurationProcess.c">Chroma level</a></td>
                         <td class="px-1 t-light-gray" colspan="3">5</td>
                         <!--<td>2</td>-->
                         <!--<td>3</td>-->
@@ -5644,7 +5659,7 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                         <td class="px-1" style="background-color: black; color: white">1</td>
                     </tr>
                     <tr class="border-lr border-bottom">
-                        <td class="px-1"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Codec/EbModeDecisionConfigurationProcess.c">Update CDF level</a></td>
+                        <td class="px-1 text-smaller"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Codec/EbModeDecisionConfigurationProcess.c">Update CDF level</a></td>
                         <td class="px-1">0</td>
                         <td class="px-1 t-light-gray text-smaller" colspan="5">
                             <code>is_base</code>：1，<br>
@@ -5667,7 +5682,7 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                         <td class="px-1" style="background-color: black; color: white">1</td>
                     </tr>
                     <tr class="border-lr border-bottom">
-                        <td class="px-1"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Globals/EbEncHandle.c">MRP level</a></td>
+                        <td class="px-1 text-smaller"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Globals/EbEncHandle.c">MRP level</a></td>
                         <td class="px-1 t-light-gray">11</td>
                         <td class="px-1 t-light-gray" colspan="2">7</td>
                         <!--<td>2</td>-->
@@ -5698,9 +5713,7 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                         <td class="px-1 t-light-gray" colspan="3">源 &gt; 640x360 或 <code>&#45;&#45;fast-decode 2<code>：9，否则 2</td>
                     </tr>-->
                     <tr class="border-lr border-bottom">
-                        <td class="px-1"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Globals/EbEncHandle.c">TPL level</a><br>
-                            <span class="text-smaller"><code>--pred-struct 2</code>、<code>--aq-mode &gt; 0</code>、关缩放/超分辨率环路时成立；N-Pass 模式下唯第二或再而次成立</span>
-                        </td>
+                        <td class="px-1 text-smaller"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Globals/EbEncHandle.c">TPL level</a></td>
                         <td class="px-1 t-light-gray">6</td>
                         <td class="px-1 t-light-gray">5</td>
                         <td class="px-1 t-light-gray" colspan="2">4</td>
@@ -5713,8 +5726,14 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                         <!--<td>10</td>-->
                         <!--<td>11</td>-->
                     </tr>
+                    <tr>
+                        <td class="px-1 text-gray-note text-smaller" colspan="12">
+                            TPL level 预设生效条件 1：<code>--pred-struct 2</code>、<code>--aq-mode</code> 非 0、关缩放/超分辨率环路；<br>
+                            N-pass 模式：<code>--pass</code> 非 1，且满足条件 1 
+                        </td>
+                    </tr>
                     <tr class="border-lr border-bottom">
-                        <td class="px-1"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Codec/EbPictureDecisionProcess.c">GM level</a><br><span class="text-smaller">关缩放/超分辨率环路时成立</span></td>
+                        <td class="px-1 text-smaller"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Codec/EbPictureDecisionProcess.c">GM level</a></td>
                         <td class="px-1 t-light-gray text-smaller" colspan="5"><code>is_ref</code>：关，否则 6</td>
                         <!--<td>2</td>-->
                         <!--<td>3</td>-->
@@ -5728,22 +5747,27 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                         <td class="px-1 t-invert-dark">3</td>
                         <td class="px-1" style="background-color: black; color: white">2</td>
                     </tr>
+                    <tr>
+                        <td class="px-1 text-gray-note text-smaller" colspan="12">
+                            GM level 预设生效条件：关缩放/超分辨率环路
+                        </td>
+                    </tr>
                     <tr class="border-lr border-bottom">
-                        <td class="px-1"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Codec/EbModeDecisionProcess.c">Max CAN</a></td>
+                        <td class="px-1 text-smaller"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Codec/EbModeDecisionProcess.c">Max CAN</a></td>
                         <td class="px-1 t-light-gray" colspan="4">190</td>
                         <!--<td>2</td>-->
                         <!--<td>3</td>-->
                         <!--<td>4</td>-->
-                        <td class="px-1 t-invert-light">236</td>
-                        <td class="px-1 t-invert-light">295</td>
-                        <td class="px-1 t-invert-light">369</td>
-                        <td class="px-1 t-invert-dark">576</td>
-                        <td class="px-1 t-invert-dark">720</td>
-                        <td class="px-1 t-invert-dark">1000</td>
-                        <td class="px-1" style="background-color: black; color: white">1225</td>
+                        <td class="px-1 t-invert-light text-smaller">236</td>
+                        <td class="px-1 t-invert-light text-smaller">295</td>
+                        <td class="px-1 t-invert-light text-smaller">369</td>
+                        <td class="px-1 t-invert-dark text-smaller">576</td>
+                        <td class="px-1 t-invert-dark text-smaller">720</td>
+                        <td class="px-1 t-invert-dark text-smaller">1000</td>
+                        <td class="px-1 text-smaller" style="background-color: black; color: white">1225</td>
                     </tr>
                     <tr class="border-lr border-bottom">
-                        <td class="px-1"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Codec/EbPictureDecisionProcess.c">CDEF level</a>，<span class="text-smaller">关帧内块拷贝模式（IBC）时成立</span></td>
+                        <td class="px-1 text-smaller"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Codec/EbPictureDecisionProcess.c">CDEF level</a></td>
                         <td class="px-1 t-light-gray text-smaller" colspan="3"><code>is_base</code>：8，否则针对 <code>is_ref</code>：9，否则 10</td>
                         <!--<td>2</td>-->
                         <!--<td>3</td>-->
@@ -5756,8 +5780,13 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                         <!--<td>10</td>-->
                         <td class="px-1" style="background-color: black; color: white">1</td>
                     </tr>
+                    <tr>
+                        <td class="px-1 text-gray-note text-smaller" colspan="12">
+                            CDEF level 预设生效条件：关帧内块拷贝模式（IBC）
+                        </td>
+                    </tr>
                     <tr class="border-lr border-bottom">
-                        <td class="px-1"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/master/Source/Lib/Globals/enc_handle.c#L4360"><code>--hierarchical-levels</code></a></td>
+                        <td class="px-1 text-smaller"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/master/Source/Lib/Globals/enc_handle.c#L4360"><code>--hierarchical-levels</code></a></td>
                         <td class="px-1 t-light-gray text-smaller" colspan="2">
                             <code>&#45;&#45;pred-struct 1</code>：2，否则 4
                         </td>
@@ -5785,7 +5814,7 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                         <!--<td>11</td>-->
                     </tr>
                     <tr class="border-lr border-bottom">
-                        <td class="px-1"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/master/Source/Lib/Codec/enc_mode_config.c#L1264">SG filter level</a></td>
+                        <td class="px-1 text-smaller"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/master/Source/Lib/Codec/enc_mode_config.c#L1264">SG filter level</a></td>
                         <td class="px-1" colspan="7">关</td>
                         <!--<td>2</td>-->
                         <!--<td>3</td>-->
@@ -5793,13 +5822,18 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                         <!--<td>5</td>-->
                         <!--<td>6</td>-->
                         <!--<td>7</td>-->
-                        <td class="px-1 t-invert-dark text-smaller">分辨率大于等于 8k，或分辨率大于等于 360p、且 <code>&#45;&#45;fast-decode</code> 开（大于 0）时关，否则 3</td>
+                        <td class="px-1 t-invert-dark text-smaller">
+                            分辨率大于等于 8k，<br>
+                            或分辨率大于等于 360p、<br>
+                            <code>&#45;&#45;fast-decode</code> 开（大于 0）时关，<br>
+                            否则 3
+                        </td>
                         <td class="px-1 t-invert-dark" colspan="3">1</td>
                         <!--<td>10</td>-->
                         <!--<td>11</td>-->
                     </tr>
                     <tr class="border-lr border-bottom">
-                        <td class="px-1"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/master/Source/Lib/Codec/enc_mode_config.c#L1246">WN filter level</a></td>
+                        <td class="px-1 text-smaller"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/master/Source/Lib/Codec/enc_mode_config.c#L1246">WN filter level</a></td>
                         <td class="px-1" colspan="2">关</td>
                         <!--<td>2</td>-->
                         <td class="px-1 t-light-gray text-smaller"><code>is_base</code>：5，否则关</td>
@@ -5813,7 +5847,7 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                         <!--<td>11</td>-->
                     </tr>
                     <tr class="border-lr border-bottom">
-                        <td class="px-1">DRL 参考帧数量</td>
+                        <td class="px-1 text-smaller">DRL 参考帧数量</td>
                         <td class="px-1 t-light-gray">2</td>
                         <td class="px-1 t-light-gray" colspan="5">5</td>
                         <!--<td>4</td>-->
@@ -5827,7 +5861,7 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                         <!--<td>12</td>-->
                     </tr>
                     <tr class="border-lr border-bottom">
-                        <td class="px-1">整数像素动态搜索 ME</td>
+                        <td class="px-1 text-smaller">整数像素动态搜索 ME</td>
                         <td class="px-1 t-light-gray" colspan="11">开</td>
                         <!--<td>2</td>-->
                         <!--<td>3</td>-->
@@ -5841,7 +5875,7 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                         <!--<td>11</td>-->
                     </tr>
                     <tr class="border-lr border-bottom">
-                        <td class="px-1">子像素动态补偿</td>
+                        <td class="px-1 text-smaller">子像素动态补偿</td>
                         <td class="px-1 t-light-gray" colspan="11">开</td>
                         <!--<td>2</td>-->
                         <!--<td>3</td>-->
@@ -5855,7 +5889,7 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                         <!--<td>11</td>-->
                     </tr>
                     <tr class="border-lr border-bottom">
-                        <td class="px-1"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/master/Source/Lib/Globals/enc_handle.c">Superblock 大小</a></td>
+                        <td class="px-1 text-smaller"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/master/Source/Lib/Globals/enc_handle.c">Superblock 大小</a></td>
                         <td class="px-1 t-light-gray" colspan="4">64</td>
                         <!--<td>2</td>-->
                         <!--<td>3</td>-->
@@ -5864,12 +5898,19 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                         <!--<td>6</td>-->
                         <!--<td>7</td>-->
                         <td class="px-1 t-invert-dark text-smaller">GOP QP 小于等于 56：64，否则 128</td>
-                        <td class="px-1 t-invert-dark text-smaller">源分辨率小于等于 480p：GOP QP 小于等于 56：64，否则 128；源分辨率大于 480p：GOP QP 小于等于 50：64，否则 128</td>
+                        <td class="px-1 t-invert-dark text-smaller">
+                            源分辨率小于等于 480p<br>
+                            且 GOP QP 小于等于 56：64，<br>
+                            否则 128；<br>
+                            源分辨率大于 480p：<br>
+                            GOP QP 小于等于 50：64，<br>
+                            否则 128
+                        </td>
                         <td class="px-1 t-invert-dark" colspan="2">128</td>
                         <!--<td>11</td>-->
                     </tr>
                     <tr class="border-lr border-bottom">
-                        <td class="px-1">最小细分块大小</td>
+                        <td class="px-1 text-smaller">最小细分块大小</td>
                         <td class="px-1 t-light-gray" colspan="8">8</td>
                         <!--<td>2</td>-->
                         <!--<td>3</td>-->
@@ -5883,28 +5924,24 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                         <!--<td>11</td>-->
                     </tr>
                     <tr class="border-lr border-bottom">
-                        <td class="px-1">帧内编码</td>
-                        <td class="px-1" colspan="4">
-                            <span class="text-smaller">
-                                平面（DC）、<br>
-                                斜面（SMOOTH/_H/_V）、
-                                <br>夹角、
-                                <br>Paeth（PNG）、
-                                <br>色度填亮度（CFL）
-                            </span>
+                        <td class="px-1 text-smaller">帧内编码</td>
+                        <td class="px-1 text-smaller" colspan="4">
+                            平面（DC）、<br>
+                            斜面（SMOOTH/_H/_V）、<br>
+                            夹角、<br>
+                            Paeth（PNG）、<br>
+                            色度填亮度（CFL）
                         </td>
                         <!--<td>2</td>-->
                         <!--<td>3</td>-->
                         <!--<td>4</td>-->
-                        <td class="px-1 t-invert-light" colspan="7">
-                            <span class="text-smaller">
-                                平面（DC）、<br>
-                                斜面（SMOOTH/_H/_V）、<br>
-                                夹角、<br>
-                                Paeth（PNG）、<br>
-                                色度填亮度（CFL）、<br>
-                                递归插值（Recursive）
-                            </span>
+                        <td class="px-1 text-smaller t-invert-light" colspan="7">
+                            平面（DC）、<br>
+                            斜面（SMOOTH/_H/_V）、<br>
+                            夹角、<br>
+                            Paeth（PNG）、<br>
+                            色度填亮度（CFL）、<br>
+                            递归插值（Recursive）
                         </td>
                         <!--<td>6</td>-->
                         <!--<td>7</td>-->
@@ -5914,7 +5951,7 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                         <!--<td>11</td>-->
                     </tr>
                     <tr class="border-lr border-bottom">
-                        <td class="px-1"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Codec/EbPictureDecisionProcess.c">IBC level</a></td>
+                        <td class="px-1 text-smaller"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Codec/EbPictureDecisionProcess.c">IBC level</a></td>
                         <td class="px-1 t-light-gray">6</td>
                         <td class="px-1 t-light-gray" colspan="2">5</td>
                         <!--<td>4</td>-->
@@ -5928,7 +5965,7 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                         <!--<td>11</td>-->
                     </tr>
                     <tr class="border-lr border-bottom">
-                        <td class="px-1"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Codec/EbPictureDecisionProcess.c">Palette level</a><span class="text-smaller"></span></td>
+                        <td class="px-1 text-smaller"><a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/f0efc5fa8d92355ae6bc6aaa56d09c574dd64009/Source/Lib/Encoder/Codec/EbPictureDecisionProcess.c">Palette level</a></td>
                         <td class="px-1 t-light-gray" colspan="11"><code>is_base</code>：2，否则 0</td>
                         <!--<td>2</td>-->
                         <!--<td>3</td>-->
@@ -5942,7 +5979,7 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                         <!--<td>11</td>-->
                     </tr>
                     <tr class="border-lr border-bottom">
-                        <td class="px-1">单帧参考帧、混合参考帧</td>
+                        <td class="px-1 text-smaller">单帧参考帧、<br>混合参考帧</td>
                         <td class="px-1 t-light-gray" colspan="11">开</td>
                         <!--<td>2</td>-->
                         <!--<td>3</td>-->
@@ -5956,7 +5993,7 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                         <!--<td>11</td>-->
                     </tr>
                     <tr class="border-lr border-bottom">
-                        <td class="px-1">亮度 1/8 像素插值</td>
+                        <td class="px-1 text-smaller">亮度 1/8 像素插值</td>
                         <td class="px-1 t-light-gray" colspan="11">开</td>
                         <!--<td>2</td>-->
                         <!--<td>3</td>-->
@@ -5970,7 +6007,7 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                         <!--<td>11</td>-->
                     </tr>
                     <tr class="border-lr border-bottom">
-                        <td class="px-1">子像素插值搜索</td>
+                        <td class="px-1 text-smaller">子像素插值搜索</td>
                         <td class="px-1 t-light-gray" colspan="11">开</td>
                         <!--<td>2</td>-->
                         <!--<td>3</td>-->
@@ -5984,7 +6021,7 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                         <!--<td>11</td>-->
                     </tr>
                     <tr class="border-lr border-bottom">
-                        <td class="px-1">仿射变换动态补偿</td><!-- TODO: 其它动态补偿呢？ -->
+                        <td class="px-1 text-smaller">仿射变换动态补偿</td><!-- TODO: 其它动态补偿呢？ -->
                         <td class="px-1 t-light-gray" colspan="11">开</td>
                         <!--<td>2</td>-->
                         <!--<td>3</td>-->
@@ -5998,7 +6035,7 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                         <!--<td>11</td>-->
                     </tr>
                     <tr class="border-lr border-bottom">
-                        <td class="px-1"><code>&#45;&#45;enable-mfmv</code></td>
+                        <td class="px-1 text-smaller"><code>&#45;&#45;enable-mfmv</code></td>
                         <td class="px-1 t-light-gray" colspan="11">1</td>
                         <!--<td>2</td>-->
                         <!--<td>3</td>-->
