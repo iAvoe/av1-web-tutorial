@@ -5225,7 +5225,7 @@ typedef enum SvtAv1PredStructure {
             <ul>
                 <li><code>--enable-variance-boost 1</code></li>
                 <li><code>&#45;&#45;preset</code> 大于等于 7，更慢的预设需要高 GOP QP 设置为 64x64</li>
-                <li><code>&#45;&#45;fast-decode</code> 开</li>
+                <li><code>&#45;&#45;fast-decode</code> 开（大于 0）</li>
                 <li><code>&#45;&#45;resize-mode</code> 开</li>
                 <li><code>--pred-struct 1</code></li>
                 <li>输入视频分辨率大于 360p、GOP QP 小于等于 56、</li>
@@ -5741,10 +5741,10 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                         </td>
                         <!--<td>2</td>-->
                         <td class="px-1 t-light-gray text-smaller">
-                            <code>&#45;&#45;pred-struct 1</code>：2，否则若 <code>&#45;&#45;fast-decode</code> 开，或 <code>&#45;&#45;rc</code> VBR/CBR，或分辨率大于等于 1080p：4，否则 5
+                            <code>&#45;&#45;pred-struct 1</code>：2，否则若 <code>&#45;&#45;fast-decode</code> 开（大于 0），或 <code>&#45;&#45;rc</code> VBR/CBR，或分辨率大于等于 1080p：4，否则 5
                         </td>
                         <td class="px-1 t-light-gray text-smaller" colspan="8">
-                            <code>&#45;&#45;pred-struct 1</code>：2，否则若 <code>&#45;&#45;fast-decode</code> 开，或 <code>&#45;&#45;rc</code> VBR/CBR，或分辨率大于等于 8k：4，否则 5
+                            <code>&#45;&#45;pred-struct 1</code>：2，否则若 <code>&#45;&#45;fast-decode</code> 开（大于 0），或 <code>&#45;&#45;rc</code> VBR/CBR，或分辨率大于等于 8k：4，否则 5
                         </td>
                         <!--<td>5</td>-->
                         <!--<td>6</td>-->
@@ -5763,7 +5763,7 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                         <!--<td>5</td>-->
                         <!--<td>6</td>-->
                         <!--<td>7</td>-->
-                        <td class="px-1 t-invert-dark text-smaller">分辨率大于等于 8k，或分辨率大于等于 360p、且 <code>&#45;&#45;fast-decode</code> 开时关，否则 3</td>
+                        <td class="px-1 t-invert-dark text-smaller">分辨率大于等于 8k，或分辨率大于等于 360p、且 <code>&#45;&#45;fast-decode</code> 开（大于 0）时关，否则 3</td>
                         <td class="px-1 t-invert-dark" colspan="3">1（最大）</td>
                         <!--<td>10</td>-->
                         <!--<td>11</td>-->
@@ -5977,8 +5977,8 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                     <tr class="border-lr border-top">
                         <th>预设</th>
                         <th>实时模式：rtc_tune</th>
-                        <th>一般模式：fast_decode 关<br>低分辨率模式：源小于等于 360p</th>
-                        <th>快速模式：fast_decode 开且源大于 360p<br>高分辨率（节约内存）模式：分辨率大于等于 8k</th>
+                        <th>一般模式：<code>&#45;&#45;fast-decode</code> 关（0）<br>低分辨率模式：源小于等于 360p</th>
+                        <th>快速模式：<code>&#45;&#45;fast-decode</code> 开（大于 0）且源大于 360p<br>高分辨率（节约内存）模式：分辨率大于等于 8k</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -5992,7 +5992,7 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                     </tr>
                     <tr class="border-lr border-bottom t-light-gray">
                         <td class="px-1"><b>9</b></td>
-                        <td class="px-1"><code>is_base</code>：5，否则 <code>is_not_last_layer</code>：6，否则：0</td>
+                        <td class="px-1" rowspan="2"><code>is_base</code>：5，否则 <code>is_not_last_layer</code>：6，否则：0</td>
                         <td class="px-1">
                             分辨率小于等于 360p：<code>is_base</code>：5，否则 <code>is_not_last_layer</code>：6，否则：0<br>
                             分辨率大于 360p：同 10+ 一般模式
@@ -6001,40 +6001,40 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                     </tr>
                     <tr class="border-lr border-bottom t-light-gray">
                         <td class="px-1"><b>8</b></td>
-                        <td class="px-1"><code>is_base</code>：5，否则 <code>is_not_last_layer</code>：6，否则：0</td>
+                        <!--<td class="px-1"><code>is_base</code>：5，否则 <code>is_not_last_layer</code>：6，否则：0</td>-->
                         <td class="px-1">
                             分辨率小于等于 360p：5<br>
                             分辨率大于 360p：<code>is_base</code>：5，否则 <code>is_not_last_layer</code>：6，否则：0
                         </td>
                         <td class="px-1">
-                            <code>fast_decode 1</code>：<code>is_base</code>：5，否则 <code>is_not_last_layer</code>：6，否则：0<br>
-                            <code>fast_decode 2</code>：同 10+ 快速模式
+                            <code>&#45;&#45;fast-decode 1</code>：<code>is_base</code>：5，否则 <code>is_not_last_layer</code>：6，否则：0<br>
+                            <code>&#45;&#45;fast-decode 2</code>：同 10+ 快速模式
                         </td>
                     </tr>
                     <tr class="border-lr border-bottom t-light-gray">
                         <td class="px-1"><b>7</b></td>
-                        <td class="px-1"><code>is_base</code>：5，否则：6</td>
+                        <td class="px-1" rowspan="4"><code>is_base</code>：5，否则：6</td>
                         <td class="px-1"><code>is_not_last_layer</code>：3，否则：6</td>
                         <td class="px-1"><code>is_not_last_layer</code>：4，否则：6</td>
                     </tr>
                     <tr class="border-lr border-bottom t-invert-light">
                         <td class="px-1"><b>5~6</b></td>
-                        <td class="px-1"><code>is_base</code>：5，否则：6</td>
+                        <!--<td class="px-1"><code>is_base</code>：5，否则：6</td>-->
                         <td class="px-1">3</td>
-                        <td class="px-1">4</td>
+                        <td class="px-1" rowspan="2">4</td>
                     </tr>
                     <tr class="border-lr t-invert-light">
                         <td class="px-1"><b>4</b></td>
-                        <td class="px-1"><code>is_base</code>：5，否则：6</td>
+                        <!--<td class="px-1"><code>is_base</code>：5，否则：6</td>-->
                         <td class="px-1">2</td>
-                        <td class="px-1">4</td>
+                        <!--<td class="px-1">4</td>-->
                     </tr>
                     <tr class="border-lr t-invert-dark">
                         <td class="px-1"><b>0~3</b></td>
-                        <td class="px-1"><code>is_base</code>：5，否则：6</td>
+                        <!--<td class="px-1"><code>is_base</code>：5，否则：6</td>-->
                         <td class="px-1">1</td>
                         <td class="px-1">
-                            <code>fast_decode 1</code>：1，<code>fast_decode 2</code>：4
+                            <code>&#45;&#45;fast-decode 1</code>：1，<code>&#45;&#45;fast-decode 2</code>：4
                         </td>
                     </tr>
                 </tbody>
