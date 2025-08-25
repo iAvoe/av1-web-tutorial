@@ -4407,7 +4407,7 @@ SvtAv1EncApp.exe -i .\输入.yuv -w 3840 -h 2160 --input-depth 10 --color-format
             <h4>（3/12）规格与级别</h4>
             <code class="code-bold">&#45;&#45;profile</code>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~2，默认 0（main）&gt;指定输出视频规格——0：main，1：high，2：professional。</p>
-            <table class="table-center mt-3">
+            <table class="table-center mt-3 text-smaller">
                 <thead>
                     <tr class="t-invert-dark">
                         <th>规格</th>
@@ -4455,7 +4455,7 @@ SvtAv1EncApp.exe -i .\输入.yuv -w 3840 -h 2160 --input-depth 10 --color-format
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;0 / 浮点 2.0~7.3：输出，默认 0（自动）&gt;指定输出视频级别。</p>
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：级别表格</button>
             <div class="coll-content overflow-auto mt-3">
-                <table class="table-center">
+                <table class="table-center text-smaller">
                     <thead>
                         <tr>
                             <th class="px-1">seq_level_idx</th>
@@ -4787,11 +4787,12 @@ static void set_bitstream_level_tier(SequenceControlSet *scs) {
 
             <h4>（8/12）率控制模式</h4>
             <code class="code-bold">&#45;&#45;enable-qm</code>
-            <p class="font-monospace pl-5 m-0 overflow-auto">&lt;0/1，默认 0：关&gt;启用量化矩阵</p>
-            <code class="code-bold">--qm-min</code>
-            <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~15，默认 8：中低&gt;指定量化矩阵的最小序号，序号值越小则允许使用越发陡峭、压缩越强的矩阵。</p>
-            <code class="code-bold">--qm-max</code>
-            <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~15，默认 15：最大&gt;指定量化矩阵的最大序号，序号值越大则允许使用越发平坦、压缩越弱的矩阵。</p>
+            <p class="font-monospace pl-5 m-0 overflow-auto">&lt;0/1，默认 0：关&gt;启用量化矩阵。搭配 Tune PSNR 启用后增加画质，降低压缩率（增加 <code>--(chroma-)qm-min</code> 后则回到增加压缩、降低画质的行为）；搭配 Tune VQ 后降低画质，增加压缩率。</p>
+            <code class="code-bold">--(chroma-)qm-min</code>
+            <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~15，默认 8：中&gt;指定<i>亮度或色度</i>量化矩阵的最小序号，序号值越小则允许使用压缩越强的矩阵（陡），进一步增加压缩率，降低画质，最小值/最大则适合直播与手机观看。</p>
+            <code class="code-bold">--(chroma-)qm-max</code>
+            <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~15，默认 15：最小&gt;指定<i>亮度或色度</i>量化矩阵的最大序号，序号值越大则允许使用压缩越弱的矩阵（平）。由于画质影响到帧内、帧间冗余，因此与 x264、x265 的 <code>--qpmin</code> 一样建议保持默认。</p>
+            <p class="text-gray-note">注：没错，<code class="code-bold">--(chroma-)qm-min/max</code> 和 <code>--preset</code> 一样，参数值是越小越强。</p>
             <code class="code-bold">&#45;&#45;rc</code>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~2，默认 0：CRF 或 CQP&gt;指定率控制模式——（<code>--aq-mode 0</code> 则为 CQP），1：VBR 模式，2：CBR 模式。</p>
             <code class="code-bold">--qp</code>
@@ -5433,7 +5434,7 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
             <ul class="text-smaller">
                 <li><b>TF level</b>：时域降噪过滤搜索级别</li>
                 <li><b>NSQ level</b>：非正方形细分块搜索级别</li>
-                <li><b>HME SA</b>：分叉式动态搜索区域 Search area</li>
+                <li><b>HME SA</b>：分叉式动态搜索区域 Search area（merange）</li>
                 <li><b>TXT level</b>：变换块分块搜索级别，见 <a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/master/Docs/Appendix-TX-Search.md">SVT-AV1 Docs</a></li>
                 <li><b>TXS level</b>：变换块大小搜索级别，见 <a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/master/Docs/Appendix-TX-Search.md">SVT-AV1 Docs</a></li>
                 <li><b>OBMC level</b>：重叠块运动补偿搜索级别，见 <a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/master/Docs/Appendix-Overlapped-Block-Motion-Compensation.md">SVT-AV1 Docs</a></li>
@@ -10402,7 +10403,7 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                     </tr>
                     <tr class="border-bottom">
                         <td>SVTAV1</td>
-                        <td class="px-1">CRF35 QM P3</td>
+                        <td class="px-1">CRF35 PSNR QM P3</td>
                         <td class="px-1 sec">45.157</td>
                         <td class="px-1 trd">616</td>
                         <td class="px-1" style="color:#EEB500">40.8003</td>
@@ -10417,7 +10418,7 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                     </tr>
                     <tr class="border-bottom">
                         <td>SVTAV1</td>
-                        <td class="px-1">CRF35 QM0 P3</td>
+                        <td class="px-1">CRF35 PSNR QM0 P3</td>
                         <td class="px-1 trd">45.103</td>
                         <td class="px-1 sec">605.16</td>
                         <td class="px-1" style="color:#EEB500">40.6694</td>
@@ -10536,7 +10537,7 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1 ace" style="color:#92D050">87.50851431</td>
                     </tr>
                     <tr class="border-bottom">
-                        <td class="px-1">SVT-AV1</td>
+                        <td>SVTAV1</td>
                         <td class="px-1">CRF30 SSIM P3</td>
                         <td class="px-1">42.132</td>
                         <td class="px-1">821.58</td>
