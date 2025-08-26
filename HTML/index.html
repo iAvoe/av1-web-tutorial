@@ -5240,7 +5240,7 @@ typedef enum SvtAv1PredStructure {
             <code class="code-bold">&#45;&#45;enable-tpl-la</code>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;0/1，默认 1：开，需 CRF/CQP 率控制模式&gt;开启前瞻时域依赖性建模，决定率控制的自动化。</p>
             <code class="code-bold">&#45;&#45;enable-tf</code>
-            <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~2，默认 1：开&gt;时域降噪过滤，也代表启用 <code>ALTREF</code> 帧类型，同时涉及 <code>OVERLAY</code> 帧类型的建立——0：关、1：开、2：根据帧类型（关键帧、参考帧、亮度、色度）、以及偏移值 <code>--tf-strength</code> 决定强度衰减系数、最后由强度在视频中的变化决定。</p>
+            <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~2，默认 1：开<span class="text-blue-emph">（开则关 <code>&#45;&#45;enable-overlays</code>）</span>&gt;启用时域降噪过滤（Temporal Filtering）以及建立配套的支线被参考帧 <code>ALTREF</code>、影响 <code>OVERLAY</code> 帧类型的启用开关——0：开、1：开、2：根据帧类型（关键帧、参考帧、亮度、色度）、以及偏移值 <code>--tf-strength</code> 决定强度衰减系数、最后由强度在视频中的变化决定。质量受到前瞻进程（Lookahead、TPL）影响。</p>
             <ul class="font-monospace pl-5 text-smaller list-dotless">
                 <li><b>2: </b><a href="https://discord.com/channels/587033243702788123/1202895560617500684/1373348432730915036">在超低 CRF（小于 11）中会产生额外的随机失真</a></li>
             </ul>
@@ -5248,6 +5248,19 @@ typedef enum SvtAv1PredStructure {
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~4，默认 3：较强&gt;指定时域降噪过滤中，滤镜强度衰减的偏移值。</p>
             <code class="code-bold">&#45;&#45;enable-overlays</code>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;0/1，默认 1：开&gt;启用 <code>OVERLAY</code> 帧类型。</p>
+            <pre><code class="text-smaller language-cpp">
+// enc_handle.c
+/** 
+ * 启用 --enable-tf 时关闭 --enable-overlays，否则检查下个条件：
+ * 不使用 CRF、CQP 时关闭，否则指定为 --enable-overlays 的用户设定或默认值（默认开）
+ * 满足所有条件时开启 --enable-overlays
+ */
+scs->static_config.enable_overlays =
+    !scs->static_config.enable_tf
+    || (scs->static_config.rate_control_mode != SVT_AV1_RC_MODE_CQP_OR_CRF)
+        ? 0
+        : scs->static_config.enable_overlays;
+            </code></pre>
             <code class="code-bold">&#45;&#45;enable-mfmv</code>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 -1~1，默认 -1：自动&gt;开启向量场规划（MVRS）。</p>
 
