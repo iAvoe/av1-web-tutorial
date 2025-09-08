@@ -147,11 +147,11 @@
                         </li>
                         <li><b>帧间预测</b>：
                             <ol class="text-smaller">
-                                <li>当前帧针对 DRL 中的被参考帧进行动态搜索，得到一系列动态信息方案</li>
-                                <li>由向量规划预测查找和整理出预测量</li>
-                                <li>由动态规划筛选出最适合某帧的预测量</li>
-                                <li>由运动补偿提高动态向量的精度</li>
-                                <li>拼合混合参考块所用的 2 项参考源或 2 种动态补偿</li>
+                                <li>DRL/DPB 中选择参考帧</li>
+                                <li>动态预测（MP）</li>
+                                <li>动态搜索（ME）</li>
+                                <li>运动补偿（MC）</li>
+                                <li>混合预测 Compound Prediction（CP）</li>
                             </ol>
                         </li>
                         <li><b>细分块</b>：
@@ -1505,30 +1505,28 @@ typedef enum { // 一般模式
             
             <h3>帧间预测——流程概述</h3>
             <ol>
-                <li>当前帧针对 DRL 中的被参考帧进行动态搜索，得到一系列动态信息方案</li>
-                <li>由向量规划预测 Motion vector referencing scheme（MVRS）查找和整理出预测量：
+                <li><b>参考帧选择</b>：从参考帧列表 DRL（DPB）中选择一张或多张参考帧</li>
+                <li>
+                    <b>动态预测（MP）</b>：由向量规划预测 Motion Vector Referencing Scheme（MVRS）查找和整理出多个预测动态向量（PMV）
                     <ul class="text-smaller">
-                        <li>空域预测 Spatial MV prediction：与空域相邻块的动态向量对齐，适合低速移动画面</li>
-                        <li>时域/向量场预测 Temporal MV prediction：与时域相邻块的动态向量对齐，适合高速移动画面</li>
+                        <li>空域预测 Spatial MP：与空域相邻块的动态向量中查找预测量（如 <code class="code-bold">NEAREST</code>、<code class="code-bold">NEAR</code>），适合低速移动画面</li>
+                        <li>时域/向量场预测 Temporal MP：与时域相邻块的动态向量对齐（如 <code class="code-bold">GLOBAL</code>），适合高速移动画面</li>
+                        <li>动态规划预测 Dynamic MVRS 进一步筛选出最适合某帧的预测量</li>
                     </ul>
                 </li>
-                <li>由动态规划 Dynamic MVRS 筛选出最适合某帧的预测量：
-                    <ul class="text-smaller">
-                        <li>单帧参考帧筛选</li>
-                        <li>混合参考帧筛选</li>
-                    </ul>
-                </li>
-                <li>由运动补偿提高动态向量的精度：
+                <li><b>动态搜索（ME）</b>：进行整数像素搜索，找出真正精确到整数像素的动态向量（MV）</li>
+                <li><b>运动补偿（MC）</b>：
                     <ul class="text-smaller">
                         <li>平移补偿 Translational MC</li>
-                        <li>局部仿射补偿 Local affine / Warped MC</li>
+                        <li>局部仿射补偿 Local Affine / Warped MC</li>
                         <li>重叠块补偿 OBMC</li>
-                        <li>全局仿射补偿 Global affine / Warped MC</li>
+                        <li>（特殊帧间预测模式）全局仿射补偿 Global Affine / Warped MC</li>
                     </ul>
                 </li>
-                <li>拼合混合参考块所用的 2 项参考源或 2 种动态补偿：
+                <li><b>混合预测 Compound Prediction（CP、针对“B 块”）</b>：
                     <ul class="text-smaller">
-                        <li>帧间间距加权分权（含平均权重/等重情况）Distance weighted predictor（with avg. case）</li>
+                        <li>糅合两处参考源的预测动态向量（PMV）与 2 种动态补偿</li>
+                        <li>帧间间距加权分权（含平均权重/等重情况）Distance-weighted predictor（with avg. case）</li>
                         <li>画面差距调制分权 Difference predictor（aka. Modulated predictor）</li>
                         <li>帧内帧间蒙版混合分权 Compound InterIntra mask predictor</li>
                         <li>楔形蒙版预测分权 Wedge mask predictor</li>
@@ -1536,85 +1534,70 @@ typedef enum { // 一般模式
                 </li>
             </ol>
 
-            <p><b>预测量 Predictor</b> 此处代表由搜索与规划算法给出，针对 8x8 块的一组可用的帧间动态向量，从中筛选出合适的帧间预测模式。</p>
+            <h3>帧间预测——动态预测 Motion Prdiction（MP）</h3>
+            <p>在参考帧（P-B 帧）的预测单元 Prediction Unit（PU）上，动态搜索（ME）之前，起到<i>提供动态搜索起点</i>功能的预测算法，这种算法会查找临空间相邻编码块和时间相邻（邻帧）编码块的动态信息来了解周遭环境。x264 使用 <code>--direct</code> 指定、x265 中使用 AMVP + Merge 算法、AV1 标准则称其为 MVRS。</p>
+            <p>由于动态向量预测得到的向量本身就已经足够靠谱，因此编码器会以“预测动态向量（PMV）+ 动态向量差（MVD）”的形式记录每个帧间块的动态信息，再冗余掉相同的预测动态向量，从而进一步提高压缩。纵然一支动态向量的信息不多，但放眼到整个视频的所有帧间参考时，质变也就产生了。</p>
 
-            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：帧间预测——动态搜索 Motion estimation</button>
-            <div class="coll-content">
-                <h3>帧间预测——动态搜索 Motion estimation</h3>
-                <p>基本原理见 x265 教程。x264/5 的动态搜索通过块间像素匹配的方法实现，运动补偿通过对比插值放大后的预测块与原画实现。SVT-AV1 支持 ME 和 HME，见 <a href="https://github.com/huijuanzh/SVT-AV1/blob/master/Docs/svt-av1-encoder-design.md#motion-estimation-process">Github: SVT-AV1 Encoder Design</a></p>
+            <h4>（1/1）向量规划 Motion Vector Referencing Scheme（MVRS）</h4>
+            <p>在全局动态向量以及针对其他被参考帧的动态向量凑齐之后，使用一种类似于帧内预测的规划法（Referencing scheme）将参考帧匹配到合适的被参考帧。这种参考规划由适合低速移动的空间预测动态向量 S-PMV 组成，以及适合高速移动的时域/向量场动态向量参考规划 T-PMV/MVF-PMV 针对不同物件移动速度规划匹配，从而在画面中为范围内的分块配置一支足够通用的预测动态向量。</p>
+
+            <h4>（1/1——1/4）空域动态向量预测 Spatial MV Prediction</h4>
+            <p>从空间相邻 8x8 块收集预测动态向量（PMV）。</p>
+
+            <h4>（1/1——2/4）空域 MVRS</h4>
+            <p>亮度编码块中以 8x8 区域搜索其帧内的顶部、左侧、左上、右上共 4 种相邻块是否溯至同一被参考帧（混合参考帧模式下为同两帧被参考帧）。如 32x32 亮度分块中，顶部代表横向 3 行，每行 4 个 8x8 区域；左侧代表纵向 3 列，每列 4 个 8x8 区域；以及左上角，右上角各一个 8x8 区域。搜索顺序为由近到远，为行 1，列 1，右上，左上，行 2，列 2，行 3，列 3：</p>
+            <div class="align-items-center">
+                <img loading="lazy" src="files/inter-prediction/spatial-mvrs-order.png" alt="imageR" class="img-small">
+                <p class="text-gray-side mt-0">图：空域 MVRS 查找顺序</p>
+                <img loading="lazy" src="files/inter-prediction/spatial-mvrs-single.png" alt="imageR" class="img-medium">
+                <p class="text-gray-side mt-0">图：单帧参考帧规划</p>
+                <img loading="lazy" src="files/inter-prediction/spatial-mvrs-compound.png" alt="imageR" class="img-medium">
+                <p class="text-gray-side mt-0">图：混合参考帧规划</p>
             </div>
+            <p class="text-gray-side">注：由于所有块都要找，因此顺序不重要。</p>
 
-            <h3>帧间预测——向量规划 Motion Vector Referencing Scheme（MVRS）</h3>
-            <p>在全局动态向量以及针对其他被参考帧的动态向量凑齐之后，使用一种类似于帧内预测的规划法（Referencing scheme）将参考帧匹配到合适的被参考帧。AV1 中，这种参考规划由适合低速移动的空间动态向量 S-MVRS 参考规划，以及适合高速移动的向量场动态向量参考规划 MVF-MVRS 实现针对不同物件移动速度规划匹配，并在每个 8x8 预测块上得到预测量。</p>
+            <h4>（1/1——3/4）时域动态向量预测 Temporal MV Prediction</h4>
+            <p>从时间相邻 8x8 块（指被参考帧上的同位块）的帧间动态向量所推理得到的预测动态向量（PMV）。</p>
 
-            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（1/4）空域动态向量预测、（2/4）空域 MVRS</button>
-            <div class="coll-content">
-                <h4>（1/4）空域动态向量预测 Spatial MV Prediction</h4>
-                <p>AV1 中代表通过空间相邻 8x8 块的帧间动态向量所推理出的动态向量，与帧内编码无关。前提是时间相邻块需要有动态向量。</p>
-
-                <h4>（2/4）空域 MVRS</h4>
-                <p>亮度编码块中以 8x8 区域搜索其帧内的顶部、左侧、左上、右上共 4 种相邻块是否溯至同一被参考帧（混合参考帧模式下为同两帧被参考帧）。如 32x32 亮度分块中，顶部代表横向 3 行，每行 4 个 8x8 区域；左侧代表纵向 3 列，每列 4 个 8x8 区域；以及左上角，右上角各一个 8x8 区域。搜索顺序为由近到远，为行 1，列 1，右上，左上，行 2，列 2，行 3，列 3：</p>
-                <div class="align-items-center">
-                    <img loading="lazy" src="files/inter-prediction/spatial-mvrs-order.png" alt="imageR" class="img-small">
-                    <p class="text-gray-side mt-0">图：空域 MVRS 查找顺序</p>
-                    <img loading="lazy" src="files/inter-prediction/spatial-mvrs-single.png" alt="imageR" class="img-medium">
-                    <p class="text-gray-side mt-0">图：单帧参考帧规划</p>
-                    <img loading="lazy" src="files/inter-prediction/spatial-mvrs-compound.png" alt="imageR" class="img-medium">
-                    <p class="text-gray-side mt-0">图：混合参考帧规划</p>
-                </div>
-            </div>
-
-            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（3/4）时域/向量场动态向量预测、（4/4）时域/向量场 MVRS</button>
-            <div class="coll-content">
-                <h4>（3/4）时域动态向量预测 Temporal MV Prediction</h4>
-                <p>AV1 中代表通过时间相邻 8x8 块（<del>相邻帧</del>被参考帧上同位块）的帧间动态向量所推理，而得到的动态向量。前提是时间相邻块需要有动态向量。</p>
-
-                <h4>（4/4）时域/向量场 MVRS</h4>
-                <p>采用一种线性投影模型以对齐时域相邻块动态向量的规划法，适合高速直线运动轨迹。以 8x8 块为单位，通过遍历地将被参考帧列表中的动态向量乘进一个缩放值，而得到当前帧的向量场预测。缩放值的取值为被参考帧距离当前帧的帧数，与被参考帧距离前被参考帧之差（帧数距离）的比。</p>
-                <div class="align-items-center">
-                    <img loading="lazy" src="files/inter-prediction/temporal-mvrs.png" alt="imageR" class="img-medium">
-                    <p class="text-gray-side mt-0">图：当前帧（Current Frame）通过距离被参考帧的帧数缩放动态向量以及预测量</p>
-                    <img loading="lazy" src="files/inter-prediction/temporal-mvrs-order.png" alt="imageR" class="img-small">
-                    <p class="text-gray-side mt-0">图：被参考帧中的搜索区域，先尝试对准一块 16x16 范围，其次是角落</p>
-                </div>
+            <h4>（1/1——4/4）时域/向量场 MVRS</h4>
+            <p>采用一种线性投影模型以对齐时域相邻块动态向量的规划法，适合高速直线运动轨迹。以 8x8 块为单位，通过遍历地将被参考帧列表中的动态向量乘进一个缩放值，而得到当前帧的向量场预测。缩放值的取值为被参考帧距离当前帧的帧数，与被参考帧距离前被参考帧之差（帧数距离）之比。</p>
+            <div class="align-items-center">
+                <img loading="lazy" src="files/inter-prediction/temporal-mvrs.png" alt="imageR" class="img-medium">
+                <p class="text-gray-side mt-0">图：当前帧通过距离被参考帧的帧数缩放动态向量以及预测量。</p>
+                <img loading="lazy" src="files/inter-prediction/temporal-mvrs-order.png" alt="imageR" class="img-small">
+                <p class="text-gray-side mt-0">图：被参考帧中的搜索区域，先尝试对准一块 16x16 范围，其次是角落。</p>
             </div>
 
             <h3>帧间预测——动态规划 Dynamic MVRS</h3>
-            <p>从动态搜索与空域 MVRS、时域 MVRS 得出的预测量中筛选。<b>预测量 Predictor</b> 于此处代表一组可行的动态向量，其中含有当前编码块相对于被参考帧列表中，被参考帧列表中每帧的最多储存 4 种可能的每帧动态向量。</p>
+            <p>从动态搜索与空域 MVRS、时域 MVRS 得出的预测动态向量列表中筛选。</p>
 
-            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（1/2）单帧参考帧筛选</button>
-            <div class="coll-content">
-                <h4>（1/2）单帧参考帧筛选</h4>
-                <p>动态搜索以及 MVRS 得到的预测量中，按照动态向量的长度，由（帧间间距）进到远排序（?）：</p>
-                <ul>
-                    <li><code class="code-bold">NEARESTMV</code>：第 1 种动态向量</li>
-                    <li><code class="code-bold">NEWMV</code>：第 1~3 种动态向量中筛选，附有预测向量与实际向量的差距（MV difference，MVD）</li>
-                    <li><code class="code-bold">NEARMV</code>：第 2~4 种动态向量中筛选</li>
-                    <li><code class="code-bold">GLOBALMV</code>：使用全局动态向量</li>
-                </ul>
-                <div class="align-items-center">
-                    <img loading="lazy" src="files/inter-prediction/reference-mv-single.png" alt="imageR" class="img-medium">
-                </div>
+            <h4>（1/2）单帧参考帧筛选</h4>
+            <p>动态搜索以及 MVRS 得到的预测量中，按照动态向量的长度，由（帧间间距）进到远排序（?）：</p>
+            <ul>
+                <li><code class="code-bold">NEARESTMV</code>：第 1 种动态向量</li>
+                <li><code class="code-bold">NEWMV</code>：第 1~3 种动态向量中筛选，附有预测向量与实际向量的差距（MV difference，MVD）</li>
+                <li><code class="code-bold">NEARMV</code>：第 2~4 种动态向量中筛选</li>
+                <li><code class="code-bold">GLOBALMV</code>：使用全局动态向量</li>
+            </ul>
+            <div class="align-items-center">
+                <img loading="lazy" src="files/inter-prediction/reference-mv-single.png" alt="imageR" class="img-medium">
             </div>
         
-            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（2/2）混合参考帧预测量筛选</button>
-            <div class="coll-content">
-                <h4>（2/2）混合参考帧预测量筛选</h4>
-                <ul>
-                    <li><code class="code-bold">NEAREST_NEARESTMV</code>：同 <code class="code-bold">NEARESTMV</code></li>
-                    <li><code class="code-bold">NEAREST_NEWMV</code>：同 <code class="code-bold">NEARESTMV</code>，远被参考帧（<code class="code-bold">RefFrame[1]</code>）附有预测向量与实际向量的差距（MV difference，MVD）</li>
-                    <li><code class="code-bold">NEW_NEARESTMV</code>：同 <code class="code-bold">NEARESTMV</code>，近被参考帧（<code class="code-bold">RefFrame[0]</code>）附有预测向量与实际向量的差距（MV difference，MVD）</li>
-                    <li><code class="code-bold">NEW_NEWMV</code>：同 <code class="code-bold">NEWMV</code>，附有近、远两被参考帧的 MVD</li>
-                    <li><code class="code-bold">NEAR_NEARMV</code>：同 <code class="code-bold">NEARMV</code>，附有远被参考帧的 MVD</li>
-                    <li><code class="code-bold">NEAR_NEWMV</code>：同 <code class="code-bold">NEARMV</code>，附有近被参考帧的 MVD</li>
-                    <li><code class="code-bold">NEAR_NEARMV</code>：同 <code class="code-bold">NEARMV</code>，附有远，仅两被参考帧的 MVD</li>
-                    <li><code class="code-bold">GLOBALMV</code>：同上</li>
-                </ul>
-                <div class="align-items-center">
-                    <img loading="lazy" src="files/inter-prediction/reference-mv-compound.png" alt="imageR" class="img-medium">
-                </div>
-                <p>除 <code class="code-bold">NEARESTMV</code>，<code class="code-bold">NEAREST_NEARESTMV</code> 之外，被参考帧的预测差距 MVD 都会被纳入考量。而剩余的模式区别就是采用哪一种预测量的区别。</p>
+            <h4>（2/2）混合参考帧预测量筛选</h4>
+            <ul>
+                <li><code class="code-bold">NEAREST_NEARESTMV</code>：同 <code class="code-bold">NEARESTMV</code></li>
+                <li><code class="code-bold">NEAREST_NEWMV</code>：同 <code class="code-bold">NEARESTMV</code>，远被参考帧（<code class="code-bold">RefFrame[1]</code>）附有预测向量与实际向量的差距（MV difference，MVD）</li>
+                <li><code class="code-bold">NEW_NEARESTMV</code>：同 <code class="code-bold">NEARESTMV</code>，近被参考帧（<code class="code-bold">RefFrame[0]</code>）附有预测向量与实际向量的差距（MV difference，MVD）</li>
+                <li><code class="code-bold">NEW_NEWMV</code>：同 <code class="code-bold">NEWMV</code>，附有近、远两被参考帧的 MVD</li>
+                <li><code class="code-bold">NEAR_NEARMV</code>：同 <code class="code-bold">NEARMV</code>，附有远被参考帧的 MVD</li>
+                <li><code class="code-bold">NEAR_NEWMV</code>：同 <code class="code-bold">NEARMV</code>，附有近被参考帧的 MVD</li>
+                <li><code class="code-bold">NEAR_NEARMV</code>：同 <code class="code-bold">NEARMV</code>，附有远，仅两被参考帧的 MVD</li>
+                <li><code class="code-bold">GLOBALMV</code>：同上</li>
+            </ul>
+            <div class="align-items-center">
+                <img loading="lazy" src="files/inter-prediction/reference-mv-compound.png" alt="imageR" class="img-medium">
             </div>
+            <p>除 <code class="code-bold">NEARESTMV</code>，<code class="code-bold">NEAREST_NEARESTMV</code> 之外，被参考帧的预测差距 MVD 都会被纳入考量。而剩余的模式区别就是采用哪一种预测量的区别。</p>
 
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：帧内与帧间预测模式表 Ymode</button>
             <div class="coll-content"><pre><code class="language-cpp">
@@ -1660,17 +1643,22 @@ static const int mode_2_counter[] = { // 帧内 + 帧间预测模式表
 }
             </code></pre></div>
 
-            <h3>帧间预测——局部运动补偿</h3>
-            <p>基本原理已在 x265 教程中说明，此处不再赘述。AV1 支持平移子像素运动补偿 Translational MC 和仿射运动补偿 Affine/Warped MC。运动补偿用于对齐动态向量到子像素精度，所以会临时地使用子像素插值滤镜。如：</p>
+            <h3>帧间预测——动态搜索 Motion Estimation（ME）</h3>
+            <p>AV1 标准无规定，由视频编码器自行决定使用什么搜索算法。SVT-AV1 支持 ME 和 HME，见 <a href="https://github.com/huijuanzh/SVT-AV1/blob/master/Docs/svt-av1-encoder-design.md#motion-estimation-process">Github: SVT-AV1 Encoder Design</a>。</p>
+
+            <h3>帧间预测——运动补偿 Motion Compensation（MC）</h3>
+
+            <h4>（1/3）局部运动补偿 Local MC</h4>
+            <p>基本原理已在 x265 教程中说明，此处不再赘述。AV1 支持平移子像素运动补偿 Translational MC 和仿射运动补偿 Affine/Warped MC，并使用子像素插值滤镜。如：</p>
             <ul class="text-smaller">
                 <li>AVC 的亮度块支持 <span class="text-blue-math">\( \frac{1}{2} \)</span> 像素精度下使用 6-tap FIR 插值、<span class="text-blue-math">\( \frac{1}{4} \)</span> 像素精度下使用双线性插值</li>
                 <li>HEVC 的亮度块支持 <span class="text-blue-math">\( \frac{1}{2} \)</span>，以及部分的 <span class="text-blue-math">\( \frac{1}{4} \)</span> 像素精度使用上下左右加权平均插值、<span class="text-blue-math">\( \frac{1}{4} \)</span> 像素精度下使用 7-tap 和 8-tap FIR 滤镜插值</li>
                 <li>HEVC 色度块 <span class="text-blue-math">\( \frac{1}{2} \)</span> 和 <span class="text-blue-math">\( \frac{1}{4} \)</span> 像素精度使用 4-tap FIR 插值</li>
             </ul>
 
-            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（1/3）平移运动补偿 Translational MC</button>
+            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（1/3——1/3）平移运动补偿 Translational MC</button>
             <div class="coll-content">
-                <h4>（1/3）平移运动补偿 Translational MC</h4>
+                <h5>（1/3——1/3）平移运动补偿 Translational MC</h5>
                 <p>选用平移预测模式后，AV1 亮度块会使用 <code>SMOOTH</code>，<code>REGULAR</code> 和 <code>SHARP</code>，共 3 种自适应 8-tap FIR 插值滤镜，代表在横向或纵向 8 个像素中采样并分配权重。如果像素位于块的纵向中间处，则先计算块中的所有横向插值结果，在从中计算纵向插值结果。</p>
                 <div class="align-items-center">
                     <img loading="lazy" src="files/inter-prediction/8-tap-interpolation.png" alt="imageR" class="img-small">
@@ -1810,18 +1798,18 @@ static const int mode_2_counter[] = { // 帧内 + 帧间预测模式表
                 <p>滤镜结构见 Github：<a href="https://github.com/mozilla/aom/blob/46b7bb243b39929c02d6decc1bdb2e39e11540d6/av1/common/filter.c"><code>filter.c</code></a>，<a href="https://github.com/mozilla/aom/blob/46b7bb243b39929c02d6decc1bdb2e39e11540d6/av1/common/filter.c"><code>filter.h</code></a></p>
             </div>
 
-            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（2/3）局部仿射变换运动补偿 Local Affine/Warped MC</button>
+            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（1/3——2/3）局部仿射变换运动补偿 Local Affine/Warped MC</button>
             <div class="coll-content">
-                <h4>（2/3）局部仿射变换运动补偿 Local Affine/Warped MC</h4>
+                <h5>（1/3——2/3）局部仿射变换运动补偿 Local Affine/Warped MC</h5>
                 <p>基于当前块及其空间相邻块，以估计局部的仿射模型参数。如果空间相邻块与当前块指向同一被参考帧，则检查这个空间相邻块中的中心像素与其作对应的，被参考帧中的像素；与其左侧、顶部的 <span class="text-blue-math">\(\frac{1}{4}\)</span> 像素，对应被参考帧的准确映射位置，而得到补偿程度的变换矩阵。</p>
                 <div class="align-items-center">
                     <img loading="lazy" src="files/inter-prediction/local-affine-motion-compensation-derivation.png" alt="imageR" class="img-medium">
                 </div>
             </div>
 
-            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（3/3）重叠块运动补偿 Overlapped block MC</button>
+            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（1/3——3/3）重叠块运动补偿 Overlapped Block MC</button>
             <div class="coll-content">
-                <h4>（3/3）重叠块运动补偿 Overlapped block MC</h4>
+                <h5>（1/3——3/3）重叠块运动补偿 Overlapped Block MC（OBMC）</h5>
                 <p>单帧参考帧中，如果当前帧间预测块面积不小于 8x8，且顶部或左侧的相邻块（不含左上块）已被编码时，只要指向同一被参考帧，则可能会有块间画面的重叠。当 OBMC 应用于当前块时，当前块的帧间预测结果会与顶部、左侧相邻块的结果合成；最多支持顶部和左侧块的四个动态向量。虽然运动补偿与预测模式下的权重分配不相关，但合并两个预测结果画面的重叠处时，仍然需要计算预测像素值，为 <span class="text-blue-math">\( P_{1}=m\cdot R_{1}+(64-m)R_{\text{above OR left}} \)</span></p>
                 <div class="align-items-center">
                     <img loading="lazy" src="files/inter-prediction/overlapped-motion-compensation-top-left.png" alt="imageR" class="img-medium">
@@ -1833,7 +1821,7 @@ static const int mode_2_counter[] = { // 帧内 + 帧间预测模式表
                 <span class="text-blue-math">\[ m=64\cdot\left(\frac{1}{2}\sin\left(\frac{\pi}{b_{height}}\left(x_{height}+\frac{1}{2}\right)\right)+\frac{1}{2}\right)\ \]</span>
             </div>
 
-            <h3>帧间编码——全局仿射动态补偿 Global affine / warped MC</h3>
+            <h4>（2/3）全局仿射动态补偿 Global Affine / Warped MC</h4>
             <p>分为<i>全局动态搜索</i>（特征匹配 Feature match）和<i>全局运动补偿</i>（模型识别 Model identification）两部分。匹配<i>被参考帧相比原画</i>的整帧缩放、倾斜、旋转（仿射变换，见变换版块）。</p>
             <ol>
                 <li><b>特征匹配</b>：识别位于原图，以及被参考帧中的特征角点</li>
@@ -1841,9 +1829,9 @@ static const int mode_2_counter[] = { // 帧内 + 帧间预测模式表
             </ol>
             <p>SVT-AV1 编码器中使用<i>特征匹配</i>来计算每个参考帧的全局运动参数，然后应用<i>随机样本一致性（RANSAC）</i>算法（见 <a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/tree/master/Docs/Appendix-Global-Motion.md">SVT-AV1 Docs</a>）。此“运动补偿”可以理解为“初阶段补偿”。</p>
 
-            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（1/4）加速式分瓣检测取点法 FAST</button>
+            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（2/3——1/4）加速式分瓣检测取点法 FAST</button>
             <div class="coll-content">
-                <h4>（1/4）加速式分瓣检测取点法 Features from accelerated segment test（FAST）</h4>
+                <h5>（2/3——1/4）加速式分瓣检测取点法 Features from accelerated segment test（FAST）</h5>
                 <p>通过检查某点 p 周围的 16 像素圆环（半径 3 像素）来识别特征角点 corner point。如果环上 12 个<i>连续点</i>的值都相比点 p 的值要高出，或低过一定阈值，则设点 p 为图像中的特征角点。这种特征提取方法对明暗和运动的变化有抗性（robustness）。“加速”体现在使用像素值差异，而不是特征向量匹配，高斯模糊渐变梯度等算法实现。</p>
                 <p>识别出原画帧<i>以及</i>被参考帧上的所有特征后，计算这两组特征之间归一化（缩放到基本单位大小）的互相关函数来实现特征筛选。大致为：</p>
                 <ul class="text-smaller">
@@ -1855,9 +1843,9 @@ static const int mode_2_counter[] = { // 帧内 + 帧间预测模式表
                 </div>
             </div>
 
-            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（1/4——1/1）线性回归分析法 Linear regression</button>
+            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（2/3——1/4——1/1）线性回归分析法 Linear regression</button>
             <div class="coll-content">
-                <h4>（1/4——1/1）线性回归分析法 Linear regression</h4>
+                <h6>（1/4——1/1）线性回归分析法 Linear regression</h6>
                 <p>一种统计方法，用于在含测量误差的干扰下仍能获取较为准确的数据（此处为直线函数）。当数据点可能因时间或其他因素偏离真实值时，可以通过回归分析找到一条最能代表这些数据的直线或曲线。当然，进行回归分析需要事先知道线的类型（正弦、余弦、幂、对数等）。</p>
                 <p>线性回归分析的目标是从坐标系的某一轴（x 或 y 轴）中，找到相对这条轴的一条最优解直线。这里的<i>最优解</i>指该直线到所有数据点的距离之和最小（通常指垂直距离）。因此，我们认为这条直线最能反映数据的整体趋势。</p>
                 <p>需要注意的是，除了线性回归以外还有主成分分析（PCA）方法。不使用后者通常是因为这组采样点的 x 或 y 坐标可能只是时间序列或其它顺序变量（如隔几秒采样一次），这种情况下，我们更关注变量之间的关系本身，而不是数据的降维处理。</p>
@@ -1874,10 +1862,10 @@ static const int mode_2_counter[] = { // 帧内 + 帧间预测模式表
                 <p>使用 PCA 而不用线性回归分析，说明这组采样点的 x 和 y 信息都是数据的一部分（例如预测下一次动态搜索中最可能的向量）。见：<a href="https://shankarmsy.github.io/posts/pca-vs-lr.html">shankarmsy.github.io</a> 然而，PCA 的实现依赖于计算协方差矩阵、特征值和特征向量，因此要求使用者需要对线性代数具有深刻理解，所以在效率的考量下一般会避免用到它。见 <a href="https://droneree.github.io/2020/06/05/PCA_CCA_PLS/">droneree.github.io</a></p>
             </div>-->
 
-            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（2/4）最小二乘法 Least squares</button>
+            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（2/3——2/4）最小二乘法 Least squares</button>
             <div class="coll-content">
-                <h4>（2/4）最小二乘法 Least squares</h4>
-                <h5>（2/4——1/2）基础理论</h5>
+                <h5>（2/3——2/4）最小二乘法 Least squares</h5>
+                <h6>（2/3——2/4——1/2）基础理论</h6>
                 <p>一种简单直接的数学优化方法，是回归分析的一种实现。其目标是最小化以下表达式：
                     <span class="text-blue-math">\[\mathbb{E} = \sum_{i=1}^{n}(y_i - f(x_i))^2\]</span>
                     通过找出误差平方和 SSE 最小的值 <span class="text-blue-math">\( \mathbb{E} \)</span>（最小化）实现“找到最能代表这些数据的直线或曲线”的目标。
@@ -1888,7 +1876,7 @@ static const int mode_2_counter[] = { // 帧内 + 帧间预测模式表
                     <li>采样/观测的次数：<span class="text-blue-math">\( n \)</span></li>
                 </ul>
 
-                <h5>（2/4——2/2）回归处理</h5>
+                <h6>（2/3——2/4——2/2）回归处理</h6>
                 <p>例如，在特征点中找出一条 <span class="text-blue-math">\(y = mx+b\)</span> 最小二乘法通过计算所有特征点的：</p>
                 <ul>
                     <li>横向特征点位置 x 的总和：<span class="text-blue-math">\(\sum x = x_1 + x_2 + \ldots + x_n\)</span></li>
@@ -1905,9 +1893,9 @@ static const int mode_2_counter[] = { // 帧内 + 帧间预测模式表
                 <!-- 说不定此处可以把 K-L 变换的内容搬出来，当然因为过于晦涩，必须是作为额外的页面出现 -->
             </div>
 
-            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（3/4）随机采样一致法 RANSAC</button>
+            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（2/3——3/4）随机采样一致法 RANSAC</button>
             <div class="coll-content">
-                <h4>（3/4）随机采样一致法 Random sample consensus（RANSAC）</h4>
+                <h5>（2/3——3/4）随机采样一致法 Random sample consensus（RANSAC）</h5>
                 <p>将特征角点归纳为“合群 inlier”与“离群 outlier”两类，通过迭代的方式筛除离群特征角点，从而增强最小二乘法抗干扰能力的处理。这个步骤大致分为：</p>
                 <ol class="text-smaller">
                     <li>随机选择若干个点记做“合群”</li>
@@ -1923,67 +1911,53 @@ static const int mode_2_counter[] = { // 帧内 + 帧间预测模式表
                 </div>
             </div>
 
-            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（4/4）全局动态向量 Global MV</button>
-            <div class="coll-content">
-                <h4>（4/4）全局动态向量 Global MV</h4>
-                <p>即模型识别的结果，分为 4 类：</p>
-                <ul>
-                    <li><code class="code-bold">IDENTITY</code>：IDTX 变换</li>
-                    <li><code class="code-bold">TRANSLATION</code>：平移变换</li>
-                    <li><code class="code-bold">ROTZOOM</code>：平移，旋转和对称放大变换</li>
-                    <li><code class="code-bold">AFFINE</code>：正仿射变换</li>
-                </ul>
-            </div>
+            <h5>（2/3——4/4）全局动态向量 Global MV</h5>
+            <ul>
+                <li><code class="code-bold">IDENTITY</code>：IDTX 变换</li>
+                <li><code class="code-bold">TRANSLATION</code>：平移变换</li>
+                <li><code class="code-bold">ROTZOOM</code>：平移，旋转和对称放大变换</li>
+                <li><code class="code-bold">AFFINE</code>：正仿射变换</li>
+            </ul>
 
-            <h3>帧间预测——混合参考帧运动补偿</h3>
-            <p>加权预测（Weighted prediction）的原理很直白：对于一个双向预测分块来说，前帧块用 60% 的像素值、后帧用 40% 的像素值，两两相加所得的预测块可能会比前后各 50% 的相加结果更接近原画，达到增冗余加画质的目的。这两瓣权重值可以从参考帧的顺序距离、画面差距等简单现象推导，但精确度——画质还有提升的空间。AV1 标准对加权权重的测算与可用的模式相比更早的编码标准都有着体系化的改进。</p>
+            <h4>（3/3）混合参考帧运动补偿 Compound Prediction（CP、针对“B 块”）</h4>
 
-            <h4>（1/5）加权权重分配（分权）</h4>
+            <h5>（3/3——1/6）加权预测与分权</h5>
+            <p>对于一个双向预测分块来说，前帧块用 60% 的像素值、后帧用 40% 的像素值，两两相加所得的预测块可能会比前后各 50% 的相加结果更接近原画，达到增冗余加画质的目的。这两瓣权重值可以从参考帧的顺序距离、画面差距等简单现象推导，但精确度——画质还有提升的空间。AV1 标准对加权权重的测算与可用的模式相比更早的编码标准都有着体系化的改进。</p>
+
+            <h5>（3/3——2/6）加权权重分配（分权）</h5>
             <p>单帧参考帧（P 帧）下，一格预测像素可以用式子表示：<span class="text-blue-math">\( P\left(x,y\right) = m\left(x,y\right) \cdot R\left(x,y\right)\)</span>，代表“预测值为缩放值与初始值的积”。混合参考帧结合了两帧被参考帧，因此在“重叠的预测像素”上也需要分配权重，如某个预测像素的值为：<span class="text-blue-math">\[ P\left(x,y\right) = m\left(x,y\right) ∗ R_{1}\left(x,y\right) + (64 - m\left(x,y\right)) ∗ R_{2}\left(x,y\right) \]</span></p>
             <p>这里的权重/缩放值 <span class="text-blue-math">\( m\left(x,y\right) \)</span> 最大（100%）被放大了 64 倍，原因是要避免浮点计算。</p>
 
-            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（2/5）帧间间距加权分权 Distance weighted predictor（with average case）</button>
-            <div class="coll-content">
-                <h4>（2/5）帧间间距加权分权 Distance weighted predictor（with average case）</h4>
-                <p>将 <span class="text-blue-math">\( d_1, d_2 \)</span> 作为混合被参考帧距离当前预测块的距离，根据 <span class="text-blue-math">\(d_2\)</span> 小于 <span class="text-blue-math">\(d_1\)</span> 的多少倍来确定权重。特殊情况为“平均加权模式分权 Average weighted predictor”，即距离加权分配中出现距离相等的情况。注：分为帧间以及帧内两种加权权重。</p>
+            <h5>（3/3——3/6）帧间间距加权分权 Distance weighted predictor（with average case）</h5>
+            <p>将 <span class="text-blue-math">\( d_1, d_2 \)</span> 作为混合被参考帧距离当前预测块的距离，根据 <span class="text-blue-math">\(d_2\)</span> 小于 <span class="text-blue-math">\(d_1\)</span> 的多少倍来确定权重。特殊情况为“平均加权模式分权 Average weighted predictor”，即距离加权分配中出现距离相等的情况。注：分为帧间以及帧内两种加权权重。</p>
+
+            <h5>（3/3——4/6）画面差距调制分权 Difference predictor（aka. Modulated predictor）</h5>
+            <p>直接从两个被参考帧中的同位像素做差，权重设定为：</p>
+            <span class="text-blue-math">\[m\left(x,y\right) = \begin{cases} 
+                38 + \frac{\left| P_{1}\left(x,y\right) - P_{2}\left(x,y\right) \right|}{16}
+                \text{, mask_type = 0} \\
+                64 - 38 + \frac{\left| P_{1}\left(x,y\right) - P_{2}\left(x,y\right) \right|}{16}
+                \text{, mask_type = 1} \\
+            \end{cases}\]</span>
+
+            <h5>（3/3——5/6）帧内帧间蒙版混合分权 Compound InterIntra mask predictor</h5>
+            <p>从正统的双向帧间预测（Bidirectional Prediction）中扩展出的新思路———“一侧”指向同一帧/帧内的参考源（参考源当然也会使用帧内编码，所以可以理解为 I 块），再通过指定使用特定的蒙版，使得平面（DC）、斜面/横斜/纵斜（SMOOTH/_H/_V）、垂直/水平夹角的<i>帧内编码块</i>与仿射预测的<i>帧间编码块</i>为素材/参考源，这些限定条件有性能和兼容性考量，使得不是所有帧内编码都可用。</p>
+            <p>结合则使用楔形蒙版预测的横向和纵向模式，但主要还是随坐标过渡权重（渐变蒙版）的两种预测结果混合，实现预测。</p>
+            <p class="text-gray-side">注：之所以叫“InterIntra”，是因为其它的分权方法都基于“InterInter”，即左右两侧皆指向其它帧，构成帧间预测。</p>
+            <p class="text-gray-side">注：重叠块运动补偿 OBMC 见下方的运动补偿版块中</p>
+            <div class="align-items-center">
+                <img loading="lazy" src="files/inter-prediction/compound-interintra-prediction.png" alt="imageR" class="img-medium">
+                <p class="text-gray-side mt-0">图：重叠合成的可行样式与渐变结构</p>
             </div>
 
-            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（3/5）画面差距调制分权 Difference predictor（aka. Modulated predictor）</button>
-            <div class="coll-content">
-                <h4>（3/5）画面差距调制分权 Difference predictor（aka. Modulated predictor）</h4>
-                <p>直接从两个被参考帧中的同位像素做差，权重设定为：</p>
-                <span class="text-blue-math">\[m\left(x,y\right) = \begin{cases} 
-                    38 + \frac{\left| P_{1}\left(x,y\right) - P_{2}\left(x,y\right) \right|}{16}
-                    \text{, mask_type = 0} \\
-                    64 - 38 + \frac{\left| P_{1}\left(x,y\right) - P_{2}\left(x,y\right) \right|}{16}
-                    \text{, mask_type = 1} \\
-                \end{cases}\]</span>
-            </div>
-
-            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（4/5）帧内帧间蒙版混合分权 Compound InterIntra mask predictor</button>
-            <div class="coll-content">
-                <h4>（4/5）帧内帧间蒙版混合分权 Compound InterIntra mask predictor</h4>
-                <p>从正统的双向帧间预测（Bidirectional Prediction）中扩展出的新思路———“一侧”指向同一帧/帧内的参考源（参考源当然也会使用帧内编码，所以可以理解为 I 块），再通过指定使用特定的蒙版，使得平面（DC）、斜面/横斜/纵斜（SMOOTH/_H/_V）、垂直/水平夹角的<i>帧内编码块</i>与仿射预测的<i>帧间编码块</i>为素材/参考源，这些限定条件有性能和兼容性考量，使得不是所有帧内编码都可用。</p>
-                <p>结合则使用楔形蒙版预测的横向和纵向模式，但主要还是随坐标过渡权重（渐变蒙版）的两种预测结果混合，实现预测。</p>
-                <p class="text-gray-side">注：之所以叫“InterIntra”，是因为其它的分权方法都基于“InterInter”，即左右两侧皆指向其它帧，构成帧间预测。</p>
-                <p class="text-gray-side">注：重叠块运动补偿 OBMC 见下方的运动补偿版块中</p>
-                <div class="align-items-center">
-                    <img loading="lazy" src="files/inter-prediction/compound-interintra-prediction.png" alt="imageR" class="img-medium">
-                    <p class="text-gray-side mt-0">图：重叠合成的可行样式与渐变结构</p>
-                </div>
-            </div>
-
-            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（5/5）楔形蒙版预测分权 Wedge mask predictor</button>
-            <div class="coll-content">
-                <h4>（5/5）楔形蒙版预测分权 Wedge mask predictor</h4>
-                <p>通过长 16 的序列作为指定分割被参考块的蒙版/掩码参数，使两个被参考帧的同位参考块得以叠加，预测出当前块。由于楔形蒙版预测实际是两帧参考帧分别合成，因此预测像素的权重只在重合界处为各自一半（32:32），其余为 64:0 以及 0:64</p>
-                <ul>
-                    <li><a href="https://aomediacodec.github.io/av1-spec/#wedge-mask-process">AV1 Spec 中</a> 则是从 64x1的蒙版/掩码（<code>Wedge_Master_Oblique_Odd/Even</code>，<code>Wedge_Master_Vertical</code>）中生成：</li>
-                </ul>
-                <div class="align-items-center">
-                    <img loading="lazy" src="files/inter-prediction/compound-wedge-prediction.png" alt="imageR" class="img-small">
-                    <p class="text-gray-side mt-0">图：楔形蒙版/楔形掩码的 NxN，Nx2N 分类的不同模式</p>
-                </div>
+            <h5>（3/3——6/6）楔形蒙版预测分权/楔形掩码预测分权 Wedge mask predictor</h5>
+            <p>通过长 16 的序列作为指定分割被参考块的蒙版/掩码参数，使两个被参考帧的同位参考块得以叠加，预测出当前块。由于楔形蒙版预测实际是两帧参考帧分别合成，因此预测像素的权重只在重合界处为各自一半（32:32），其余为 64:0 以及 0:64</p>
+            <ul>
+                <li><a href="https://aomediacodec.github.io/av1-spec/#wedge-mask-process">AV1 Spec 中</a> 则是从 64x1的蒙版/掩码（<code>Wedge_Master_Oblique_Odd/Even</code>，<code>Wedge_Master_Vertical</code>）中生成：</li>
+            </ul>
+            <div class="align-items-center">
+                <img loading="lazy" src="files/inter-prediction/compound-wedge-prediction.png" alt="imageR" class="img-small">
+                <p class="text-gray-side mt-0">图：楔形蒙版/楔形掩码的 NxN，Nx2N 分类的不同模式</p>
             </div>
 
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：64x1 楔形蒙版初始值</button>
@@ -1997,7 +1971,7 @@ Wedge_Master_Oblique_Even[MASK_MASTER_SIZE] =
 Wedge_Master_Vertical[MASK_MASTER_SIZE] =
 { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 7, 21, 43, 57, 62, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64, 64 }
             </code></pre></div>
-            <p>通过确认当前块横向还是纵向的 4x4 分块数量更多，以预选一批模式，然后循环遍历选取蒙版角度，以及额外用于对齐的 x 偏移与 y 偏移，完成预测：</p>
+            <p>通过确认当前块横向还是纵向的 4x4 分块数量更多，以预选一批模式，然后循环遍历选取蒙版角度，以及额外用于对齐的 x、y 偏移，完成预测：</p>
             <div class="align-items-center">
                 <img loading="lazy" src="files/inter-prediction/compound-prediction-modes.webp" alt="imageR" class="img-small">
                 <p class="text-gray-side mt-0">图：不同混合参考帧预测模式的结果对比</p>
