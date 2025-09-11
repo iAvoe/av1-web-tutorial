@@ -6800,7 +6800,8 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
             </ol>
             <h4>（4/4）VMAF 的缺点</h4>
             <ul>
-                <li>算法原理复杂</li>
+                <li>算法原理复杂，分数降低的原因不好说</li>
+                <li>默认先输入压缩源、后输入原画源，与其它画质指标的输入顺序相反，且反直觉</li>
                 <li>评价指标主要取决于提炼出的特征，而非失真图像与源的客观差距——分数变化与客观画质不一定呈正相关</li>
                 <li>机器学习模型的训练数据只能涵盖部分画面内容种类，因此画面内容不够主流的视频不一定可用</li>
                 <li>（<span class="text-red-emph">此点未经查证，真假未知</span>）特定版本中模糊失真、块失真、高对比度所导致的色度边缘溢出、偏色失真反而会导致评分提高</li>
@@ -7279,15 +7280,16 @@ ffprobe.exe -v error -select_streams v:0 -show_entries stream=time_base -of defa
             <pre><code class="text-smaller language-powershell">
 [0:v]setpts=N*(1/24000)[src]; [1:v]setpts=N*(1/24000)[enc];
             </code></pre>
-            <p>而 XPSNR、VMAF 命令前添加这个 setpts 以及输入 [src][enc] 两个源即可：</p>
+            <p>而 XPSNR、VMAF 命令前添加这个 setpts 以及输入 <code>[enc][src]</code> 两个源即可：</p>
+            <p class="text-red-emph">注意：VMAF 的滤镜输入顺序是先压缩、后原画，因此不是 <code>[src][enc]</code></p>
             <pre><code class="text-smaller language-powershell">
--lavfi "[0:v]setpts=N*(1/24000)[src]; [1:v]setpts=N*(1/24000)[enc]; [src][enc]xpsnr=stats_file=-"
+-lavfi "[0:v]setpts=N*(1/24000)[src]; [1:v]setpts=N*(1/24000)[enc]; [enc][src]xpsnr=stats_file=-"
 
-ffmpeg -i .\源视频.mkv -i .\压缩后.ivf -lavfi "[0:v]setpts=N*(1/24000)[src]; [1:v]setpts=N*(1/24000)[enc]; [src][enc]xpsnr=stats_file=-" -f null -
+ffmpeg -i .\源视频.mkv -i .\压缩后.ivf -lavfi "[0:v]setpts=N*(1/24000)[src]; [1:v]setpts=N*(1/24000)[enc]; [enc][src]xpsnr=stats_file=-" -f null -
 
--lavfi "[0:v]setpts=N*(1/24000)[src]; [1:v]setpts=N*(1/24000)[enc]; [src][enc]libvmaf=model=version=vmaf_v0.6.1\\:name=vmaf_1080p|version=vmaf_4k_v0.6.1\\:name=vmaf_4k"
+-lavfi "[0:v]setpts=N*(1/24000)[src]; [1:v]setpts=N*(1/24000)[enc]; [enc][src]libvmaf=model=version=vmaf_v0.6.1\\:name=vmaf_1080p|version=vmaf_4k_v0.6.1\\:name=vmaf_4k"
 
-ffmpeg -i .\源视频.mkv -i .\压缩后.ivf -lavfi "[0:v]setpts=N*(1/24000)[src]; [1:v]setpts=N*(1/24000)[enc]; [src][enc]libvmaf=model=version=vmaf_v0.6.1\\:name=vmaf_1080p|version=vmaf_4k_v0.6.1\\:name=vmaf_4k" -f null -
+ffmpeg -i .\源视频.mkv -i .\压缩后.ivf -lavfi "[0:v]setpts=N*(1/24000)[src]; [1:v]setpts=N*(1/24000)[enc]; [enc][src]libvmaf=model=version=vmaf_v0.6.1\\:name=vmaf_1080p|version=vmaf_4k_v0.6.1\\:name=vmaf_4k" -f null -
             </code></pre>
             <h5>对齐丢帧帧率/小数帧率时间基</h5>
             <p>若得到 1/90000（有些蓝光盘的 .m2ts 流）与 1001/24000（24fps 丢帧到 23.976），则因为第二个值而不能简单的计算分母积，而只能计算分数的最大公约数（这是丢帧帧率应该被淘汰的又一原因）：</p>
@@ -7351,9 +7353,9 @@ chcp 65001
 
 set "sourcePath=X:\源视频路径\"
 set "lossyPath=X:\压缩视频路径\"
-set "setptsCmdA=[0:v]setpts=N*(1/24000)[src]; [1:v]setpts=N*(1/24000)[enc]; [src][enc]"
-set "setptsCmdB=[0:v]setpts=N*(1/6000)[src]; [1:v]setpts=N*(1/6000)[enc]; [src][enc]"
-set "setptsCmdC=[0:v]setpts=N*(1/360000)[src]; [1:v]setpts=N*(1/360000)[enc]; [src][enc]"
+set "setptsCmdA=[0:v]setpts=N*(1/24000)[src]; [1:v]setpts=N*(1/24000)[enc]; [enc][src]"
+set "setptsCmdB=[0:v]setpts=N*(1/6000)[src]; [1:v]setpts=N*(1/6000)[enc]; [enc][src]"
+set "setptsCmdC=[0:v]setpts=N*(1/360000)[src]; [1:v]setpts=N*(1/360000)[enc]; [enc][src]"
 set "xpsnrCmd=xpsnr=stats_file="
 
 set "outputFile=X\\:/\导出测试结果路径\/xpsnr-视频1跑分-两万四千分之一.txt"
@@ -7389,9 +7391,9 @@ chcp 65001
 
 set "sourcePath=X:\源视频路径\"
 set "lossyPath=X:\压缩视频路径\"
-set "setptsCmdA=[0:v]setpts=N*(1/24000)[src]; [1:v]setpts=N*(1/24000)[enc]; [src][enc]"
-set "setptsCmdB=[0:v]setpts=N*(1/6000)[src]; [1:v]setpts=N*(1/6000)[enc]; [src][enc]"
-set "setptsCmdC=[0:v]setpts=N*(1/360000)[src]; [1:v]setpts=N*(1/360000)[enc]; [src][enc]"
+set "setptsCmdA=[0:v]setpts=N*(1/24000)[src]; [1:v]setpts=N*(1/24000)[enc]; [enc][src]"
+set "setptsCmdB=[0:v]setpts=N*(1/6000)[src]; [1:v]setpts=N*(1/6000)[enc]; [enc][src]"
+set "setptsCmdC=[0:v]setpts=N*(1/360000)[src]; [1:v]setpts=N*(1/360000)[enc]; [enc][src]"
 set "vmafCmd=libvmaf=model=version=vmaf_v0.6.1\\:name=vmaf_1080p|version=vmaf_4k_v0.6.1\\:name=vmaf_4k"
 
 set "outputFile=X:\导出测试结果路径\vmaf-视频1跑分-两万四千之一.txt"
