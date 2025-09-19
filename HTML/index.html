@@ -4795,8 +4795,11 @@ static void set_bitstream_level_tier(SequenceControlSet *scs) {
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;逗号分隔整数，默认 0,0,...,0&gt;指定每层色度尖塔混合参考帧（<code>--hierarchical-levels</code>）下级的量化步长索引偏移，决定色度平面量化步长大小。</p>
 
             <h5>（8/12——2/7）方差自适应量化</h5>
+            <code class="code-bold">--aq-mode</code>
+            <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~2，默认 2&gt;指定<u>帧间</u>方差自适应量化模式——0：关，1：分瓣 VAQ 调整；2：并且使用 QP 偏移预测。</p>
+            <p class="text-gray-side">注：SVT-AV1 中，该参数和字面意思一样只设“mode”，不调强度（异于 x264、x265）。</p>
             <code class="code-bold">&#45;&#45;enable-variance-boost</code>
-            <p class="font-monospace pl-5 m-0 overflow-auto">&lt;0/1，默认 0：关，<span class="text-red-emph">Superblock 大小改为 64x64</span>&gt;指定<u>帧内</u>方差自适应量化的增强强度微调。Superblock 改动逻辑见 <a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/master/Source/Lib/Globals/enc_handle.c#L3922">enc_handle.c</a>。</p>
+            <p class="font-monospace pl-5 m-0 overflow-auto">&lt;0/1，默认 0：关，<span class="text-red-emph">开启时 Superblock 大小改为 64x64</span>&gt;指定<u>帧内</u>方差自适应量化的增强强度微调。Superblock 改动逻辑见 <a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/master/Source/Lib/Globals/enc_handle.c#L3922">enc_handle.c</a>。</p>
             <code class="code-bold">--variance-boost-curve</code>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~2，默认 0：默认曲线&gt;指定<u>帧内</u>方差自适应量化的增强映射曲线。TODO：可能无法在 API 中使用，包括 ffmpeg svtav1-params，需确认 CLI ONLY）</p>
             <ul class="list-dotless text-smaller">
@@ -4836,19 +4839,15 @@ switch (curve) {
             <code class="code-bold">--variance-octile</code>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 1~8，默认 6：高要求&gt;指定<u>帧内（Superblock）</u>方差自适应量化增强（Variance Boost）的方差自适应量化开启条件——但凡特大块中某个分块的面积达到全块的 variance-octile÷8，并且内容为低对比度，则对该 Superblock 启用方差自适应量化增强。这样可以减少其中紧挨着“复杂块”的“简单块”被连带着分配了过高量化强度所致的模糊块失真。</p>
             <p class="text-gray-side">注：在大范围优化测试（见下方测试版块）中，发现指定 2、4、6（默认）时，对所有测试视频都没能产生任何影响，也没有触发参数无效警告。因此可能需要在远超 CRF30 所致的高量化强度、指定极值、或搭配参数使用。</p>
-            <ul class="list-dotless text-smaller">
-                <li>分子越小，则越多紧邻纹理线条/烟雾破片的平面/斜面的区域被开启 VAQ、计算量越大、码率越高、块内视觉对比度一致性也越高</li>
-                <li>分子越大，则越少紧邻纹理线条/烟雾破片的平面/斜面的区域被开启 VAQ、计算量越大、码率越低、块内视觉对比度一致性也越低</li>
+            <ul class="text-smaller">
+                <li>分子越小，则紧邻纹理线条的平面/斜面的区域越多开启 VAQ、编码延迟越高、码率越高、块内画质（视觉对比度一致性）越好</li>
+                <li>分子越大，则紧邻纹理线条的平面/斜面的区域越少开启 VAQ、编码延迟越低、码率越低、块内画质（视觉对比度一致性）越差</li>
                 <li>注：较大的分子可能会导致模糊块失真得不到解决</li>
                 <li>注：如果源的画面自始至终都保持一致的复杂或简单，则此参数的影响需要极小值见效，但此时关键帧的体积可能会超出播放设备的带宽/网速上限</li>
                 <li>建议：该参数高度依赖原画清晰度。如果原画已受到模糊、JPEG 蚊噪等失真影响，则建议使用默认或更高的值</li>
                 <li>建议：一开始给予较低 CRF 强度、宽限 VBR 的情况下可以保持默认，否则根据高频细节与平面的紧邻程度和分辨率来调整。</li>
                 <li>建议：官方建议范围 4~7，此外的值会导致码率翻倍或画质自适应不足。详见 <a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/master/Docs/Appendix-Variance-Boost.md?ref_type=heads#--variance-octile-1-8">SVT-AV1 Readme</a></li>
             </ul>
-
-            <code class="code-bold">--aq-mode</code>
-            <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~2，默认 2：分瓣 VAQ + QP 偏移预测&gt;指定帧间方差自适应量化模式——0：关，1：分瓣 VAQ 调整；2：并且使用 QP 偏移预测。</p>
-            <p class="text-gray-side">注：与 x264、x265 不同，该参数不再调整强度，而是和字面意思一样只调整模式。强度相关设置</p>
 
             <h5>（8/12——3/7）VBR、CBR 模式细节</h5>
             <code class="code-bold">--tbr</code>
@@ -13664,7 +13663,7 @@ Max Latency:		27642 ms
             <p>尽管 AV1 编码器有强大的帧间参考系统，但在压缩 24 秒、36 秒（2 倍、3 倍）关键帧间隔时没能起到显著或有效的提升。在简单（动漫材质动画，3D 动画）场景的压缩率提升在 2%；复杂片源中则因为关键帧过长出现了码率反增的副作用。因此“大幅提高 GOP 长度、开启最高的分层预测结构层数、并降低关键帧量化强度”被证明无效，也不需要进行画质跑分了。</p>
 
             <h3>测试——SVT-AV1 全功能 B 帧与画质优先参数测试</h3>
-            <p>由于 x265 一开始就使用了高压缩高画质自定义参数，所以只使用一般~快速选项的 SVT-AV1 才显得不足。本次测试会使用更慢的 <code>&#45;&#45;preset 2</code> 预设，该预设下 SVT-AV1 会解锁楔形蒙版、距离、画面差距等混合参考分权算法；同时让最小细分块缩小到 4x4，从而提高画面精细度（其它 preset 变更见上方预设参数说明）；与此同时，将上述测试中得出的理论优解按照画面类型选出综合材质动画、综合材质录像两类同时优化画质和码率的参数，再进行交叉测试。</p>
+            <p>由于上述测试中的 x265 全部使用了高压缩高画质自定义参数，显得基准测试中的 SVT-AV1 被盖过风头。本次测试会使用更慢，但功能完整的 <code>&#45;&#45;preset 2</code> 预设——启用楔形蒙版、距离、画面差距等混合参考分权算法；解锁更精细的 4x4 细分块（其它变化见参数说明）；与此同时，将上述测试中得出的理论优解按照画面类型选出综合材质动画、综合材质录像两类同时优化画质和码率的参数，再进行交叉测试。</p>
 
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（1/8）SVT-AV1 v3.0——SolLevante</button>
             <div class="coll-content">
@@ -14754,7 +14753,7 @@ ssimulacra2_rs: Mean: 83.68623603, Median: 83.96666350, Std Dev: 3.66503275, 5th
                 <li>SVT-AV1 的最差画质（SSIMULACRA 第 5%）远好于 x265</li>
             </ol>
 
-            <h3>测试——SVT-AV1 3.1 CLang 与 3.0 MSVC 对比测试</h3>
+            <h3>测试——SVT-AV1 3.1 Clang 与 3.0 MSVC 对比测试</h3>
             <p>只测试部分片源来观察画质指标得分版本更新，编译方法优化前后的提升。参数全部采用保守型画质优先参数以减少重复测试。</p>
             <div id="svtav1VerCompTestData" class="overflow-auto mt-3"><table class="table-center text-smaller two-decimals">
                 <thead>
@@ -15398,6 +15397,17 @@ ssimulacra2_rs: Mean: 83.68623603, Median: 83.96666350, Std Dev: 3.66503275, 5th
                 <li>困难场景画质全面上升，简单场景画面有下降，但仔细看可以发现变化不大，相比于速度的增加完全可以接受</li>
             </ol>
 
+            <h3>SVT-AV1 未完全测试发现的问题</h3>
+            <ol>
+                <li>难以控制大锯齿画面的体积，而尽管 x265 结果画质差些（参数同上述 x265 基准参数，针对片源调整），压缩率上又能赢回来
+                    <ul>
+                        <li>任天堂 Switch 主机/游戏、以及没有调好画面的游戏录屏中关闭了抗锯齿 Anti-Aliasing（AA），因此是普遍的画面类型</li>
+                        <li>大锯齿画面对心理学优化（PSY）的要求高，而绝大多数 AV1 编码器没有这个功能</li>
+                        <li>在大锯齿画面下，x265 CRF18 搭配上述基准参数的结果体积只有 SVT-AV1 CRF30 P2 默认（关自适应量化等调优）的 3/5~1/2</li>
+                    </ul>
+                </li>
+            </ol>
+
             <h2 id="h2-19">附录——下载</h2>
 
             <h3>下载——SVT-AV1 编码器</h3>
@@ -15544,9 +15554,14 @@ cmake --fresh -B svt_build -G Ninja ^
                     <li><code class="code-bold">-flto</code>：启用全程序链接时优化（Link‑Time Optimization）</li>
                     <li><code class="code-bold">-DCMAKE_BUILD_TYPE=Release</code>、<code class="code-bold">/DNDEBUG</code>：编译发布（Release）而非调试（Debug）版本</li>
                     <li><code class="code-bold">/clang:-02</code>：Clang-CL 编译器的优化等级设置</li>
-                    <li><code class="code-bold">-DENABLE_AVX512=OFF</code>：禁 AVX-512 指令集，推荐用于架构旧于 ZEN4、Arrow Lake 的 CPU</li>
+                    <li><code class="code-bold">-DENABLE_AVX512=OFF</code>：禁用 SVT-AV1 源代码中提供的 AVX-512 指令集，推荐用于架构旧于 ZEN4、Arrow Lake 的 CPU</li>
                     <li><code class="code-bold">-DSVT_AV1_LTO=OFF</code>：使用 <code class="code-bold">-flto</code> 做上位替代，因此关闭</li>
-                    <li><code class="code-bold">-march=native</code>：自动根据当前 CPU 架构优化性能，建议开，或根据目标电脑修改参数值</li>
+                    <li><code class="code-bold">-march=native</code>：自动根据当前 CPU 架构优化性能，建议开，或根据目标电脑修改参数值
+                        <ul>
+                            <li>启用 <code>-march=native</code> 时，LLVM 会根据当前 CPU 架构（和 BIOS 设置）而选择是否生成 AVX-512 指令，这与 <code>-DENABLE_AVX512=OFF</code> 选项无关</li>
+                            <li>因此在启用 <code>-march=native</code> 时，如果编译时 BIOS 启用了 AVX-512、编译后又关闭了 AVX-512，则编译出的程序无法运行</li>
+                        </ul>
+                    </li>
                 </ul>
                 <p>最后使用 Ninja 编译：</p>
                 <pre><code class="text-smaller language-powershell hljs">
