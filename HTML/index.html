@@ -6388,8 +6388,9 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
             <p>对于测试画质这种说不准的伪客观多变量虚拟单位，即曾仕强教授所言“只能对到一定程度、深度，再往深究就错了”。测量画质的方法论即 Image/Video Quality Assessment。IQA、VQA 分为主观、客观，绝对评价、相对评价，全参考、部分参考和无参考。见 <a href="https://baike.baidu.com/item/IQA/19453034">百度百科</a>。</p>
             <p>主观画质测量指标受到视觉系统差异和认知理解差异拖累，因此需要大量参与者以及耗费大量时间测量和整理数据——需要协调群体完成。相比之下，由于主观评价最能贴近人眼视觉，这类指标成为客观指标的参考依据。客观测试具有结果高度可重复、高效率、无人值守、低成本的优点。当报告图像质量测量结果时，通常使用平均意见分数 Mean opinion score（MOS），或差异 Difference MOS（DMOS）平均意见分数表——以类似星级评价的测量方法（完全看不清~完美），见 <a href="https://videoclarity.com/PDF/Advancing-To-Multi-Scale-SSIM-Final.pdf">videoclarity</a>。VQA 与 IQA 使用了相同的评价体系分类，区别是视频要求观看距离和屏幕尺寸在测试中不变，且不暂停播放。</p>
             <div class="align-items-center">
-                <img loading="lazy" src="files/image-quality-metric/vqa.webp" alt="imageR" class="">
-                <p class="text-gray-side mt-0">图：VQA 测试。见<a href="https://qualinet.github.io/databases/video/ivp_subjective_quality_video_database/">香港大学 IVP Lab</a></p>
+                <img loading="lazy" src="files/image-quality-metric/vqa.webp" alt="VQA1" class="">
+                <img loading="lazy" src="files/image-quality-metric/Saliency Maps 2013.webp" alt="VQA2" class="img-medium">
+                <p class="text-gray-side mt-0">图：VQA 测试。见<a href="https://qualinet.github.io/databases/video/ivp_subjective_quality_video_database/">香港大学 IVP Lab</a>，<a href="https://compression.ru">MSU Graphics</a></p>
             </div>
 
             <h3>画质指标——评价体系分类</h3>
@@ -15577,31 +15578,42 @@ ninja -C svt_build
             <h3><a href="https://github.com/nekotrix/SVT-AV1-Essential/releases/tag/v3.1.0-Essential">下载——SVT-AV1-Essential 编码器</a>（fork）</h3>
             <h3><a href="https://github.com/Patman86/SVT-AV1-Mod-by-Patman">下载——SVT-AV1-HDR 编码器</a>（fork）</h3>
 
-            <p>SVT-AV1-Essential同 SVT-AV1-PSY 是第三方修改版的编码器，增加了新参数，新功能，目前（3.1）版也与官方版进度一致。在完整版教程的测试，以及接下来的参数配置部分仍然围绕 SVT-AV1 进行。选择使用第三方修改版需要额外参考针对它们的参数变化，它们往往不会被 ffmpeg 收录为动态链接库。使用时请确保自己至少有一天之闲来调试测试。</p>
+            <p>SVT-AV1-Essential 同 SVT-AV1-PSY 是第三方修改版的编码器，增加了新参数，新功能，目前（3.1）版也与官方版进度一致。在完整版教程的测试，以及接下来的参数配置部分仍然围绕 SVT-AV1 进行。选择使用第三方修改版需要额外参考针对它们的参数变化，它们往往不会被 ffmpeg 收录为动态链接库。使用时请确保自己至少有一天之闲来调试测试。</p>
 
             <!--失败：<h4>（2/2）Windows Docker Desktop 编译</h4>-->
             <h3>下载——基本工具</h3>
             <table class="table-center">
                 <tbody>
                     <tr class="border-bottom">
+                        <th class="px-3 t-light-gray"><a href="https://bluesky-soft.com/en/DXVAChecker.html">DXVA Checker</a></th>
+                        <td class="px-1">
+                            <p>检测 PC 上支持的硬件编解码、渲染器的输入输出色彩空间、色度采样，以及监控编解码占用的轻量工具。可选择下载安装版（Installer）或便携版（ZIP）</p>
+                        </td>
+                    </tr>
+                    <tr class="border-bottom">
                         <th class="px-3 t-light-gray"><a href="http://ffmpeg.org/download.html">ffmpeg~ffprobe</a></th>
-                        <td class="px-1">顶级开源多系统多媒体 CLI 处理工具、ffmpeg 中内置了 libsvtav1；后者还支持读取视频帧/GOP SEI 信息，可以用于分析码率构成与趋势，以及挑选出不同压制结果中的最优选。</td>
+                        <td class="px-1">
+                            <p>顶级开源多系统多媒体 CLI 处理工具；后者还支持读取视频帧/GOP SEI 信息，可以用于分析码率构成与趋势，以及挑选出不同压制结果中的最优选。</p>
+                        </td>
                     </tr>
                     <tr class="border-bottom">
                         <th class="px-3 t-light-gray"><a href="https://mpv.io/installation/">mpv</a></th>
-                        <td class="px-1">开源，支持便携的现代视频视频播放器。见<a href="https://nazorip.site/archives/1052/">安装与配置</a>教程</td>
+                        <td class="px-1"><p>支持便携的开源多系统现代视频播放器。见<a href="https://nazorip.site/archives/1052/">安装与配置</a>教程</td>
                     </tr>
                     <tr class="border-bottom">
                         <th class="px-3 t-light-gray"><a href="https://www.voukoder.org/">Voukoder</a></th>
-                        <td class="px-1">开源 Premiere Vegas After Effects 压制导出插件，分为 Voukoder 和 V-Connector 两部分</td>
+                        <td class="px-1"><p>Premiere Vegas After Effects 压制导出插件，分为 Voukoder 和 V-Connector 两部分</p></td>
                     </tr>
                     <tr class="border-bottom">
                         <th class="px-3 t-light-gray"><a href="https://obsproject.com/zh-cn/download">OBS</a></th>
-                        <td class="px-1">强大的开源直播框架和软件，设置略比传统录屏软件复杂，但效果也更好</td>
+                        <td class="px-1"><p>开源直播框架和录制软件，设置略比传统录屏软件复杂，但效果也更好</p></td>
                     </tr>
                     <tr class="border-bottom">
                         <th class="px-3 t-light-gray"><a href="https://mediaarea.net/zh-CN/MediaInfo">MediaInfo</a></th>
-                        <td class="px-1">开源的 GUI 媒体元数据/视音频格式读取器，用于配置正确的压制参数</td>
+                        <td class="px-1">
+                            <p>开源 GUI 媒体元数据/视音频格式读取器，这些数据是配置合理压制参数的关键</p>
+                            <p class="text-gray-side">注：由于苹果应用商店收取上架费，因此需要在 <a href="https://mediaarea.net/zh-CN/MediaInfo/Download/Mac_OS">MediaInfo 官网下载安装包（下载 GUI，不是 CLI）</a>并侧载安装。</p>
+                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -15706,7 +15718,7 @@ ssimulacra2.exe .\原画.png .\压缩.png
             <div class="coll-content">
                 <ol>
                     <li>安装 <a href="https://rustup.rs/">rustup</a>（编译环境）</li>
-                    <li>完整安装 <a href="th/vapoursynth/releases">VapourSynth</a>（ssimulacra_rs 依赖），必须安装到 <code>C:\Program Files\VapourSynth</code> 并选择“Install for all users”
+                    <li>完整安装 <a href="https://github.com/vapoursynth/vapoursynth/releases">VapourSynth</a>（ssimulacra_rs 依赖），必须安装到 <code>C:\Program Files\VapourSynth</code> 并选择“Install for all users”
                         <ul><li>此处打开时会报错，并提示特定的 Python 版本要求</li></ul>
                     </li>
                     <li>完整安装 VapourSynth 要求的 <a href="https://www.python.org/">Python</a> 环境版本，必须以管理员身份运行，并在自定义安装中选择“Install for all users”（VapourSynth 依赖）</li>
