@@ -6380,15 +6380,15 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
             <h4>（1/4）主观指标</h4>
             <p>只涉及人类观察者的人眼视觉系统 Human visual system（HVS），分为外行评价者与内行评价者的测量方法。</p>
             <ul>
-                <li><b>绝对：</b>对比原图和失真图像，以类似星级评价的测量方法</li>
-                <li><b>相对：</b>没有原图作参考，而是由观察者对一批图像进行画质优劣顺序</li>
+                <li><b>绝对</b>：对比原图和失真图像，以类似星级评价的测量方法</li>
+                <li><b>相对</b>：没有原图作参考，而是由观察者对一批图像进行画质优劣顺序</li>
             </ul>
             <h4>（2/4）客观指标</h4>
-            <p>借助反映人眼感知的算法，给出数学计算推导结果。</p>
+            <p>借助反映人眼感知的算法来推导结果。</p>
             <ul>
-                <li><b>全参考：</b>使用算法统计，如 PSNR、SSIM、VIF、MAE、FUZZ、等，必须提供无损压缩或未压缩的源（Garbage in garbage out）</li>
-                <li><b>部分参考：</b>通过算法提炼出图像的主体特征，与理想状态的主体特征做对比得到，相比全参考的计算量有所减少</li>
-                <li><b>无参考：</b>没有原图时，设定一种理想的数据状态，再检查失真图像的各种性质（亮度、对比度、结构等）是否贴近</li>
+                <li><b>全参考</b>：使用算法统计，如 PSNR、SSIM、VIF、MAE、FUZZ、等，必须提供无损压缩或未压缩的源（Garbage in garbage out）</li>
+                <li><b>部分参考</b>：通过算法提炼出图像的主体特征，与理想状态的主体特征做对比得到，相比全参考的计算量有所减少</li>
+                <li><b>无参考</b>：没有原图时，设定一种理想的数据状态，再检查失真图像的各种性质（亮度、对比度、结构等）是否贴近</li>
             </ul>
             <h4>（3/4）客观指标缺点</h4>
             <ul>
@@ -6399,8 +6399,8 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                         <li>通过软件录制渲染出的画面会受到 CPU 带宽与硬盘的写入性能制约，并与渲染画面争夺计算性能</li>
                     </ul>
                 </li>
-                <li><b>部分参考：</b>图像的失真不一定都存在于特征上，如画面平面、斜面处的色带、块失真</li>
-                <li><b>无参考：</b>用途很有限</li>
+                <li><b>部分参考</b>：图像的失真不一定都存在于特征上，如画面平面、斜面处的色带、块失真</li>
+                <li><b>无参考</b>：用途很有限</li>
             </ul>
             <h4>（4/4）暂停还是播放</h4>
             <p>有损视频压缩必然会根据信息的动态强度而应用不同程度的量化，并在偏动态的画面中产生相比偏静态画面更多的“暂停时可见失真”；而另一方面，类似于观众对画质理解的差异，不同画质指标对于这种失真的“接受度”不同。基于图像的画质评价算法与“暂停观看评价”（图像序列逐帧对比）一致，所以必然会得出与基于视频的画质评价算法差异较大的分数。为了减少这种差异，测试环节就必然需要同时测量出“暂停观看评价”与“播放观看评价”两种指标，以保证合理性。</p>
@@ -6783,7 +6783,7 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
             <h4>（4/4）VMAF 的缺点</h4>
             <ul>
                 <li>算法原理复杂，分数降低的原因不好说</li>
-                <li>默认先输入压缩源、后输入原画源，与其它画质指标的输入顺序相反，且反直觉</li>
+                <li>倒序输入视频源与压缩后结果（先损后源），不但反直觉，而且不是常识，使得网络上大部分 VMAF 跑分，包括本教程的跑分失信</li>
                 <li>评价指标主要取决于提炼出的特征，而非失真图像与源的客观差距——分数变化与客观画质不一定呈正相关</li>
                 <li>机器学习模型的训练数据只能涵盖部分画面内容种类，因此画面内容不够主流的视频不一定可用</li>
                 <li>（<span class="text-red-emph">此点未经查证，真假未知</span>）特定版本中模糊失真、块失真、高对比度所导致的色度边缘溢出、偏色失真反而会导致评分提高</li>
@@ -7263,7 +7263,7 @@ ffprobe.exe -v error -select_streams v:0 -show_entries stream=time_base -of defa
 [0:v]setpts=N*(1/24000)[src]; [1:v]setpts=N*(1/24000)[enc];
             </code></pre>
             <p>而 XPSNR、VMAF 命令前添加这个 setpts 以及输入 <code>[enc][src]</code> 两个源即可：</p>
-            <p class="text-red-emph">注意：VMAF 的滤镜输入顺序是先压缩、后原画，因此不是 <code>[src][enc]</code></p>
+            <p class="text-red-emph">注：VMAF 的滤镜输入顺序是先损后源，因此是 <code>[enc][src]</code>，不是 <code>[src][enc]</code></p>
             <pre><code class="text-smaller language-powershell">
 -lavfi "[0:v]setpts=N*(1/24000)[src]; [1:v]setpts=N*(1/24000)[enc]; [enc][src]xpsnr=stats_file=-"
 
@@ -7367,6 +7367,7 @@ ffmpeg -hide_banner -an ^
 pause
             </code></pre>
             <h5>VMAF 批处理</h5>
+            <p class="text-red-emph">VMAF 的输入顺序是先损后源，因此压缩视频的输入在前。</p>
             <pre><code class="text-smaller language-powershell">
 
 chcp 65001
@@ -7380,26 +7381,26 @@ set "vmafCmd=libvmaf=model=version=vmaf_v0.6.1\\:name=vmaf_1080p|version=vmaf_4k
 
 set "outputFile=X:\导出测试结果路径\vmaf-视频1跑分-两万四千之一.txt"
 ffmpeg -hide_banner -an ^
--i "%sourcePath%源视频1.mkv" ^
 -i "%lossyPath%压缩视频1.ivf" ^
+-i "%sourcePath%源视频1.mkv" ^
 -lavfi "%setptsCmdA%%vmafCmd%" -f null - &gt; %outputFile% 2&gt;&1
 
 set "outputFile=X:\导出测试结果路径\vmaf-视频2跑分-六千分之一.txt"
 ffmpeg -hide_banner -an ^
--i "%sourcePath%源视频2.mov" ^
 -i "%lossyPath%压缩视频2.ivf" ^
+-i "%sourcePath%源视频2.mov" ^
 -lavfi "%setptsCmdB%%vmafCmd%" -f null - &gt; %outputFile% 2&gt;&1
 
 set "outputFile=X:\导出测试结果路径\vmaf-视频3跑分-三十六万分之一.txt"
 ffmpeg -hide_banner -an ^
--i "%sourcePath%源视频3.m2ts" ^
 -i "%lossyPath%压缩视频3.ivf" ^
+-i "%sourcePath%源视频3.m2ts" ^
 -lavfi "%setptsCmdC%%vmafCmd%" -f null - &gt; %outputFile% 2&gt;&1
 
 set "outputFile=X:\导出测试结果路径\vmaf-视频4跑分-无对齐.txt"
 ffmpeg -hide_banner -an ^
--i "%sourcePath%源视频4.m2ts" ^
 -i "%lossyPath%压缩视频4.ivf" ^
+-i "%sourcePath%源视频4.m2ts" ^
 -lavfi "%vmafCmd%" -f null - &gt; %outputFile% 2&gt;&1
 
 pause
