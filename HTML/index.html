@@ -16,67 +16,49 @@
         <script>hljs.highlightAll();</script>
         <title>AV1 编码教程 HTML 版</title>
 	</head>
-	<body class="text-gray-main">
+    <body class="text-gray-main">
         <div class="container-title">
             <h1>AV1 编码教程 <span class="text-blue-emph">HTML 版</span></h1>
-            <p>欢迎阅读！若有任何问题，请加入 QQ 群<a href="https://jq.qq.com/?_wv=1027&k=5YJFXyf">691892901</a>。本教程虽然相对于 x264、x265 教程严谨，并提供了测试数据提高严谨性，但仍仅具备业余参考价值。本文省略了 x264、x265 教程中出现过的内容，查阅本文要求读者已经明晰视频编码器的基本原理和一定细节。</p>
-            <!-- x264 教程副本，更改需手动同步 ! 未同步 ! 未同步 ! 未同步 { -->
-            <h2 class="my-3">地图</h2>
-            <ol class="font-monospace">
-                <li><a href="../../x264-web-tutorial/HTML/index.html">x264 教程网页版</a></li>
-                <li><a href="../../x265-web-tutorial/HTML/index.html">x265 教程网页版</a></li>
-                <li><a href="../../av1-web-tutorial/HTML/index.html" class="disabled">AV1 教程网页版（你在这里）</a>
-                    <ul class="text-xs">
-                        <li>概览：
-                            <a class="toSelf" href="#h2-1">视频的压制</a>
-                            <a class="toSelf" href="#h2-2">流结构</a>
-                            <a class="toSelf" href="#h2-3">图片结构</a>
-                        </li>
-                        <li>编码：
-                            <a class="toSelf" href="#h2-4">变换</a>
-                            <a class="toSelf" href="#h2-5">前瞻</a>
-                            <a class="toSelf" href="#h2-6">帧间预测</a>
-                            <a class="toSelf" href="#h2-7">帧内预测</a>
-                            <a class="toSelf" href="#h2-8">量化</a>
-                            <a class="toSelf" href="#h2-9">熵编码</a>
-                            <a class="toSelf" href="#h2-10">模式决策</a>
-                            <a class="toSelf" href="#h2-11">环路滤镜</a>
-                        </li>
-                        <li>参数：
-                            <a class="toSelf" href="#h2-13">SVT-AV1 参数与预设</a>
-                            <a class="toSelf" href="#h2-14">SVT-AV1 报错与警告</a>
-                            <!--本教程在设计上考虑了多编码器的参数、报错说明，但由于测试工作量远超预期，所以最终只完成了一个编码器
-                            <a class="toSelf disabled" href="#h2-15">某编码器 参数与预设</a>
-                            <a class="toSelf disabled" href="#h2-16">某编码器 报错与警告</a>-->
-                        </li>
-                        <li>附录：
-                            <a class="toSelf" href="#h2-17">画质指标</a>
-                            <a class="toSelf" href="#h2-18">编码测试</a>
-                            <a class="toSelf" href="#h2-19">软件下载</a>
-                            <a class="toSelf" href="#h2-20">参考文献</a>
-                        </li>
-                    </ul>
+            <p>欢迎阅读！若有任何问题，请加入 QQ 群<a href="https://jq.qq.com/?_wv=1027&k=5YJFXyf">691892901</a>。教程地图、工具下载见：<a href="https://iavoe.github.io/">iavoe.github.io</a>。尽管本教程的严谨性有所提高，并提供了测试数据提高严谨性，但仍仅具备业余参考价值。本文省略了 x264、x265 教程中出现过的内容，查阅本文要求读者已经明晰视频编码器的基本原理和一定细节。</p>
+            <h2 class="my-3">目录</h2>
+            <ul class="font-monospace text-smaller">
+                <li>概览：
+                    <a class="toSelf" href="#h2-1">视频的压制</a>
+                    <a class="toSelf" href="#h2-2">流结构</a>
+                    <a class="toSelf" href="#h2-3">图片结构</a>
+                </li>
+                <li>编码：
+                    <a class="toSelf" href="#h2-4">变换</a>
+                    <a class="toSelf" href="#h2-5">前瞻</a>
+                    <a class="toSelf" href="#h2-6">帧间预测</a>
+                    <a class="toSelf" href="#h2-7">帧内预测</a>
+                    <a class="toSelf" href="#h2-8">量化</a>
+                    <a class="toSelf" href="#h2-9">熵编码</a>
+                    <a class="toSelf" href="#h2-10">模式决策</a>
+                    <a class="toSelf" href="#h2-11">环路滤镜</a>
+                </li>
+                <li>参数：
+                    <a class="toSelf" href="#h2-13">SVT-AV1 参数与预设</a>
+                    <a class="toSelf" href="#h2-14">SVT-AV1 报错与警告</a>
+                    <!--本教程在设计上考虑了多编码器的参数、报错说明，但由于测试工作量远超预期，所以最终只完成了一个编码器
+                                <a class="toSelf disabled" href="#h2-15">某编码器 参数与预设</a>
+                                <a class="toSelf disabled" href="#h2-16">某编码器 报错与警告</a>-->
                 </li>
                 <li>附录：
-                    <a href="https://www.nazorip.site/archives/44/">QAAC 音频压缩教程</a> 或
-                    <a href="https://github.com/iAvoe/QAAC-Tutorial-Standalone/blob/master/%E6%95%99%E7%A8%8B.md">Github 副本</a>
+                    <a class="toSelf" href="#h2-17">画质指标</a>
+                    <a class="toSelf" href="#h2-18">编码测试</a>
+                    <a class="toSelf" href="#h2-19">软件下载</a>
+                    <a class="toSelf" href="#h2-20">参考文献</a>
                 </li>
-                <li>附录：<a href="https://nazorip.site/archives/334/">x264，libx264，x265，libx265 压制教程急用版</a></li>
-                <li>附录：<a href="https://nazorip.site/archives/169/">ffprobe 教程</a> 或
-                    <a href="https://github.com/iAvoe/FFprobe-Tutorial-Standalone/blob/master/%E6%95%99%E7%A8%8B.md">Github 副本</a>
-                </li>
-                <li>附录：<a href="https://nazorip.site/archives/1068/">ffprobe+Excel 可视化视频流分析</a></li>
-                <li>附录：<a href="../../deint-ivtc-web-tutorial/HTML/index.html">交错转逐行与 IVTC 处理</a></li>
-                <li>附录：<a href="../../img-sequence-enc-web-tutorial/HTML/index.html">图像序列的处理</a></li>
-                <li>相关：<a href="https://nazorip.site/archives/1052/">mpv 视频播放器的安装与设置</a></li>
-            </ol>
+            </ul>
+
             <h3>打印支持（点击以下按钮）</h3>
             <button type="button" class="border-main rounded-3 ms-1 px-1" onclick="toggleCollapseAll()">1/5. 同步展开/折叠所有内容</button>
             <button type="button" class="border-main rounded-3 ms-1 px-1" onclick="printMode()">2. 进入打印模式排版</button>
             <button type="button" class="border-main rounded-3 ms-1 px-1" onclick="window.print()">3. 打印（可生成 PDF）</button>
             <button type="button" class="border-main rounded-3 ms-1 px-1" onclick="printModeOff()">4. 退出打印排版</button>
             <p class="font-monospace px-1 text-smaller">推荐打印设置：彩色模式、打印背景、含边距、打印页眉页脚</p>
-            <!-- } -->
+
             <h3>移动端支持</h3>
             <p>点击图片即可轮询 3 种图片大小。窗口宽度大于窗口高度则切换到宽屏/桌面端/平板电脑排版，否则切换到窄屏/移动端排版。</p>
         </div>
@@ -6252,8 +6234,8 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
             <h3>SVT-AV1 报错——参数与模式/源/参数间冲突</h3>
             <ul class="text-smaller">
                 <li><code class="code-bold">&#45;&#45;preset &lt;=4</code>：不支持 <code>INPUT_SIZE_8K_TH</code>（8K 分辨率以及同等像素流量大小的）视频源，仅支持 5 及更快的预设</li>
-                <li><b>视频源宽度</b> 必须至少为 4</li>
-                <li><b>视频源高度</b> 必须至少为 4</li>
+                <li><b>源视频宽</b> 至少 4 像素</li>
+                <li><b>源视频高</b> 至少 4 像素</li>
                 <li><code class="code-bold">&#45;&#45;pass</code>：不支持 Open GOP 流结构</li>
                 <li><code class="code-bold">&#45;&#45;pass 2</code>：不支持 CRF、CBR 率控制模式</li>
                 <li><code class="code-bold">&#45;&#45;pass 2</code>：在 <code>&#45;&#45;preset &lt; 10</code> 下不支持 VBR 率控制模式</li>
@@ -6390,7 +6372,7 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
             <div class="align-items-center">
                 <img loading="lazy" src="files/image-quality-metric/vqa.webp" alt="VQA1" class="">
                 <img loading="lazy" src="files/image-quality-metric/Saliency Maps 2013.webp" alt="VQA2" class="img-medium">
-                <p class="text-gray-side mt-0">图：VQA 测试。见<a href="https://qualinet.github.io/databases/video/ivp_subjective_quality_video_database/">香港大学 IVP Lab</a>，<a href="https://compression.ru">MSU Graphics</a></p>
+                <p class="text-gray-side mt-0">图：VQA 测试（图 2 的设备用于跟踪眼球聚焦位置，不是真的测试）。见<a href="https://qualinet.github.io/databases/video/ivp_subjective_quality_video_database/">香港大学 IVP Lab</a>，<a href="https://compression.ru">MSU Graphics</a></p>
             </div>
 
             <h3>画质指标——评价体系分类</h3>
@@ -7297,7 +7279,7 @@ ffmpeg -i .\源视频.mkv -i .\压缩后.ivf -lavfi "[0:v]setpts=N*(1/24000)[src
                 {GCD}\left(\frac{a}{b}, \frac{c}{d}\right)
                 = \frac{{GCD}\left(a,c\right)}{{LCM}\left(b,d\right)}
             \]</span>
-            <p class="text-side-gray">GCD：最大公约数；LCM：最小公倍数：</p>
+            <p class="text-gray-side">GCD：最大公约数；LCM：最小公倍数：</p>
             <span class="text-blue-math overflow-auto">\[
                 {T}_{common} = {GCD}\left(\frac{1}{90000}, \frac{1001}{24000}\right)
             \]\[
@@ -15412,6 +15394,7 @@ ssimulacra2_rs: Mean: 83.68623603, Median: 83.96666350, Std Dev: 3.66503275, 5th
             </ol>
 
             <h2 id="h2-19">附录——下载</h2>
+            <p class="text-gray-side">为了统一管理不同教程的下载栏目，除 AV1 编码器编译外的教程已被移动到 <a href="https://iavoe.github.io/">iavoe.github.io</a> 中。</p>
 
             <h3>下载——SVT-AV1 编码器</h3>
             <p>可以选择直接使用最新版 ffmpeg 内置的 libsvtav1，或下载本教程中测试所编译的 SVT-AV1 v3.0，或自行下载 Github 仓库以及 Visual Studio 等工具编译。</p>
@@ -15825,8 +15808,9 @@ FFVship.exe -s .\源视频 -e .\压缩后 -m SSIMULACRA2 --gpu-id &lt;显卡编�
             <p>联系：
                 <a href="https://github.com/iAvoe/">Github</a>，
                 <a href="https://github.com/iAvoe/av1-web-tutorial/issues">Github Issues</a>，
-                <a href="https://jq.qq.com/?_wv=1027&k=5YJFXyf">QQ 群：691892901</a>
-            </p>
+                <a href="https://jq.qq.com/?_wv=1027&k=5YJFXyf">QQ 群：691892901</a></p>
+            <p>教程地图、工具下载：
+                <a href="https://iavoe.github.io/">iavoe.github.io</a></p>
             &#x24B8; iAvoe，2025
         </footer>
 	</body>
