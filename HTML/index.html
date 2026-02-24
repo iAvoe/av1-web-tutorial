@@ -15453,8 +15453,14 @@ ssimulacra2_rs: Mean: 83.68623603, Median: 83.96666350, Std Dev: 3.66503275, 5th
                             <li><b>检查（系统信息 →）高级系统设置 → 环境变量 → 系统变量 → Path 中可能缺少的“C:\Program Files\NASM\”值，没有则手动新建并添加</b></li>
                         </ul>
                     </li>
-                    <li><b>CMake</b>；<a href="https://github.com/Kitware/CMake/releases">github.com/Kitware/CMake/releases</a>
+                    <li><b>CMake</b>：<a href="https://github.com/Kitware/CMake/releases">github.com/Kitware/CMake/releases</a>
                         <ul><li>Windows 64bit 选择 cmake-x.y.z-windows_x86_64.msi 即可</li></ul>
+                    </li>
+                    <li><b>Ninja</b>（如果文件不存在则手动安装）：
+<pre><code class="text-smaller language-powershell">
+C:\Program Files\Microsoft Visual Studio\...\Common7\IDE\CommonExtensions\Microsoft\CMake\Ninja\ninja.exe
+</code></pre>
+                        <ul><li>直接下载并剪切 ninja.exe 到 <code>C:\Program Files\CMake\bin</code>（该路径恰好位于系统变量下，若希望放置于其它路径则添加系统变量）</li></ul>
                     </li>
                     <li><b>Git</b>（可选）：<a href="https://git-scm.com/download/win">git-scm.com/download/win</a>
                         <ul>
@@ -15496,7 +15502,7 @@ cd svt-av1
                 <p class="text-red-emph">注意：Windows 系统下，后续命令须在 Windows CMD 或 Git Bash（后者暂未验证）中运行，<b>不要用 PowerShell</b>。</p>
 
                 <h4>（3/3）编译步骤</h4>
-                <p>0. 在 CMD 中确认 LLVM、CMake、NASM 已正确安装并准备好运行（输入命令后按回车，得到程序输出信息）：</p>
+                <p>0. 打开新的 CMD 窗口（确保信息更新），从中确认 LLVM、CMake、NASM、Ninja 已正确安装并准备好运行（输入命令后按回车，得到程序输出信息）：</p>
                 <pre><code class="text-smaller language-powershell">
 "C:\Program Files\LLVM\bin\clang.exe" --version
 :: clang version ***
@@ -15513,6 +15519,9 @@ nasm --v
 cmake --version
 :: cmake version ***
 :: CMake suite maintained and supported by Kitware (kitware.com/cmake).
+
+ninja --version
+:: *.*
                 </code></pre>
                 <p class="text-red-emph">注意：只有全部正常才能继续。</p>
                 <p>1. 切换文本编码到 UTF-8：</p>
@@ -15527,17 +15536,19 @@ call "C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Auxiliar
                 </code></pre>
                 <div class="align-items-center mt-3">
                     <img loading="lazy" src="files/x64-Native-Tools-Command-Prompt-VS.png" alt="vcvars64" class="img-medium">
-                    <p class="text-gray-side mt-0">图：虽然没有试过，但大概率就是这个 x64 Native Tools Command Prompt for VS 20xx</p>
+                    <p class="text-gray-side mt-0">图：x64 Native Tools Command Prompt for VS 20xx</p>
                 </div>
 
-                <p>3. 运行 vcvars64.bat 后会进入一个新的 CMD 界面，在此指定两个变量以定义使用 Clang-CL 编译器：</p>
+                <p>3. 运行 vcvars64.bat 后（可能）会进入一个新的 CMD 界面，在此指定两个变量以定义使用 Clang-CL 编译器：</p>
                 <pre><code class="text-smaller language-powershell">
 set "CC=clang-cl"
 set "CXX=clang-cl"
                 </code></pre>
                 <p>用 CMake 生成 Ninja 项目并配置编译选项（根据压制电脑的 CPU 架构进行调整）：</p>
                 <pre><code class="text-smaller language-powershell">
-:: 如果当前目录不在 SVT-AV1 或 SVT-AV1-PSY 目录下，则照上例使用 cd 命令移动过去
+:: 如果当前目录不在 SVT-AV1 或 SVT-AV1-PSY 目录下，则使用 cd 命令移动过去
+:: CMD 中需要 /D 才能切换盘符
+cd /D X:\文件夹\svt-av1 或 cd /D Y:\文件夹\svt-av1-psy
 
 :: 换行符取决于终端软件，如 CMD 使用 ^，Bash 使用 \。未知则直接删除所有换行
 :: 如果要编译 Debug 版而非发布版，则去掉 -DCMAKE_BUILD_TYPE=Release 整行
