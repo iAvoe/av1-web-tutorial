@@ -15413,7 +15413,7 @@ ssimulacra2_rs: Mean: 83.68623603, Median: 83.96666350, Std Dev: 3.66503275, 5th
                     <li>运行解压项目中的 <code>*-master/Build/windows/build.bat</code></li>
                     <li>将 <code>*-master\Bin\Debug</code> 中找到 <code>SvtAv1EncApp.exe</code>、<code>SvtAv1Enc.dll</code> 拷贝到需要的位置，然后通过 <code>SvtAv1EncApp.exe -v</code> 命令检查</li>
                 </ol>
-                <p>SVT-AV1 编码器的官方推荐下载和编译流程，见 <a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/master/Docs/Build-Guide.md">Build Guide</a>，<a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/master/Docs/ARM-Build-Guide.md?ref_type=heads">ARM（aarch64）Build Guide</a>：</p>
+                <p>SVT-AV1 编码器的官方推荐下载和编译流程，见 <a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/master/Docs/Build-Guide.md">Build Guide</a>，<a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/master/Docs/ARM-Build-Guide.md?ref_type=heads">ARM (aarch64) Build Guide</a>：</p>
             </div>
 
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：下载——Clang（LLVM）手动编译 SVT-AV1-PSY、SVT-AV1 编码器（推荐）</button>
@@ -15421,20 +15421,26 @@ ssimulacra2_rs: Mean: 83.68623603, Median: 83.96666350, Std Dev: 3.66503275, 5th
                 <p class="text-gray-side">修改自原文：<a href="https://discord.com/channels/992019264959676448/1253334764920766505">discord/AV1 weeb edition/scripts-tools-and-guides</a>。</p>
                 <h4>（1/3）下载并安装编译工具</h4>
                 <ol>
-                    <li><b>LLVM（clang 支持）</b>：<a href="https://github.com/llvm/llvm-project/releases/latest">github.com/llvm/llvm-project/releases/latest</a>
+                    <li><b>LLVM（clang 支持）</b>：<a href="https://github.com/llvm/llvm-project/releases">github.com/llvm/llvm-project/releases/latest</a>
                         <ul>
-                            <li>在打开的网盘路径中根据系统和指令集位宽找最新版程序
-                                <ul><li>例如，Windows 64bit 操作系统选 <i>LLVM-***-win64.exe</i></li></ul>
+                            <li>根据系统和指令集位宽找最新版程序
+                                <ul>
+                                    <li>Windows 64bit 操作系统选 <i>LLVM-***-win64.exe</i></li>
+                                    <li>有的 release 可能不包括<i>xxx-win64.exe</i></i>，此时找更早的版本即可</li>
+                                </ul>
                             </li>
                             <li>安装时选择 <i>Add LLVM to the system PATH for all/current users</i></li>
                         </ul>
                     </li>
-                    <li><b>Microsoft C++ Build Tools</b>：<a href="https://visualstudio.microsoft.com/visual-cpp-build-tools">visualstudio.microsoft.com/visual-cpp-build-tools</a>
+                    <li><b>Microsoft C++ Build Tools</b>：<a href="https://visualstudio.microsoft.com/visual-cpp-build-tools">visualstudio.microsoft.com/visual-cpp-build-tools</a>（一般选 2022 版本），再在其中添加该功能
                         <ul>
-                            <li>如果已经安装 Visual Studio，且直接下载了 C++ 桌面应用开发组件，则可以跳过这步</li>
-                            <li>下载并运行安装程序，选择 <i>Desktop development with C++</i></li>
-                            <li>打开一个记事本，将实际安装位置路径拷贝进去</li>
-                            <li>安装页面中，可以仅选择安装 MSVC 和最新的 Windows 10/11 SDK</li>
+                            <li>镜像：<a href="https://gist.github.com/Mr-Precise/9967e3fcf03f2df0282b76841d2f3876">GitHub/Mr-Precise</a></li>
+                            <li>在 Visual Studio 安装器界面中勾选“使用 C++ 的桌面开发（组件）”并安装即可</li>
+                            <ul>
+                                <li>如果已经安装 Visual Studio，且直接下载了 C++ 桌面应用开发组件，则可以跳过：</li>
+                                <li>下载并运行安装程序，选择 <i>Desktop development with C++</i>（桌面端 C++ 开发支持）</li>
+                                <li>安装页面中，可以仅选择安装 MSVC 和最新的 Windows 10/11 SDK</li>
+                            </ul>
                         </ul>
                     </li>
                     <li><b>NASM</b>：<a href="https://www.nasm.us/pub/nasm/releasebuilds/?C=M;O=D">nasm.us/pub/nasm/releasebuilds/?C=M;O=D</a>
@@ -15693,14 +15699,25 @@ ssimulacra2.exe .\原画.png .\压缩.png
             <p class="text-gray-side">注：已知 SSIMULACRA2_rs 至少与 VapourSynth R71/Python 3.13.x 兼容，但与 R73/Python 3.14.x 不兼容（<code>exit code: 1120</code>）</p>
             <button type="button" class="collapsible border-main rounded-3 mt-3">（1/1）Windows 安装流程</button>
             <div class="coll-content">
+                <h4>下载并安装编译工具</h4>
                 <ol>
-                    <li>安装 <a href="https://rustup.rs/">rustup</a>（编译环境）</li>
+                    <li><b>Microsoft C++ Build Tools</b>：<a href="https://visualstudio.microsoft.com/visual-cpp-build-tools">visualstudio.microsoft.com/visual-cpp-build-tools</a>（一般选 2022 版本），再在其中添加该功能
+                        <ul>
+                            <li>镜像：<a href="https://gist.github.com/Mr-Precise/9967e3fcf03f2df0282b76841d2f3876">GitHub/Mr-Precise</a></li>
+                            <li>在 Visual Studio 安装器界面中勾选“使用 C++ 的桌面开发（组件）”并安装即可</li>
+                            <ul>
+                                <li>如果已经安装 Visual Studio，且直接下载了 C++ 桌面应用开发组件，则可以跳过：</li>
+                                <li>下载并运行安装程序，选择 <i>Desktop development with C++</i>（桌面端 C++ 开发支持）</li>
+                                <li>安装页面中，可以仅选择安装 MSVC 和最新的 Windows 10/11 SDK</li>
+                            </ul>
+                        </ul>
+                    </li>
                     <li>完整安装 <a href="https://github.com/vapoursynth/vapoursynth/releases">VapourSynth</a>（ssimulacra_rs 依赖），
                         <ul>
                             <li>建议用以管理员身份运行安装包</li>
                             <li>必须安装到 <code>C:\Program Files\VapourSynth</code> 并选择“Install for all users”</li>
                             <li>此处打开时会报错，并提示特定的 Python 版本要求</li>
-                            <li>（Python 环境安装完成）之后进入“Select Additional Tasks”时，可以选择去勾选“Add ‘New VapourSynth Python Script’ option to shell context menu”以避免添加新的右键菜单项</li>
+                            <li>（Python 环境安装完成）之后进入“Select Additional Tasks”时，可以选择去勾选“Add‘New VapourSynth Python Script’option to shell context menu”以避免添加右键菜单项</li>
                         </ul>
                     </li>
                     <li>完整安装 VapourSynth 安装包要求的 <a href="https://www.python.org/">Python</a> 环境版本（据上一步的报错得知版本）
@@ -15708,16 +15725,19 @@ ssimulacra2.exe .\原画.png .\压缩.png
                             <li><b>必须以管理员身份运行，浏览器下载菜单打开会导致错误安装</b></li>
                             <li>选择自定义安装（Customize Installation）而非直接安装（Install Now）</li>
                             <li>Advanced Options 中选择“Install for all users”（VapourSynth 依赖）
-                                <ul><li>Optional Feature 中的“Install for all users”是指代码编辑器，而非 Python 本体</li></ul>
+                                <ul><li>Optional Feature 中的“Install for all users”是指代码编辑器，不是 Python 本体</li></ul>
                             </li>
-                            <li class="text-smaller">已知 python-manager-xx.x.msix 的安装方式违逆了安装 VapourSynth 的要求，不能使用</li>
+                            <li class="text-smaller">已知 python-manager-xx.x.msix 的安装方式不符合 VapourSynth 的要求，不能用</li>
                         </ol>
                     </li>
-                    <li>检查 <code>C:\Program Files\VapourSynth\sdk\lib64</code> 路径存在，并且含有 <code>vapoursynth.lib</code>。否则卸载 Python 以及 VapourSynth，并仔细阅读上述步骤以正确安装</li>
-                    <li>PowerShell 中运行 <code>cargo install ssimulacra2_rs</code> 完成安装，过程中不应该有任何报错
+                    <li><a href="https://rustup.rs/">rustup</a> 编译环境</li>
+                </ol>
+                <h4>安装流程</h4>
+                <ol>
+                    <li>检查 <code>C:\Program Files\VapourSynth\sdk\lib64</code> 路径存在，并且含有 <code>vapoursynth.lib</code>。否则需卸载 Python 以及 VapourSynth，并仔细阅读上述步骤以正确安装</li>
+                    <li>PowerShell 中运行 <code class="text-blue-emph">cargo install ssimulacra2_rs</code> 完成安装，过程中不应该有任何报错
                         <ul>
-                            <li>出现 <code>error: linker `link.exe` not found</code> 则代表缺失 Visual Studio Build Tools with C++ support</li>
-                            <li>安装 Visual Studio 本体（一般选 2022 版本），再在其中添加该功能，或者使用 <a href="https://gist.github.com/Mr-Precise/9967e3fcf03f2df0282b76841d2f3876">GitHub/Mr-Precise</a> 的整合包</li>
+                            <li>出现 <code class="text-red-emph">error: linker `link.exe` not found</code> 则代表缺失 Visual Studio Build Tools with C++ support（上述步骤 1 没有正确完成）</li>
                             <li>在 Visual Studio 安装器界面中勾选“使用 C++ 的桌面开发（组件）”并安装即可</li>
                             <li>检查 vcvars64.bat 是否存在于以下任意路径：<pre><code class="text-smaller language-powershell">
 C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build
@@ -15768,7 +15788,7 @@ pause</code></pre>
             <h4>对比图片用法</h4>
             <p>将上例的 <code>ssimulacra2_rs.exe video</code> 换成 <code>ssimulacra2_rs.exe image</code>，并导入图片即可。</p>
 
-            <p class="text-gray-side">注：ssimulacra2_rs 在 PowerShell 中无法正常打印信息，需要使用 CMD 运行；LSMAS 缓存文件代表“O__&lt;视频文件名&gt;.lwi” 索引文件，这些文件在运行后不会被删除，下次在相同缓存路径解码相同视频时可以自动跳过，或造成更新后信息与缓存不符的错误。</p>
+            <p class="text-gray-side">注：ssimulacra2_rs 在 PowerShell 中无法正常打印信息，需要使用 CMD 运行；LSMAS 缓存文件代表“O__&lt;视频文件名&gt;.lwi”索引文件，这些文件在运行后不会被删除，下次在相同缓存路径解码相同视频时可以自动跳过，或造成更新后信息与缓存不符的错误。</p>
             
             <h3>下载——SSIMULACRA2 VapourSynth-HIP</h3>
             <p>一款支持使用英伟达和 AMD 显卡计算 SSIMULACRA、Butteraugli 的动态链接库，支持直接以自带的 FFVSHIP 使用，或在 VapourSynth 内调用。下载与配置见 <a href="https://github.com/Line-fr/Vship">Github/Line-fr</a>。</p>
