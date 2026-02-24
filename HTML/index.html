@@ -15452,8 +15452,18 @@ ssimulacra2_rs: Mean: 83.68623603, Median: 83.96666350, Std Dev: 3.66503275, 5th
                             <li>安装时可以去勾选 Manual 和 VS8 Integration</li>
                         </ul>
                     </li>
-                    <li><b>CMake</b>；<a href="https://github.com/Kitware/CMake/releases">github.com/Kitware/CMake/releases</a></li>
-                    <li><b>Git</b>（可选）：<a href="https://git-scm.com/download/win">git-scm.com/download/win</a></li>
+                    <li><b>CMake</b>；<a href="https://github.com/Kitware/CMake/releases">github.com/Kitware/CMake/releases</a>
+                        <ul><li>Windows 64bit 选择 cmake-x.y.z-windows_x86_64.msi 即可</li></ul>
+                    </li>
+                    <li><b>Git</b>（可选）：<a href="https://git-scm.com/download/win">git-scm.com/download/win</a>
+                        <ul>
+                            <li>如果安装了 VSCode，则可以考虑“Use Visual Studio Code as Git's default editor”（UI 最好）</li>
+                            <li>安装后启动 Git Bash，配置用户名和 Email（如果有 GithHub 账号就保持一致）：
+                                <pre><code class="text-smaller language-powershell">git config --global user.name "你的网名"
+git config --global user.email "你的邮箱"</code></pre>
+                            </li>
+                        </ul>
+                    </li>
                 </ol>
 
                 <h4>（2/3）获取 SVT-AV1 源码</h4>
