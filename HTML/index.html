@@ -15743,26 +15743,34 @@ C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Auxiliary\Buil
             <h4>对比视频用法</h4>
             <p>创建一个批处理调用即可，如：</p>
             <pre><code class="text-smaller language-powershell">
-
+@echo off
 chcp 65001
+title SSIMU2 测试
 
 set "xPath=X:\源视频文件夹\"
 set "yPath=Y:\压制后文件夹\"
 set "zPath=Z:\存日志文件夹\"
 
-:: 存日志文件夹包括跑分结果和报错信息
-:: 据 CPU 核心数、内存大小来调整线程数命令 -f，建议从等于 CPU 核心数的值开始
+REM 存日志文件夹包括跑分结果
+
+REM 开启超线程以占用更多内存而提速
+
+REM 命令末尾添加“2>&1”以导出报错到文件，但会失去进度显示
+
+REM 据处理器核心数与内存大小而设置 -f，可以以核心数为起点
 
 X:\ssimulacra2_rs.exe video "%xPath%源视频.mkv" "%yPath%测试_2160p_123fps_4bit_crf56_subme7_yuv420.mp4" -f 32 > "%zPath%测试_2160p_123fps_4bit_crf56_subme7_yuv420.txt" 2>&1
 
-:: 照上例继续添加更多命令...</code></pre>
+REM 照上例继续添加更多命令...
+
+pause</code></pre>
             
             <h4>对比图片用法</h4>
             <p>将上例的 <code>ssimulacra2_rs.exe video</code> 换成 <code>ssimulacra2_rs.exe image</code>，并导入图片即可。</p>
 
             <p class="text-gray-side">注：ssimulacra2_rs 在 PowerShell 中无法正常打印信息，需要使用 CMD 运行；LSMAS 缓存文件代表“O__&lt;视频文件名&gt;.lwi” 索引文件，这些文件在运行后不会被删除，下次在相同缓存路径解码相同视频时可以自动跳过，或造成更新后信息与缓存不符的错误。</p>
             
-            <h3>下载——SSIMULACRA2 Vapoursynth-HIP</h3>
+            <h3>下载——SSIMULACRA2 VapourSynth-HIP</h3>
             <p>一款支持使用英伟达和 AMD 显卡计算 SSIMULACRA、Butteraugli 的动态链接库，支持直接以自带的 FFVSHIP 使用，或在 VapourSynth 内调用。下载与配置见 <a href="https://github.com/Line-fr/Vship">Github/Line-fr</a>。</p>
             <p class="text-gray-side">注：测试发现虽然该实现的速度大幅提高，但所得分数相比基于 CPU 的 ssimulacra2_rs 平均偏移了 -0.3，这个偏差足以影响测试结果中的前三排名，故不在本教程中采用，也不建议使用。</p>
             <p class="text-gray-side">注：若两组人分别压制了同一片源，则使用 vship 计算画质的组会输给使用 ssimulacra2_rs 的组。</p>
