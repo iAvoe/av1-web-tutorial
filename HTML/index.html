@@ -3147,7 +3147,7 @@ int av1_get_qindex(const struct segmentation *seg, int segment_id, int base_qind
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：熵编码——帧分瓣平面级别</button>
             <div class="coll-content">
                 <h3>熵编码——帧分瓣平面级别</h3>
-                <p>AV1 中，代表不同范围的系子（量化结果）幅度：0~2 为低，3~14 为中，15 及以上为高。低中级平面的熵编码按倒序扫描顺序编码，高级平面按顺序扫描顺序编码。熵编码时与 x265 一样使用零阶指数哥伦布编码（见 x265 教程）转换到二进制。</p>
+                <p>AV1 中代表不同范围的系子（量化结果）幅度：0~2 为低，3~14 为中，15 及以上为高。低中级平面的熵编码按倒序扫描顺序编码，高级平面按顺序扫描顺序编码。熵编码时与 x265 一样使用零阶指数哥伦布编码（见 x265 教程）转换到二进制。</p>
             </div>
 
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：CABAC 编码</button>
@@ -3367,7 +3367,7 @@ Default_Partition_W64_Cdf[ PARTITION_CONTEXTS ][ 11 ] = {
 /**
  * 换算为 0~1 范围
  *{
- *   { 0.969, 1, 0 }, Row 0，无上下文
+ *   { 0.969, 1, 0 }, Row 0，空上下文
  *   { 0.504, 1, 0 }, Row 1
  *   { 0.140, 1, 0 }  Row 2，满上下文
  * } Col 0,   1, 2
@@ -14731,7 +14731,7 @@ ssimulacra2_rs: Mean: 83.68623603, Median: 83.96666350, Std Dev: 3.66503275, 5th
             </ol>
 
             <h3>测试——SVT-AV1 3.1 Clang 与 3.0 MSVC 对比测试</h3>
-            <p>只测试部分片源来观察画质指标得分版本更新，编译方法优化前后的提升。参数全部采用保守型画质优先参数以减少重复测试。</p>
+            <p>只测试部分片源，从而观察画质指标得分中版本更新，以及编译方法优化前后的提升。参数全部采用保守型画质优先参数以减少重复测试。</p>
             <div id="svtav1VerCompTestData" class="overflow-auto mt-3"><table class="table-center text-smaller two-decimals">
                 <thead>
                     <tr class="border-lr">
@@ -15501,7 +15501,7 @@ chcp 65001
                 </code></pre>
                 <p>2. 在先前下载的 VS Build Tools 路径中运行 vcvars64.bat 环境配置脚本（根据实际安装位置调整）：</p>
                 <pre><code class="text-smaller language-powershell">
-:: 若已经有下载了 C++ 桌面应用开发组件的 Visual Studio，且 Visual Studio 是 64bit，
+:: 若已有下载了 C++ 桌面应用开发组件的 Visual Studio，且 Visual Studio 是 64bit，
 :: 则路径可能是 C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars64.bat
 call "C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Auxiliary\Build\vcvars64.bat"
                 </code></pre>
@@ -15745,7 +15745,7 @@ C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Auxiliary\Buil
             <pre><code class="text-smaller language-powershell">
 @echo off
 chcp 65001
-title SSIMU2 测试
+title SSIMU2 跑分
 
 set "xPath=X:\源视频文件夹\"
 set "yPath=Y:\压制后文件夹\"
@@ -15757,7 +15757,7 @@ REM 开启超线程以占用更多内存而提速
 
 REM 命令末尾添加“2>&1”以导出报错到文件，但会失去进度显示
 
-REM 据处理器核心数与内存大小而设置 -f，可以以核心数为起点
+REM 据处理器核心数与内存大小而设置 -f，推荐以核心数为起点
 
 X:\ssimulacra2_rs.exe video "%xPath%源视频.mkv" "%yPath%测试_2160p_123fps_4bit_crf56_subme7_yuv420.mp4" -f 32 > "%zPath%测试_2160p_123fps_4bit_crf56_subme7_yuv420.txt" 2>&1
 
