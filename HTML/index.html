@@ -15635,7 +15635,7 @@ ninja -C svt_build
                         </ul>
                     </li>
                 </ol>
-                <p>注：移除并删除该子系统可通过 <code>wsl --unregister Debian</code> 命令完成。</p>
+                <p class="text-gray-side">注：移除并删除该子系统可通过 <code>wsl --unregister Debian</code> 命令完成。</p>
             </div>
 
             <button type="button" class="collapsible border-main rounded-3 mt-3">（2/2）编译 Windows 可执行文件</button>
@@ -15690,6 +15690,7 @@ ssimulacra2.exe .\原画.png .\压缩.png
 
             <h3>下载——SSIMULACRA2_rs</h3>
             <p>详见：<a href="https://github.com/rust-av/ssimulacra2_bin">GitHub/rust-av</a></p>
+            <p class="text-gray-side">注：已知 SSIMULACRA2_rs 与 VapourSynth R71/Python 3.13.x 兼容，与 R73/Python 3.14.x 不兼容（<code>exit code: 1120</code>）</p>
             <button type="button" class="collapsible border-main rounded-3 mt-3">（1/1）Windows 安装流程</button>
             <div class="coll-content">
                 <ol>
@@ -15715,9 +15716,16 @@ ssimulacra2.exe .\原画.png .\压缩.png
                     <li>检查 <code>C:\Program Files\VapourSynth\sdk\lib64</code> 路径存在，并且含有 <code>vapoursynth.lib</code>。否则卸载 Python 以及 VapourSynth，并仔细阅读上述步骤以正确安装</li>
                     <li>PowerShell 中运行 <code>cargo install ssimulacra2_rs</code> 完成安装，过程中不应该有任何报错
                         <ul>
-                            <li>如果出现 <code>error: linker `link.exe` not found</code> 指代 Visual Studio Build Tools with C++ support 的缺失</li>
-                            <li>微软希望用户安装 Visual Studio 本体，再在其中添加该功能，但这样做下载数据量大，可以尝试 <a href="https://gist.github.com/Mr-Precise/9967e3fcf03f2df0282b76841d2f3876">GitHub/Mr-Precise</a> 的下载整理，或自行搜索独立安装包</li>
+                            <li>出现 <code>error: linker `link.exe` not found</code> 则代表缺失 Visual Studio Build Tools with C++ support</li>
+                            <li>安装 Visual Studio 本体（一般选 2022 版本），再在其中添加该功能，或者使用 <a href="https://gist.github.com/Mr-Precise/9967e3fcf03f2df0282b76841d2f3876">GitHub/Mr-Precise</a> 的整合包</li>
                             <li>在 Visual Studio 安装器界面中勾选“使用 C++ 的桌面开发（组件）”并安装即可</li>
+                            <li>检查 vcvars64.bat 是否存在于以下任意路径：<pre><code class="text-smaller language-powershell hljs">
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build
+C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Auxiliary\Build
+                </code></pre></li>
+                        </ul>
+                        <ul>
+                            <li>出现 <code>exit code: 1120</code> 则代表 VapourSynth 版本过老或过新</li>
                         </ul>
                     </li>
                     <li>将 <code>C:\Users\&lt;用户名&gt;\.cargo\bin\ssimulacra2_rs.exe</code> 拷贝到工作路径，此时可以卸载 rustup</li>
