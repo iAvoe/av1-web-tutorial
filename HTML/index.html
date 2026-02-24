@@ -15713,13 +15713,19 @@ ssimulacra2.exe .\原画.png .\压缩.png
                         </ol>
                     </li>
                     <li>检查 <code>C:\Program Files\VapourSynth\sdk\lib64</code> 路径存在，并且含有 <code>vapoursynth.lib</code>。否则卸载 Python 以及 VapourSynth，并仔细阅读上述步骤以正确安装</li>
-                    <li>PowerShell 中运行 <code>cargo install ssimulacra2_rs</code> 完成安装，过程中不应该有任何报错</li>
-                    <li>将 <code>C:\Users\&lt;用户名&gt;\.cargo\bin\ssimulacra2_rs.exe</code> 拷贝到工作路径，便以卸载 rustup</li>
+                    <li>PowerShell 中运行 <code>cargo install ssimulacra2_rs</code> 完成安装，过程中不应该有任何报错
+                        <ul>
+                            <li>如果出现 <code>error: linker `link.exe` not found</code> 指代 Visual Studio Build Tools with C++ support 的缺失</li>
+                            <li>微软希望用户安装 Visual Studio 本体，再在其中添加该功能，但这样做下载数据量大，可以尝试 <a href="https://gist.github.com/Mr-Precise/9967e3fcf03f2df0282b76841d2f3876">GitHub/Mr-Precise</a> 的下载整理，或自行搜索独立安装包</li>
+                            <li>在 Visual Studio 安装器界面中勾选“使用 C++ 的桌面开发（组件）”并安装即可</li>
+                        </ul>
+                    </li>
+                    <li>将 <code>C:\Users\&lt;用户名&gt;\.cargo\bin\ssimulacra2_rs.exe</code> 拷贝到工作路径，此时可以卸载 rustup</li>
                     <li>下载 <a href="https://github.com/AkarinVS/L-SMASH-Works/releases">LSMAS 解码器</a>，随意根据缓存文件路径设定选择版本：
                         <ul>
                             <li>官方设定：<code>cachedir=""</code>，命令行窗口当前路径，Windows 默认为 C 盘 </li>
-                            <li>cwd 设定：<code>cachedir="."</code>，即当前命令行路径（本教程的测试环节将使用这个）</li>
-                            <li>tmp 设定：<code>cachedir=%TEMP%</code>，操作系统指定缓存盘，Windows 一般为 C 盘 </li>
+                            <li><b>cwd：</b><code>cachedir="."</code>，即当前命令行/脚本文件路径（本教程的测试环节将使用这个）</li>
+                            <li><b>tmp：</b><code>cachedir=%TEMP%</code>，操作系统指定缓存盘，Windows 下为 C 盘 </li>
                         </ul>
                     </li>
                     <li>解压并拷贝下载的 <code>LSMASHSource.dll</code>、<code>LSMASHSource.pyd</code>到 VapourSynth 插件目录下 <code>C:\Program Files\VapourSynth\plugins\</code></li>
