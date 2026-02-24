@@ -2032,7 +2032,7 @@ WEDGE_OBLIQUE117, 6, 4
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：帧内预测——临近参考源序列 Neighbour arrays</button>
             <div class="coll-content">
                 <h3>帧内预测——临近参考源序列 Neighbour arrays</h3>
-                <p>HEVC 中的帧内参考源拥有左侧一列，顶部一行，共两排参考源加一个左上角参考源。SVT-AV1 编码器的帧内预测块拥有其所在 Superblock 的左侧和顶部一行一列，外加一个左上肩型序列（Γ），<i>共 3 列</i>。</p>
+                <p>HEVC 的帧内参考源拥有左侧一列，顶部一行，以及左上角的一个参考源组成。SVT-AV1 编码器的帧内预测块拥有其所在 Superblock 的左侧一行、顶部一列，外加一个左上“肩型”序列（Γ），<i>共 3 列</i>组成。</p>
                 <p>左侧序列约一个 SB 高，可使用帧内编码 SB 的 y 坐标锁定。顶部序列大约有一个图片宽，且包含了原本的左上角参考源像素，可以使用当前块的 x 坐标锁定。</p>
                 <div class="align-items-center">
                     <img loading="lazy" src="files/intra-prediction/intra-reference-neighbour.png" alt="imageR" class="img-medium">
@@ -2423,7 +2423,7 @@ Intra_Filter_Taps[ INTRA_FILTER_MODES ][ 8 ][ 7 ] = {
             </code></pre></div>
 
             <h3>帧内预测——色度填亮度模式 Chroma from luma（CFL，特殊）</h3>
-            <p>色度平面的预测像素通过亮度平面的同位像素值生成。高频部分通过重建块减去亮度块平均值预测得到，低频部分取自亮度块 <code class="code-bold">DC_PRED</code> 预测模式的像素值。高低频相加则得到一个色度预测像素，见：<a href="https://aomediacodec.github.io/av1-spec/#predict-chroma-from-luma-process">AV1 Spec - CfL</a></p>
+            <p>色度平面的预测像素由其所处位置亮度平面的同位像素值填入而实现预测。高频部分通过重建块减去亮度块平均值预测得到，低频部分取自亮度块 <code class="code-bold">DC_PRED</code> 预测模式的像素值。高低频相加则得到一个色度预测像素，见：<a href="https://aomediacodec.github.io/av1-spec/#predict-chroma-from-luma-process">AV1 Spec - CfL</a></p>
             <div class="align-items-center">
                 <img loading="lazy" src="files/intra-prediction/chroma-from-luma-prediction.png" alt="imageR" class="img-medium">
                 <p class="text-gray-side mt-0">图：色度填亮度预测模式的计算。包括了提取亮度平面残差，乘进缩放值，以及叠加色度平面 <code class="code-bold">DC_PRED</code> 结果</p>
@@ -2444,7 +2444,7 @@ scaledLuma = Round2Signed( alpha * ( L[i][j] - lumaAvg ), 6 )
             </div>-->
 
             <h3>帧内预测——帧内块拷贝模式 Intra block copy（IBC，特殊）</h3>
-            <p>通过“伪动态向量”定位一个重建块的伪帧间预测。亮度块的伪动态向量缩小后可以用于色度平面，但向量会变成半像素精度，这种情况下会额外在子像素上用到双线性插值滤镜，见：<a href="https://aomediacodec.github.io/av1-spec/#general-12">AV1 Spec</a>。</p>
+            <p>以“伪动态向量”定位一个重建块的伪帧间预测。亮度块的伪动态向量缩小后可以用于色度平面，但向量会变成半像素精度，这种情况下会额外在子像素上用到双线性插值滤镜，见：<a href="https://aomediacodec.github.io/av1-spec/#general-12">AV1 Spec</a>。</p>
 
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：IBC 模式启用条件</button>
             <div class="coll-content">
@@ -2466,7 +2466,7 @@ scaledLuma = Round2Signed( alpha * ( L[i][j] - lumaAvg ), 6 )
 
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：调色板模式的映射</button>
             <div class="coll-content">
-                <p>调色板的映射包括从左，上和左上参考源中筛选出惯用值，再对上下文排序，最后以对角线扫描的顺序映射出预测块。预测每个块都需要更新一遍调色板（上下文）。编码时，编码块的冠军个预测像素会独立选择调色板中的颜色，其余的预测像素使用其顶部、左侧和左上角的参考源作为熵编码的上下文进行编码。见：<a href="https://aomediacodec.github.io/av1-spec/#palette-prediction-process">AV1 Spec - Palette Prediction</a>，<a href="https://aomediacodec.github.io/av1-spec/#palette-color-context-function">AV1 Spec - Palette Color Context</a></p>
+                <p>调色板的映射包括从左，上和左上参考源中筛选出惯用值，再对上下文排序，最后以对角线扫描的顺序映射出预测块。预测每个块都需要更新一遍调色板（上下文）。编码时，编码块的冠军个预测像素会独立选择调色板中的颜色，其余的预测像素使用其顶、左和左上的参考源作为熵编码的上下文进行编码。见：<a href="https://aomediacodec.github.io/av1-spec/#palette-prediction-process">AV1 Spec - Palette Prediction</a>，<a href="https://aomediacodec.github.io/av1-spec/#palette-color-context-function">AV1 Spec - Palette Color Context</a></p>
                 <div class="align-items-center">
                     <img loading="lazy" src="files/intra-prediction/palette-mode.png" alt="imageR" class="img-small">
                     <img loading="lazy" src="files/intra-prediction/palette-context.png" alt="imageR" class="img-small">
@@ -2477,7 +2477,7 @@ scaledLuma = Round2Signed( alpha * ( L[i][j] - lumaAvg ), 6 )
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：帧内预测——模式决策设定</button>
             <div class="coll-content">
                 <h3>帧内预测——模式决策设定</h3>
-                <p>一般情况下，AV1 会尝试所有帧内预测模式，并通过计算各个结果的率失真程度以选出合适的模式。特定情况下：</p>
+                <p>AV1 编码器一般情况下会使用所有帧内预测模式，以各个模式下的提前退出检测来节省资源占用，最终通过计算各个预测模式所做结果的率失真程度而择优。特定情况下：</p>
                 <ul class="text-smaller">
                     <li>4x4 亮度预测分块沿用 SB 的帧内预测模式</li>
                     <li>8x4，4x8 亮度预测沿用其上级细分块的帧内预测模式</li>
