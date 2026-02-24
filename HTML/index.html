@@ -15736,7 +15736,7 @@ C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Auxiliary\Buil
                             <li><b>tmp：</b><code>cachedir=%TEMP%</code>，操作系统指定缓存盘，Windows 下为 C 盘 </li>
                         </ul>
                     </li>
-                    <li>解压并拷贝下载的 <code>LSMASHSource.dll</code> 到 VapourSynth 插件目录下 <code>C:\Program Files\VapourSynth\plugins</code></li>
+                    <li>解压并拷贝下载的 <code>LSMASHSource.dll</code> 到 VapourSynth 插件目录（<code>C:\Program Files\VapourSynth\plugins</code>）</li>
                 </ol>
             </div>
 
@@ -15750,13 +15750,12 @@ set "xPath=X:\源视频文件夹\"
 set "yPath=Y:\压制后文件夹\"
 set "zPath=Z:\存日志文件夹\"
 
-:: 存日志文件夹包括检测结果
+:: 存日志文件夹包括跑分结果和报错信息
 :: 据 CPU 核心数、内存大小来调整线程数命令 -f，建议从等于 CPU 核心数的值开始
 
-X:\ssimulacra2_rs.exe video "%xPath%源视频.mkv" "%yPath%测试_2160p_123fps_4bit_crf56_subme7_yuv420.mp4" -f 32 > "%zPath%测试_2160p_123fps_4bit_crf56_subme7_yuv420.txt"
+X:\ssimulacra2_rs.exe video "%xPath%源视频.mkv" "%yPath%测试_2160p_123fps_4bit_crf56_subme7_yuv420.mp4" -f 32 > "%zPath%测试_2160p_123fps_4bit_crf56_subme7_yuv420.txt" 2>&1
 
-:: 照上例继续添加更多命令...
-            </code></pre>
+:: 照上例继续添加更多命令...</code></pre>
             
             <h4>对比图片用法</h4>
             <p>将上例的 <code>ssimulacra2_rs.exe video</code> 换成 <code>ssimulacra2_rs.exe image</code>，并导入图片即可。</p>
