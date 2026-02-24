@@ -1935,7 +1935,7 @@ static const int mode_2_counter[] = { // 帧内 + 帧间预测模式表
             <h5>（3/3——6/6）楔形蒙版预测分权/楔形掩码预测分权 Wedge mask predictor</h5>
             <p>通过长 16 的序列作为指定分割被参考块的蒙版/掩码参数，使两个被参考帧的同位参考块得以叠加，预测出当前块。由于楔形蒙版预测实际是两帧参考帧分别合成，因此预测像素的权重只在重合界处为各自一半（32:32），其余为 64:0 以及 0:64</p>
             <ul>
-                <li><a href="https://aomediacodec.github.io/av1-spec/#wedge-mask-process">AV1 Spec 中</a> 则是从 64x1的蒙版/掩码（<code>Wedge_Master_Oblique_Odd/Even</code>，<code>Wedge_Master_Vertical</code>）中生成：</li>
+                <li><a href="https://aomediacodec.github.io/av1-spec/#wedge-mask-process">AV1 Spec 中</a> 则是从 64x1 的蒙版/掩码（<code>Wedge_Master_Oblique_Odd/Even</code>，<code>Wedge_Master_Vertical</code>）中生成：</li>
             </ul>
             <div class="align-items-center">
                 <img loading="lazy" src="files/inter-prediction/compound-wedge-prediction.png" alt="imageR" class="img-small">
@@ -2594,7 +2594,7 @@ Quantizer_Matrix[ 15 ][ 2 ][ QM_TOTAL_SIZE ] = {
         { // 亮度块 QM level 2
             // 4x4 QM,
             // 8x8 QM,
-            // ... 略 12 “列” ...
+            // ... 略 12“列” ...
         },
         // ... 略 1 行 ...
     },
@@ -4275,7 +4275,7 @@ ffmpeg.exe -i .\输入.mkv -c:v libsvtav1 -preset 4 -crf 35 -svtav1-params "keyi
             <p class="text-gray-side">注：使用该选项则建议手动编译 SvtAv1EncApp.exe，以获取 SVT-AV1 的最新稳定版。</p>
             <p> ffmpeg、avs2yuv、avs2pipemod 等到独立 SVT-AV1 编码器程序，使用 <code>-strict -1</code> 解除 10bit y4m 管道格式限制，SVT-AV1 使用 12 秒关键帧间隔，CRF 35，预设 3，启用量化矩阵量化模式，完整显示进度条；导出未封装视频流：</p>
             <pre><code class="text-smaller language-powershell">
-ffmpeg.exe -i .\输入YUV420空间10bit位深视频.mkv -f yuv4mpegpipe -pix_fmt yuv420p10le -strict -1 - | SvtAv1EncApp.exe -i - --keyint 12s --crf 35 --enable-qm 1 --preset 3 --progress 2 -b .\输出.ivf
+ffmpeg.exe -i .\输入 YUV420 空间 10bit 位深视频.mkv -f yuv4mpegpipe -pix_fmt yuv420p10le -strict -1 - | SvtAv1EncApp.exe -i - --keyint 12s --crf 35 --enable-qm 1 --preset 3 --progress 2 -b .\输出.ivf
 
 avs2yuv.exe .\输入.avs -csp &lt;色彩空间&gt; -depth &lt;位深&gt; - | SvtAv1EncApp.exe -i - &lt;其它命令&gt; -b .\输出.ivf
 
@@ -4733,12 +4733,13 @@ static void set_bitstream_level_tier(SequenceControlSet *scs) {
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;0/1，默认 0：关&gt;启用无损压缩模式。</p>
 
             <h4>（7/12）线程与节点占用</h4>
+            <p class="text-gray-side">注：如果使用了服务器等核心数量多的 CPU，关闭超线程（SMT）可能会带来 5~10% 的提速，不过需要注意系统的线程调度策略在超线程开/关状态下会有所区别，验证时需统一设置</p>
             <code class="code-bold">--lp</code>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~6，默认 0：全部&gt;指定当前压制任务的线程数量（Level of Parallelism）。</p>
             <code class="code-bold">&#45;&#45;pin</code>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~n，默认 0：关&gt;指定仅占用前 n 个 CPU 核心，应搭配 <code>--lp</code> 使用。</p>
             <code class="code-bold">--ss</code>
-            <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 -1~n，默认-1：自动&gt;指定使用多节点系统中的特定节点编码。</p>
+            <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 -1~n，默认 -1：自动&gt;指定使用多节点系统中的特定节点编码。</p>
             <p class="text-gray-side">注：使用 <code>--lp 4 --pin 4</code> 将限制编码器运行到核心 0~3，并将资源分配设置为与 <code>--lp 4</code> 关联的线程/内存数量；而使用 <code>--pin 0 --lp 4</code> 会导致相同的线程/内存分配，但编码器在需要时可以在 0~3 之外的核心上运行（根据编码任务自动使用，但 4 线程本身给的也比较少）。<code>--pin 0</code> 下的线程控制相当于只限制内存占用，这样相比限制核心反而能允许更多编码被同时运行，CPU 利用率更高，批量压制速度更快。见：<a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/master/Docs/Parameters.md#1-thread-management-parameters">Gitlab/AOMediaCodec</a>。</p>
 
             <h4>（8/12）率控制模式</h4>
@@ -4841,7 +4842,7 @@ switch (curve) {
             <code class="code-bold">--undershoot-pct</code>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~100，默认取决于率控制模式&gt;指定判定 VBR，CBR 模式下码率大小为落标的百分比。</p>
             <code class="code-bold">--maxsection-pct</code>
-            <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~10000，默认 200：2x 目标码率为限&gt;目标码率为基准的百分比尖峰上限，设置更高以解除一些码率限制条件</p>
+            <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~10000，默认 200：两倍目标码率为限&gt;目标码率为基准的百分比尖峰上限，设置更高以解除一些码率限制条件</p>
             <code class="code-bold">--gop-constraint-rc</code>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;0/1，默认 0：关，<span class="text-red-emph">需 VBR</span>&gt;将 VBR 模式的码率限制改为逐 GOP 应用，<span class="text-red-emph">猜测：</span>能够使每个 GOP 开始时有更充足的码率，但可能会消耗额外带宽。</p>
 
@@ -5073,7 +5074,7 @@ static void perform_pred_depth_refinement(SequenceControlSet *scs, PictureContro
                             add_sub_depth = is_child_to_current_deviation_small(pcs, ctx, blk_geom, blk_index, th_offset);
                         }
 
-                        // 每个块设最大深度为 2（PRED+父、或 PRED+子）
+                        // 每个块设最大深度为 2（PRED + 父、或 PRED + 子）
                         if (ctx-&gt;depth_refinement_ctrls.enabled && ctx-&gt;depth_refinement_ctrls.up_to_2_depth) {
                             if ((s_depth == -1) && add_parent_depth && (e_depth == 1) && add_sub_depth) {
                                 if (ctx-&gt;parent_to_current_deviation != MIN_SIGNED_VALUE &&
@@ -5663,8 +5664,8 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                         <td class="px-1 t-light-gray" colspan="2">7</td>
                         <!--<td>2</td>-->
                         <td class="px-1 t-light-gray text-smaller">
-                            <code>&#45;&#45;pred-struct 1 --hierarchical-levels</code> 大于等于 3：6；<br>
-                            <code>&#45;&#45;pred-struct 1 --hierarchical-levels</code> 大于 3：5；<br>
+                            <code>&#45;&#45;pred-struct 1 --hierarchical-levels</code> 大于等于 3：<code>6</code>；<br>
+                            <code>&#45;&#45;pred-struct 1 --hierarchical-levels</code> 大于 3：<code>5</code>；<br>
                             <code>&#45;&#45;pred-struct 2</code>：7
                         </td>
                         <td class="px-1 t-invert-light">5</td>
@@ -5871,21 +5872,21 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                         <!--<td>3</td>-->
                         <!--<td>4</td>-->
                         <td class="px-1 t-invert-light text-smaller" colspan="3">
-                            GOP QP 小于等于 57：64，<br>
+                            GOP QP 小于等于 57：<code>64</code>，<br>
                             否则 128
                         </td>
                         <!--<td>6</td>-->
                         <!--<td>7</td>-->
                         <td class="px-1 t-invert-dark text-smaller">
-                            GOP QP 小于等于 56：64，<br>
+                            GOP QP 小于等于 56：<code>64</code>，<br>
                             否则 128
                         </td>
                         <td class="px-1 t-invert-dark text-smaller">
                             分辨率小于等于 480p<br>
-                            且 GOP QP 小于等于 56：64，<br>
+                            且 GOP QP 小于等于 56：<code>64</code>，<br>
                             否则 128；<br>
                             源分辨率大于 480p：<br>
-                            GOP QP 小于等于 50：64，<br>
+                            GOP QP 小于等于 50：<code>64</code>，<br>
                             否则 128
                         </td>
                         <td class="px-1 t-invert-dark" colspan="2">128</td>
@@ -6182,8 +6183,8 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
                 <thead>
                     <tr class="t-invert-dark">
                         <th class="px-1">值</th>
-                        <th class="px-1">0x像素数量</th>
-                        <th class="px-1">0d像素数量</th>
+                        <th class="px-1">十六进制像素数</th>
+                        <th class="px-1">十进制像素量</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -6926,7 +6927,7 @@ InputValue    Score
                 <li><b>仅读取 ICC 色彩空间配置文件</b>：ICC Profile 少见于图片元数据，所以需要检视图片规格，下载对应的 ICC 规格文件，再下载并使用如 image magick 之类的工具嵌入到图片中，比较麻烦
                     <ol>
                         <li>检查：<code>magick identify -verbose .\image.png</code>，得到一行如“Colorspace: sRGB”的指标</li>
-                        <li>下载：<a href="https://color.org/srgbprofiles.xalter">sRGB IEC61966-2.1（sRGBv2）</a> 规格</li>
+                        <li>下载：<a href="https://color.org/srgbprofiles.xalter">sRGB IEC61966-2.1 (sRGBv2)</a> 规格</li>
                         <li>嵌入：<code>magick .\lack-icc.png -profile sRGBv2.icc .\icc_embedded.png</code></li>
                         <li>验证：<code>magick identify -verbose .\image.png | findstr -i "Profile-icc"</code>，成功则得到：Profile-icc: 3024 bytes</li>
                     </ol>
@@ -7202,7 +7203,7 @@ VMAF 4k: 99.561552, VMAF 1080p: 96.971028
             </code></pre>
 
             <h4>（8/9）XPSNR、VMAF 一般用法与时间基对齐</h4>
-            <p>反之，如果没有 ffmpeg “DTS 未单调增加”报错或“not matching timebases ...” 警告，则使用普通写法即可：</p>
+            <p>反之，如果没有 ffmpeg“DTS 未单调增加”报错或“not matching timebases ...”警告，则使用普通写法即可：</p>
             <pre><code class="text-smaller language-powershell">
 title XPSNR 跑分
 ffmpeg -i .\源视频.mkv -i .\压缩后.ivf -lavfi xpsnr="stats_file=-" -f null -
@@ -7287,7 +7288,7 @@ function lcm{
     $z = gcd $a $b;
     return [Math]::Abs($a * $b) / $z;
 }
-# 计算分数的最大公约数，输入整数分子1，分母1，分子2，分母2
+# 计算分数的最大公约数，输入整数分子 1，分母 1，分子 2，分母 2
 function fracGCD{
     param([int]$num1,[int]$denom1,[int]$num2,[int]$denom2)
     return [String](gcd $num1 $num2)+"/"+(lcm $denom1 $denom2)
@@ -7297,10 +7298,10 @@ function fracGCD{
 [double]$b = 1000
 # 调用最小公倍数函数并输出结果
 $result = lcm $a $b
-Write-Host "a, b 的最小公倍数为: $result"
+Write-Host "a, b 的最小公倍数为：$result"
 # 计算 1/90000 与 1001/24000 的最小公倍数
 $result = fracGCD 1 90000 1001 24000
-Write-Host "1/90000 与 1001/24000 的最大公约数为: $result"
+Write-Host "1/90000 与 1001/24000 的最大公约数为：$result"
             </code></pre>
 
             <h4>（10/10）批处理示例</h4>
@@ -7322,28 +7323,28 @@ set "setptsCmdB=[0:v]setpts=N*(1/6000)[src]; [1:v]setpts=N*(1/6000)[enc]; [enc][
 set "setptsCmdC=[0:v]setpts=N*(1/360000)[src]; [1:v]setpts=N*(1/360000)[enc]; [enc][src]"
 set "xpsnrCmd=xpsnr=stats_file="
 
-set "outputFile=X\\:/\导出测试结果路径\/xpsnr-视频1跑分-两万四千分之一.txt"
+set "outputFile=X\\:/\导出测试结果路径\/xpsnr-视频 1 跑分—两万四千分之一.txt"
 ffmpeg -hide_banner -an ^
--i "%sourcePath%源视频1.mkv" ^
--i "%lossyPath%压缩视频1.ivf" ^
+-i "%sourcePath%源视频 1.mkv" ^
+-i "%lossyPath%压缩视频 1.ivf" ^
 -lavfi "%setptsCmdA%%xpsnrCmd%%outputFile%" -f null -
 
-set "outputFile=X\\:/\导出测试结果路径\/xpsnr-视频2跑分-六千分之一.txt"
+set "outputFile=X\\:/\导出测试结果路径\/xpsnr-视频 2 跑分—六千分之一.txt"
 ffmpeg -hide_banner -an ^
--i "%sourcePath%源视频2.mov" ^
--i "%lossyPath%压缩视频2.ivf" ^
+-i "%sourcePath%源视频 2.mov" ^
+-i "%lossyPath%压缩视频 2.ivf" ^
 -lavfi "%setptsCmdB%%xpsnrCmd%%outputFile%" -f null -
 
-set "outputFile=X\\:/\导出测试结果路径\/xpsnr-视频3跑分-三十六万分之一.txt"
+set "outputFile=X\\:/\导出测试结果路径\/xpsnr-视频 3 跑分—三十六万分之一.txt"
 ffmpeg -hide_banner -an ^
--i "%sourcePath%源视频3.m2ts" ^
--i "%lossyPath%压缩视频3.ivf" ^
+-i "%sourcePath%源视频 3.m2ts" ^
+-i "%lossyPath%压缩视频 3.ivf" ^
 -lavfi "%setptsCmdC%%xpsnrCmd%%outputFile%" -f null -
 
-set "outputFile=X\\:/\导出测试结果路径\/xpsnr-视频4跑分-无对齐.txt"
+set "outputFile=X\\:/\导出测试结果路径\/xpsnr-视频 4 跑分—无对齐.txt"
 ffmpeg -hide_banner -an ^
--i "%sourcePath%源视频4.m2ts" ^
--i "%lossyPath%压缩视频4.ivf" ^
+-i "%sourcePath%源视频 4.m2ts" ^
+-i "%lossyPath%压缩视频 4.ivf" ^
 -lavfi "%xpsnrCmd%%outputFile%" -f null -
 
 pause
@@ -7361,28 +7362,28 @@ set "setptsCmdB=[0:v]setpts=N*(1/6000)[src]; [1:v]setpts=N*(1/6000)[enc]; [enc][
 set "setptsCmdC=[0:v]setpts=N*(1/360000)[src]; [1:v]setpts=N*(1/360000)[enc]; [enc][src]"
 set "vmafCmd=libvmaf=model=version=vmaf_v0.6.1\\:name=vmaf_1080p|version=vmaf_4k_v0.6.1\\:name=vmaf_4k"
 
-set "outputFile=X:\导出测试结果路径\vmaf-视频1跑分-两万四千之一.txt"
+set "outputFile=X:\导出测试结果路径\vmaf-视频 1 跑分—两万四千之一.txt"
 ffmpeg -hide_banner -an ^
--i "%lossyPath%压缩视频1.ivf" ^
--i "%sourcePath%源视频1.mkv" ^
+-i "%lossyPath%压缩视频 1.ivf" ^
+-i "%sourcePath%源视频 1.mkv" ^
 -lavfi "%setptsCmdA%%vmafCmd%" -f null - &gt; %outputFile% 2&gt;&1
 
-set "outputFile=X:\导出测试结果路径\vmaf-视频2跑分-六千分之一.txt"
+set "outputFile=X:\导出测试结果路径\vmaf-视频 2 跑分—六千分之一.txt"
 ffmpeg -hide_banner -an ^
--i "%lossyPath%压缩视频2.ivf" ^
--i "%sourcePath%源视频2.mov" ^
+-i "%lossyPath%压缩视频 2.ivf" ^
+-i "%sourcePath%源视频 2.mov" ^
 -lavfi "%setptsCmdB%%vmafCmd%" -f null - &gt; %outputFile% 2&gt;&1
 
-set "outputFile=X:\导出测试结果路径\vmaf-视频3跑分-三十六万分之一.txt"
+set "outputFile=X:\导出测试结果路径\vmaf-视频 3 跑分—三十六万分之一.txt"
 ffmpeg -hide_banner -an ^
--i "%lossyPath%压缩视频3.ivf" ^
--i "%sourcePath%源视频3.m2ts" ^
+-i "%lossyPath%压缩视频 3.ivf" ^
+-i "%sourcePath%源视频 3.m2ts" ^
 -lavfi "%setptsCmdC%%vmafCmd%" -f null - &gt; %outputFile% 2&gt;&1
 
-set "outputFile=X:\导出测试结果路径\vmaf-视频4跑分-无对齐.txt"
+set "outputFile=X:\导出测试结果路径\vmaf-视频 4 跑分—无对齐.txt"
 ffmpeg -hide_banner -an ^
--i "%lossyPath%压缩视频4.ivf" ^
--i "%sourcePath%源视频4.m2ts" ^
+-i "%lossyPath%压缩视频 4.ivf" ^
+-i "%sourcePath%源视频 4.m2ts" ^
 -lavfi "%vmafCmd%" -f null - &gt; %outputFile% 2&gt;&1
 
 pause
@@ -10141,7 +10142,7 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1 ace" style="color:#31D87D">100</td>
                     </tr>
                     <tr class="text-smaller">
-                        <td class="align-items-center t-light-gray" colspan="13"><b>ドラゴン会. MAIDRAGON-S</b></td>
+                        <td class="align-items-center t-light-gray" colspan="13"><b>ドラゴン会/MAIDRAGON-S</b></td>
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1 text-blue-emph">x265</td>
@@ -10324,7 +10325,7 @@ SSIMULACRA2_rs: Mean: 81.85594740 Median: 82.74166944 Std Dev: 5.18134927 5th Pe
                         <td class="px-1 trd" style="color:#92D050">88.19626015</td>
                     </tr>
                     <tr class="text-smaller">
-                        <td class="align-items-center t-light-gray" colspan="13"><b>OB 会. HYOUKA</b></td>
+                        <td class="align-items-center t-light-gray" colspan="13"><b>OB 会/HYOUKA</b></td>
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1 text-blue-emph">x265</td>
@@ -13006,7 +13007,7 @@ SSIMULACRA2_rs: Mean: 82.71404144, Median: 83.55282859, Std Dev: 4.82887766, 5th
                         <td class="px-1" style="color:#31D87D">99.67355643</td>
                     </tr>
                     <tr class="text-smaller">
-                        <td class="align-items-center t-light-gray" colspan="12"><b>ドラゴン会. MAIDRAGON-S</b></td>
+                        <td class="align-items-center t-light-gray" colspan="12"><b>ドラゴン会/MAIDRAGON-S</b></td>
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">CRF30 PSNR P3 Sharp-4</td>
@@ -13093,7 +13094,7 @@ SSIMULACRA2_rs: Mean: 82.71404144, Median: 83.55282859, Std Dev: 4.82887766, 5th
                         <td class="px-1 ace" style="color:#92D050">89.01016059</td>
                     </tr>
                     <tr class="text-smaller">
-                        <td class="align-items-center t-light-gray" colspan="12"><b>OB 会. HYOUKA</b></td>
+                        <td class="align-items-center t-light-gray" colspan="12"><b>OB 会/HYOUKA</b></td>
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1">CRF30 PSNR P3 Sharp-4</td>
@@ -13595,7 +13596,7 @@ Max Latency:		27642 ms
                             <td class="px-1 border-left">21361.20</td>
                         </tr>
                         <tr class="text-smaller">
-                            <td class="align-items-center t-light-gray" colspan="3"><b>ドラゴン会. MAIDRAGON-S</b></td>
+                            <td class="align-items-center t-light-gray" colspan="3"><b>ドラゴン会/MAIDRAGON-S</b></td>
                         </tr>
                         <tr class="border-bottom">
                             <td class="px-1">CRF30 PSNR P3 HierLvl5 FixedQoffs2 KQoffs-1 keyint12s</td>
@@ -13613,7 +13614,7 @@ Max Latency:		27642 ms
                             <td class="px-1 border-left">1762.19</td>
                         </tr>
                         <tr class="text-smaller">
-                            <td class="align-items-center t-light-gray" colspan="3"><b>OB 会. HYOUKA</b></td>
+                            <td class="align-items-center t-light-gray" colspan="3"><b>OB 会/HYOUKA</b></td>
                         </tr>
                         <tr class="border-bottom">
                             <td class="px-1">CRF30 PSNR P3 HierLvl5 FixedQoffs2 KQoffs-1 keyint12s</td>
@@ -14561,7 +14562,7 @@ ssimulacra2_rs: Mean: 83.68623603, Median: 83.96666350, Std Dev: 3.66503275, 5th
                         <td class="px-1" style="color:#31D87D">99.36087300</td>
                     </tr>
                     <tr class="text-smaller">
-                        <td class="align-items-center t-light-gray" colspan="13"><b>ドラゴン会. MAIDRAGON-S</b></td>
+                        <td class="align-items-center t-light-gray" colspan="13"><b>ドラゴン会/MAIDRAGON-S</b></td>
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1 text-blue-emph">x265</td>
@@ -14639,7 +14640,7 @@ ssimulacra2_rs: Mean: 83.68623603, Median: 83.96666350, Std Dev: 3.66503275, 5th
                         <td class="px-1" style="color:#92D050">89.31973903</td>
                     </tr>
                     <tr class="text-smaller">
-                        <td class="align-items-center t-light-gray" colspan="13"><b>OB 会. HYOUKA</b></td>
+                        <td class="align-items-center t-light-gray" colspan="13"><b>OB 会/HYOUKA</b></td>
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1 text-blue-emph">x265</td>
@@ -15270,7 +15271,7 @@ ssimulacra2_rs: Mean: 83.68623603, Median: 83.96666350, Std Dev: 3.66503275, 5th
                         <td class="px-1" style="color:#31D87D">99.67507947</td>
                     </tr>
                     <tr class="text-smaller">
-                        <td class="align-items-center t-light-gray" colspan="13"><b>ドラゴン会. MAIDRAGON-S</b></td>
+                        <td class="align-items-center t-light-gray" colspan="13"><b>ドラゴン会/MAIDRAGON-S</b></td>
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1 text-blue-emph">x265 4.0</td>
@@ -15318,7 +15319,7 @@ ssimulacra2_rs: Mean: 83.68623603, Median: 83.96666350, Std Dev: 3.66503275, 5th
                         <td class="px-1" style="color:#92D050">88.87699541</td>
                     </tr>
                     <tr class="text-smaller">
-                        <td class="align-items-center t-light-gray" colspan="13"><b>OB 会. HYOUKA</b></td>
+                        <td class="align-items-center t-light-gray" colspan="13"><b>OB 会/HYOUKA</b></td>
                     </tr>
                     <tr class="border-bottom">
                         <td class="px-1 text-blue-emph">x265 4.0</td>
