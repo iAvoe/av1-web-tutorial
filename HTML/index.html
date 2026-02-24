@@ -15696,22 +15696,23 @@ ssimulacra2.exe .\原画.png .\压缩.png
                     <li>安装 <a href="https://rustup.rs/">rustup</a>（编译环境）</li>
                     <li>完整安装 <a href="https://github.com/vapoursynth/vapoursynth/releases">VapourSynth</a>（ssimulacra_rs 依赖），
                         <ul>
+                            <li>建议用以管理员身份运行安装包</li>
                             <li>必须安装到 <code>C:\Program Files\VapourSynth</code> 并选择“Install for all users”</li>
                             <li>此处打开时会报错，并提示特定的 Python 版本要求</li>
-                            <li>之后进入“Select Additional Tasks”时，可以选择去勾选“Add ‘New VapourSynth Python Script’ option to shell context menu”以避免添加新的右键菜单项</li>
+                            <li>（Python 环境安装完成）之后进入“Select Additional Tasks”时，可以选择去勾选“Add ‘New VapourSynth Python Script’ option to shell context menu”以避免添加新的右键菜单项</li>
                         </ul>
                     </li>
                     <li>完整安装 VapourSynth 安装包要求的 <a href="https://www.python.org/">Python</a> 环境版本（据上一步的报错得知版本）
-                        <ul>
-                            <li><b>必须以管理员身份运行，勿用浏览器下载菜单的打开</b></li>
-                            <li>选择自定义安装（Customize Installation）而不是直接安装（Install Now）</li>
+                        <ol>
+                            <li><b>必须以管理员身份运行，浏览器下载菜单打开会导致错误安装</b></li>
+                            <li>选择自定义安装（Customize Installation）而非直接安装（Install Now）</li>
                             <li>Advanced Options 中选择“Install for all users”（VapourSynth 依赖）
                                 <ul><li>Optional Feature 中的“Install for all users”是指代码编辑器，而非 Python 本体</li></ul>
                             </li>
-                            <li>已知 python-manager-xx.x.msix 的安装方式违逆了安装 VapourSynth 的要求，建议用 .exe 的安装包</li>
-                        </ul>
+                            <li class="text-smaller">已知 python-manager-xx.x.msix 的安装方式违逆了安装 VapourSynth 的要求，不能使用</li>
+                        </ol>
                     </li>
-                    <li>检查 <code>C:\Program Files\VapourSynth\sdk\lib64</code> 路径存在，并且含有 <code>vapoursynth.lib</code>。否则卸载 Python 和 VapourSynth，并仔细阅读并正确完成安装</li>
+                    <li>检查 <code>C:\Program Files\VapourSynth\sdk\lib64</code> 路径存在，并且含有 <code>vapoursynth.lib</code>。否则卸载 Python 以及 VapourSynth，并仔细阅读上述步骤以正确安装</li>
                     <li>PowerShell 中运行 <code>cargo install ssimulacra2_rs</code> 完成安装，过程中不应该有任何报错</li>
                     <li>将 <code>C:\Users\&lt;用户名&gt;\.cargo\bin\ssimulacra2_rs.exe</code> 拷贝到工作路径，便以卸载 rustup</li>
                     <li>下载 <a href="https://github.com/AkarinVS/L-SMASH-Works/releases">LSMAS 解码器</a>，随意根据缓存文件路径设定选择版本：
