@@ -2029,9 +2029,9 @@ WEDGE_OBLIQUE117, 6, 4
 
             <h2 id="h2-7">帧内预测</h2>
 
-            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：帧内预测——临近参考源序列 Neighbour arrays</button>
+            <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：帧内预测——临近参考源序列（Neighbour arrays）</button>
             <div class="coll-content">
-                <h3>帧内预测——临近参考源序列 Neighbour arrays</h3>
+                <h3>帧内预测——临近参考源序列（Neighbour arrays）</h3>
                 <p>HEVC 的帧内参考源拥有左侧一列，顶部一行，以及左上角的一个参考源组成。SVT-AV1 编码器的帧内预测块拥有其所在 Superblock 的左侧一行、顶部一列，外加一个左上“肩型”序列（Γ），<i>共 3 列</i>组成。</p>
                 <p>左侧序列约一个 SB 高，可使用帧内编码 SB 的 y 坐标锁定。顶部序列大约有一个图片宽，且包含了原本的左上角参考源像素，可以使用当前块的 x 坐标锁定。</p>
                 <div class="align-items-center">
@@ -15694,10 +15694,22 @@ ssimulacra2.exe .\原画.png .\压缩.png
             <div class="coll-content">
                 <ol>
                     <li>安装 <a href="https://rustup.rs/">rustup</a>（编译环境）</li>
-                    <li>完整安装 <a href="https://github.com/vapoursynth/vapoursynth/releases">VapourSynth</a>（ssimulacra_rs 依赖），必须安装到 <code>C:\Program Files\VapourSynth</code> 并选择“Install for all users”
-                        <ul><li>此处打开时会报错，并提示特定的 Python 版本要求</li></ul>
+                    <li>完整安装 <a href="https://github.com/vapoursynth/vapoursynth/releases">VapourSynth</a>（ssimulacra_rs 依赖），
+                        <ul>
+                            <li>必须安装到 <code>C:\Program Files\VapourSynth</code> 并选择“Install for all users”</li>
+                            <li>此处打开时会报错，并提示特定的 Python 版本要求</li>
+                        </ul>
                     </li>
-                    <li>完整安装 VapourSynth 要求的 <a href="https://www.python.org/">Python</a> 环境版本，必须以管理员身份运行，并在自定义安装中选择“Install for all users”（VapourSynth 依赖）</li>
+                    <li>完整安装 VapourSynth 安装包要求的 <a href="https://www.python.org/">Python</a> 环境版本（据上一步的报错得知版本）
+                        <ul>
+                            <li><b>必须以管理员身份运行，勿用浏览器下载菜单的打开</b></li>
+                            <li>选择自定义安装（Customize Installation）而不是直接安装（Install Now）</li>
+                            <li>Advanced Options 中选择“Install for all users”（VapourSynth 依赖）
+                                <ul><li>Optional Feature 中的“Install for all users”是指代码编辑器，而非 Python 本体</li></ul>
+                            </li>
+                            <li>已知 python-manager-xx.x.msix 的安装方式违逆了安装 VapourSynth 的要求，建议用 .exe 的安装包</li>
+                        </ul>
+                    </li>
                     <li>检查 <code>C:\Program Files\VapourSynth\sdk\lib64</code> 路径存在，并且含有 <code>vapoursynth.lib</code>。否则卸载 Python 和 VapourSynth，并仔细阅读并正确完成安装</li>
                     <li>PowerShell 中运行 <code>cargo install ssimulacra2_rs</code> 完成安装，过程中不应该有任何报错</li>
                     <li>将 <code>C:\Users\&lt;用户名&gt;\.cargo\bin\ssimulacra2_rs.exe</code> 拷贝到工作路径，便以卸载 rustup</li>
