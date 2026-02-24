@@ -2133,9 +2133,9 @@ WEDGE_OBLIQUE117, 6, 4
             <h3>帧内预测——平滑模式 Smooth</h3>
             <p>分为以二次多项式插值（一种样条 Spline 插值）的 <code class="code-bold">SMOOTH_V_PRED</code> 与 <code class="code-bold">SMOOTH_H_PRED</code>，以及合并前两者，构成类似 HEVC 趋平预测模式（Planar）的 <code class="code-bold">SMOOTH_PRED</code>。权重根据预测像素坐标变化而变化：</p>
             <ul class="text-smaller">
-                <li><code class="code-bold">SMOOTH_V_PRED</code> 使用二次多项式插值计算左下角参考点到左上角参考点的过渡，然后纵向填满该编码块</li>
-                <li><code class="code-bold">SMOOTH_H_PRED</code> 使用二次多项式插值计算右上角参考点到左上角参考点的过渡，然后横向填满该编码块</li>
-                <li><code class="code-bold">SMOOTH_PRED</code> 使用二次多项式插值出两种过渡，然后通过 Round2 函数取平均</li>
+                <li><code class="code-bold">SMOOTH_V_PRED</code> 使用二次多项式插值（Spline）计算左下角参考点到左上角参考点的过渡，再纵向填满该编码块</li>
+                <li><code class="code-bold">SMOOTH_H_PRED</code> 使用二次多项式插值（Spline）计算右上角参考点到左上角参考点的过渡，再横向填满该编码块</li>
+                <li><code class="code-bold">SMOOTH_PRED</code> 使用二次多项式插值（Spline）算出两种过渡，然后通过 Round2 函数取平均</li>
                 <li>二次多项式插值代表“权重 1 × 点 1 + 权重 2 × 点 2 + ... + 权重 N × 点 N”，权重由距离过渡得到</li>
             </ul>
             <div class="align-items-center">
@@ -2443,7 +2443,7 @@ scaledLuma = Round2Signed( alpha * ( L[i][j] - lumaAvg ), 6 )
                 </code></pre>
             </div>-->
 
-            <h3>帧内预测——帧内块拷贝模式 Intra block copy（特殊）</h3>
+            <h3>帧内预测——帧内块拷贝模式 Intra block copy（IBC，特殊）</h3>
             <p>通过“伪动态向量”定位一个重建块的伪帧间预测。亮度块的伪动态向量缩小后可以用于色度平面，但向量会变成半像素精度，这种情况下会额外在子像素上用到双线性插值滤镜，见：<a href="https://aomediacodec.github.io/av1-spec/#general-12">AV1 Spec</a>。</p>
 
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：IBC 模式启用条件</button>
@@ -2527,7 +2527,7 @@ scaledLuma = Round2Signed( alpha * ( L[i][j] - lumaAvg ), 6 )
                     <li><b>亮度色度 QP 偏移</b>：
                         <ul class="text-smaller"><li>据亮度 Luma、色度 Chroma 平面偏移 QP，AV1 支持 Y、Cb、Cr 分别偏移</li></ul>
                     </li>
-                    <li><b>转换到量化步长索引 QIndex</b>：
+                    <li><b>转换到量化步长索引（QIndex）</b>：
                         <ul class="text-smaller">
                             <li>将 QP 缩放到 0~255 范围的高精度状态<span class="text-smaller">（QIndex 不绑定位深，所以不存在 0~1023 的范围）</span></li>
                             <li>“索引”在编程中代表支持储存多个值的变量中，某个特定值的序号</li><!--（Array、ArrayList、LinkedList）-->
@@ -2559,7 +2559,7 @@ scaledLuma = Round2Signed( alpha * ( L[i][j] - lumaAvg ), 6 )
             </div>
 
             <h3>量化——量化步长</h3>
-            <p>AVC、HEVC 中为 QStep，代表量化强度的阶梯间隔，映射到对应的量化矩阵。VP9、AV1 中的默认量化模式是直接将变换块除以量化步长得到。量化步长由量化步长索引 QIndex 结合 <code>Dc_Qlookup</code>、<code>Ac_Qlookup</code> 得到，量化步长索引同时用于量化与逆量化。</p>
+            <p>即 AVC、HEVC 中的 QStep（量化强度的梯度间隔，映射到对应的量化矩阵）。VP9 与 AV1 默认会将变换块直接除以量化步长的方式实现量化，这样做的好处是快速、数据结构更简单，内存占用也更低。量化步长由量化步长索引 QIndex 结合 <code>Dc_Qlookup</code>、<code>Ac_Qlookup</code> 得到，量化步长索引同时用于量化与逆量化。</p>
 
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：量化——量化矩阵</button>
             <div class="coll-content">
@@ -2722,7 +2722,7 @@ qm_val_t *aom_qmatrix(AV1_COMMON *cm, int qmlevel, int is_chroma, TX_SIZE tx_siz
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：量化——逆量化</button>
             <div class="coll-content">
                 <h3>量化——逆量化</h3>
-                <p>在默认方法中，VP9 与 AV1 通过将整帧乘以一个固定强度实现；AV1 的逆量化值由多个因素推导。从量化结果像素 <span class="text-blue-math">\( q[i] \)</span> 开始的过程为：</p>
+                <p>VP9 与 AV1 默认将整帧乘以一个固定强度实现；其中 AV1 的逆量化值由多个因素推导。从量化结果像素 <span class="text-blue-math">\( q[i] \)</span> 开始的过程为：</p>
                 <span class="text-blue-math">\[ \text{dq}\left(i\right) = \frac{q[i] * Q_{\text{Step}}}{\text{deNorm}} \]</span>
                 <table class="align-items-center table-center mb-3">
                     <thead>
@@ -5400,7 +5400,7 @@ void svt_av1_build_quantizer(PictureParentControlSet *pcs, EbBitDepth bit_depth,
             <code class="code-bold">&#45;&#45;preset</code>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 13~-1，默认 10（可能最新版本为 8）：快速&gt;SVT-AV1 中高度涉及编码功能强度设定的参数。大致上 13~7 用于实时和快速编码用途，6~4 为常规用途，3~1 为高压缩用途，-1 为（<code>ENC_MR</code>，Research mode）模式，是在算力足以支撑 preset 0 时可以考虑的更优选项（不一定是上位替代）。10~0 的<i>部分</i>预设范围见下，或 <a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/master/Docs/CommonQuestions.md">SVT-AV1 Common questions</a>：</p>
             <ul class="text-smaller">
-                <li><b>TF level</b>：时域降噪过滤搜索级别</li>
+                <li><b>TF level</b>：时域降噪过滤（TF）搜索级别</li>
                 <li><b>NSQ level</b>：非正方形细分块搜索级别</li>
                 <li><b>HME SA</b>：分叉式动态搜索区域 Search area（merange）</li>
                 <li><b>TXT level</b>：变换块分块搜索级别，见 <a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/master/Docs/Appendix-TX-Search.md">SVT-AV1 Docs</a></li>
@@ -10861,7 +10861,7 @@ SSIMULACRA2_rs: Mean: 79.07579506 Median: 75.54317772 Std Dev: 13.21970057 5th P
                 <li><code>--variance-boost-strength 3</code> 的增益不如 <code>--variance-boost-curve 2</code> 好</li>
             </ol>
 
-            <h3>测试——SVT-AV1 时域降噪过滤测试</h3>
+            <h3>测试——SVT-AV1 时域降噪过滤（TF）测试</h3>
 
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（1/2）SVT-AV1 v3.0——ElephantsDream-TF</button>
             <div class="coll-content">
@@ -11039,7 +11039,7 @@ SSIMULACRA2_rs: Mean: 78.34317414 Median: 78.04531049 Std Dev: 8.94038278 5th Pe
             <div class="overflow-auto mt-3"><table class="table-center text-smaller two-decimals">
                 <thead>
                     <tr class="border-lr">
-                        <th colspan="3">时域降噪过滤测试</th>
+                        <th colspan="3">时域降噪过滤（TF）测试</th>
                         <th class="px-1" colspan="3">XPSNR</th>
                         <th class="px-1" colspan="2">VMAF 0.6.1</th>
                         <th class="px-1" colspan="4">SSIMULACRA 2.1</th>
@@ -11182,11 +11182,11 @@ SSIMULACRA2_rs: Mean: 78.34317414 Median: 78.04531049 Std Dev: 8.94038278 5th Pe
             </table></div>
             <div class="align-items-center"><p class="text-blue-emph text-smaller">于单元格上方悬浮光标以查看完整小数</p></div>
 
-            <h4>（2/2）SVT-AV1 时域降噪过滤分析</h4>
+            <h4>（2/2）SVT-AV1 时域降噪过滤（TF）分析</h4>
             <ol>
                 <li>即使去掉 CRF30 PSNR、CRF30 VQ 两个基准结果，编码出的视频仍然是不分高下且差距极小</li>
                 <li>在所有画质指标中，启用 <code>--enable-tf 2</code> 后都隐隐有些画质提升，但</li>
-                <li>启用 <code>--enable-tf 2</code> 后，1920x1080 视频编码 fps 却下降了 0.707，而降低 CRF 非但能够达到同样的画质提升，并且不会拖累编码速度</li>
+                <li>启用 <code>--enable-tf 2</code> 后，1920x1080 编码却下降了 0.707fps（理论上架构弱于 ZEN 5 的 CPU 会更慢），而降低 CRF 不但画质提升相同，并且不一定会显著减速/增加延迟</li>
                 <li>Elephants-Dream 片源包含了多种动态变化程度的场景，理论上只要有一个场景明显占优势，则测试的一系列选项就应当出现阶段性的上升/下降趋势，但跑分的变化忽高忽低，没有趋势</li>
             </ol>
 
@@ -11972,7 +11972,7 @@ SSIMULACRA2_rs: Mean: 43.37989094 Median: 42.86187330 Std Dev: 10.52248577 5th P
             </ol>
 
             <h3>测试——SVT-AV1 大范围优化测试</h3>
-            <p>降低启用 VAQ 的 Superblock 结构区分阈值、指定锐度优先的模式决策选项。</p>
+            <p>降低启用 VAQ 的（Superblock 结构区分）阈值、指定锐度优先的模式决策选项。</p>
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（1/8）SVT-AV1 v3.0——SolLevante</button>
             <div class="coll-content">
                 <p><code>&#45;&#45;preset 3 --crf 30 --sharpness -4</code>：</p>
@@ -15715,8 +15715,8 @@ ssimulacra2.exe .\原画.png .\压缩.png
             
             <h3>下载——SSIMULACRA2 Vapoursynth-HIP</h3>
             <p>一款支持使用英伟达和 AMD 显卡计算 SSIMULACRA、Butteraugli 的动态链接库，支持直接以自带的 FFVSHIP 使用，或在 VapourSynth 内调用。下载与配置见 <a href="https://github.com/Line-fr/Vship">Github/Line-fr</a>。</p>
-            <p class="text-gray-side">注：测试发现虽然该实现的速度大幅提高，但所得分数相比基于 CPU 的 ssimulacra2_rs 平均偏移了 -0.3，这个偏差足以影响测试结果中的前三排名，故不在本教程中采用，也不建议在与他人压制结果对比时使用。</p>
-            <p class="text-gray-side">注：若两组人分别压制了同一片源，则使用 ssimulacra2_rs 计算画质的组得分更高，使用 vship 计算画质的组得分更低而败。</p>
+            <p class="text-gray-side">注：测试发现虽然该实现的速度大幅提高，但所得分数相比基于 CPU 的 ssimulacra2_rs 平均偏移了 -0.3，这个偏差足以影响测试结果中的前三排名，故不在本教程中采用，也不建议使用。</p>
+            <p class="text-gray-side">注：若两组人分别压制了同一片源，则使用 vship 计算画质的组会输给使用 ssimulacra2_rs 的组。</p>
 
             <h4>直接使用流程</h4>
             <p>此处仍然需要随便提供 <code class="code-bold">--source</code>、<code class="code-bold">--encoded</code> 两个源才能使用 <code class="code-bold">-list-gpu</code> 命令，否则报错，但无大碍。</p>
