@@ -1084,14 +1084,14 @@
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：图片结构——瓦片 Tile</button>
             <div class="coll-content">
                 <h3>图片结构——瓦片 Tile</h3>
-                <p>继承自 VP9 的帧下级结构，仅用于提高软件解码器效率。AV1 中，最小的瓦片可以由一个粗分块构成，一帧最多可含 512 片，但级别 Level 6.3——7680x4320@120 限制到最高 128 片。</p>
-                <p>AV1 支持非对等大小瓦片（non-uniform tiles），并兼容了 VP9 的对等大小瓦片（uniform tiles）配置。理论上可以使每片瓦的码率分配，或算力分配（如桌面端与移动端处理器的 P-E 核架构）更合理，但最终优化程度取决于开发者。</p>
+                <p>继承自 VP9 的帧下级结构，仅用于提高软件解码器效率。AV1 中，瓦片最小可以由单个粗分块构成，技术上一帧最多可含 512 片，但级别（Level）6.3——7680x4320@120 限制在最高 128 片。</p>
+                <p>AV1 支持非对等大小瓦片（non-uniform tiles），并兼容了 VP9 的对等大小瓦片（uniform tiles）配置。理论上可以使每片瓦的码率与算力分配更合理（如根据大小核软件编解码调度策略调优），但优化最终取决于开发者。</p>
             </div>
 
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（1/1）基于瓦片的多线程优化</button>
             <div class="coll-content">
                 <h4>（1/1）基于瓦片的多线程优化</h4>
-                <p>作为一种分区方法，瓦片自然也可以用于拆分压制任务。这种方法的缺点是会干扰到视频编码依赖于帧间 + 帧内的二维冗余，导致编码效率或画质降低，类似于 x264 编码器曾尝试并弃用的“基于分片的多线程优化”。SVT-AV1 支持基于瓦片的多线程优化，但默认关闭。</p>
+                <p>作为一种分区方法，瓦片自然能够拆分压制任务。此方法的缺点是会干扰到视频编码依赖于帧间 + 帧内的冗余，导致编码效率或画质降低，类似于 x264 编码器曾尝试并最终不用于默认的“基于分片的多线程优化”。SVT-AV1 支持基于瓦片的多线程优化，但默认关闭。</p>
                 <p class="text-gray-side">注：AV1 中已经使用了分瓣（Tile Segment）来根据画面内容而划区分配码率</p>
                 <p class="text-gray-side">注：虽然 x264 证明了“将帧分为条带来提升多线程优化”的上下文损失极高，但随着硬件编码技术的改进，以及视频分辨率的增加，瓦片的大小可能会变得形同 x264 最初设计应对的分辨率，如 768x512 的一组视频，因此如果被优化到位，则这种调度说不定会变得可行</p>
             </div>
@@ -1099,14 +1099,14 @@
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：图片结构——分瓣 Frame segment</button>
             <div class="coll-content">
                 <h3>图片结构——分瓣 Frame segment</h3>
-                <p>继承自 VP9，独立于瓦片 tile 的划分结构。最多支持 8 瓣，每个块独立选择归纳为其中一瓣，以将一些编码信息分组，有提升熵编码/文本编码压缩率。主要由帧标识头 Frame header 配置和更新以下关键设定：</p>
+                <p>继承自 VP9，独立于瓦片 tile 的划分结构。最多支持 8 瓣，每个块独立选择归纳为其中一瓣，以将一些编码信息分组，有提升熵编码/文本编码压缩率。主要由帧标识头（Frame header）配置和更新以下关键设定：</p>
                 <ul class="text-smaller">
                     <li>量化强度偏移设定</li>
                     <li>环路滤镜设定</li>
                     <li>被参考帧设定</li>
                     <li>编码跳过设定</li>
                 </ul>
-                <p>分瓣与 AVC 的分段编码 Segment based encoding 不同，前者相当于时域加空域分割（Temporal + spatial segmentation），后者只有时域分割。</p>
+                <p>分瓣与 AVC 的分段编码（Segment-based encode）不同，前者相当于时域加空域分割（Temporal + spatial segmentation），后者只有时域分割。</p>
             </div>
 
             <h3>图片结构——粗分块/特大块 Superblock</h3>
@@ -2077,9 +2077,9 @@ WEDGE_OBLIQUE117, 6, 4
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：（1/1）SVT-AV1 更新和访问参考源序列的流程</button>
             <div class="coll-content">
                 <h4>（1/1）SVT-AV1 更新和访问参考源序列的流程</h4>
-                <p>临近参考源序列在当前帧开始帧内编码时重置。每个块完成编码后，其模式信息（或参考信息）会被填入这些序列。SVT-AV1 编码器更新和访问参考源序列的流程如下：</p>
+                <p>临近参考源序列会在当前帧开始帧内编码时被重置。每个块完成编码后，其模式信息（或参考信息）会被填入这些序列。SVT-AV1 编码器更新和访问参考源序列的流程如下：</p>
                 <ol>
-                    <li>参考源序列合成当前编码块（SB 内的分块）所需的参考源信息</li>
+                    <li>参考源序列合成当前编码块（SB 内的分块）所需要的参考源信息</li>
                     <li>块的帧内编码模式决策</li>
                     <li>将当前块的模式信息（或参考信息）更新到参考源序列中</li>
                     <li>如果当前编码块是 SB 内的分块模式决策点，则更新与当前帧内参考模式所相关的参考源序列（?）</li>
@@ -3147,7 +3147,7 @@ int av1_get_qindex(const struct segmentation *seg, int segment_id, int base_qind
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：熵编码——帧分瓣平面级别</button>
             <div class="coll-content">
                 <h3>熵编码——帧分瓣平面级别</h3>
-                <p>AV1 中代表不同范围的系子（量化结果）幅度：0~2 为低，3~14 为中，15 及以上为高。低中级平面的熵编码按倒序扫描顺序编码，高级平面按顺序扫描顺序编码。熵编码时与 x265 一样使用零阶指数哥伦布编码（见 x265 教程）转换到二进制。</p>
+                <p>AV1 中代表不同范围的系子（量化结果）幅度：0~2 为低，3~14 为中，15 及以上为高。低中级平面的熵编码按倒序扫描顺序编码，高级平面按顺序扫描顺序编码。熵编码时与 x265 一样会使用零阶指数哥伦布编码（见 x265 教程）转换到二进制。</p>
             </div>
 
             <button type="button" class="collapsible border-main rounded-3 mt-3">点击展开/折叠内容：CABAC 编码</button>
@@ -7003,11 +7003,11 @@ for ($i=1; $i -le $frames; $i++) {
             <h4>（1/7）测试源条件与中间格式</h4>
             <p>只使用合理的视频源、并将所有源的格式统一，以达到可靠的测试条件。</p>
             <ul>
-                <li><b>分辨率：</b>原生逐行扫描、视频高不超过 2160 像素</li>
+                <li><b>分辨率：</b>原生逐行扫描（非隔行）、视频高不超过 2160 像素</li>
                 <li><b>帧率：</b>原生恒定帧率、未插帧的视频源</li>
                 <li><b>色彩空间：</b>源与压缩结果均为 YUV 4:2:0；矩阵格式/系数指标、传输特质、三原色及白点、master-display 皆为 Bt.709 SDR
                     <ul>
-                        <li>如果源的原生色域高于 Bt.709，则转换到 Bt.709 并编码为中间格式</li>
+                        <li>如果源的原生色域高于 Bt.709，则转换到 Bt.709 并编码为无损中间格式</li>
                         <li>源的原生色域不可低于 Bt.709</li>
                     </ul>
                 </li>
@@ -7015,7 +7015,7 @@ for ($i=1; $i -le $frames; $i++) {
                 <li><b>关键帧间隔：</b>由于测试项目较多，所以只使用 12 秒间隔，理想时间条件下应当额外测试 5 秒关键帧间隔
                     <ul><li>该距离虽略长于串流用途（提高解码难度和延迟），但作为测试，这有助于编码器时域冗余能力得到充分发挥</li></ul>
                 </li>
-                <li><b>空间/时间加边（Padding）：</b>不得有任何黑边，或累计时长打达到影片 10% 长度的黑场；黑边黑场的编解码过于简单，导致原本影片的分数异常升高而失信</li>
+                <li><b>空间/时间加边（Padding）：</b>黑边黑场的编解码过于简单，会导致画质得分异常升高，故不得有黑边，或累计时长达到影片 5% 长度的黑场</li>
             </ul>
             <h4>（2/7）测试内容画面</h4>
             <h5>（2/7——1/3）电影、录像</h5>
@@ -15728,7 +15728,7 @@ ssimulacra2.exe .\原画.png .\压缩.png
 
             <h3>下载——SSIMULACRA2_rs</h3>
             <p>详见：<a href="https://github.com/rust-av/ssimulacra2">GitHub/rust-av</a></p>
-            <p class="text-gray-side">注：已知 SSIMULACRA2_rs 至少与 VapourSynth R71/Python 3.13.x 兼容，但与 R73/Python 3.14.x 不兼容（<code>exit code: 1120</code>）</p>
+            <p class="text-gray-side">注：已知 SSIMULACRA2_rs 至少与 VapourSynth R71/Python 3.13.x 兼容，<b>但不兼容 R73/Python 3.14.x </b>：<code>exit code: 1120</code></p>
             <button type="button" class="collapsible border-main rounded-3 mt-3">（1/1）Windows 安装流程</button>
             <div class="coll-content">
                 <h4>下载并安装编译工具</h4>
