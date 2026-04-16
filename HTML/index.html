@@ -4755,7 +4755,7 @@ static void set_bitstream_level_tier(SequenceControlSet *scs) {
             <code class="code-bold">--qp</code>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 1~63，默认 35：中高量化&gt;指定 CQP 模式下的固定值，CRF 模式下为初始 QP（类似于手动设置 x264/5 的 <code>--cplxblur</code>）。由于 GOP 总以关键帧开始，所以 CRF 模式下推荐较低的值。</p>
             <code class="code-bold">--crf</code>
-            <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 1~63，默认 35：中高量化&gt;指定质量呼应码率模式的量化强度目标，SVT-AV1 中直接映射为 <code>&#45;&#45;rc 0 --aq-mode 2 --qp [_]</code>。</p>
+            <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 1~63，默认 35：中高量化&gt;指定码率调谐常量的量化强度目标，SVT-AV1 中直接映射为 <code>&#45;&#45;rc 0 --aq-mode 2 --qp [_]</code>。</p>
             <code class="code-bold">--luminance-qp-bias</code>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~100，默认 0：关闭&gt;将 QP 分配逻辑过渡到“据亮度调整”的百分比程度（使码率分配逻辑变得更像 x264、x265 的表现）。</p>
 
