@@ -4603,7 +4603,29 @@ static void set_bitstream_level_tier(SequenceControlSet *scs) {
 
             <h4>（4/12）格式与 VUI/SEI 标注</h4>
             <code class="code-bold">--chroma-sample-position</code>
-            <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~2，默认 0（留空）&gt;指定色度采样缩减分辨率时所用的像素相对于缩小前像素的位置，涉及到解码端的色度像素对齐。如果源视频标注，则建议标注——1：左，2：左上。</p>
+            <p class="font-monospace pl-5 m-0 overflow-auto">&lt;字符串，默认 unknown&gt;指定色度采样位置。如果源视频标注，则建议标注：</p>
+            <ul class="list-dotless text-smaller">
+                <li><b>unknown：</b>未知（unknown）</li>
+                <li><b>left</b> 或 <b>vertical：</b>←（left）</li>
+                <li><b>topleft</b> 或 <b>colocated：</b>↖（topleft）</li>
+            </ul>
+            <pre><code class="text-smaller language-powershell">
+$cl = switch ($ChromaLocation) {
+    'left'       { 'left'; break }
+    'center'     { $null; break }
+    'topleft'    { 'topleft'; break }
+    'top'        { $null; break }
+    'bottomleft' { $null; break }
+    'bottom'     { $null; break }
+    'unknown'    { 'unknown'; break }
+    'unspecified'{ $null; break }
+    default      { $null; break }
+}
+if ($null -ne $cl) { return "--chroma-sample-position $cl" }
+            </code></pre>
+            <div class="align-items-center">
+                <p class="text-gray-side">例：PowerShell 中映射 ffmpeg/ffprobe chroma_location 值到 SVT-AV1 参数的示例</p>
+            </div>
             <code class="code-bold">--color-format</code>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~3，默认 1&gt;指定输入视频的 YUV 色彩空间格式——0: 400，1: 420，2: 422，3: 444</p>
             <code class="code-bold">--matrix-coefficients</code>
