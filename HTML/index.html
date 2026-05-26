@@ -4755,7 +4755,8 @@ if ($null -ne $cl) { return "--chroma-sample-position $cl" }
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;0/1，默认 0：关&gt;启用无损压缩模式。</p>
 
             <h4>（7/12）线程与节点占用</h4>
-            <p class="text-gray-side">注：如果使用了服务器等核心数量多的 CPU，关闭超线程（SMT）可能会带来 5~10% 的提速，不过需要注意系统的线程调度策略在超线程开/关状态下会有所区别，验证时需统一设置</p>
+            <p class="text-gray-side">注：如果使用了服务器等核心数量多的 CPU，关闭超线程（SMT）可能会带来 5~10% 的提速，不过需要注意系统的线程调度策略在超线程开/关状态时有变，验证时需统一设置。</p>
+            <p class="text-gray-side">注：由于在 Linux 和 macOS 的支持较差，以及为了减少工作量，SVT-AV1 项目移除了指定 NUMA 节点（<code>--ss</code>）的参数，见 <a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/work_items/2151#note_1773698143">GitLab Notes</a>。</p>
             <code class="code-bold">--lp</code>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~6，默认 0：自动&gt;指定当前压制任务的并行机制（Level of Parallelism）。1~6 分别代表创建更多的任务线程和同时处理的帧数。</p>
             <code class="code-bold">&#45;&#45;pin</code>
