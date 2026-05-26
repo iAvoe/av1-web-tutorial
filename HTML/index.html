@@ -4757,11 +4757,11 @@ if ($null -ne $cl) { return "--chroma-sample-position $cl" }
             <h4>（7/12）线程与节点占用</h4>
             <p class="text-gray-side">注：如果使用了服务器等核心数量多的 CPU，关闭超线程（SMT）可能会带来 5~10% 的提速，不过需要注意系统的线程调度策略在超线程开/关状态下会有所区别，验证时需统一设置</p>
             <code class="code-bold">--lp</code>
-            <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~6，默认 0：全部&gt;指定当前压制任务的线程数量（Level of Parallelism）。</p>
+            <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~6，默认 0：自动&gt;指定当前压制任务的并行机制（Level of Parallelism）。1~6 分别代表创建更多的任务线程和同时处理的帧数。</p>
             <code class="code-bold">&#45;&#45;pin</code>
             <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 0~n，默认 0：关&gt;指定仅占用前 n 个 CPU 核心，应搭配 <code>--lp</code> 使用。</p>
-            <code class="code-bold">--ss</code>
-            <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 -1~n，默认 -1：自动&gt;指定使用多节点系统中的特定节点编码。</p>
+            <!--<code class="code-bold">--ss</code>
+            <p class="font-monospace pl-5 m-0 overflow-auto">&lt;整数 -1~n，默认 -1：自动&gt;指定使用多节点系统中的特定节点编码。</p>-->
             <p class="text-gray-side">注：使用 <code>--lp 4 --pin 4</code> 将限制编码器运行到核心 0~3，并将资源分配设置为与 <code>--lp 4</code> 关联的线程/内存数量；而使用 <code>--pin 0 --lp 4</code> 会导致相同的线程/内存分配，但编码器在需要时可以在 0~3 之外的核心上运行（根据编码任务自动使用，但 4 线程本身给的也比较少）。<code>--pin 0</code> 下的线程控制相当于只限制内存占用，这样相比限制核心反而能允许更多编码被同时运行，CPU 利用率更高，批量压制速度更快。见：<a href="https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/master/Docs/Parameters.md#1-thread-management-parameters">Gitlab/AOMediaCodec</a>。</p>
 
             <h4>（8/12）率控制模式</h4>
