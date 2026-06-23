@@ -15704,7 +15704,7 @@ SvtAv1EncApp.exe --version
                 <h4>（2/2）编译 Windows 可执行文件</h4>
                 <ol>
                     <li>下载并安装用于编译 Windows 的 <a href="https://www.msys2.org/">MSYS2</a></li>
-                    <li><b>安装后打开 MSYS2 并运行更新：</b>
+                    <li><b>安装后打开 <code>C:\msys64\mingw64.exe</code> 并运行更新：</b>
                         <ul>
                             <li><code>pacman -Syu</code></li>
                             <li>如果提示关闭，则关闭后双击安装路径下的 mingw64.exe 重新打开，然后继续更新：</li>
@@ -15730,16 +15730,20 @@ SvtAv1EncApp.exe --version
                     <li>将 <code>ssimulacra2-main/build-win/ssimulacra2.exe</code> 拷贝到需要的路径中</li>
                     <li>将前几步所下载的一些动态链接库从 <code>&lt;MSYS2 安装位置&gt;\msys64\mingw64\bin</code> 拷贝到 <code>ssimulacra2.exe</code> 的新路径中：
                         <ul>
-                            <li><code>libhwy.dll</code></li>
-                            <li><code>libjpeg-8</code></li>
-                            <li><code>liblcms2-2.dll</code></li>
+                            <li><code>libdeflate.dll</code></li>
                             <li><code>libgcc_s_seh-1.dll</code></li>
-                            <li><code>libjpeg-8</code></li>
-                            <li><code>libstdc++-6.dll</code></li>
+                            <li><code>libhwy.dll</code></li>
+                            <li><code>libIex-3_4.dll</code></li>
+                            <li><code>libIlmThread-3_4.dll</code></li>
+                            <li><code>libImath-3_2.dll</code></li>
+                            <li><code>libjpeg-8.dll</code></li>
+                            <li><code>liblcms2-2.dll</code></li>
+                            <li><code>libOpenEXR-3_4.dll</code></li>
+                            <li><code>libOpenEXRCore-3_4.dll</code></li>
+                            <li><code>libopenjph-0.25.dll</code></li>
                             <li><code>libpng16-16.dll</code></li>
                             <li><code>libstdc++-6.dll</code></li>
                             <li><code>libwinpthread-1.dll</code></li>
-                            <li><code>zlib1.dll</code></li>
                         </ul>
                     </li>
                 </ol>
